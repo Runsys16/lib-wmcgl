@@ -1,0 +1,25 @@
+#!/bin/bash
+
+function get_window_id() {
+    WINDOW_ID=`wmctrl -l | grep "$1" | cut -f1 -d" "`
+    echo $WINDOW_ID
+}
+
+edition ed makefile run src/depend.py src/build_makefile src/build_include src/makefile.base
+edition	src/*.cpp *.c
+edition src/*.h
+
+sleep 5
+get_window_id "Font.cpp ("
+echo "ID = " $WINDOW_ID
+wmctrl -i -r "$WINDOW_ID" -e 0,1000,0,900,1150
+
+get_window_id "Font.h ("
+echo "ID = " $WINDOW_ID
+wmctrl -i -r "$WINDOW_ID" -e 0,0,0,900,1150
+
+get_window_id "ed ("
+echo "ID = " $WINDOW_ID
+wmctrl -i -r "$WINDOW_ID" -e 0,1000,0,900,1150
+
+

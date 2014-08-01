@@ -1,0 +1,37 @@
+#!/bin/bash
+
+INCLUDE="./include/WindowsManager.h"
+SRC="./src/"
+
+echo "#ifndef WINDOWSMANAGER_H" >${INCLUDE}
+echo "#define WINDOWSMANAGER_H" >>${INCLUDE}
+echo  >>${INCLUDE}
+echo "#include <vector>" >>${INCLUDE}
+echo "#include <string>" >>${INCLUDE}
+echo  >>${INCLUDE}
+echo  >>${INCLUDE}
+echo  "class TEXTURE2D;" >>${INCLUDE}
+echo  "class Panel;" >>${INCLUDE}
+echo  "class Font;" >>${INCLUDE}
+echo  "class TextUtil;" >>${INCLUDE}
+echo  >>${INCLUDE}
+echo "#define color32 unsigned int" >>${INCLUDE}
+
+#cat ${SRC}wm.h | grep -v include | grep -v "#" | sed -e "s/SINGLETON_B.*/class WindowsManager {/g" | sed -e "s/SINGLETON_E.*/};/g"  >> ${INCLUDE}
+cat ${SRC}Font.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+#echo  >>${INCLUDE}
+#echo "enum Font::FONT { ARIAL, UBUNTU_B, UBUNTU_RI, UBUNTU_R, DEJA_VU_SANS_MONO };" >>${INCLUDE}
+#echo  >>${INCLUDE}
+
+cat ${SRC}InternalFonts.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}TextUtil.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}Panel.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}PanelSimple.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}PanelText.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}wm.h | grep -v include | grep -v "#"    >> ${INCLUDE}
+
+echo  >>${INCLUDE}
+echo "WindowsManager* WindowsManager::instance = 0;" >>${INCLUDE}
+
+echo "#endif" >>${INCLUDE}
+

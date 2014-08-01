@@ -1,0 +1,73 @@
+CPP  = g++
+CC   = gcc
+
+VER = 0.1
+
+
+OBJDIR		= ./build/
+BINDIR		= ./bin/
+INSTALLDIR	= /usr/lib/
+INCLUDEDIR	= /usr/include/
+
+SRCDIR		= ./src/
+
+SRC		= $(wildcard $(SRCDIR)*.cpp)
+OBJ		= $(SRC:$(SRCDIR)%.cpp=$(OBJDIR)%.o)
+BIN		= libwmcgl.so
+
+LIBS	=  -lGL -lglut -lGLU -lGLEW -lIL -shared
+
+INCS =  -I"/usr/include" -I"/usr/include/freetype2" 
+CXXINCS =  -Wno-deprecated 
+CXXFLAGS = $(CXXINCS)  -O2  -shared
+CFLAGS = $(INCS) -g -O2 -fpic -fpermissive -mtune=core2 -Wno-deprecated -Wno-unused-result
+
+
+
+
+
+RM = rm -f
+MKDIR = mkdir -p
+CP = cp -f
+LN = ln -sf
+
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before $(BIN)  all-after 
+
+all-before:
+	@$(MKDIR) $(OBJDIR)
+	@$(MKDIR) $(BINDIR)
+
+
+clean: clean-custom clean-lib
+	@${RM} $(OBJDIR)*.o  *~
+	@${RM} $(OBJWMDIR)*.o  *~
+	@${RM} $(BINDIR)*  *~
+
+clean-lib: 
+	@${RM} $(OBJWMDIR)*.o  *~
+	@${RM} $(BINDIR)lib*  *~
+
+
+vi: clean-custom
+	@${RM}  *~ .*.swp
+	@${RM}  model/*~ model/.*.swp
+
+$(BIN): $(OBJ)
+	@echo ---------   edition des liens library $@.$(VER)
+	$(CPP) $(OBJ) -o $(BINDIR)$(BIN).$(VER) $(LIBS)
+
+
+install: $(BIN)
+	@echo ---------   Installation de library $@ dans $(INSTALLDIR)
+	$(CP) $(BINDIR)$(BIN).$(VER) $(INSTALLDIR)
+	$(LN) $(INSTALLDIR)$(BIN).$(VER) $(INSTALLDIR)$(BIN)
+	@./src/build_include
+	$(CP) ./include/WindowsManager.h $(INCLUDEDIR)
+
+
+
+
+

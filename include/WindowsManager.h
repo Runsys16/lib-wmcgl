@@ -1,0 +1,399 @@
+#ifndef WINDOWSMANAGER_H
+#define WINDOWSMANAGER_H
+
+#include <vector>
+#include <string>
+
+
+class TEXTURE2D;
+class Panel;
+class Font;
+class TextUtil;
+
+#define color32 unsigned int
+
+
+
+/*
+*/
+ 
+class Font 	{
+	public:
+		enum FONT { ARIAL, UBUNTU_B, UBUNTU_RI, UBUNTU_R, DEJA_VU_SANS_MONO };
+		Font();
+
+		void				print(Font::FONT, int, int, std::string );
+		void				print(Font::FONT, int, int, char* );
+
+	private:
+		std::map<int, freetype::font_data *>*		pFonts;
+};
+
+
+//  ---------------------------------------------------------------------------
+//
+//  @file       TwFonts.h
+//  @brief      Bitmaps fonts
+//  @author     Philippe Decaudin - http://www.antisphere.com
+//  @license    This file is part of the AntTweakBar library.
+//              For conditions of distribution and use, see License.txt
+//
+//  note:       Private header
+//
+//  ---------------------------------------------------------------------------
+
+
+
+
+/*
+  
+@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_
+`abcdefghijklmnopqrstuvwxyz{|}~
+
+ ¡¢£€¥Š§š©ª«¬­®¯°±²³Žµ¶·ž¹º»ŒœŸ¿
+ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß
+àáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ
+
+First column of a source bitmap is a delimiter with color=zero at the end of each line of characters.
+Last row of a line of characters is a delimiter with color=zero at the last pixel of each character.
+
+*/
+
+
+struct CTexFont
+{
+    unsigned char * m_TexBytes;
+    int             m_TexWidth;     // power of 2
+    int             m_TexHeight;    // power of 2
+    float           m_CharU0[256];
+    float           m_CharV0[256];
+    float           m_CharU1[256];
+    float           m_CharV1[256];
+    int             m_CharWidth[256];
+    int             m_CharHeight;
+    int             m_NbCharRead;
+
+    CTexFont();
+    ~CTexFont();
+};
+
+
+CTexFont *TwGenerateFont(const unsigned char *_Bitmap, int _BmWidth, int _BmHeight);
+
+
+extern CTexFont *g_DefaultSmallFont;
+extern CTexFont *g_DefaultNormalFont;
+extern CTexFont *g_DefaultLargeFont;
+
+void TwGenerateDefaultFonts();
+void TwDeleteDefaultFonts();
+
+
+//  ---------------------------------------------------------------------------
+//
+//  @file       TwOpenGL.h
+//  @brief      OpenGL graph functions
+//  @author     Philippe Decaudin - http://www.antisphere.com
+//  @license    This file is part of the AntTweakBar library.
+//              For conditions of distribution and use, see License.txt
+//
+//  notes:      Private header
+//              TAB=4
+//
+//  ---------------------------------------------------------------------------
+
+
+
+
+
+
+//  ---------------------------------------------------------------------------
+
+
+
+const color32 COLOR32_BLACK     = 0xff000000;   // Black 
+const color32 COLOR32_WHITE     = 0xffffffff;   // White 
+const color32 COLOR32_ZERO      = 0x00000000;   // Zero 
+const color32 COLOR32_RED       = 0xffff0000;   // Red 
+const color32 COLOR32_GREEN     = 0xff00ff00;   // Green 
+const color32 COLOR32_BLUE      = 0xff0000ff;   // Blue 
+   
+
+
+class TextUtil  {
+
+public:
+
+    void *      NewTextObj();
+    void        DeleteTextObj(void *_TextObj);
+    void        BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines, const CTexFont *_Font, int _Sep, int _BgWidth);
+    
+    void		BeginGL();
+    void		EndGL();
+    void        DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 _BgColor);
+
+	void				ChangeViewport(int, int, int, int, int, int);
+
+	GLuint 				BindFont( const CTexFont * );
+	void 				UnbindFont( GLuint );
+
+
+
+protected:
+    bool                m_Drawing;
+    GLuint              m_FontTexID;
+    const CTexFont *    m_FontTex;
+    GLfloat             m_PrevLineWidth;
+    GLint               m_PrevTexEnv;
+    GLint               m_PrevPolygonMode[2];
+    GLint               m_MaxClipPlanes;
+    GLint               m_PrevTexture;
+    GLint               m_PrevArrayBufferARB;
+    GLint               m_PrevElementArrayBufferARB;
+    GLboolean           m_PrevVertexProgramARB;
+    GLboolean           m_PrevFragmentProgramARB;
+    GLuint              m_PrevProgramObjectARB;
+    GLboolean           m_PrevTexture3D;
+    enum EMaxTextures   { MAX_TEXTURES = 128 };
+    GLboolean           m_PrevActiveTexture1D[MAX_TEXTURES];
+    GLboolean           m_PrevActiveTexture2D[MAX_TEXTURES];
+    GLboolean           m_PrevActiveTexture3D[MAX_TEXTURES];
+    GLboolean           m_PrevClientTexCoordArray[MAX_TEXTURES];
+    GLint               m_PrevActiveTextureARB;
+    GLint               m_PrevClientActiveTextureARB;
+    bool                m_SupportTexRect;
+    GLboolean           m_PrevTexRectARB;
+    GLint               m_PrevBlendEquation;
+    GLint               m_PrevBlendEquationRGB;
+    GLint               m_PrevBlendEquationAlpha;
+    GLint               m_PrevBlendSrcRGB;
+    GLint               m_PrevBlendDstRGB;
+    GLint               m_PrevBlendSrcAlpha;
+    GLint               m_PrevBlendDstAlpha;
+    GLint               m_ViewportInit[4];
+    GLfloat             m_ProjMatrixInit[16];
+    int                 m_WndWidth;
+    int                 m_WndHeight;
+
+    struct Vec2         { GLfloat x, y; Vec2(){} Vec2(GLfloat _X, GLfloat _Y):x(_X),y(_Y){} Vec2(int _X, int _Y):x(GLfloat(_X)),y(GLfloat(_Y)){} };
+    struct CTextObj
+    {
+        std::vector<Vec2>   m_TextVerts;
+        std::vector<Vec2>   m_TextUVs;
+        std::vector<Vec2>   m_BgVerts;
+        std::vector<color32>m_Colors;
+        std::vector<color32>m_BgColors;
+    };
+};
+
+//  ---------------------------------------------------------------------------
+
+
+
+
+
+class Panel {
+	public:
+		Panel();
+		
+		void 				init();
+		void				add( Panel* );
+		bool				isMouseOver( int, int);
+		
+		virtual void		displayGL();
+		virtual void		updatePos();
+
+		inline void			setParent( Panel* p )							{parent = p;};
+		inline Panel*		getParent()										{return parent;};
+		inline void			setPosAndSize(int x0, int y0, int dx0, int dy0)	{x=x0; y=y0; dx=dx0 ;dy=dy0;};
+		inline void			setPos(int x0, int y0)							{x=x0; y=y0;};
+		inline void			setdSize(int dx0, int dy0)						{dx=dx0 ;dy=dy0;};
+		inline int			getX()											{return x_raw;};
+		inline int			getY()											{return y_raw;};
+		inline int			getDX()											{return dx_raw;};
+		inline int			getDY()											{return dy_raw;};
+		inline void			setID(int id)									{ID = id;};
+		inline int			getID()											{return ID;};
+		
+		inline void			setPosX(int i)									{x = i;};
+		inline void			setPosY(int i)									{y = i;};
+		inline void			setPosDX(int i)									{dx = i;};
+		inline void			setPosDY(int i)									{dy = i;};
+		inline int			getPosX()										{return x;};
+		inline int			getPosY()										{return y;};
+		inline int			getPosDX()										{return dx;};
+		inline int			getPosDY()										{return dy;};
+	
+		inline bool			getVisible()									{return visible;};
+		inline void			setVisible(bool b)								{visible=b;};
+		
+	protected:
+		int ID;
+		int x_raw;
+		int y_raw;
+		int dx_raw;
+		int dy_raw;
+	
+		int x;
+		int y;
+		int dx;
+		int dy;
+	
+		int startX;
+		int startY;
+	
+		bool visible;
+		bool canMove;
+		bool mouseVisible;
+	
+		Panel* 				parent;
+		std::vector<Panel*> childs;
+
+};
+
+
+
+
+
+
+class PanelSimple : public Panel {
+	public:
+		PanelSimple();
+		
+		void				displayGL();
+		void				updatePos();
+		
+	private:
+		Texture2D*		m_pTexBackground;
+
+		void * 							cTextObj;
+		TextUtil*						textUtil;
+		std::vector<std::string>		str;
+};
+
+
+
+
+
+
+
+
+class PanelText : public Panel	{
+
+	public:
+		enum FONT { ARIAL, UBUNTU_B, UBUNTU_RI, UBUNTU_R, DEJA_VU_SANS_MONO, NORMAL_FONT, SMALL_FONT, LARGE_FONT };
+
+
+		PanelText();
+		PanelText( std::string );
+		PanelText( std::string, FONT );
+		PanelText( std::string, FONT, int, int );
+
+		void 				buildString();
+		
+		void 				changeText( std::string );
+		void 				changeText( std::string, FONT );
+		
+		void				displayGL();
+		void				updatePos();
+		
+	private:
+		void				displayGLInternal();
+		std::string			strFont();		
+
+		TextUtil*		textUtil;
+		FONT			typeFont;
+		std::string		text;
+		bool			bChange;
+		
+		void*			pTextGL;
+	
+};
+
+
+
+
+
+
+class WindowsManager {
+
+public:
+	void				init();
+	void				setScreenSize(int, int);
+	void				add(Panel *);
+	void				sup(Panel *);
+	void				supByID(int);
+	int					getFreeID();
+	Panel *				findPanelMouseOver(int, int);
+	void				movePanel( int, int);
+	void				swapVisible();
+	
+	/*
+	void			setWidth( int);
+	int				getWidth();
+	void			setHeight( int );
+	int				getHeight();
+	Font*			getFonts();
+	int				getOffsetX();
+	int				getOffsetY();
+	*/
+
+
+	inline void			setWidth( int w)				{width=w;}
+	inline int			getWidth()						{return width;}
+	inline void			setHeight( int h )				{height=h;}
+	inline int			getHeight()						{return height;}
+	inline Font*		getFonts()						{return fonts;}
+	inline int			getOffsetX()					{return 0;}
+	inline int			getOffsetY()					{return 0;}
+	inline TextUtil*	getTextUtil()					{return &textUtil;}
+
+
+	void				idleGL();
+	void				displayGL();
+	void				clearBufferGL();
+	void				clearBufferGL( GLbitfield );
+		
+	void				passiveMotionFunc(int, int);
+	void				motionFunc(int, int);
+	void				mouseFunc(int, int, int, int);
+	void				keyboardUpFunc( unsigned char, int, int );
+	void				keyboardFunc( unsigned char, int, int );
+	void				keyboardSpecialUpFunc( unsigned char, int, int );
+	void				keyboardSpecialFunc( unsigned char, int, int );
+	
+	inline static WindowsManager&	getInstance()			{ if (!instance) instance = new WindowsManager();return *instance;}
+	inline static void				Destroy()				{ if (instance) delete instance;instance=0;}
+	
+	WindowsManager();
+	WindowsManager(int, int);
+	~WindowsManager();
+
+	int			iTest;
+
+private:
+	static WindowsManager*	instance ;
+	
+	int 					width;
+	int						height;
+	std::vector<Panel*>		childs;
+	//std::vector<Panel*>		panels;
+	Font*					fonts;
+	
+	int						xm_old;
+	int						ym_old;
+	
+	void * 					cTextObj;
+	TextUtil				textUtil;
+	std::string				str[10];
+
+
+};
+
+//WindowsManager* WindowsManager::instance = 0;
+
+
+
+
+WindowsManager* WindowsManager::instance = 0;
+#endif

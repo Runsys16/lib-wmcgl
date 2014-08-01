@@ -27,33 +27,26 @@ CFLAGS = $(INCS) -g -O2 -fpic -fpermissive -mtune=core2 -Wno-deprecated -Wno-unu
 
 
 RM = rm -f
+RMDIR = rm -rf
 MKDIR = mkdir -p
 CP = cp -f
 LN = ln -sf
 
 
-.PHONY: all all-before all-after clean clean-custom
+.PHONY: all
 
-all: all-before $(BIN)  all-after 
+all: before $(BIN)
 
-all-before:
+before:
 	@$(MKDIR) $(OBJDIR)
 	@$(MKDIR) $(BINDIR)
+	
+
+clean: 
+	@$(RMDIR) $(OBJDIR)
+	@$(RMDIR) $(BINDIR)
 
 
-clean: clean-custom clean-lib
-	@${RM} $(OBJDIR)*.o  *~
-	@${RM} $(OBJWMDIR)*.o  *~
-	@${RM} $(BINDIR)*  *~
-
-clean-lib: 
-	@${RM} $(OBJWMDIR)*.o  *~
-	@${RM} $(BINDIR)lib*  *~
-
-
-vi: clean-custom
-	@${RM}  *~ .*.swp
-	@${RM}  model/*~ model/.*.swp
 
 $(BIN): $(OBJ)
 	@echo ---------   edition des liens library $@.$(VER)

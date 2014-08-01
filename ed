@@ -5,8 +5,8 @@ function get_window_id() {
     echo $WINDOW_ID
 }
 
-edition ed makefile run src/depend.py src/build_makefile src/build_include src/makefile.base
-edition	src/*.cpp *.c
+edition ed makefile src/depend.py src/build_makefile src/build_include src/makefile.base
+edition	src/*.cpp
 edition src/*.h
 
 sleep 5

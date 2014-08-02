@@ -1,43 +1,74 @@
 #!/bin/bash
-
+#----------------------------------------------------------------------------------------------------
+STR0="ed makefile src/depend.py src/build_makefile src/build_include src/makefile.base"
+STR1="src/lib/*.h"
+STR2="src/lib/*.cpp"
+#----------------------------------------------------------------------------------------------------
 function get_window_id() {
-    WINDOW_ID=`wmctrl -l | grep "lib-wmcgl"| grep "$1" | cut -f1 -d" "`
-    #echo $WINDOW_ID
+	WINDOW_ID=""
+	for n in $*
+	do
+		FILENAME=$(basename $n)
+		#echo Recherche de $FILENAME $n
+		WINDOW_ID=$(wmctrl -l | grep "lib-wmcgl"| grep "gedit" | grep "$FILENAME (" | cut -f1 -d" ")
+		if [ "$WINDOW_ID" != "" ]
+		then
+			break
+		fi
+	done
+	
+    echo $WINDOW_ID
 }
 
+#----------------------------------------------------------------------------------------------------
 function get_workspace()	{
 	N=$(wmctrl -d | cut -d' ' -f8 | cut -d',' -f1)
-	#echo $N
+	echo $N
 }
 
-#get_workspace
-#WS_OLD=$(expr $N / 1920 )
-#WS=$(expr $WS_OLD + 1 )
-#
-#echo workspace = $WS_OLD $WS
-#
-#get_window_id "ed ("
-#echo "window ID = "$WINDOW_ID
-#wmctrl -i -r "$WINDOW_ID" -e 0,1000,0,900,1150
-#wmctrl -i -r "$WINDOW_ID" -e 0,2920,0,900,1150
+#----------------------------------------------------------------------------------------------------
+function wait_id()	{
+	ID=""
+	while [ "$ID" == "" ]
+	do
+		ID=$(get_window_id $*)
+	done
+}
 
+#----------------------------------------------------------------------------------------------------
+function run_edit()	{
+	ID=$(get_window_id $*)
+	if [ "$ID" == "" ]
+	then
+		edition $*
+	fi
+}
 
+#----------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------
 
-edition ed makefile src/depend.py src/build_makefile src/build_include src/makefile.base
-edition	src/lib/*.cpp
-edition src/lib/*.h
+OUVERT=$(wmctrl -l | grep "lib-wmcgl" | grep "gedit" | wc -l)
 
-sleep 5
-get_window_id "Font.cpp ("
-echo "ID = " $WINDOW_ID
-wmctrl -i -r "$WINDOW_ID" -e 0,2920,0,900,1150
+if [ "$OUVERT" == "3" ]
+then
+	echo Les fichiers sont deja edite ....
+	exit 0
+fi
 
-get_window_id "Font.h ("
-echo "ID = " $WINDOW_ID
-wmctrl -i -r "$WINDOW_ID" -e 0,1920,0,900,1150
+#----------------------------------------------------------------------------------------------------
+run_edit $STR0
+wait_id $STR0
+wmctrl -i -r $(get_window_id $STR0) -e 0,1000,0,900,1150
 
-get_window_id "ed ("
-echo "ID = " $WINDOW_ID
-wmctrl -i -r "$WINDOW_ID" -e 0,1000,0,900,1150
+#----------------------------------------------------------------------------------------------------
+run_edit $STR1
+wait_id $STR1
+wmctrl -i -r $(get_window_id $STR1) -e 0,1920,0,900,1150
+
+#----------------------------------------------------------------------------------------------------
+run_edit $STR2
+wait_id $STR2
+wmctrl -i -r $(get_window_id $STR2) -e 0,2920,0,900,1150
+
 
 

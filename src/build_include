@@ -1,7 +1,7 @@
 #!/bin/bash
 
 INCLUDE="./include/WindowsManager.h"
-SRC="./src/"
+SRC="./"
 
 echo "#ifndef WINDOWSMANAGER_H" >${INCLUDE}
 echo "#define WINDOWSMANAGER_H" >>${INCLUDE}

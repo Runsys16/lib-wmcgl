@@ -1,22 +1,40 @@
 #!/bin/bash
 
 function get_window_id() {
-    WINDOW_ID=`wmctrl -l | grep "$1" | cut -f1 -d" "`
-    echo $WINDOW_ID
+    WINDOW_ID=`wmctrl -l | grep "lib-wmcgl"| grep "$1" | cut -f1 -d" "`
+    #echo $WINDOW_ID
 }
 
+function get_workspace()	{
+	N=$(wmctrl -d | cut -d' ' -f8 | cut -d',' -f1)
+	#echo $N
+}
+
+#get_workspace
+#WS_OLD=$(expr $N / 1920 )
+#WS=$(expr $WS_OLD + 1 )
+#
+#echo workspace = $WS_OLD $WS
+#
+#get_window_id "ed ("
+#echo "window ID = "$WINDOW_ID
+#wmctrl -i -r "$WINDOW_ID" -e 0,1000,0,900,1150
+#wmctrl -i -r "$WINDOW_ID" -e 0,2920,0,900,1150
+
+
+
 edition ed makefile src/depend.py src/build_makefile src/build_include src/makefile.base
-edition	src/*.cpp
-edition src/*.h
+edition	src/lib/*.cpp
+edition src/lib/*.h
 
 sleep 5
 get_window_id "Font.cpp ("
 echo "ID = " $WINDOW_ID
-wmctrl -i -r "$WINDOW_ID" -e 0,1000,0,900,1150
+wmctrl -i -r "$WINDOW_ID" -e 0,2920,0,900,1150
 
 get_window_id "Font.h ("
 echo "ID = " $WINDOW_ID
-wmctrl -i -r "$WINDOW_ID" -e 0,0,0,900,1150
+wmctrl -i -r "$WINDOW_ID" -e 0,1920,0,900,1150
 
 get_window_id "ed ("
 echo "ID = " $WINDOW_ID

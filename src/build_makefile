@@ -32,4 +32,6 @@ echo  >> ../makefile
 echo  >> ../makefile
 echo  >> ../makefile
 
-./depend.py >>../makefile
+cd lib
+../depend.py >>../../makefile
+cd ..

@@ -9,7 +9,7 @@ BINDIR		= ./bin/
 INSTALLDIR	= /usr/lib/
 INCLUDEDIR	= /usr/include/
 
-SRCDIR		= ./src/
+SRCDIR		= ./src/lib/
 
 SRC		= $(wildcard $(SRCDIR)*.cpp)
 OBJ		= $(SRC:$(SRCDIR)%.cpp=$(OBJDIR)%.o)
@@ -40,7 +40,15 @@ all: before $(BIN)
 before:
 	@$(MKDIR) $(OBJDIR)
 	@$(MKDIR) $(BINDIR)
-	
+
+print:
+	@echo -----------------------------------------
+	@echo 'Variable OBJ'
+	@echo $(OBJ)
+	@echo -----------------------------------------
+	@echo 'Variable SRC'
+	@echo $(SRC)
+	@echo -----------------------------------------
 
 clean: 
 	@$(RMDIR) $(OBJDIR)
@@ -53,7 +61,7 @@ $(BIN): $(OBJ)
 	$(CPP) $(OBJ) -o $(BINDIR)$(BIN).$(VER) $(LIBS)
 
 
-install: $(BIN)
+install:
 	@echo ---------   Installation de library $@ dans $(INSTALLDIR)
 	$(CP) $(BINDIR)$(BIN).$(VER) $(INSTALLDIR)
 	$(LN) $(INSTALLDIR)$(BIN).$(VER) $(INSTALLDIR)$(BIN)
@@ -227,7 +235,9 @@ install: $(BIN)
 #01#echo  >> ../makefile
 #01#echo  >> ../makefile
 #01#
-#01#./depend.py >>../makefile
+#01#cd lib
+#01#../depend.py >>../../makefile
+#01#cd ..
 
 
 

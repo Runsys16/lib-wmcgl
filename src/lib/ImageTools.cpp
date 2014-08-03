@@ -124,14 +124,17 @@ GLubyte* OpenImageDevIL(const std::string& filename, unsigned int& w, unsigned i
 
 GLubyte* OpenImage(const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d)
 {
+	GLubyte* ptr = NULL;
 	if(filename.find(".ppm") != std::string::npos){
-		return ImageTools::OpenImagePPM("./textures/"+filename, w, h, d);
+		ptr = ImageTools::OpenImagePPM("./textures/"+filename, w, h, d);
+		if ( !ptr ) ptr = ImageTools::OpenImagePPM(filename, w, h, d);
 	}
 	else {
-		return ImageTools::OpenImageDevIL("./textures/"+filename, w, h, d);
+		ptr =  ImageTools::OpenImageDevIL("./textures/"+filename, w, h, d);
+		if ( !ptr ) ptr = ImageTools::OpenImageDevIL(filename, w, h, d);
 	}
-	std::cout << "Erreur de chargement de l'image " << filename << std::endl;
-	return NULL;
+	if ( ptr == NULL )	{ std::cout << "Erreur de chargement de l'image " << filename << std::endl; }
+	return ptr;
 }
 
 void OpenImage(const std::string& filename, ImageData& img)

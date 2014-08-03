@@ -7,6 +7,25 @@
 #include <vector>
 #include <string>
 
+
+#include <iostream>
+#include <iomanip>
+#include <sstream>
+#include <fstream>
+#include <string>
+#include <cmath>
+#include <assert.h>
+#include <typeinfo>
+
+
+#include <ft2build.h>
+#include <freetype2/freetype.h>
+#include <freetype2/ftglyph.h>
+#include <freetype2/ftoutln.h>
+#include <freetype2/fttrigon.h>
+
+
+
 #include "Panel.h"
 #include "Font.h"
 #include "TextUtil.h"

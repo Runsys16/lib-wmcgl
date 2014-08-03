@@ -33,6 +33,7 @@ CTexFont::CTexFont()
     m_TexBytes = NULL;
     m_NbCharRead = 0;
     m_CharHeight = 0;
+    m_TexID = 0;
 }
 
 //  ---------------------------------------------------------------------------

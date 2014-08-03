@@ -45,7 +45,7 @@ public:
 
     void *      NewTextObj();
     void        DeleteTextObj(void *_TextObj);
-    void        BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines, const CTexFont *_Font, int _Sep, int _BgWidth);
+    void        BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines,  CTexFont *_Font, int _Sep, int _BgWidth);
     
     void		BeginGL();
     void		EndGL();
@@ -53,8 +53,10 @@ public:
 
 	void				ChangeViewport(int, int, int, int, int, int);
 
-	GLuint 				BindFont( const CTexFont * );
+	GLuint 				GenFont( CTexFont * );
+	void 				BindFont( const CTexFont * );
 	void 				UnbindFont( GLuint );
+	void 				UnbindFont();
 
 
 

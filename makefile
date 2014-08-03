@@ -14,10 +14,11 @@ SRCDIR		= ./src/lib/
 SRC		= $(wildcard $(SRCDIR)*.cpp)
 OBJ		= $(SRC:$(SRCDIR)%.cpp=$(OBJDIR)%.o)
 BIN		= $(BINDIR)libwmcgl.so.$(VER)
-
-LIBS	=  -lGL -lglut -lGLU -lGLEW -lIL -shared
+BINNAME = libwmcgl.so
 
 INCS =  -I"/usr/include" -I"/usr/include/freetype2" 
+LIBS	=  -lGL -lglut -lGLU -lGLEW -lIL -lfreetype -shared
+
 CXXINCS =  -Wno-deprecated 
 CXXFLAGS = $(CXXINCS)  -O2  -shared
 CFLAGS = $(INCS) -g -O2 -fpic -fpermissive -mtune=core2 -Wno-deprecated -Wno-unused-result
@@ -66,8 +67,8 @@ $(BIN): $(OBJ)
 
 install:
 	@echo ---------   Installation de library $@ dans $(INSTALLDIR)
-	$(CP) $(BINDIR)$(BIN).$(VER) $(INSTALLDIR)
-	$(LN) $(INSTALLDIR)$(BIN).$(VER) $(INSTALLDIR)$(BIN)
+	$(CP) $(BIN) $(INSTALLDIR)
+	$(LN) $(INSTALLDIR)$(BINNAME).$(VER) $(INSTALLDIR)$(BINNAME)
 	@./src/build_include
 	$(CP) ./include/WindowsManager.h $(INCLUDEDIR)
 

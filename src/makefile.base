@@ -14,6 +14,7 @@ SRCDIR		= ./src/lib/
 SRC		= $(wildcard $(SRCDIR)*.cpp)
 OBJ		= $(SRC:$(SRCDIR)%.cpp=$(OBJDIR)%.o)
 BIN		= $(BINDIR)libwmcgl.so.$(VER)
+BINNAME = libwmcgl.so
 
 LIBS	=  -lGL -lglut -lGLU -lGLEW -lIL -shared
 
@@ -66,8 +67,8 @@ $(BIN): $(OBJ)
 
 install:
 	@echo ---------   Installation de library $@ dans $(INSTALLDIR)
-	$(CP) $(BINDIR)$(BIN).$(VER) $(INSTALLDIR)
-	$(LN) $(INSTALLDIR)$(BIN).$(VER) $(INSTALLDIR)$(BIN)
+	$(CP) $(BIN) $(INSTALLDIR)
+	$(LN) $(INSTALLDIR)$(BINNAME).$(VER) $(INSTALLDIR)$(BINNAME)
 	@./src/build_include
 	$(CP) ./include/WindowsManager.h $(INCLUDEDIR)
 

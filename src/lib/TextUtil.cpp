@@ -156,11 +156,14 @@ PFNGLBlendFuncSeparate glBlendFuncSeparate = NULL;
 
 //  ---------------------------------------------------------------------------
 
-GLuint TextUtil::BindFont(const CTexFont *_Font)
+GLuint TextUtil::GenFont( CTexFont *_Font)
 {
+	if ( _Font->m_TexID != 0 )		return _Font->m_TexID;
     GLuint TexID = 0;
-    glGenTextures(1, &TexID);
-    glBindTexture(GL_TEXTURE_2D, TexID);
+    glGenTextures(1, &(_Font->m_TexID) );
+	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
+
+    glBindTexture(GL_TEXTURE_2D, _Font->m_TexID);
     glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
     glPixelStorei(GL_UNPACK_LSB_FIRST, GL_FALSE);
     glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
@@ -179,18 +182,41 @@ GLuint TextUtil::BindFont(const CTexFont *_Font)
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     glBindTexture(GL_TEXTURE_2D, 0);
+    
+    glPixelTransferf(GL_ALPHA_SCALE, 1);
+    glPixelTransferf(GL_RED_SCALE, 0.5);
+    
     glPixelTransferf(GL_ALPHA_BIAS, 0);
     glPixelTransferf(GL_RED_BIAS, 0);
     glPixelTransferf(GL_GREEN_BIAS, 0);
     glPixelTransferf(GL_BLUE_BIAS, 0);
+    
+    
+	glPixelStorei(GL_UNPACK_ALIGNMENT,1);
+	glPixelStorei(GL_PACK_ALIGNMENT,1);
 
-    return TexID;
+    return _Font->m_TexID;
+}
+
+void TextUtil::BindFont(const CTexFont *_Font)
+{
+	cout << "TextUtil::BindFont() : "<< _Font->m_TexID << endl;
+	glActiveTexture(GL_TEXTURE0+0);
+    glBindTexture(GL_TEXTURE_2D, _Font->m_TexID);
 }
 
 void TextUtil::UnbindFont(GLuint _FontTexID)
 {
+    glBindTexture(GL_TEXTURE_2D, 0);
+    /*
     if( _FontTexID>0 )
         glDeleteTextures(1, &_FontTexID);
+    */
+}
+
+void TextUtil::UnbindFont()
+{
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 
@@ -212,18 +238,23 @@ void TextUtil::DeleteTextObj(void *_TextObj)
 
 //  ---------------------------------------------------------------------------
 
-void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines, const CTexFont *_Font, int _Sep, int _BgWidth)
+void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines, CTexFont *_Font, int _Sep, int _BgWidth)
 {
     //assert(m_Drawing==true);
     //assert(_TextObj!=NULL);
     //assert(_Font!=NULL);
 
+    m_FontTexID = GenFont(_Font);
+    m_FontTex = _Font;
+    UnbindFont();
+	/*
     if( _Font != m_FontTex )
     {
         UnbindFont(m_FontTexID);
-        m_FontTexID = BindFont(_Font);
-        m_FontTex = _Font;
+        _Font->m_TexID = m_FontTexID;
+	    m_FontTexID = GenFont(_Font);
     }
+    */
     CTextObj *TextObj = static_cast<CTextObj *>(_TextObj);
     TextObj->m_TextVerts.resize(0);
     TextObj->m_TextUVs.resize(0);
@@ -309,10 +340,11 @@ void TextUtil::BeginGL()	{
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 
+	/*	
 	int width  = WindowsManager::getInstance().getWidth();
 	int height = WindowsManager::getInstance().getHeight();
 	ChangeViewport( 0, 0, width, height, 0, 0 );
-
+	*/
   	
 
     glMatrixMode(GL_MODELVIEW);
@@ -352,10 +384,10 @@ void TextUtil::DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 
   	*/
     CTextObj *TextObj = static_cast<CTextObj *>(_TextObj);
 
-    if( TextObj->m_TextVerts.size()<4 && TextObj->m_BgVerts.size()<4 )	{
+    if( !TextObj || (TextObj->m_TextVerts.size()<4 && TextObj->m_BgVerts.size()<4 )	   ){
 		#ifdef DEBUG
-    	std::cout << "Nothing to draw ..." << std::endl;
 		#endif
+    	std::cout << "Nothing to draw ..." << std::endl;
         return; // nothing to draw
     }
 	/*
@@ -386,8 +418,8 @@ void TextUtil::DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 
 		#endif
         glDrawArrays(GL_TRIANGLES, 0, (int)TextObj->m_BgVerts.size());
     }
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, m_FontTexID);
+    //glEnable(GL_TEXTURE_2D);
+    //glBindTexture(GL_TEXTURE_2D, m_FontTexID);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 

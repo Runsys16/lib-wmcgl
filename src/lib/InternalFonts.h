@@ -36,6 +36,7 @@ Last row of a line of characters is a delimiter with color=zero at the last pixe
 struct CTexFont
 {
     unsigned char * m_TexBytes;
+	unsigned int	m_TexID;
     int             m_TexWidth;     // power of 2
     int             m_TexHeight;    // power of 2
     float           m_CharU0[256];

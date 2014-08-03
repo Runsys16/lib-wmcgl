@@ -24,7 +24,8 @@ class Font 	{
 		void				print(Font::FONT, int, int, char* );
 
 	private:
-		std::map<int, freetype::font_data *>*		pFonts;
+		//std::map<int, freetype::font_data *>*		pFonts;
+		std::map<int, void *>*		pFonts;
 };
 
 

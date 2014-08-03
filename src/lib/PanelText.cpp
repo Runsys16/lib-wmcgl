@@ -129,12 +129,15 @@ void PanelText::buildString()	{
 
 	switch (typeFont )	{
 	case NORMAL_FONT :
+		textUtil->GenFont( g_DefaultNormalFont );
 		textUtil->BuildText( pTextGL, &(text), &color, &color_bg, 1,  g_DefaultNormalFont, 0, 0);
 		break;
 	case SMALL_FONT :
+		textUtil->GenFont( g_DefaultSmallFont );
 		textUtil->BuildText( pTextGL, &(text), &color, &color_bg, 1,  g_DefaultSmallFont, 0, 0);
 		break;
 	case LARGE_FONT :
+		textUtil->GenFont( g_DefaultLargeFont );
 		textUtil->BuildText( pTextGL, &(text), &color, &color_bg, 1,  g_DefaultLargeFont, 0, 0);
 		break;
 	}
@@ -188,22 +191,27 @@ void PanelText::displayGLInternal()	{
 #endif
 	//glScissor( scx, scy, scdx, scdy );
 	//glEnable( GL_SCISSOR_TEST );
-	
+	glColor4f( 0.0f, 0.0f, 0.0f, 0.0f );
+	//glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
 
 	int iTex;	
+    glEnable(GL_TEXTURE_2D);
 	switch( typeFont )	{
 	case NORMAL_FONT :
-		iTex = textUtil->BindFont( g_DefaultNormalFont );
+		//iTex = textUtil->BindFont( g_DefaultNormalFont );
+		textUtil->BindFont( g_DefaultNormalFont );
 		break;
 	case SMALL_FONT :
-		iTex = textUtil->BindFont( g_DefaultSmallFont );
+		//iTex = textUtil->BindFont( g_DefaultSmallFont );
+		textUtil->BindFont( g_DefaultSmallFont );
 		break;
 	case LARGE_FONT :
-		iTex = textUtil->BindFont( g_DefaultLargeFont );
+		//iTex = textUtil->BindFont( g_DefaultLargeFont );
+		textUtil->BindFont( g_DefaultLargeFont );
 		break;
 	}
 	textUtil->DrawText( pTextGL, getX(), getY(), COLOR32_WHITE, COLOR32_RED );
-	textUtil->UnbindFont( iTex );
+	textUtil->UnbindFont();
 
 	//glDisable( GL_SCISSOR_TEST );
 	textUtil->EndGL();
@@ -213,6 +221,7 @@ void PanelText::displayGLInternal()	{
 
 void PanelText::displayGL() {
 	if (visible == false)			return;
+	if (bChange)					return;
 
 #ifdef DEBUG
 	WindowsManager& wm = WindowsManager::getInstance();

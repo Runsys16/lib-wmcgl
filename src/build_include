@@ -1,16 +1,17 @@
 #!/bin/bash
 
 INCLUDE="./include/WindowsManager.h"
-SRC="./"
+SRC="./src/lib/"
 
 echo "#ifndef WINDOWSMANAGER_H" >${INCLUDE}
 echo "#define WINDOWSMANAGER_H" >>${INCLUDE}
 echo  >>${INCLUDE}
 echo "#include <vector>" >>${INCLUDE}
 echo "#include <string>" >>${INCLUDE}
+echo "#include <map>" >>${INCLUDE}
 echo  >>${INCLUDE}
 echo  >>${INCLUDE}
-echo  "class TEXTURE2D;" >>${INCLUDE}
+echo  "class Texture2D;" >>${INCLUDE}
 echo  "class Panel;" >>${INCLUDE}
 echo  "class Font;" >>${INCLUDE}
 echo  "class TextUtil;" >>${INCLUDE}

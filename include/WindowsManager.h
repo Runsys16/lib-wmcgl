@@ -3,9 +3,10 @@
 
 #include <vector>
 #include <string>
+#include <map>
 
 
-class TEXTURE2D;
+class Texture2D;
 class Panel;
 class Font;
 class TextUtil;
@@ -26,7 +27,8 @@ class Font 	{
 		void				print(Font::FONT, int, int, char* );
 
 	private:
-		std::map<int, freetype::font_data *>*		pFonts;
+		//std::map<int, freetype::font_data *>*		pFonts;
+		std::map<int, void *>*		pFonts;
 };
 
 
@@ -63,6 +65,7 @@ Last row of a line of characters is a delimiter with color=zero at the last pixe
 struct CTexFont
 {
     unsigned char * m_TexBytes;
+	unsigned int	m_TexID;
     int             m_TexWidth;     // power of 2
     int             m_TexHeight;    // power of 2
     float           m_CharU0[256];
@@ -126,7 +129,7 @@ public:
 
     void *      NewTextObj();
     void        DeleteTextObj(void *_TextObj);
-    void        BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines, const CTexFont *_Font, int _Sep, int _BgWidth);
+    void        BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines,  CTexFont *_Font, int _Sep, int _BgWidth);
     
     void		BeginGL();
     void		EndGL();
@@ -134,8 +137,10 @@ public:
 
 	void				ChangeViewport(int, int, int, int, int, int);
 
-	GLuint 				BindFont( const CTexFont * );
+	GLuint 				GenFont( CTexFont * );
+	void 				BindFont( const CTexFont * );
 	void 				UnbindFont( GLuint );
+	void 				UnbindFont();
 
 
 
@@ -260,12 +265,14 @@ class PanelSimple : public Panel {
 	public:
 		PanelSimple();
 		
+		void				buildText();
 		void				displayGL();
 		void				updatePos();
 		
 	private:
 		Texture2D*		m_pTexBackground;
-
+		
+		bool							bTextOK;
 		void * 							cTextObj;
 		TextUtil*						textUtil;
 		std::vector<std::string>		str;
@@ -309,6 +316,12 @@ class PanelText : public Panel	{
 		void*			pTextGL;
 	
 };
+
+
+
+
+
+
 
 
 

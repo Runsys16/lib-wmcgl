@@ -32,7 +32,8 @@ Font::Font()	{
 	freetype::font_data * pFont;
 
 
-	pFonts = new std::map<int, freetype::font_data *>();
+	//pFonts = new std::map<int, freetype::font_data *>();
+	pFonts = new std::map<int, void *>();
 
 	
 	pFont = new freetype::font_data;
@@ -70,14 +71,15 @@ Font::Font()	{
 }
 
 void Font::print( Font::FONT F, int x, int y, string str)	{
-	map<int, freetype::font_data *>::iterator it;
 	WindowsManager& wm = WindowsManager::getInstance();
+	//map<int, freetype::font_data *>::iterator it;
+	map<int, void *>::iterator it;
 
 	freetype::font_data *  pFont;
 	it = pFonts->find( (int)F );
 
 	if ( it != pFonts->end() )	{
-		pFont = it->second;
+		pFont = (freetype::font_data*)it->second;
 
 		x = x + wm.getOffsetX();
 		y = wm.getHeight() - (y+20) + wm.getOffsetX();
@@ -94,7 +96,8 @@ void Font::print( Font::FONT F, int x, int y, char * cStr)	{
 	std::cout <<"void Font::print( Font::FONT : " << (int)F << ", int : "<< x <<", int : "<< y << ", char * : "<< cStr << ")" << std::endl;
 	//std::cout << "Nombre de pFonts : " << pFonts->size() << std::endl;
 	#endif
-	map<int, freetype::font_data *>::iterator it;
+	//map<int, freetype::font_data *>::iterator it;
+	map<int, void *>::iterator it;
 	WindowsManager& wm = WindowsManager::getInstance();
 	/*
 	#ifdef DEBUG
@@ -108,7 +111,7 @@ void Font::print( Font::FONT F, int x, int y, char * cStr)	{
 	it = pFonts->find( (int)F );
 
 	if ( it != pFonts->end() )	{
-		pFont = it->second;
+		pFont = (freetype::font_data *)it->second;
 
 		x = x + wm.getOffsetX();
 		y = wm.getHeight() - (y+20) + wm.getOffsetX();

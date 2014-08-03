@@ -260,6 +260,26 @@ void WindowsManager::idleGL()	{
 }
 
 
+void ChangeViewport(int _X0, int _Y0, int _Width, int _Height, int _OffsetX, int _OffsetY)	{
+    if( _Width>0 && _Height>0 )
+    {
+        GLint vp[4];
+        vp[0] = _X0;
+        vp[1] = _Y0;
+        vp[2] = _Width-1;
+        vp[3] = _Height-1;
+        //glViewport(vp[0], m_WndHeight-vp[1]-vp[3], vp[2], vp[3]);
+
+        GLint matrixMode = 0;
+        glGetIntegerv(GL_MATRIX_MODE, &matrixMode);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(_OffsetX, _OffsetX+vp[2], vp[3]-_OffsetY, -_OffsetY, -1, 1);
+        glMatrixMode(matrixMode);
+    }
+}
+
+
 
 void WindowsManager::displayGL()	{
 	//cout << "WindowsManager::displayGL()" << endl;
@@ -270,10 +290,14 @@ void WindowsManager::displayGL()	{
 	int wrap_t;
 	*/
 	
+	//int width  = WindowsManager::getInstance().getWidth();
+	//int height = WindowsManager::getInstance().getHeight();
 	
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
+
+	ChangeViewport( 0, 0, width, height, 0, 0 );
 
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();

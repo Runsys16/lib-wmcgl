@@ -48,28 +48,37 @@ PanelSimple::PanelSimple()	{
 	if ( g_DefaultNormalFont == NULL )	{
 		cout << "ERREUR : Font null ..." << endl;
 	}
-	else	{
-		cTextObj = textUtil->NewTextObj();
-		char cStr[255];
-		sprintf( cStr, "--- ID %d ---", getID() );
-		//str = new str::string()[30];
-		str.push_back( cStr );
-		str.push_back( cStr );
-		str.push_back( cStr );
-		str.push_back( cStr );
-
-	//void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines, const CTexFont *_Font, int _Sep, int _BgWidth)
-		//twFont.BuildText( cTextObj, &str, 0xffffffff, 0xffffffff, 1,  g_DefaultNormalFont, int _Sep, int _BgWidth)
-		color32 color		= COLOR32_WHITE;
-		color32 color_bg	= COLOR32_WHITE;
-		textUtil->BuildText( cTextObj, &(str[0]), &color, &color_bg, 1,  g_DefaultNormalFont, 10, 0);
-	}
+	
+	bTextOK = false;
 }
 
 
+void PanelSimple::buildText()	{
+	cTextObj = textUtil->NewTextObj();
+	char cStr[255];
+	sprintf( cStr, "--- ID %d ---", getID() );
+	//str = new str::string()[30];
+	str.push_back( cStr );
+	str.push_back( cStr );
+	str.push_back( cStr );
+	str.push_back( cStr );
+
+	str[1] = "essai de string dynamqiue de tres lognue string ...";
+	str[2] = "TEST TEST ...";
+	str[3] = "Ca fonctionne ...";
+
+	color32 color		= COLOR32_WHITE;
+	color32 color_bg	= COLOR32_WHITE;
+	textUtil->GenFont( g_DefaultNormalFont );
+	textUtil->BuildText( cTextObj, &str[0], &color, &color_bg, str.size(),  g_DefaultNormalFont, 10, 0);
+
+	bTextOK = true;
+}
 
 
 void PanelSimple::updatePos() {
+	if ( bTextOK == false )			buildText();
+
 	/*
 	for ( int i=0; i<NB; i++ )	{
 		if ( tab[i] == NULL )	{
@@ -86,7 +95,7 @@ void PanelSimple::updatePos() {
 	sprintf( tab[0], "--- Panel ID %d ---", getID() );
 	*/
 	Panel::updatePos();
-
+/*
 	char cStr[255];
 	sprintf( cStr, "--- ID %d ---", getID() );
 	str[0] = cStr;
@@ -100,6 +109,7 @@ void PanelSimple::updatePos() {
 	str[2] = "TEST TEST ...";
 	str[3] = "Ca fonctionne ...";
 	textUtil->BuildText( cTextObj, &(str[0]), &color, &color_bg, str.size(),  g_DefaultNormalFont, 0, 0);
+*/
 }
 
 
@@ -110,6 +120,7 @@ void PanelSimple::displayGL() {
 	//if (texBackground == null)			return;
 	//cout << "PanelSimple::displayGL()" << endl;
 	if (visible == false)			return;
+	if ( bTextOK == false )			return;
 
 	WindowsManager& wm = WindowsManager::getInstance();
 	
@@ -182,15 +193,11 @@ void PanelSimple::displayGL() {
 	glEnable( GL_SCISSOR_TEST );
 	
 	
-	int iTex = textUtil->BindFont( g_DefaultLargeFont );
-	/*
-	for ( int i=0; i<15; i++ )	{
-		int y = getY() + i*str.size()*15;
-		textUtil->DrawText( cTextObj, getX(), y, COLOR32_WHITE, COLOR32_RED );
-	}
-	*/
+	//int iTex = textUtil->BindFont( g_DefaultLargeFont );
+	textUtil->BindFont( g_DefaultNormalFont );
 	textUtil->DrawText( cTextObj, getX(), getY(), COLOR32_WHITE, COLOR32_RED );
-	textUtil->UnbindFont( iTex );
+	//textUtil->UnbindFont( iTex );
+	textUtil->UnbindFont();
 
 	textUtil->EndGL();
 	

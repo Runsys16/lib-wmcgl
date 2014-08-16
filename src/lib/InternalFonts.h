@@ -55,12 +55,19 @@ struct CTexFont
 CTexFont *TwGenerateFont(const unsigned char *_Bitmap, int _BmWidth, int _BmHeight);
 
 
-extern CTexFont *g_DefaultSmallFont;
-extern CTexFont *g_DefaultNormalFont;
-extern CTexFont *g_DefaultLargeFont;
 
-void TwGenerateDefaultFonts();
-void TwDeleteDefaultFonts();
+#ifndef INTERNALFONT_CPP
+extern CTexFont *DefaultSmallFont;
+extern CTexFont *DefaultNormalFont;
+extern CTexFont *DefaultLargeFont;
+#else
+CTexFont *DefaultSmallFont = NULL;
+CTexFont *DefaultNormalFont = NULL;
+CTexFont *DefaultLargeFont = NULL;
+#endif
+
+void wmcglGenerateDefaultFonts();
+void wmcglDeleteDefaultFonts();
 
 
 #endif  // !defined ANT_TW_FONTS_INCLUDED

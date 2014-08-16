@@ -158,9 +158,13 @@ PFNGLBlendFuncSeparate glBlendFuncSeparate = NULL;
 
 GLuint TextUtil::GenFont( CTexFont *_Font)
 {
+	//cout << "TextUtil::GenFont()" << endl;
+
 	if ( _Font->m_TexID != 0 )		return _Font->m_TexID;
+	
     GLuint TexID = 0;
     glGenTextures(1, &(_Font->m_TexID) );
+	cout << "TextUtil::GenFont() Generate Texture ID : " << _Font->m_TexID << endl;;
 	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
 
     glBindTexture(GL_TEXTURE_2D, _Font->m_TexID);
@@ -200,7 +204,7 @@ GLuint TextUtil::GenFont( CTexFont *_Font)
 
 void TextUtil::BindFont(const CTexFont *_Font)
 {
-	cout << "TextUtil::BindFont() : "<< _Font->m_TexID << endl;
+	//cout << "TextUtil::BindFont() : "<< _Font->m_TexID << endl;
 	glActiveTexture(GL_TEXTURE0+0);
     glBindTexture(GL_TEXTURE_2D, _Font->m_TexID);
 }
@@ -283,6 +287,12 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
         for( i=0; i<Len; ++i )
         {
             ch = Text[i];
+            if ( ch == '\t' )	{
+            	int pos = x / 40;
+            	x = (pos+1) * 40;
+            	continue;
+            }
+
             x1 = x + _Font->m_CharWidth[ch];
 
             TextObj->m_TextVerts.push_back(Vec2(x , y ));
@@ -332,6 +342,76 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
             }
         }
     }
+}
+
+//  ---------------------------------------------------------------------------
+
+int TextUtil::lenght(void *_TextObj, const std::string *_TextLines, CTexFont *_Font )
+//, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines, CTexFont *_Font, int _Sep, int _BgWidth)
+{
+    CTextObj *TextObj = static_cast<CTextObj *>(_TextObj);
+
+    int x, x1, y, y1, i, Len;
+    unsigned char ch;
+    const unsigned char *Text;
+	int _NbLines =1;
+	int _Sep = 0;
+
+    for( int Line=0; Line<_NbLines; ++Line )
+    {
+        x = 0;
+        y = Line * (_Font->m_CharHeight+_Sep);
+        y1 = y+_Font->m_CharHeight;
+        Len = (int)_TextLines[Line].length();
+        Text = (const unsigned char *)(_TextLines[Line].c_str());
+		
+		#ifdef DEBUG
+		cout << "TextUtil::BuildText Nb caractere : " << Len << endl;
+		cout << "TextUtil::BuildText sizeof Vec2 : " << sizeof(Vec2) << endl;
+		#endif
+        for( i=0; i<Len; ++i )
+        {
+            ch = Text[i];
+            x1 = x + _Font->m_CharWidth[ch];
+            x = x1;
+        }
+    }
+    
+    return x;
+}
+
+int TextUtil::lenght(void *_TextObj, const std::string *_TextLines, CTexFont *_Font, int nbChar )
+//, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines, CTexFont *_Font, int _Sep, int _BgWidth)
+{
+    CTextObj *TextObj = static_cast<CTextObj *>(_TextObj);
+
+    int x, x1, y, y1, i, Len;
+    unsigned char ch;
+    const unsigned char *Text;
+	int _NbLines =1;
+	int _Sep = 0;
+
+    for( int Line=0; Line<_NbLines; ++Line )
+    {
+        x = 0;
+        y = Line * (_Font->m_CharHeight+_Sep);
+        y1 = y+_Font->m_CharHeight;
+        Len = (int)_TextLines[Line].length();
+        Text = (const unsigned char *)(_TextLines[Line].c_str());
+		
+		#ifdef DEBUG
+		cout << "TextUtil::BuildText Nb caractere : " << Len << endl;
+		cout << "TextUtil::BuildText sizeof Vec2 : " << sizeof(Vec2) << endl;
+		#endif
+        for( i=0; i<nbChar; ++i )
+        {
+            ch = Text[i];
+            x1 = x + _Font->m_CharWidth[ch];
+            x = x1;
+        }
+    }
+    
+    return x;
 }
 
 //  ---------------------------------------------------------------------------
@@ -386,8 +466,8 @@ void TextUtil::DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 
 
     if( !TextObj || (TextObj->m_TextVerts.size()<4 && TextObj->m_BgVerts.size()<4 )	   ){
 		#ifdef DEBUG
-		#endif
     	std::cout << "Nothing to draw ..." << std::endl;
+		#endif
         return; // nothing to draw
     }
 	/*

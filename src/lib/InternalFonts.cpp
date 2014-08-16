@@ -6,6 +6,10 @@
 //              For conditions of distribution and use, see License.txt
 //
 //  ---------------------------------------------------------------------------
+#ifndef INTERNALFONT_CPP
+#define INTERNALFONT_CPP
+
+
 
 
 //#include "TwPrecomp.h"
@@ -62,9 +66,10 @@ static int NextPow2(int _n)
 
 const char *g_ErrBadFontHeight = "Cannot determine font height while reading font bitmap (check first pixel column)";
 
-CTexFont *TwGenerateFont(const unsigned char *_Bitmap, int _BmWidth, int _BmHeight)
+CTexFont *wmcglGenerateFont(const unsigned char *_Bitmap, int _BmWidth, int _BmHeight)
 {
     // find height of the font
+
     int x, y;
     int h = 0, hh = 0;
     int r, NbRow = 0;
@@ -136,6 +141,8 @@ CTexFont *TwGenerateFont(const unsigned char *_Bitmap, int _BmWidth, int _BmHeig
     lmax += 16*MARGIN_X;
     // - Second, build the texture
     CTexFont *TexFont = new CTexFont;
+    TexFont->m_TexID = 0;
+
     TexFont->m_NbCharRead = ch-32;
     TexFont->m_CharHeight = h;
     TexFont->m_TexWidth = NextPow2(lmax);
@@ -192,14 +199,16 @@ CTexFont *TwGenerateFont(const unsigned char *_Bitmap, int _BmWidth, int _BmHeig
         TexFont->m_CharWidth[ch] = TexFont->m_CharWidth[Undef]/2;
     }
 
+    TexFont->m_TexID = 0;
     return TexFont;
 }
 
 //  ---------------------------------------------------------------------------
-
-CTexFont *g_DefaultSmallFont = NULL;
-CTexFont *g_DefaultNormalFont = NULL;
-CTexFont *g_DefaultLargeFont = NULL;
+/*
+CTexFont *DefaultSmallFont = NULL;
+CTexFont *DefaultNormalFont = NULL;
+CTexFont *DefaultLargeFont = NULL;
+*/
 
 // Small font
 const int FONT0_BM_W = 211;
@@ -3923,26 +3932,29 @@ static const unsigned char s_Font2AA[] =
 };
 
 
-void TwGenerateDefaultFonts()
+void wmcglGenerateDefaultFonts()
 {
-    g_DefaultSmallFont = TwGenerateFont(s_Font0, FONT0_BM_W, FONT0_BM_H);
-    //assert(g_DefaultSmallFont && g_DefaultSmallFont->m_NbCharRead==224);
-    g_DefaultNormalFont = TwGenerateFont(s_Font1AA, FONT1AA_BM_W, FONT1AA_BM_H);
-    //assert(g_DefaultNormalFont && g_DefaultNormalFont->m_NbCharRead==224);
-    g_DefaultLargeFont = TwGenerateFont(s_Font2AA, FONT2AA_BM_W, FONT2AA_BM_H);
-    //assert(g_DefaultLargeFont && g_DefaultLargeFont->m_NbCharRead==224);
+    DefaultSmallFont = wmcglGenerateFont(s_Font0, FONT0_BM_W, FONT0_BM_H);
+    //assert(DefaultSmallFont && DefaultSmallFont->m_NbCharRead==224);
+    DefaultNormalFont = wmcglGenerateFont(s_Font1AA, FONT1AA_BM_W, FONT1AA_BM_H);
+    //assert(DefaultNormalFont && DefaultNormalFont->m_NbCharRead==224);
+    DefaultLargeFont = wmcglGenerateFont(s_Font2AA, FONT2AA_BM_W, FONT2AA_BM_H);
+    //assert(DefaultLargeFont && DefaultLargeFont->m_NbCharRead==224);
 }
 
 //  ---------------------------------------------------------------------------
 
-void TwDeleteDefaultFonts()
+void wmcglDeleteDefaultFonts()
 {
-    delete g_DefaultSmallFont;
-    g_DefaultSmallFont = NULL;
-    delete g_DefaultNormalFont;
-    g_DefaultNormalFont = NULL;
-    delete g_DefaultLargeFont;
-    g_DefaultLargeFont = NULL;
+    delete DefaultSmallFont;
+    DefaultSmallFont = NULL;
+    delete DefaultNormalFont;
+    DefaultNormalFont = NULL;
+    delete DefaultLargeFont;
+    DefaultLargeFont = NULL;
 }
 
 //  ---------------------------------------------------------------------------
+
+
+#endif

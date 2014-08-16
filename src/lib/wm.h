@@ -32,17 +32,22 @@
 
 //#define DEBUG_WM
 
+
 class WindowsManager {
 
 public:
+
+
 	void				init();
 	void				setScreenSize(int, int);
 	void				add(Panel *);
 	void				sup(Panel *);
 	void				supByID(int);
+	Panel*				getByID(int);
 	int					getFreeID();
-	Panel *				findPanelMouseOver(int, int);
+	Panel*				findPanelMouseOver(int, int);
 	void				movePanel( int, int);
+	void				movePanel( int, int, Panel* );
 	void				swapVisible();
 	
 	/*
@@ -65,8 +70,9 @@ public:
 	inline int			getOffsetY()					{return 0;}
 	inline TextUtil*	getTextUtil()					{return &textUtil;}
 
+	void				ChangeViewport(int, int, int, int, int, int);
 
-	void				idleGL();
+	void				idleGL(float);
 	void				displayGL();
 	void				clearBufferGL();
 	void				clearBufferGL( GLbitfield );
@@ -78,7 +84,10 @@ public:
 	void				keyboardFunc( unsigned char, int, int );
 	void				keyboardSpecialUpFunc( unsigned char, int, int );
 	void				keyboardSpecialFunc( unsigned char, int, int );
+
+	void				call_back_keyboard( Panel * );
 	
+
 	inline static WindowsManager&	getInstance()			{ if (!instance) instance = new WindowsManager();return *instance;}
 	inline static void				Destroy()				{ if (instance) delete instance;instance=0;}
 	
@@ -86,28 +95,34 @@ public:
 	WindowsManager(int, int);
 	~WindowsManager();
 
-	int			iTest;
+	int					iTest;
 
+				
 private:
-	static WindowsManager*	instance ;
+	static WindowsManager*	instance;
 	
-	int 					width;
-	int						height;
-	std::vector<Panel*>		childs;
+	int 						width;
+	int							height;
+	std::vector<Panel*>			childs;
 	//std::vector<Panel*>		panels;
-	Font*					fonts;
+	Font*						fonts;
 	
-	int						xm_old;
-	int						ym_old;
-	
-	void * 					cTextObj;
-	TextUtil				textUtil;
-	std::string				str[10];
+	int							xm_old;
+	int							ym_old;
+				
+	void * 						cTextObj;
+	TextUtil					textUtil;
+	std::string					str[10];
 
-
+	bool						bMovePanel;
+	Panel*						panelMove;
+	Panel*						panelFocus;
+	std::vector<Panel *>		panels_cbKey;
 };
 
-//WindowsManager* WindowsManager::instance = 0;
+#ifdef WM_CPP
+WindowsManager* WindowsManager::instance = 0;
+#endif
 
 
 #endif

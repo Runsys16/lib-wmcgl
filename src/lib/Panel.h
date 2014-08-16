@@ -6,14 +6,21 @@
 
 class Panel {
 	public:
+
+
 		Panel();
 		
 		void 				init();
 		void				add( Panel* );
+		void				sup( Panel* );
 		bool				isMouseOver( int, int);
 		
 		virtual void		displayGL();
 		virtual void		updatePos();
+		virtual void		idle(float)										{;};
+		virtual void		cb_keyboard( unsigned char ) 					{;};
+		virtual void		cb_keyboard_special( unsigned char )			{;};
+		
 
 		inline void			setParent( Panel* p )							{parent = p;};
 		inline Panel*		getParent()										{return parent;};

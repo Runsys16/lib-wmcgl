@@ -1,3 +1,5 @@
+#define WM_CPP
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
@@ -62,11 +64,11 @@ void WindowsManager::init()	{
 	
 	fonts = new Font();
 
-	TwGenerateDefaultFonts();
+	wmcglGenerateDefaultFonts();
 	cTextObj = textUtil.NewTextObj();
 	
 	
-	if ( g_DefaultNormalFont == NULL )	{
+	if ( DefaultNormalFont == NULL )	{
 		cout << "ERREUR : Font null ..." << endl;
 	}
 
@@ -83,12 +85,13 @@ void WindowsManager::init()	{
 	str[9] = "Sur 10 lignes ...";
 
 //void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines, const CTexFont *_Font, int _Sep, int _BgWidth)
-	//twFont.BuildText( cTextObj, &str, 0xffffffff, 0xffffffff, 1,  g_DefaultNormalFont, int _Sep, int _BgWidth)
+	//twFont.BuildText( cTextObj, &str, 0xffffffff, 0xffffffff, 1,  DefaultNormalFont, int _Sep, int _BgWidth)
 	color32 color		= COLOR32_WHITE;
 	color32 color_bg	= COLOR32_WHITE;
-	textUtil.BuildText( cTextObj, str, &color, &color_bg, 10,  g_DefaultNormalFont, 2, 100);
+	textUtil.BuildText( cTextObj, str, &color, &color_bg, 10,  DefaultNormalFont, 2, 100);
 
 
+	panelMove = NULL;
 
 }
 
@@ -152,6 +155,22 @@ void WindowsManager::supByID( int id )	{
 }
 
 
+Panel* WindowsManager::getByID( int id )	{
+	#ifdef DEBUG
+	cout << "WindowsManager::getByID( " << id << " )" << endl;
+	#endif
+
+	int nb = childs.size();
+	
+	for ( int i=0; i<nb; i++ )	{
+		if ( childs[i]->getID() == id )	{
+			return childs[i];
+		}
+	}
+	return NULL;
+}
+
+
 int WindowsManager::getFreeID()	{
 	#ifdef DEBUG
 	cout << "WindowsManager::getFreeID() : ";// << endl;
@@ -202,6 +221,15 @@ void WindowsManager::movePanel( int xm, int ym)	{
 	Panel * p;
 	
 	p = findPanelMouseOver( xm, ym );
+	movePanel( xm, ym, p );
+}
+
+
+void WindowsManager::movePanel( int xm, int ym, Panel* p )	{
+	#ifdef DEBUG
+	cout << "WindowsManager::movePanel( " << xm << ", " << ym << " )" << endl;
+	#endif
+
 	if ( p != NULL )	{
 		#ifdef DEBUG
 		cout << "WindowsManager::Mouse Over Panel.ID = " << p->getID() << endl;
@@ -231,15 +259,11 @@ void WindowsManager::swapVisible()	{
 }
 
 
-/*
-void	WindowsManager::setWidth( int w)				{width=w;}
-int		WindowsManager::getWidth()						{return width;}
-void	WindowsManager::setHeight( int h )				{height=h;}
-int		WindowsManager::getHeight()						{return height;}
-Font*	WindowsManager::getFonts()						{return fonts;}
-int		WindowsManager::getOffsetX()					{return 0;}
-int		WindowsManager::getOffsetY()					{return 0;}
-*/
+
+
+void WindowsManager::call_back_keyboard( Panel * p )	{
+	panels_cbKey.push_back(p);
+}
 
 
 
@@ -248,19 +272,21 @@ int		WindowsManager::getOffsetY()					{return 0;}
 //               opengl function	s
 //------------------------------------------------------------
 
-void WindowsManager::idleGL()	{
+void WindowsManager::idleGL(float elapsedTime)	{
 	//cout << "WindowsManager::idleGL()" << endl;
 	int nb = childs.size();
 	
 	for( int i=0; i<nb; i++ )	{
-		childs[i]->updatePos();
+		childs[i]->idle( elapsedTime );
 	}
 
-
+	for( int i=0; i<nb; i++ )	{
+		childs[i]->updatePos();
+	}
 }
 
 
-void ChangeViewport(int _X0, int _Y0, int _Width, int _Height, int _OffsetX, int _OffsetY)	{
+void WindowsManager::ChangeViewport(int _X0, int _Y0, int _Width, int _Height, int _OffsetX, int _OffsetY)	{
     if( _Width>0 && _Height>0 )
     {
         GLint vp[4];
@@ -283,15 +309,6 @@ void ChangeViewport(int _X0, int _Y0, int _Width, int _Height, int _OffsetX, int
 
 void WindowsManager::displayGL()	{
 	//cout << "WindowsManager::displayGL()" << endl;
-	/*
-	int min_filter;
-	int mag_filter;
-	int wrap_s;
-	int wrap_t;
-	*/
-	
-	//int width  = WindowsManager::getInstance().getWidth();
-	//int height = WindowsManager::getInstance().getHeight();
 	
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -306,15 +323,6 @@ void WindowsManager::displayGL()	{
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);		//Color.black.bind();
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	/*
-
-	min_filter	= glGetTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER);		
-	mag_filter	= glGetTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER);		
-	wrap_s		= glGetTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S);
-	wrap_t		= glGetTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);		
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);		
-	*/
 
 	int nb = childs.size();
 	
@@ -322,26 +330,10 @@ void WindowsManager::displayGL()	{
 		childs[i]->displayGL();
 	}
 	
-	//fonts->print( Font::UBUNTU_B, 50, 500, (string)"Essai numero 1" );
-	//fonts->print( Font::UBUNTU_B, 50, 530, (string)"Essai numero 2" );
-
 	#ifdef DEBUG
 	cout << "WindowsManager::displayGL()  Draw Texte" << endl;
 	#endif
-	/*
-	textUtil.BeginGL();
-	int iTex = textUtil.BindFont( g_DefaultNormalFont );
-	textUtil.DrawText( cTextObj, 100, 100, COLOR32_WHITE, COLOR32_GREEN );
-	textUtil.UnbindFont( iTex );
-	textUtil.EndGL();
-	*/
-	/*
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);		
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);		
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_s);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t);
-	*/
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);		//Color.black.bind();
 
@@ -373,35 +365,62 @@ void WindowsManager::passiveMotionFunc(int x, int y)	{
 
 void WindowsManager::motionFunc(int x, int y)	{
 	//cout << "WindowsManager::motionFunc( " << x << ", " << y << " )" << endl;
-	movePanel( x, y );
+	if ( bMovePanel && panelMove != NULL )	{
+		movePanel( x, y, panelMove );
+	}
 }
 
 void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
-	//cout << "WindowsManager::mouseFunc( " << button << ", " << state << ", " << x << ", " << y << " )" << endl;
+	cout << "WindowsManager::mouseFunc( " << button << ", " << state << ", " << x << ", " << y << " )" << endl;
 	
-	if ( button == 2 && state == 1 )	{
-		swapVisible();
+	if ( button == 2 && state == 0 )	{
+		panelMove = findPanelMouseOver(x, y);
+		if ( panelMove != NULL )	{
+			bMovePanel = true;
+		}
+		//swapVisible();
 	}
+	else if ( button == 2 && state == 1 )	{
+		panelMove = NULL;
+		bMovePanel = false;
+		xm_old = -1;
+		ym_old = -1;
+	}
+	
+	int ID;
+	if ( panelMove == NULL )		ID = -1;
+	else							ID = panelMove->getID();
+	
+	cout << "WindowsManager::mouseFunc Addr : " << panelMove <<" ID "<< ID <<", " << bMovePanel << endl;;
+
 }
 
 
 
 void WindowsManager::keyboardFunc( unsigned char key, int x, int y)	{
-	//cout << "WindowsManager::keyboardFunc( " << key << ", " << x << ", " << y << " )" << endl;
+	cout << "WindowsManager::keyboardFunc( " << key << ", " << x << ", " << y << " )" << endl;
+	int nb = panels_cbKey.size();
+	for( int i=0; i<nb; i++ )	{
+		panels_cbKey[i]->cb_keyboard( key );
+	}
 }
 
 void WindowsManager::keyboardUpFunc( unsigned char key, int x, int y)	{
-	//cout << "WindowsManager::keyboardUpFunc( " << key << ", " << x << ", " << y << " )" << endl;
+	cout << "WindowsManager::keyboardUpFunc( " << key << ", " << x << ", " << y << " )" << endl;
 }
 
 
 
 void WindowsManager::keyboardSpecialFunc( unsigned char key, int x, int y)	{
-	//cout << "WindowsManager::keyboardSpecialFunc( " << key << ", " << x << ", " << y << " )" << endl;
+	cout << "WindowsManager::keyboardSpecialFunc( " << key << ", " << x << ", " << y << " )" << endl;
+	int nb = panels_cbKey.size();
+	for( int i=0; i<nb; i++ )	{
+		panels_cbKey[i]->cb_keyboard_special( key );
+	}
 }
 
 void WindowsManager::keyboardSpecialUpFunc( unsigned char key, int x, int y)	{
-	//cout << "WindowsManager::keyboardSpecialUpFunc( " << key << ", " << x << ", " << y << " )" << endl;
+	cout << "WindowsManager::keyboardSpecialUpFunc( " << key << ", " << x << ", " << y << " )" << endl;
 }
 //------------------------------------------------------------
 

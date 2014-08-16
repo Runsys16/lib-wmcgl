@@ -1,11 +1,16 @@
+#include <stdio.h>
+
 #include <GL/glew.h>
 #include <GL/glut.h>
+#include <GL/gl.h>
+
 
 #include <iostream>
 #include <string>
-
+#include <typeinfo>
 
 #include <WindowsManager.h>
+
 
 using namespace std;
 
@@ -13,8 +18,9 @@ using namespace std;
 
 
 GLenum err;
-float prevTime = -1.0f;
+//PanelConsole console(100);
 
+float prevTime = -1.0;
 
 //WindowsManager & wm = WindowsManager::getInstance();
 
@@ -99,6 +105,8 @@ static void idleGL(void)
 
 
 
+
+
 static void quit(void)
 {
 	exit(0);
@@ -130,12 +138,62 @@ static void initGL(int argc,
 
 
 static void glutKeyboardFunc(unsigned char key, int x, int y) {
+	PanelConsole* console = (PanelConsole*)WindowsManager::getInstance().getByID(5);
+	cout <<"Console addr : "<< console <<"typeof "<< typeid(console).name() << endl;
+	WindowsManager::getInstance().keyboardFunc( key, x, y);
+
+	static int n = 0;
+	
+	
 	switch(key){ 
-	case 27: quit(); break;
-	default :
-		WindowsManager::getInstance().swapVisible();
-		std::cout << (int)key << std::endl;
+	case 27: 
+		{
+		quit();
+		}
 		break;
+	
+/*	
+	case '\r':
+		{
+		char buff[80];
+		sprintf( buff, "Essai de console %d ...", n++ );
+		
+		std::string * Affichage = new std::string(buff);
+		cout << Affichage << endl;
+		
+		//if ( console != NULL )	console->affiche( dynamic_cast<string*> (&Affichage)  ); 
+		if ( console != NULL )	console->affiche(  Affichage ); 
+		if ( console != NULL )	console->addLine();
+		}
+		break;
+	
+	case 178:
+		{
+		
+		char buff[80];
+		sprintf( buff, "Essai de console %d ...", n++ );
+		
+		std::string * Affichage = new std::string(buff);
+		cout << Affichage << endl;
+		
+		if ( console != NULL )	console->affiche( Affichage ); 
+		//if ( console != NULL )	console->addLine();
+		}
+		break;
+	
+	case 9:
+		{
+		WindowsManager::getInstance().swapVisible();
+		}
+		break;
+
+	default :
+		{
+		std::cout << (int)key << std::endl;
+		if ( console != NULL )	console->addChar(  key ); 
+		}
+		break;
+*/
 	}
 }
 
@@ -172,6 +230,8 @@ static void CreateAllWindows()	{
 	WindowsManager& wm = WindowsManager::getInstance();
 	wm.setScreenSize( width-100, height-100 );
 
+	string * pStr;
+
 	PanelSimple  * ps;
 	PanelText* pt;
 	
@@ -179,7 +239,7 @@ static void CreateAllWindows()	{
 	ps = new PanelSimple();
 	ps->setPosAndSize( 50+0, 50+50, 200, wm.getHeight()-100);
 	wm.add( ps );
-	int y = 100;
+	int y = 10;
 	int dy = 15;
 	ps->add( new PanelText( "Fichier",		PanelText::LARGE_FONT, 5, y + 0*dy ) );
 	ps->add( new PanelText( "Edition",		PanelText::LARGE_FONT, 5, y + 1*dy ) );
@@ -196,30 +256,59 @@ static void CreateAllWindows()	{
 	ps = new PanelSimple();
 	ps->setPosAndSize( 50+0, 50+wm.getHeight()-50-2, wm.getWidth(), 50+2);
 	wm.add( ps );
+	//ps->add( new PanelText( *(new string("Press ESC to quit")),	PanelText::NORMAL_FONT, 10, 5 ) );
+	pStr = new string("Press ESC to quit");
+	PanelText* pT = new PanelText( *pStr,	PanelText::NORMAL_FONT, 0, 20 );
+	pT->setAlign( PanelText::CENTER );
+	//ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 5 ) );
+	ps->add( pT );
 	
 	ps = new PanelSimple();
 	ps->setPosAndSize( 50+0, 50+0, wm.getWidth(), 50+2);
 	wm.add( ps );
+	pStr = new string("Press ESC to quit");
+	ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 5 ) );
+	pStr = new string("Or key to test console");
+	ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 20 ) );
 	
 	
 	ps = new PanelSimple();
-	ps->setPosAndSize( 50+200, 50+200, 400, 600);
+	ps->setPosAndSize( 650-4, 50+50+0, 400, 600);
 	wm.add( ps );
 	
-	pt = new PanelText( "1 Essai de panelText", PanelText::SMALL_FONT );
+	pt = new PanelText( "1 Essai de panelText SMALL_FONT", PanelText::SMALL_FONT );
 	pt->setPos( 40, 100 );
 	ps->add( pt );
 	
-	pt = new PanelText( "2 Essai de panelText", PanelText::NORMAL_FONT );
+	pt = new PanelText( "2 Essai de panelText NORMAL_FONT", PanelText::NORMAL_FONT );
 	pt->setPos( 60, 120 );
 	ps->add( pt );
 	
-	pt = new PanelText( "3 Essai de panelText", PanelText::LARGE_FONT );
+	pt = new PanelText( "3 Essai de panelText LARGE_FONT", PanelText::LARGE_FONT );
 	pt->setPos( 80, 140 );
 	ps->add( pt );
 	
+
+
+	PanelConsole* pc;
+	pc = new PanelConsole( 100 );
+	pc->setPosAndSize( 10, 10, 400, 600);
+	pc->setPosAndSize( 250-2, 100, 400, wm.getHeight()-100);
+	pc->setPrompt( "console> " );
+	pc->setPrompt( "rene@poste-002:/home/rene$ " );
+	pc->setPrompt( "con:> " );
+	wm.add( pc );
 	
+	pc = new PanelConsole( 100 );
+	pc->setPosAndSize( 250-2-4+800, 100, 200+8, wm.getHeight()-100);
+	pc->setPrompt( "rene@poste-002:/home/rene$ " );
+	pc->setPrompt( "con:> " );
+	pc->setPrompt( "console> " );
+	wm.add( pc );
+
 	wm.setScreenSize( width, height );
+	//console.setPosAndSize( 10, 10, 400, 600);
+	//wm.add( &console );
 }
 
 
@@ -246,7 +335,7 @@ int main(int argc,
 	glutInitWindowSize( width, height );
 	glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH)-width)/2, (glutGet(GLUT_SCREEN_HEIGHT)-height)/2 );
 
-	if (glutCreateWindow("Sample-00") == 0){ 
+	if (glutCreateWindow("Sample-01") == 0){ 
 		return 1;
 	}
 

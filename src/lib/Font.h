@@ -23,6 +23,12 @@ class Font 	{
 		void				print(Font::FONT, int, int, std::string );
 		void				print(Font::FONT, int, int, char* );
 
+		/*
+		static CTexFont *DefaulttSmallFont = NULL;
+		static CTexFont *DefaulttNormalFont = NULL;
+		static CTexFont *DefaulttLargeFont = NULL;
+		*/
+
 	private:
 		//std::map<int, freetype::font_data *>*		pFonts;
 		std::map<int, void *>*		pFonts;

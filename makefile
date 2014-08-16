@@ -16,11 +16,12 @@ OBJ		= $(SRC:$(SRCDIR)%.cpp=$(OBJDIR)%.o)
 BIN		= $(BINDIR)libwmcgl.so.$(VER)
 BINNAME = libwmcgl.so
 
-INCS =  -I"/usr/include" -I"/usr/include/freetype2" 
-LIBS	=  -lGL -lglut -lGLU -lGLEW -lIL -lfreetype -shared
+LIBS	=  -lfreetype -lGL -lglut -lGLU -lGLEW -lIL -shared
 
+INCS =  -I"/usr/include" -I"/usr/include/freetype2" 
 CXXINCS =  -Wno-deprecated 
 CXXFLAGS = $(CXXINCS)  -O2  -shared
+CFLAGS = $(INCS) -O2 -fpic -fpermissive -mtune=core2 -Wno-deprecated -Wno-unused-result
 CFLAGS = $(INCS) -g -O2 -fpic -fpermissive -mtune=core2 -Wno-deprecated -Wno-unused-result
 
 
@@ -265,6 +266,10 @@ $(OBJDIR)InternalFonts.o :   $(SRCDIR)InternalFonts.cpp  $(SRCDIR)InternalFonts.
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
 $(OBJDIR)Panel.o :   $(SRCDIR)Panel.cpp  $(SRCDIR)Panel.h 
+	@echo ---------   compilation de $@
+	$(CPP) -c $< -o $@  $(CFLAGS)
+
+$(OBJDIR)PanelConsole.o :   $(SRCDIR)PanelConsole.cpp  $(SRCDIR)PanelConsole.h  $(SRCDIR)PanelSimple.h  $(SRCDIR)Panel.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)PanelText.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h 
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 

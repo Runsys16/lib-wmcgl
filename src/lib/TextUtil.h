@@ -46,7 +46,9 @@ public:
     void *      NewTextObj();
     void        DeleteTextObj(void *_TextObj);
     void        BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines,  CTexFont *_Font, int _Sep, int _BgWidth);
-    
+
+    int			lenght(void *_TextObj, const std::string *_TextLines, CTexFont * );
+    int			lenght(void *_TextObj, const std::string *_TextLines, CTexFont *, int );
     void		BeginGL();
     void		EndGL();
     void        DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 _BgColor);

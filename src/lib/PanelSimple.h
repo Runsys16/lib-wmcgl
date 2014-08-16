@@ -11,8 +11,9 @@ class PanelSimple : public Panel {
 		PanelSimple();
 		
 		void				buildText();
-		void				displayGL();
-		void				updatePos();
+
+		virtual void		displayGL();
+		virtual void		updatePos();
 		
 	private:
 		Texture2D*		m_pTexBackground;

@@ -26,40 +26,16 @@ class Font 	{
 		void				print(Font::FONT, int, int, std::string );
 		void				print(Font::FONT, int, int, char* );
 
+		/*
+		static CTexFont *DefaulttSmallFont = NULL;
+		static CTexFont *DefaulttNormalFont = NULL;
+		static CTexFont *DefaulttLargeFont = NULL;
+		*/
+
 	private:
 		//std::map<int, freetype::font_data *>*		pFonts;
 		std::map<int, void *>*		pFonts;
 };
-
-
-//  ---------------------------------------------------------------------------
-//
-//  @file       TwFonts.h
-//  @brief      Bitmaps fonts
-//  @author     Philippe Decaudin - http://www.antisphere.com
-//  @license    This file is part of the AntTweakBar library.
-//              For conditions of distribution and use, see License.txt
-//
-//  note:       Private header
-//
-//  ---------------------------------------------------------------------------
-
-
-
-
-/*
-  
-@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_
-`abcdefghijklmnopqrstuvwxyz{|}~
-
- ¡¢£€¥Š§š©ª«¬­®¯°±²³Žµ¶·ž¹º»ŒœŸ¿
-ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞß
-àáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ
-
-First column of a source bitmap is a delimiter with color=zero at the end of each line of characters.
-Last row of a line of characters is a delimiter with color=zero at the last pixel of each character.
-
-*/
 
 
 struct CTexFont
@@ -84,13 +60,13 @@ struct CTexFont
 CTexFont *TwGenerateFont(const unsigned char *_Bitmap, int _BmWidth, int _BmHeight);
 
 
-extern CTexFont *g_DefaultSmallFont;
-extern CTexFont *g_DefaultNormalFont;
-extern CTexFont *g_DefaultLargeFont;
 
-void TwGenerateDefaultFonts();
-void TwDeleteDefaultFonts();
+extern CTexFont *DefaultSmallFont;
+extern CTexFont *DefaultNormalFont;
+extern CTexFont *DefaultLargeFont;
 
+void wmcglGenerateDefaultFonts();
+void wmcglDeleteDefaultFonts();
 
 //  ---------------------------------------------------------------------------
 //
@@ -130,7 +106,9 @@ public:
     void *      NewTextObj();
     void        DeleteTextObj(void *_TextObj);
     void        BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines,  CTexFont *_Font, int _Sep, int _BgWidth);
-    
+
+    int			lenght(void *_TextObj, const std::string *_TextLines, CTexFont * );
+    int			lenght(void *_TextObj, const std::string *_TextLines, CTexFont *, int );
     void		BeginGL();
     void		EndGL();
     void        DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 _BgColor);
@@ -199,14 +177,21 @@ protected:
 
 class Panel {
 	public:
+
+
 		Panel();
 		
 		void 				init();
 		void				add( Panel* );
+		void				sup( Panel* );
 		bool				isMouseOver( int, int);
 		
 		virtual void		displayGL();
 		virtual void		updatePos();
+		virtual void		idle(float)										{;};
+		virtual void		cb_keyboard( unsigned char ) 					{;};
+		virtual void		cb_keyboard_special( unsigned char )			{;};
+		
 
 		inline void			setParent( Panel* p )							{parent = p;};
 		inline Panel*		getParent()										{return parent;};
@@ -266,8 +251,9 @@ class PanelSimple : public Panel {
 		PanelSimple();
 		
 		void				buildText();
-		void				displayGL();
-		void				updatePos();
+
+		virtual void		displayGL();
+		virtual void		updatePos();
 		
 	private:
 		Texture2D*		m_pTexBackground;
@@ -289,6 +275,7 @@ class PanelText : public Panel	{
 
 	public:
 		enum FONT { ARIAL, UBUNTU_B, UBUNTU_RI, UBUNTU_R, DEJA_VU_SANS_MONO, NORMAL_FONT, SMALL_FONT, LARGE_FONT };
+		enum ALIGN { LEFT, RIGHT, CENTER };
 
 
 		PanelText();
@@ -298,24 +285,79 @@ class PanelText : public Panel	{
 
 		void 				buildString();
 		
+		inline std::string	getText()										{return text;};
+		int					getTextLenght();
+		int					getTextLenght(int);
+
 		void 				changeText( std::string );
 		void 				changeText( std::string, FONT );
+		void 				changeText( std::string, bool );
+		void 				changeText( std::string, FONT, bool );
 		
-		void				displayGL();
-		void				updatePos();
+		virtual void		displayGL();
+		virtual void		updatePos();
+		
+		inline void 		setAlign( ALIGN a )								{align = a;};
 		
 	private:
-		void				displayGLInternal();
+		//----------------- functions
 		std::string			strFont();		
+		void				displayGLInternal();
+
+		//----------------- members
+		ALIGN			align;
 
 		TextUtil*		textUtil;
 		FONT			typeFont;
 		std::string		text;
+		std::string		cmdLine;
 		bool			bChange;
 		
 		void*			pTextGL;
 	
 };
+
+
+
+
+
+
+
+class PanelConsole : public PanelSimple	{
+
+	public:
+
+		PanelConsole( int );
+		
+		void						setPrompt( std::string );
+
+		virtual void				displayGL();
+		virtual void				updatePos();
+		virtual void				idle(float);
+		virtual void				cb_keyboard( unsigned char );
+		virtual void				cb_keyboard_special( unsigned char );
+		
+		void						addLine();
+		void						affiche( std::string * );
+		void						addChar( char );
+		void						supChar();
+		
+		void						incCursor();
+		void						moveCursor();
+		
+	private:
+		std::vector<PanelText *>	texts;
+		std::string					prompt;
+		PanelText					cursor;
+		
+		int 						currentLine;
+		int							currentPos;
+		
+		float						cursorTime;
+		bool						bIns;
+	
+};
+
 
 
 
@@ -331,14 +373,18 @@ class PanelText : public Panel	{
 class WindowsManager {
 
 public:
+
+
 	void				init();
 	void				setScreenSize(int, int);
 	void				add(Panel *);
 	void				sup(Panel *);
 	void				supByID(int);
+	Panel*				getByID(int);
 	int					getFreeID();
-	Panel *				findPanelMouseOver(int, int);
+	Panel*				findPanelMouseOver(int, int);
 	void				movePanel( int, int);
+	void				movePanel( int, int, Panel* );
 	void				swapVisible();
 	
 	/*
@@ -361,8 +407,9 @@ public:
 	inline int			getOffsetY()					{return 0;}
 	inline TextUtil*	getTextUtil()					{return &textUtil;}
 
+	void				ChangeViewport(int, int, int, int, int, int);
 
-	void				idleGL();
+	void				idleGL(float);
 	void				displayGL();
 	void				clearBufferGL();
 	void				clearBufferGL( GLbitfield );
@@ -374,7 +421,10 @@ public:
 	void				keyboardFunc( unsigned char, int, int );
 	void				keyboardSpecialUpFunc( unsigned char, int, int );
 	void				keyboardSpecialFunc( unsigned char, int, int );
+
+	void				call_back_keyboard( Panel * );
 	
+
 	inline static WindowsManager&	getInstance()			{ if (!instance) instance = new WindowsManager();return *instance;}
 	inline static void				Destroy()				{ if (instance) delete instance;instance=0;}
 	
@@ -382,31 +432,33 @@ public:
 	WindowsManager(int, int);
 	~WindowsManager();
 
-	int			iTest;
+	int					iTest;
 
+				
 private:
-	static WindowsManager*	instance ;
+	static WindowsManager*	instance;
 	
-	int 					width;
-	int						height;
-	std::vector<Panel*>		childs;
+	int 						width;
+	int							height;
+	std::vector<Panel*>			childs;
 	//std::vector<Panel*>		panels;
-	Font*					fonts;
+	Font*						fonts;
 	
-	int						xm_old;
-	int						ym_old;
-	
-	void * 					cTextObj;
-	TextUtil				textUtil;
-	std::string				str[10];
+	int							xm_old;
+	int							ym_old;
+				
+	void * 						cTextObj;
+	TextUtil					textUtil;
+	std::string					str[10];
 
-
+	bool						bMovePanel;
+	Panel*						panelMove;
+	Panel*						panelFocus;
+	std::vector<Panel *>		panels_cbKey;
 };
 
-//WindowsManager* WindowsManager::instance = 0;
 
 
 
 
-WindowsManager* WindowsManager::instance = 0;
 #endif

@@ -7,7 +7,7 @@
 #include "wm.h"
 
 //#define DEBUG
-#define DEBUG_CONST
+//#define DEBUG_CONST
 
 #ifdef DEBUG_WM
 #	define DEBUG
@@ -31,8 +31,12 @@ PanelText::PanelText()	{
 	cout << "Constructeur PanelText ..." << endl;
 	#endif
 
+	text = "";
 	textUtil = WindowsManager::getInstance().getTextUtil();
 	setPos( 0, 0 );
+	align = LEFT;
+	pTextGL = NULL;
+	bChange = false;
 }
 
 
@@ -40,7 +44,9 @@ PanelText::PanelText( string str )	{
 	#ifdef DEBUG_CONST
 	cout << "Constructeur PanelText( "<< str <<" )" << endl;
 	#endif
+
 	PanelText();
+
 	changeText( str );
 }
 
@@ -51,9 +57,8 @@ PanelText::PanelText( string str, FONT type )	{
 	cout << "Constructeur PanelText( "<< str <<", "<< strFont() <<" )" << endl;
 	#endif
 	PanelText();
-	bChange = true;
 
-	changeText( str, type );
+	changeText( str, type, true );
 }
 
 
@@ -62,11 +67,11 @@ PanelText::PanelText( string str, FONT type, int x, int y )	{
 	#ifdef DEBUG_CONST
 	cout << "Constructeur PanelText( "<< str <<", "<< strFont() <<", "<< x <<", "<< y <<" )" << endl;
 	#endif
-	PanelText();
-	bChange = true;
 
-	changeText( str, type );
+	PanelText();
+
 	setPos(x, y);
+	changeText( str, type );
 }
 
 
@@ -95,9 +100,14 @@ string PanelText::strFont() {
 
 void PanelText::changeText( string str )	{
 	#ifdef DEBUG
-	cout << "PanelText::changeText( "<< str <<" )" << endl;
+	cout << "PanelText::changeText( "<< str <<", "<< strFont() <<" )" <<  endl;
 	#endif
 	
+	if ( text.compare(str) == 0 )		{
+		bChange = false;
+		return;
+	}
+
 	text = str;
 	bChange = true;
 }
@@ -106,44 +116,98 @@ void PanelText::changeText( string str )	{
 
 void PanelText::changeText( string str, FONT type )	{
 	#ifdef DEBUG
+	cout << "PanelText::changeText( "<< str  <<", "<< strFont() <<" )" << endl;
+	#endif
+	
+	if ( (text.compare(str) == 0) && (type == typeFont) )		{
+		bChange = false;
+		return;
+	}
+
+	typeFont = type;
+	changeText( str );
+}
+
+
+void PanelText::changeText( string str, bool build )	{
+	#ifdef DEBUG
+	cout << "PanelText::changeText( "<< str <<", "<< strFont()  <<" )" << endl;
+	#endif
+	
+	if ( text.compare(str) == 0 )		{
+		bChange = false;
+		return;
+	}
+
+	bChange = true;
+
+	text = str;
+	bChange = true;
+	
+	if (build)		buildString();
+}
+
+
+
+void PanelText::changeText( string str, FONT type, bool build )	{
+	#ifdef DEBUG
 	cout << "PanelText::changeText( "<< str <<", "<< type <<" )" << endl;
 	#endif
 	
+	if ( (type == typeFont) && text.compare(str) == 0 )	{
+		bChange = false;
+		return;
+	}
+	
 	typeFont = type;
-	changeText( str );
+	text = str;
+
+	if (build)		buildString();
 }
 
 
 
 void PanelText::buildString()	{
 	#ifdef DEBUG
-	cout << "PanelText::buildString() font = "<< strFont() << endl;
+	cout << "PanelText::buildString() font = "<< strFont() <<"  texte = \""<< text <<"\""<< endl;
 	#endif
+	if ( text.compare("") == 0 )	{ pTextGL = NULL; return; }
+	
 	textUtil = WindowsManager::getInstance().getTextUtil();
 
-	color32 color		= COLOR32_WHITE;
+	color32 color		= COLOR32_BLACK;
 	color32 color_bg	= COLOR32_WHITE;
 
+	//if (pTextGL != NULL )	textUtil->DeleteTextObj( pTextGL );
 	pTextGL = textUtil->NewTextObj();
  
 
 	switch (typeFont )	{
 	case NORMAL_FONT :
-		textUtil->GenFont( g_DefaultNormalFont );
-		textUtil->BuildText( pTextGL, &(text), &color, &color_bg, 1,  g_DefaultNormalFont, 0, 0);
+		textUtil->GenFont( DefaultNormalFont );
+		textUtil->BuildText( pTextGL, &(text), &color, &color_bg, 1,  DefaultNormalFont, 0, 0);
 		break;
 	case SMALL_FONT :
-		textUtil->GenFont( g_DefaultSmallFont );
-		textUtil->BuildText( pTextGL, &(text), &color, &color_bg, 1,  g_DefaultSmallFont, 0, 0);
+		textUtil->GenFont( DefaultSmallFont );
+		textUtil->BuildText( pTextGL, &(text), &color, &color_bg, 1,  DefaultSmallFont, 0, 0);
 		break;
 	case LARGE_FONT :
-		textUtil->GenFont( g_DefaultLargeFont );
-		textUtil->BuildText( pTextGL, &(text), &color, &color_bg, 1,  g_DefaultLargeFont, 0, 0);
+		textUtil->GenFont( DefaultLargeFont );
+		textUtil->BuildText( pTextGL, &(text), &color, &color_bg, 1,  DefaultLargeFont, 0, 0);
 		break;
 	}
 	bChange = false;
 }
 
+
+
+int PanelText::getTextLenght()	{
+	return( textUtil->lenght( pTextGL, &text, DefaultNormalFont ) );
+}
+
+int PanelText::getTextLenght( int nbChar )	{
+	return( textUtil->lenght( pTextGL, &text, DefaultNormalFont, nbChar ) );
+}
 
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -154,11 +218,17 @@ void PanelText::buildString()	{
 void PanelText::updatePos() {
 	#ifdef DEBUG
 	cout << "PanelText::updatePos()" << boolalpha << bChange;
-	cout << ", typeFont = "<< strFont() << endl;
+	cout << ", typeFont = "<< strFont();
+	cout << ", addr str = "<< &text;
+	cout << endl;
 	#endif
-	
 	Panel::updatePos();
-	
+
+	if ( pTextGL == NULL )	{
+		bChange = false;
+		return;	
+	}
+
 	if ( bChange )	{
 		switch( typeFont )	{
 		case NORMAL_FONT :
@@ -168,6 +238,52 @@ void PanelText::updatePos() {
 			break;
 		}
 	}
+
+
+
+	switch (align)	{
+	case LEFT:
+		break;
+	case CENTER:
+		if ( parent && bChange == false )	{
+			int l;
+			switch( typeFont )	{
+				case NORMAL_FONT :		l = textUtil->lenght( pTextGL, &text, DefaultNormalFont );		break;
+				case SMALL_FONT :		l = textUtil->lenght( pTextGL, &text, DefaultSmallFont );		break;
+				case LARGE_FONT :		l = textUtil->lenght( pTextGL, &text, DefaultLargeFont );		break;
+			}
+			#ifdef DEBUG
+				cout << "Align : l="<< l << " String=\""<< text <<"\"" << endl;
+				cout << "Align : x="<< x_raw << endl;
+			#endif
+			x_raw += parent->getDX()/2 - l/2;
+			#ifdef DEBUG
+				cout << "Align : x="<< x_raw << endl;
+			#endif
+		}
+		break;
+	case RIGHT:
+		if ( parent )	{
+			int l;
+			switch( typeFont )	{
+				case NORMAL_FONT :		l = textUtil->lenght( pTextGL, &text, DefaultNormalFont );		break;
+				case SMALL_FONT :		l = textUtil->lenght( pTextGL, &text, DefaultSmallFont );		break;
+				case LARGE_FONT :		l = textUtil->lenght( pTextGL, &text, DefaultLargeFont );		break;
+			}
+			#ifdef DEBUG
+				cout << "Align : l="<< l << " String=\""<< text <<"\"" << endl;
+				cout << "Align : x="<< x_raw << endl;
+			#endif
+			x_raw += parent->getDX() - l - x;
+			#ifdef DEBUG
+				cout << "Align : x="<< x_raw << endl;
+			#endif
+		}
+		break;
+	}
+	
+	
+
 }
 
 
@@ -198,16 +314,16 @@ void PanelText::displayGLInternal()	{
     glEnable(GL_TEXTURE_2D);
 	switch( typeFont )	{
 	case NORMAL_FONT :
-		//iTex = textUtil->BindFont( g_DefaultNormalFont );
-		textUtil->BindFont( g_DefaultNormalFont );
+		//iTex = textUtil->BindFont( DefaultNormalFont );
+		textUtil->BindFont( DefaultNormalFont );
 		break;
 	case SMALL_FONT :
-		//iTex = textUtil->BindFont( g_DefaultSmallFont );
-		textUtil->BindFont( g_DefaultSmallFont );
+		//iTex = textUtil->BindFont( DefaultSmallFont );
+		textUtil->BindFont( DefaultSmallFont );
 		break;
 	case LARGE_FONT :
-		//iTex = textUtil->BindFont( g_DefaultLargeFont );
-		textUtil->BindFont( g_DefaultLargeFont );
+		//iTex = textUtil->BindFont( DefaultLargeFont );
+		textUtil->BindFont( DefaultLargeFont );
 		break;
 	}
 	textUtil->DrawText( pTextGL, getX(), getY(), COLOR32_WHITE, COLOR32_RED );
@@ -222,11 +338,16 @@ void PanelText::displayGLInternal()	{
 void PanelText::displayGL() {
 	if (visible == false)			return;
 	if (bChange)					return;
+	if ( pTextGL == NULL )			return;	
 
 #ifdef DEBUG
 	WindowsManager& wm = WindowsManager::getInstance();
-	cout << "PT displayGL ... fenetre id : " << getID() << endl;
 	cout << "    PT:" << "-------------------" << endl;
+	int parentID = -1;
+	if ( this->getParent() )	parentID = this->getParent()->getID();
+	cout << "PT displayGL ... fenetre id : " << getID() <<"  parnet ID : "<< parentID << endl;
+	cout << "    PT:" << "-------------------" << endl;
+	cout << "    PT:" << text << endl;
 	cout << "    PT:" << getX() <<", "<< getY() <<", "<< getDX() <<", "<< getDY() << endl;
 	cout << "    PT:" << wm.getWidth() <<", "<< wm.getHeight() << endl;
 #endif

@@ -5,7 +5,8 @@
 #include "Panel.h"
 
 
-
+//#define DEBUG
+#define DEBUG_CONST
 
 #ifdef DEBUG_WM
 #	define DEBUG
@@ -48,9 +49,21 @@ void Panel::init()	{
 
 
 void Panel::add( Panel* p)	{
+	#ifdef DEBUG_CONST
+	cout << " Panel::add() ..." << endl;
+	#endif
 	childs.push_back( p );
 	
 	p->setParent( this );
+}
+
+void Panel::sup( Panel* p)	{
+	int nb = childs.size();
+	for ( int i=0; i<nb; i++ )	{
+		if ( childs[i] == p )	{
+			childs.erase( childs.begin()+i );
+		}
+	}
 }
 
 

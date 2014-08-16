@@ -1,4 +1,4 @@
-
+BIN=sample-01
 GPP = g++
 
 INCS     =  -I"/usr/include" -I"/usr/include/freetype2"
@@ -11,17 +11,17 @@ LIBS	 =  $(PATHLIBS) -lGL -lglut -lGLU -lGLEW -lIL -lwmcgl -rdynamic
 
 
 .PHONY: all
-all: sample-00
+all: sample-01
 
 clean:
 	rm -f *.o
-	rm -f sample-00
+	rm -f $(BIN)
 
-sample-00.o: main.cpp
+sample-01.o: main.cpp
 	@echo ---- Compilation : main.cpp -----
-	$(GPP) -c main.cpp -o sample-00.o  $(CFLAGS) 
+	$(GPP) -c main.cpp -o $@  $(CFLAGS) 
 	
-sample-00: sample-00.o
+$(BIN): sample-01.o
 	@echo -- Edition des liens -----
-	$(GPP) sample-00.o -o sample-00 $(LIBS) 
+	$(GPP) $< -o $@ $(LIBS) 
 

@@ -18,21 +18,50 @@ echo  "class TextUtil;" >>${INCLUDE}
 echo  >>${INCLUDE}
 echo "#define color32 unsigned int" >>${INCLUDE}
 
-#cat ${SRC}wm.h | grep -v include | grep -v "#" | sed -e "s/SINGLETON_B.*/class WindowsManager {/g" | sed -e "s/SINGLETON_E.*/};/g"  >> ${INCLUDE}
 cat ${SRC}Font.h | grep -v include | grep -v "#"   >> ${INCLUDE}
-#echo  >>${INCLUDE}
-#echo "enum Font::FONT { ARIAL, UBUNTU_B, UBUNTU_RI, UBUNTU_R, DEJA_VU_SANS_MONO };" >>${INCLUDE}
-#echo  >>${INCLUDE}
 
-cat ${SRC}InternalFonts.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat >> ${INCLUDE} << EOF 
+struct CTexFont
+{
+    unsigned char * m_TexBytes;
+	unsigned int	m_TexID;
+    int             m_TexWidth;     // power of 2
+    int             m_TexHeight;    // power of 2
+    float           m_CharU0[256];
+    float           m_CharV0[256];
+    float           m_CharU1[256];
+    float           m_CharV1[256];
+    int             m_CharWidth[256];
+    int             m_CharHeight;
+    int             m_NbCharRead;
+
+    CTexFont();
+    ~CTexFont();
+};
+
+
+CTexFont *TwGenerateFont(const unsigned char *_Bitmap, int _BmWidth, int _BmHeight);
+
+
+
+extern CTexFont *DefaultSmallFont;
+extern CTexFont *DefaultNormalFont;
+extern CTexFont *DefaultLargeFont;
+
+void wmcglGenerateDefaultFonts();
+void wmcglDeleteDefaultFonts();
+
+EOF
+
 cat ${SRC}TextUtil.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}Panel.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}PanelSimple.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}PanelText.h | grep -v include | grep -v "#"   >> ${INCLUDE}
-cat ${SRC}wm.h | grep -v include | grep -v "#"    >> ${INCLUDE}
+cat ${SRC}PanelConsole.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}wm.h | grep -v "WindowsManager::instance" | grep -v include | grep -v "#"    >> ${INCLUDE}
 
 echo  >>${INCLUDE}
-echo "WindowsManager* WindowsManager::instance = 0;" >>${INCLUDE}
+##echo "extern WindowsManager* WindowsManager::instance;" >>${INCLUDE}
 
 echo "#endif" >>${INCLUDE}
 

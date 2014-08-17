@@ -6,10 +6,9 @@
 
 class Panel {
 	public:
-
-
-		Panel();
-		
+		//-----------------------------------------------------------------------------------
+							Panel();
+		//-----------------------------------------------------------------------------------
 		void 				init();
 		void				add( Panel* );
 		void				sup( Panel* );
@@ -20,6 +19,7 @@ class Panel {
 		virtual void		idle(float)										{;};
 		virtual void		cb_keyboard( unsigned char ) 					{;};
 		virtual void		cb_keyboard_special( unsigned char )			{;};
+		virtual void		cb_keyboard_special_up( unsigned char )			{;};
 		
 
 		inline void			setParent( Panel* p )							{parent = p;};
@@ -45,25 +45,26 @@ class Panel {
 	
 		inline bool			getVisible()									{return visible;};
 		inline void			setVisible(bool b)								{visible=b;};
-		
+		//-----------------------------------------------------------------------------------
 	protected:
-		int ID;
-		int x_raw;
-		int y_raw;
-		int dx_raw;
-		int dy_raw;
+		//-----------------------------------------------------------------------------------
+		int					ID;
+		int					x_raw;
+		int					y_raw;
+		int					dx_raw;
+		int					dy_raw;
 	
-		int x;
-		int y;
-		int dx;
-		int dy;
+		int					x;
+		int					y;
+		int					dx;
+		int					dy;
 	
-		int startX;
-		int startY;
+		int					startX;
+		int					startY;
 	
-		bool visible;
-		bool canMove;
-		bool mouseVisible;
+		bool				visible;
+		bool				canMove;
+		bool				mouseVisible;
 	
 		Panel* 				parent;
 		std::vector<Panel*> childs;

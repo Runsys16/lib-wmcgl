@@ -14,10 +14,10 @@ class PanelText : public Panel	{
 		enum ALIGN { LEFT, RIGHT, CENTER };
 
 
-		PanelText();
-		PanelText( std::string );
-		PanelText( std::string, FONT );
-		PanelText( std::string, FONT, int, int );
+							PanelText();
+							PanelText( std::string );
+							PanelText( std::string, FONT );
+							PanelText( std::string, FONT, int, int );
 
 		void 				buildString();
 		
@@ -41,15 +41,15 @@ class PanelText : public Panel	{
 		void				displayGLInternal();
 
 		//----------------- members
-		ALIGN			align;
+		ALIGN				align;
 
-		TextUtil*		textUtil;
-		FONT			typeFont;
-		std::string		text;
-		std::string		cmdLine;
-		bool			bChange;
+		TextUtil*			textUtil;
+		FONT				typeFont;
+		std::string			text;
+		std::string			cmdLine;
+		bool				bChange;
 		
-		void*			pTextGL;
+		void*				pTextGL;
 	
 };
 

@@ -8,40 +8,53 @@
 #include "TextUtil.h"
 
 
+typedef void (* CB_CMD)();
 
 class PanelConsole : public PanelSimple	{
-
 	public:
 
-		PanelConsole( int );
+									PanelConsole( int );
 		
 		void						setPrompt( std::string );
+		void						setCallBackCmd( CB_CMD );
 
 		virtual void				displayGL();
 		virtual void				updatePos();
 		virtual void				idle(float);
 		virtual void				cb_keyboard( unsigned char );
 		virtual void				cb_keyboard_special( unsigned char );
+		virtual void				cb_keyboard_special_up( unsigned char );
 		
 		void						addLine();
 		void						affiche( std::string * );
 		void						addChar( char );
 		void						supChar();
+		void						delChar();
+		void						supWord();
+		void						delWord();
 		
 		void						incCursor();
+		void						decCursor();
+		int							posWordPrec();
+		int							posWordSuiv();
+		void						wordPrec();
+		void						wordSuiv();
 		void						moveCursor();
 		
 	private:
 		std::vector<PanelText *>	texts;
 		std::string					prompt;
 		PanelText					cursor;
+		CB_CMD						cb_cmd;
 		
 		int 						currentLine;
 		int							currentPos;
 		
 		float						cursorTime;
 		bool						bIns;
-	
+		bool						bRightCtrl;
+		bool						bLeftCtrl;
+		bool						bCtrl;
 };
 
 #endif

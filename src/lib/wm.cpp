@@ -421,6 +421,10 @@ void WindowsManager::keyboardSpecialFunc( unsigned char key, int x, int y)	{
 
 void WindowsManager::keyboardSpecialUpFunc( unsigned char key, int x, int y)	{
 	cout << "WindowsManager::keyboardSpecialUpFunc( " << key << ", " << x << ", " << y << " )" << endl;
+	int nb = panels_cbKey.size();
+	for( int i=0; i<nb; i++ )	{
+		panels_cbKey[i]->cb_keyboard_special( key );
+	}
 }
 //------------------------------------------------------------
 

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <typeinfo>
+#include <string>
 
 #include <WindowsManager.h>
 
@@ -27,6 +28,7 @@ float prevTime = -1.0;
 int width  = 1500;
 int height = 800;
 GLdouble fov = 60.0;
+PanelConsole *pPC;
 
 void change_fov( void )
 {
@@ -134,12 +136,9 @@ static void initGL(int argc,
 }
 
 
-
-
-
 static void glutKeyboardFunc(unsigned char key, int x, int y) {
 	PanelConsole* console = (PanelConsole*)WindowsManager::getInstance().getByID(5);
-	cout <<"Console addr : "<< console <<"typeof "<< typeid(console).name() << endl;
+	//cout <<"Console addr : "<< console <<"typeof "<< typeid(console).name() << endl;
 	WindowsManager::getInstance().keyboardFunc( key, x, y);
 
 	static int n = 0;
@@ -151,49 +150,11 @@ static void glutKeyboardFunc(unsigned char key, int x, int y) {
 		quit();
 		}
 		break;
-	
-/*	
-	case '\r':
-		{
-		char buff[80];
-		sprintf( buff, "Essai de console %d ...", n++ );
-		
-		std::string * Affichage = new std::string(buff);
-		cout << Affichage << endl;
-		
-		//if ( console != NULL )	console->affiche( dynamic_cast<string*> (&Affichage)  ); 
-		if ( console != NULL )	console->affiche(  Affichage ); 
-		if ( console != NULL )	console->addLine();
-		}
-		break;
-	
-	case 178:
-		{
-		
-		char buff[80];
-		sprintf( buff, "Essai de console %d ...", n++ );
-		
-		std::string * Affichage = new std::string(buff);
-		cout << Affichage << endl;
-		
-		if ( console != NULL )	console->affiche( Affichage ); 
-		//if ( console != NULL )	console->addLine();
-		}
-		break;
-	
-	case 9:
+	case 9: 
 		{
 		WindowsManager::getInstance().swapVisible();
 		}
 		break;
-
-	default :
-		{
-		std::cout << (int)key << std::endl;
-		if ( console != NULL )	console->addChar(  key ); 
-		}
-		break;
-*/
 	}
 }
 
@@ -222,6 +183,22 @@ static void glutPassiveMotionFunc(int x, int y)	{
 
 
 
+void exec_cmd( string cmd  )	{
+	printf( "C standard :: exec_cmd( %s ) \"%s\"\n", cmd.c_str() );
+	pPC->affiche( new string("Exec command ..") );
+}
+
+
+
+
+
+class CallBack : public PanelConsoleCallBack	{
+	public :
+	virtual void					callback_cmd(std::string cmd)	{
+		cout << "Class Callback : " << cmd << endl;
+		cout << "  CallBack::callback_cmd( \""<< cmd <<"\" )"<< endl;
+	};
+};
 
 
 
@@ -236,6 +213,7 @@ static void CreateAllWindows()	{
 	PanelText* pt;
 	
 	
+	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
 	ps->setPosAndSize( 50+0, 50+50, 200, wm.getHeight()-100);
 	wm.add( ps );
@@ -248,11 +226,12 @@ static void CreateAllWindows()	{
 	ps->add( new PanelText( "Outils",		PanelText::LARGE_FONT, 5, y + 4*dy ) );
 	ps->add( new PanelText( "Aide",			PanelText::LARGE_FONT, 5, y + 5*dy ) );
 	
-	
+	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
 	ps->setPosAndSize( 50+wm.getWidth()-200, 50+50, 200, wm.getHeight()-100);
 	wm.add( ps );
 	
+	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
 	ps->setPosAndSize( 50+0, 50+wm.getHeight()-50-2, wm.getWidth(), 50+2);
 	wm.add( ps );
@@ -263,6 +242,7 @@ static void CreateAllWindows()	{
 	//ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 5 ) );
 	ps->add( pT );
 	
+	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
 	ps->setPosAndSize( 50+0, 50+0, wm.getWidth(), 50+2);
 	wm.add( ps );
@@ -271,44 +251,34 @@ static void CreateAllWindows()	{
 	pStr = new string("Or key to test console");
 	ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 20 ) );
 	
-	
+	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
 	ps->setPosAndSize( 650-4, 50+50+0, 400, 600);
 	wm.add( ps );
-	
-	pt = new PanelText( "1 Essai de panelText SMALL_FONT", PanelText::SMALL_FONT );
-	pt->setPos( 40, 100 );
-	ps->add( pt );
-	
-	pt = new PanelText( "2 Essai de panelText NORMAL_FONT", PanelText::NORMAL_FONT );
-	pt->setPos( 60, 120 );
-	ps->add( pt );
-	
-	pt = new PanelText( "3 Essai de panelText LARGE_FONT", PanelText::LARGE_FONT );
-	pt->setPos( 80, 140 );
-	ps->add( pt );
-	
 
+	ps->add( new PanelText( "1 Essai de panelText SMALL_FONT", PanelText::SMALL_FONT, 40, 100 ) );
+	ps->add( new PanelText( "2 Essai de panelText NORMAL_FONT", PanelText::NORMAL_FONT, 60, 120 ) );
+	ps->add( new PanelText( "3 Essai de panelText LARGE_FONT", PanelText::LARGE_FONT, 80, 140 ) );
 
+	//---------------------------------------------------------------------------------	
 	PanelConsole* pc;
 	pc = new PanelConsole( 100 );
-	pc->setPosAndSize( 10, 10, 400, 600);
+	//pc->setPosAndSize( 10, 10, 400, 600);
 	pc->setPosAndSize( 250-2, 100, 400, wm.getHeight()-100);
-	pc->setPrompt( "console> " );
-	pc->setPrompt( "rene@poste-002:/home/rene$ " );
-	pc->setPrompt( "con:> " );
+	pc->setPrompt( "console1> " );
 	wm.add( pc );
+	pc->setCallBackCmd( exec_cmd );
+	pPC = pc;
 	
+	//---------------------------------------------------------------------------------	
 	pc = new PanelConsole( 100 );
 	pc->setPosAndSize( 250-2-4+800, 100, 200+8, wm.getHeight()-100);
-	pc->setPrompt( "rene@poste-002:/home/rene$ " );
-	pc->setPrompt( "con:> " );
-	pc->setPrompt( "console> " );
+	//pc->setPrompt( "rene@poste-002:/home/rene$ " );
+	pc->setPrompt( "console2> " );
+	pc->setCallBackCmd( new CallBack() );
 	wm.add( pc );
 
 	wm.setScreenSize( width, height );
-	//console.setPosAndSize( 10, 10, 400, 600);
-	//wm.add( &console );
 }
 
 

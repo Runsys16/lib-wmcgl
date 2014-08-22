@@ -398,7 +398,7 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 
 
 void WindowsManager::keyboardFunc( unsigned char key, int x, int y)	{
-	cout << "WindowsManager::keyboardFunc( " << key << ", " << x << ", " << y << " )" << endl;
+	cout << "WindowsManager::keyboardFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	int nb = panels_cbKey.size();
 	for( int i=0; i<nb; i++ )	{
 		panels_cbKey[i]->cb_keyboard( key );
@@ -406,13 +406,13 @@ void WindowsManager::keyboardFunc( unsigned char key, int x, int y)	{
 }
 
 void WindowsManager::keyboardUpFunc( unsigned char key, int x, int y)	{
-	cout << "WindowsManager::keyboardUpFunc( " << key << ", " << x << ", " << y << " )" << endl;
+	cout << "WindowsManager::keyboardUpFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 }
 
 
 
 void WindowsManager::keyboardSpecialFunc( unsigned char key, int x, int y)	{
-	cout << "WindowsManager::keyboardSpecialFunc( " << key << ", " << x << ", " << y << " )" << endl;
+	cout << "WindowsManager::keyboardSpecialFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	int nb = panels_cbKey.size();
 	for( int i=0; i<nb; i++ )	{
 		panels_cbKey[i]->cb_keyboard_special( key );
@@ -420,10 +420,10 @@ void WindowsManager::keyboardSpecialFunc( unsigned char key, int x, int y)	{
 }
 
 void WindowsManager::keyboardSpecialUpFunc( unsigned char key, int x, int y)	{
-	cout << "WindowsManager::keyboardSpecialUpFunc( " << key << ", " << x << ", " << y << " )" << endl;
+	cout << "WindowsManager::keyboardSpecialUpFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	int nb = panels_cbKey.size();
 	for( int i=0; i<nb; i++ )	{
-		panels_cbKey[i]->cb_keyboard_special( key );
+		panels_cbKey[i]->cb_keyboard_special_up( key );
 	}
 }
 //------------------------------------------------------------

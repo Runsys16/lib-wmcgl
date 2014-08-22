@@ -177,10 +177,9 @@ protected:
 
 class Panel {
 	public:
-
-
-		Panel();
-		
+		//-----------------------------------------------------------------------------------
+							Panel();
+		//-----------------------------------------------------------------------------------
 		void 				init();
 		void				add( Panel* );
 		void				sup( Panel* );
@@ -191,6 +190,7 @@ class Panel {
 		virtual void		idle(float)										{;};
 		virtual void		cb_keyboard( unsigned char ) 					{;};
 		virtual void		cb_keyboard_special( unsigned char )			{;};
+		virtual void		cb_keyboard_special_up( unsigned char )			{;};
 		
 
 		inline void			setParent( Panel* p )							{parent = p;};
@@ -216,25 +216,26 @@ class Panel {
 	
 		inline bool			getVisible()									{return visible;};
 		inline void			setVisible(bool b)								{visible=b;};
-		
+		//-----------------------------------------------------------------------------------
 	protected:
-		int ID;
-		int x_raw;
-		int y_raw;
-		int dx_raw;
-		int dy_raw;
+		//-----------------------------------------------------------------------------------
+		int					ID;
+		int					x_raw;
+		int					y_raw;
+		int					dx_raw;
+		int					dy_raw;
 	
-		int x;
-		int y;
-		int dx;
-		int dy;
+		int					x;
+		int					y;
+		int					dx;
+		int					dy;
 	
-		int startX;
-		int startY;
+		int					startX;
+		int					startY;
 	
-		bool visible;
-		bool canMove;
-		bool mouseVisible;
+		bool				visible;
+		bool				canMove;
+		bool				mouseVisible;
 	
 		Panel* 				parent;
 		std::vector<Panel*> childs;
@@ -278,10 +279,10 @@ class PanelText : public Panel	{
 		enum ALIGN { LEFT, RIGHT, CENTER };
 
 
-		PanelText();
-		PanelText( std::string );
-		PanelText( std::string, FONT );
-		PanelText( std::string, FONT, int, int );
+							PanelText();
+							PanelText( std::string );
+							PanelText( std::string, FONT );
+							PanelText( std::string, FONT, int, int );
 
 		void 				buildString();
 		
@@ -305,15 +306,15 @@ class PanelText : public Panel	{
 		void				displayGLInternal();
 
 		//----------------- members
-		ALIGN			align;
+		ALIGN				align;
 
-		TextUtil*		textUtil;
-		FONT			typeFont;
-		std::string		text;
-		std::string		cmdLine;
-		bool			bChange;
+		TextUtil*			textUtil;
+		FONT				typeFont;
+		std::string			text;
+		std::string			cmdLine;
+		bool				bChange;
 		
-		void*			pTextGL;
+		void*				pTextGL;
 	
 };
 
@@ -322,40 +323,61 @@ class PanelText : public Panel	{
 
 
 
+typedef void (* CB_CMD)(std::string);
+
+class PanelConsoleCallBack	{
+	public :
+	virtual void					callback_cmd(std::string)=0;
+};
+
 
 class PanelConsole : public PanelSimple	{
-
 	public:
 
-		PanelConsole( int );
+									PanelConsole( int );
 		
 		void						setPrompt( std::string );
+		void						setCallBackCmd( CB_CMD );
+		void						setCallBackCmd( PanelConsoleCallBack * );
 
 		virtual void				displayGL();
 		virtual void				updatePos();
 		virtual void				idle(float);
 		virtual void				cb_keyboard( unsigned char );
 		virtual void				cb_keyboard_special( unsigned char );
+		virtual void				cb_keyboard_special_up( unsigned char );
 		
 		void						addLine();
 		void						affiche( std::string * );
 		void						addChar( char );
 		void						supChar();
+		void						delChar();
+		void						supWord();
+		void						delWord();
 		
 		void						incCursor();
+		void						decCursor();
+		int							posWordPrec();
+		int							posWordSuiv();
+		void						wordPrec();
+		void						wordSuiv();
 		void						moveCursor();
 		
 	private:
 		std::vector<PanelText *>	texts;
 		std::string					prompt;
 		PanelText					cursor;
+		CB_CMD						cb_cmd;
+		PanelConsoleCallBack*		ppccb;
 		
 		int 						currentLine;
 		int							currentPos;
 		
 		float						cursorTime;
 		bool						bIns;
-	
+		bool						bRightCtrl;
+		bool						bLeftCtrl;
+		bool						bCtrl;
 };
 
 

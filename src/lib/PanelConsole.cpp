@@ -39,7 +39,11 @@ PanelConsole::PanelConsole(int nb)	{
 	cursorTime = -1.0f;
 
 	cb_cmd = NULL;
+	ppccb = NULL;
 	bIns = false;
+	bCtrl = false;
+	bRightCtrl = false;
+	bLeftCtrl = false;
 		
 	for( int i=0; i<nb; i++ )	{
 		texts.push_back( new PanelText() );
@@ -50,7 +54,7 @@ PanelConsole::PanelConsole(int nb)	{
 	WindowsManager::getInstance().call_back_keyboard( this );
 	//cursor.setPos( currentPos, 15*currentLine );
 
-	cursor.changeText( "_", PanelText::NORMAL_FONT, true );
+	cursor.changeText( "|", PanelText::NORMAL_FONT, true );
 	this->add( &cursor );
 	moveCursor();
 }
@@ -70,6 +74,10 @@ void PanelConsole::setPrompt( std::string str )		{
 
 void PanelConsole::setCallBackCmd( CB_CMD f )		{
 	cb_cmd = f;
+}
+
+void PanelConsole::setCallBackCmd( PanelConsoleCallBack* p )		{
+	ppccb = p;
 }
 
 
@@ -102,8 +110,9 @@ void PanelConsole::affiche( string* str ) {
 
 
 void PanelConsole::addChar( char c ) {
-	cout << "PanelConsole::addChar()  currentPos   : \""<< currentPos <<"\""<< endl;;
-	cout << "PanelConsole::addChar()  currentLine  : \""<< currentLine <<"\""<< endl;;
+	cout <<"PanelConsole::addChar() "<< endl;
+	cout <<"  currentPos   : \""<< currentPos <<"\""<< endl;;
+	cout <<"  currentLine  : \""<< currentLine <<"\""<< endl;;
 	if ( currentLine >= texts.size() )	{
 		return;
 	}
@@ -131,8 +140,8 @@ void PanelConsole::addChar( char c ) {
 
 		left[ll] = 0;
 		right[rl] = 0;
-		cout << "PanelConsole::addChar()  left  : \""<< left <<"\""<< endl;;
-		cout << "PanelConsole::addChar()  right : \""<< right <<"\""<< endl;;
+		cout << "  left  : \""<< left <<"\""<< endl;;
+		cout << "  right : \""<< right <<"\""<< endl;;
 		
 		char buff[2048];
 		sprintf( buff, "%s%c%s", left, c, right );
@@ -156,15 +165,16 @@ void PanelConsole::addChar( char c ) {
 
 
 void PanelConsole::delChar() {
+	cout << "PanelConsole::delChar()" << endl;
 	if ( currentLine >= texts.size() )	{
 		return;
 	}
 	if ( currentPos <= 0  )	{
-		cout << "PanelConsole::delChar() : currentPos NULL" << endl;;
+		cout << "  currentPos NULL" << endl;;
 		return;
 	}
 	string str = texts[currentLine]->getText();
-	cout << "PanelConsole::delChar() : \""<< str <<"\""<< endl;;
+	cout <<"  str =  \""<< str <<"\""<< endl;;
 	#ifdef DEBUG
 	#endif
 	
@@ -173,7 +183,7 @@ void PanelConsole::delChar() {
 	
 	
 	if ( prompt.size() >= str.size() )	{
-		cout << "PanelConsole::delChar() : *** Debut de ligne *** "<< endl;
+		cout << "  *** Debut de ligne *** "<< endl;
 		return;
 	}
 	
@@ -189,10 +199,10 @@ void PanelConsole::delChar() {
 
 	if ( currentPos == cl )	{
 		str.copy( buff, str.size()-1, 0);
-		cout << "PanelConsole::delChar() : \""<< buff <<"\""<< endl;;
+		cout << "  buff : \""<< buff <<"\""<< endl;;
 		buff[str.size()-1] = 0;
 		val = new string(buff);
-		cout << "PanelConsole::delChar() : \""<< *val <<"\""<< endl;;
+		cout << "  val : \""<< *val <<"\""<< endl;;
 	}
 	else	{
 		char left[2048];
@@ -206,8 +216,8 @@ void PanelConsole::delChar() {
 
 		left[ll] = 0;
 		right[rl] = 0;
-		cout << "PanelConsole::delChar()  left  : \""<< left <<"\""<< endl;;
-		cout << "PanelConsole::delChar()  right : \""<< right <<"\""<< endl;;
+		cout << "  left  : \""<< left <<"\""<< endl;;
+		cout << "  right : \""<< right <<"\""<< endl;;
 		
 		char buff[2048];
 		sprintf( buff, "%s%s", left, right );
@@ -225,15 +235,13 @@ void PanelConsole::delChar() {
 
 
 void PanelConsole::supChar() {
+	cout << "PanelConsole::supChar()" << endl;
 	if ( currentLine >= texts.size() )	{
 		return;
 	}
-	if ( currentPos <= 0  )	{
-		cout << "PanelConsole::supChar() : currentPos NULL" << endl;;
-		return;
-	}
+
 	string str = texts[currentLine]->getText();
-	cout << "PanelConsole::supChar() : \""<< str <<"\""<< endl;;
+	cout << "  str : \""<< str <<"\""<< endl;;
 	#ifdef DEBUG
 	#endif
 	
@@ -241,7 +249,7 @@ void PanelConsole::supChar() {
 	
 	
 	if ( prompt.size() >= str.size() )	{
-		cout << "PanelConsole::supChar() : *** Debut de ligne *** "<< endl;
+		cout << "  *** Debut de ligne *** "<< endl;
 		return;
 	}
 	
@@ -253,16 +261,17 @@ void PanelConsole::supChar() {
 	string * val;
 
 	
+	cout << "  CurretnPos = "<< currentPos <<" , cl = "<< cl<< endl;
 
+	if ( prompt.size() >= str.size() )	{
+		cout << " *** Debut de ligne *** "<< endl;
+		return;
+	}
+	
 
-	if ( currentPos == cl )	{
-		char buff[2048];
-
-		str.copy( buff, str.size()-1, 0);
-		cout << "PanelConsole::supChar() : \""<< buff <<"\""<< endl;;
-		buff[str.size()-1] = 0;
-		val = new string(buff);
-		cout << "PanelConsole::supChar() : \""<< *val <<"\""<< endl;;
+	if ( currentPos >= cl )	{
+		cout << "  *** Fin de ligne *** "<< endl;
+		return;
 	}
 	else	{
 		char left[2048];
@@ -273,12 +282,12 @@ void PanelConsole::supChar() {
 		int rl = str.size()-(pl+currentPos) -1;
 
 		str.copy( left, ll, 0 );
-		str.copy( right, rl, pl+currentPos )+1;
+		str.copy( right, rl, pl+currentPos+1 );
 
 		left[ll] = 0;
 		right[rl] = 0;
-		cout << "PanelConsole::supChar()  left  : \""<< left <<"\""<< endl;;
-		cout << "PanelConsole::supChar()  right : \""<< right <<"\""<< endl;;
+		cout << "  left  : \""<< left <<"\""<< endl;;
+		cout << "  right : \""<< right <<"\""<< endl;;
 		
 		sprintf( buff, "%s%s", left, right );
 		val = new string(buff);
@@ -289,7 +298,7 @@ void PanelConsole::supChar() {
 	
 	texts[currentLine]->changeText( *val, PanelText::NORMAL_FONT, true );
 	delete val;
-	decCursor();
+	//decCursor();
 
 }
 
@@ -320,28 +329,28 @@ void PanelConsole::decCursor()	{
 
 int PanelConsole::posWordSuiv()	{
 	int prevCursor = currentPos;
-	string * pT = texts[currentLine];
+	string  pT = texts[currentLine]->getText();
 	int pl = prompt.size();
-	int l = pT->getText().size();
+	int l = pT.size();
 	char cmd[2048];
 
 	// extrait la partie commande
 	// string cmd	
-	pT->getText().copy( cmd, l-pl, pl );
+	pT.copy( cmd, l-pl, pl );
 	cmd[l-pl] = 0;
 
 	int i = currentPos;
-	if ( (i+1) >= (l-pl) )		return l-pl;
+	if ( (i) >= (l-pl) )		return l-pl;
 
 	// tant que le caratere suivant est ' ' ou '\t'
-	while( cmd[i+1] == ' ' || cmd[i+1] == '\t' )	{
+	while( cmd[i] == ' ' || cmd[i] == '\t' )	{
 		i++;
-		if ( (i+1) >= (l-pl) )	return i;
+		if ( (i) >= (l-pl) )	return i;
 	}
 	// tant que le caratere suivant n'est pas ' ' et '\t'
-	while( cmd[i+1] != ' ' && cmd[i+1] != '\t' )	{
+	while( cmd[i] != ' ' && cmd[i] != '\t' )	{
 		i++;
-		if ( (i+1) >= (l-pl) )	return i;
+		if ( (i) >= (l-pl) )	return i;
 	}
 	
 	return i;
@@ -351,14 +360,14 @@ int PanelConsole::posWordSuiv()	{
 
 int PanelConsole::posWordPrec()	{
 	int prevCursor = currentPos;
-	string * pT = texts[currentLine];
+	string pT = texts[currentLine]->getText();
 	int pl = prompt.size();
-	int l = pT->getText().size();
+	int l = pT.size();
 	char cmd[2048];
 
 	// extrait la partie commande
 	// string cmd	
-	pT->getText().copy( cmd, l-pl, pl );
+	pT.copy( cmd, l-pl, pl );
 	cmd[l-pl] = 0;
 
 	int i = currentPos;
@@ -387,21 +396,22 @@ void PanelConsole::wordPrec()	{
 
 
 void PanelConsole::wordSuiv()	{
-	currentPos = posWordPrec();
+	currentPos = posWordSuiv();
 	moveCursor();
 }
 
 
 
 void PanelConsole::supWord()	{
-	rightPos = posWordPrec();
+	cout << "PanelConsole::supWord()" << endl;
+	int rightPos = posWordSuiv();
 
 	if ( currentLine >= texts.size() )	{
 		return;
 	}
 
 	#ifdef DEBUG
-	cout << "PanelConsole::supWord() : \""<< str <<"\""<< endl;;
+	cout << "  str : \""<< str <<"\""<< endl;;
 	#endif
 	
 	string str = texts[currentLine]->getText();
@@ -420,8 +430,8 @@ void PanelConsole::supWord()	{
 
 	left[ll] = 0;
 	right[rl] = 0;
-	cout << "PanelConsole::supWord()  left  : \""<< left <<"\""<< endl;;
-	cout << "PanelConsole::supWord()  right : \""<< right <<"\""<< endl;;
+	cout << "  left  : \""<< left <<"\""<< endl;;
+	cout << "  right : \""<< right <<"\""<< endl;;
 	
 	char buff[2048];
 	sprintf( buff, "%s%s", left, right );
@@ -430,11 +440,12 @@ void PanelConsole::supWord()	{
 	texts[currentLine]->changeText( *val, PanelText::NORMAL_FONT, true );
 	delete val;
 }
-	moveCursor();
+//	moveCursor();
 
 
 void PanelConsole::delWord()	{
 	currentPos = posWordPrec();
+	supWord();
 	moveCursor();
 }
 
@@ -459,14 +470,25 @@ void PanelConsole::cb_keyboard( unsigned char key ) {
 	static int n=0;
 	switch(key){ 
 	case '\r':		{
-		addLine();
-		if ( cb_cmd )		*cb_cmd();
+		if ( cb_cmd || ppccb )	{
+			string str = texts[currentLine]->getText();
+			char		cmd[2048];
+			str.copy( cmd, str.size()-prompt.size(), prompt.size() );
+			//cout << "Exec command "<< cmd << endl;
+			
+			addLine();
+			if ( cb_cmd )	(*cb_cmd)(cmd);
+			if ( ppccb )	(ppccb->callback_cmd)(cmd);
+		}
+		else {
+			addLine();
+		}
 		}	
 		break;
 	//² 
 	case 178:		{
 		char buff[80];
-		sprintf( buff, "Essai de console %d ...", n++ );
+		sprintf( buff, "  Essai de console %d ...", n++ );
 		std::string * Affichage = new std::string(buff);
 		
 		affiche( Affichage ); 
@@ -492,7 +514,7 @@ void PanelConsole::cb_keyboard( unsigned char key ) {
 		}
 		break;
 	default :		{
-		std::cout << (int)key << std::endl;
+		std::cout << "  Value : "<< (int)key << std::endl;
 		addChar(  key ); 
 		}		
 		break;
@@ -506,12 +528,12 @@ void PanelConsole::cb_keyboard_special( unsigned char key ) {
 	#endif
 	switch(key){ 
 	//  Right Ctrl
-	case 100:	{
+	case 250:	{
 		bRightCtrl = true;
 		}	
 		break;
 	//  Left Ctrl
-	case 100:	{
+	case 114:	{
 		bLeftCtrl = true;
 		}	
 		break;
@@ -559,19 +581,20 @@ void PanelConsole::cb_keyboard_special( unsigned char key ) {
 	case 108:	{
 		bIns = ! bIns;
 		if ( bIns )
-			cursor.changeText( "|", PanelText::NORMAL_FONT, true );
-		else
 			cursor.changeText( "_", PanelText::NORMAL_FONT, true );
+		else
+			cursor.changeText( "|", PanelText::NORMAL_FONT, true );
 		}
 		break;
 	default :		{
-		std::cout << "Value : "<< (int)key << std::endl;
+		std::cout << "  Value : "<< (int)key << std::endl;
 		}
 		break;
 	}
 	
 	if ( bRightCtrl || bLeftCtrl ) 	bCtrl = true;
 	//else							bCtrl = false;
+	cout <<"  bCtrl= "<< std::boolalpha << bCtrl <<" bRightCtrl="<< bRightCtrl <<" bLeftCtrl="<< bLeftCtrl << endl;
 }
 	
 
@@ -582,23 +605,25 @@ void PanelConsole::cb_keyboard_special_up( unsigned char key ) {
 	#endif
 	switch(key){ 
 	//  Right Ctrl
-	case 100:	{
+	case 250:	{
 		bRightCtrl = false;
 		}	
 		break;
 	//  Left Ctrl
-	case 101:	{
+	case 114:	{
 		bLeftCtrl = false;
 		}	
 		break;
 	default :		{
-		std::cout << "Value : "<< (int)key << std::endl;
+		std::cout << "  Value : "<< (int)key << std::endl;
 		}
 		break;
 	}
 	
 	if ( bRightCtrl || bLeftCtrl ) 	bCtrl = true;
 	else							bCtrl = false;
+
+	cout <<"  bCtrl= "<< std::boolalpha << bCtrl <<" bRightCtrl="<< bRightCtrl <<" bLeftCtrl="<< bLeftCtrl << endl;
 }
 	
 
@@ -643,10 +668,10 @@ void PanelConsole::displayGL() {
 #ifdef DEBUG
 	cout << "PanelConsole::displayGL()" << endl;;
 	WindowsManager& wm = WindowsManager::getInstance();
-	cout << "PC displayGL ... fenetre id : " << getID() << endl;
-	cout << "    PC:" << "-------------------" << endl;
-	cout << "    PC:" << getX() <<", "<< getY() <<", "<< getDX() <<", "<< getDY() << endl;
-	cout << "    PC:" << wm.getWidth() <<", "<< wm.getHeight() << endl;
+	cout << "  PC displayGL ... fenetre id : " << getID() << endl;
+	cout << "  PC:" << "-------------------" << endl;
+	cout << "  PC:" << getX() <<", "<< getY() <<", "<< getDX() <<", "<< getDY() << endl;
+	cout << "  PC:" << wm.getWidth() <<", "<< wm.getHeight() << endl;
 #endif
 	
 }

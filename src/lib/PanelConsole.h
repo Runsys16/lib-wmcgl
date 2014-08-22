@@ -8,7 +8,13 @@
 #include "TextUtil.h"
 
 
-typedef void (* CB_CMD)();
+typedef void (* CB_CMD)(std::string);
+
+class PanelConsoleCallBack	{
+	public :
+	virtual void					callback_cmd(std::string)=0;
+};
+
 
 class PanelConsole : public PanelSimple	{
 	public:
@@ -17,6 +23,7 @@ class PanelConsole : public PanelSimple	{
 		
 		void						setPrompt( std::string );
 		void						setCallBackCmd( CB_CMD );
+		void						setCallBackCmd( PanelConsoleCallBack * );
 
 		virtual void				displayGL();
 		virtual void				updatePos();
@@ -46,6 +53,7 @@ class PanelConsole : public PanelSimple	{
 		std::string					prompt;
 		PanelText					cursor;
 		CB_CMD						cb_cmd;
+		PanelConsoleCallBack*		ppccb;
 		
 		int 						currentLine;
 		int							currentPos;

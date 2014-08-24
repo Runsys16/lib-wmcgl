@@ -188,7 +188,8 @@ GLuint TextUtil::GenFont( CTexFont *_Font)
     glBindTexture(GL_TEXTURE_2D, 0);
     
     glPixelTransferf(GL_ALPHA_SCALE, 1);
-    glPixelTransferf(GL_RED_SCALE, 0.5);
+    //glPixelTransferf(GL_RED_SCALE, 0.5);
+    //glPixelTransferf(GL_RED_SCALE, 1);
     
     glPixelTransferf(GL_ALPHA_BIAS, 0);
     glPixelTransferf(GL_RED_BIAS, 0);

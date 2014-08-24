@@ -29,6 +29,7 @@ class PanelText : public Panel	{
 		void 				changeText( std::string, FONT );
 		void 				changeText( std::string, bool );
 		void 				changeText( std::string, FONT, bool );
+		void 				eraseText( );
 		
 		virtual void		displayGL();
 		virtual void		updatePos();
@@ -46,7 +47,7 @@ class PanelText : public Panel	{
 		TextUtil*			textUtil;
 		FONT				typeFont;
 		std::string			text;
-		std::string			cmdLine;
+		//std::string			cmdLine;
 		bool				bChange;
 		
 		void*				pTextGL;

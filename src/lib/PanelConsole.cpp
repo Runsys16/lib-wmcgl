@@ -26,16 +26,28 @@ using namespace std;
 //						Constructeurs ....
 //
 //--------------------------------------------------------------------------------------------------------------------
-PanelConsole::PanelConsole(int nb)	{
+PanelConsole::PanelConsole()	{
 	#ifdef DEBUG_CONST
-	cout << "Constructeur PanelConsole( "<< nb << " ) ..." << endl;
+	cout << "Constructeur PanelConsole() ..." << endl;
 	#endif
 	
 	PanelSimple();
 
+}
+
+
+PanelConsole::PanelConsole(int nbLine, int max)	{
+	#ifdef DEBUG_CONST
+	cout << "Constructeur PanelConsole( "<< nbLine << " ) ..." << endl;
+	#endif
+	
+	PanelConsole();
+
 	prompt = "";
+	maxCmd = max;
 	currentLine = 0;
 	currentPos = 0;
+	currentCmd = 0;
 	cursorTime = -1.0f;
 
 	cb_cmd = NULL;
@@ -44,10 +56,12 @@ PanelConsole::PanelConsole(int nb)	{
 	bCtrl = false;
 	bRightCtrl = false;
 	bLeftCtrl = false;
-		
-	for( int i=0; i<nb; i++ )	{
+
+	heightLine = 13;
+			
+	for( int i=0; i<nbLine; i++ )	{
 		texts.push_back( new PanelText() );
-		texts[i]->setPos( 0, i*15 );
+		texts[i]->setPos( 0, i*heightLine );
 		this->add( texts[i] );
 	}
 	
@@ -57,6 +71,9 @@ PanelConsole::PanelConsole(int nb)	{
 	cursor.changeText( "|", PanelText::NORMAL_FONT, true );
 	this->add( &cursor );
 	moveCursor();
+
+
+
 }
 
 
@@ -81,39 +98,134 @@ void PanelConsole::setCallBackCmd( PanelConsoleCallBack* p )		{
 }
 
 
+
+
+void PanelConsole::moveCursor()	{
+	int pl = prompt.size();
+	int x = texts[currentLine]->getTextLenght(pl+currentPos);
+	int y = texts[currentLine]->getPosY();//TextLenght(pl+currentPos);
+	//int y = currentLine*heightLine;
+
+	cursor.setPos( x, y );
+}
+
+
+
+
+
+void PanelConsole::scroll() {
+	if ( texts[currentLine]->getPosY() < (getDY()-heightLine+1) )	{
+		return;
+	}
+	cout << "--- scroll() "<< endl;
+	
+	int nb = texts.size();
+	for ( int i=0; i< nb; i++ )	{
+		int y = texts[i]->getPosY();
+		y -= heightLine;
+		texts[i]->setPosY( y );
+	}
+	cout << "--- scroll  y(curretnLine)    = "<< texts[currentLine]->getPosY() << endl;
+	cout << "--- scroll  text(curretnLine) = "<< texts[currentLine]->getText() << endl;
+}
+
+
+void PanelConsole::rotateBuffer() {
+	int y = texts[ texts.size()-1 ]->getPosY() + heightLine;
+	cout << "--- rotate buffer y = "<< y << endl;
+	currentLine--;
+	this->sup( texts[0] );
+	texts.erase( texts.begin() + 0 );
+	texts.push_back( new PanelText() );
+	texts[ texts.size()-1 ]->setPosY( y );
+	texts[ texts.size()-1 ]->setPosX( 0 );
+	this->add( texts[ texts.size()-1 ] );
+}
+
+
 void PanelConsole::addLine() {
 	currentLine++;
 	currentPos = 0;
 	//cursor.setPos( currentPos, 15*currentLine );
 	if ( currentLine >= texts.size() )	{
-		return;
-	}
+		cout << "--- EraseLine "<< endl;
+		rotateBuffer();
 	
+	}
+	texts[currentLine]->changeText( prompt, PanelText::NORMAL_FONT, true );
+
+	scroll();
+	
+	moveCursor();
+}
+
+
+void PanelConsole::eraseTexts( ) {
+	currentLine = 0;
+	currentPos = 0;
+	
+	int nb = texts.size();
+	for (int i=0; i<nb; i++ )	{
+		texts[i]->eraseText();
+	}
 	texts[currentLine]->changeText( prompt, PanelText::NORMAL_FONT, true );
 	moveCursor();
 }
+
+
+
+
+void PanelConsole::clear( ) {
+	//currentLine = 0;
+	//currentPos = 0;
+	
+	int deltaY = texts[currentLine]->getPosY();
+	int nb = texts.size();
+	for (int i=0; i<nb; i++ )	{
+		int y = texts[i]->getPosY();
+		
+		texts[i]->setPosY(y-deltaY);
+	}
+		
+	texts[currentLine]->changeText( prompt, PanelText::NORMAL_FONT, true );
+	moveCursor();
+}
+
+
+
+
+
+
 
 void PanelConsole::affiche( string* str ) {
-	if ( currentLine >= texts.size() )	{
-		return;
-	}
-	
 	texts[currentLine]->changeText(*str, PanelText::NORMAL_FONT, true );
-	currentLine++;
-	currentPos = 0;
-	//cursor.setPos( currentPos, 15*currentLine );
-	texts[currentLine]->changeText( prompt, PanelText::NORMAL_FONT, true );
-	moveCursor();
+	addLine();
 }
 
 
 
 
+void PanelConsole::affiche( string str ) {
+	texts[currentLine]->changeText(str, PanelText::NORMAL_FONT, true );
+	addLine();
+}
+
+//--------------------------------------------------------------------------------------------------------------------
+//
+//						fonctions d'editions
+//
+//--------------------------------------------------------------------------------------------------------------------
+
 void PanelConsole::addChar( char c ) {
+	#ifdef DEBUG
 	cout <<"PanelConsole::addChar() "<< endl;
 	cout <<"  currentPos   : \""<< currentPos <<"\""<< endl;;
 	cout <<"  currentLine  : \""<< currentLine <<"\""<< endl;;
-	if ( currentLine >= texts.size() )	{
+	#endif
+	if ( currentLine == texts.size() )	{
+		#ifdef DEBUG
+		cout <<"PanelConsole::addChar() *** max texts *** "<< endl;
+		#endif
 		return;
 	}
 	string str = texts[currentLine]->getText();
@@ -167,6 +279,7 @@ void PanelConsole::addChar( char c ) {
 void PanelConsole::delChar() {
 	cout << "PanelConsole::delChar()" << endl;
 	if ( currentLine >= texts.size() )	{
+		cout <<"PanelConsole::delChar() *** max texts *** "<< endl;
 		return;
 	}
 	if ( currentPos <= 0  )	{
@@ -237,6 +350,7 @@ void PanelConsole::delChar() {
 void PanelConsole::supChar() {
 	cout << "PanelConsole::supChar()" << endl;
 	if ( currentLine >= texts.size() )	{
+		cout <<"PanelConsole::supChar() *** max texts *** "<< endl;
 		return;
 	}
 
@@ -450,22 +564,38 @@ void PanelConsole::delWord()	{
 }
 
 
-
-void PanelConsole::moveCursor()	{
-	int pl = prompt.size();
-	int x = texts[currentLine]->getTextLenght(pl+currentPos);
-	int y = currentLine*15;
-
-	cursor.setPos( x, y );
-}
 //--------------------------------------------------------------------------------------------------------------------
 //
 //						Callback keyboard functions....
 //
 //--------------------------------------------------------------------------------------------------------------------
-void PanelConsole::cb_keyboard( unsigned char key ) {
-	cout << "PanelConsole::cb_keyboard( "<< (unsigned int) key <<" ) "<< endl;;
+void PanelConsole::addCmd( string cmd ) {
 	#ifdef DEBUG
+	#endif
+	cout << "PanelConsole::addCmd( \""<< cmd <<"\" ) "<< endl;;
+	if ( cmds.size() == maxCmd )	{
+		#ifdef DEBUG
+		#endif
+		cout << "  delete cmd[0]  max = "<< maxCmd << endl;;
+		delete cmds[0];
+		cmds.erase( cmds.begin()+0 );
+		currentCmd--;
+	}
+	
+	string * pStr = new string( cmd );
+	cmds.push_back( pStr );
+	cout << "  CurrentCmd : "<< currentCmd << endl;;
+	currentCmd++;
+	#ifdef DEBUG
+	#endif
+	cout << "  CurrentCmd : "<< currentCmd << endl;;
+}
+
+
+void PanelConsole::cb_keyboard( unsigned char key ) {
+	//if ( !bVisible )		return;
+	#ifdef DEBUG
+	cout << "PanelConsole::cb_keyboard( "<< (unsigned int) key <<" ) "<< endl;;
 	#endif
 	static int n=0;
 	switch(key){ 
@@ -477,6 +607,8 @@ void PanelConsole::cb_keyboard( unsigned char key ) {
 			//cout << "Exec command "<< cmd << endl;
 			
 			addLine();
+			currentCmd = cmds.size();
+			addCmd( cmd );
 			if ( cb_cmd )	(*cb_cmd)(cmd);
 			if ( ppccb )	(ppccb->callback_cmd)(cmd);
 		}
@@ -485,6 +617,11 @@ void PanelConsole::cb_keyboard( unsigned char key ) {
 		}
 		}	
 		break;
+	// ESC
+	case 27:		{
+		}		
+		break;
+
 	//² 
 	case 178:		{
 		char buff[80];
@@ -496,10 +633,12 @@ void PanelConsole::cb_keyboard( unsigned char key ) {
 		break;
 
 	//tab	
+	/*
 	case 9:		{
 		WindowsManager::getInstance().swapVisible();
 		}		
 		break;
+	*/
 	// DEL
 	case 8:		{
 		if ( bCtrl )	delWord();
@@ -514,7 +653,9 @@ void PanelConsole::cb_keyboard( unsigned char key ) {
 		}
 		break;
 	default :		{
+		#ifdef DEBUG
 		std::cout << "  Value : "<< (int)key << std::endl;
+		#endif
 		addChar(  key ); 
 		}		
 		break;
@@ -523,9 +664,10 @@ void PanelConsole::cb_keyboard( unsigned char key ) {
 	
 
 void PanelConsole::cb_keyboard_special( unsigned char key ) {
-	cout << "PanelConsole::cb_keyboard_special( "<< (unsigned int) key <<" ) "<< endl;;
+	//if ( !bVisible )		return;
 	#ifdef DEBUG
 	#endif
+	cout << "PanelConsole::cb_keyboard_special( "<< (unsigned int) key <<" ) "<< endl;;
 	switch(key){ 
 	//  Right Ctrl
 	case 250:	{
@@ -545,6 +687,18 @@ void PanelConsole::cb_keyboard_special( unsigned char key ) {
 		break;
 	// up
 	case 101:	{
+			if ( currentCmd == cmds.size() )	{
+				svgCmd = texts[currentLine]->getText();
+			}
+	
+			if ( (currentCmd) > 0 )	{
+				currentCmd--;
+				string newCmd = prompt + *(cmds[currentCmd]);
+				texts[currentLine]->changeText( newCmd, PanelText::NORMAL_FONT, true );
+				currentPos = 0;
+				moveCursor();
+			}
+			cout << "  CurrentCmd : "<< currentCmd<<"/"<< cmds.size() << endl;;
 		}
 		break;
 	// right
@@ -555,6 +709,21 @@ void PanelConsole::cb_keyboard_special( unsigned char key ) {
 		break;
 	// down
 	case 103:	{
+			if ( (currentCmd) != cmds.size() )					currentCmd++;
+			
+			if ( (currentCmd) == cmds.size() )	{
+				texts[currentLine]->changeText( svgCmd, PanelText::NORMAL_FONT, true );
+				currentPos = svgCmd.size()-prompt.size();
+				moveCursor();
+			}
+			else{
+				//currentCmd++;
+				string newCmd = prompt + *(cmds[currentCmd]);
+				texts[currentLine]->changeText( newCmd, PanelText::NORMAL_FONT, true );
+				currentPos = 0;
+				moveCursor();
+			}
+			cout << "  CurrentCmd : "<< currentCmd <<"/"<< cmds.size() << endl;;
 		}	
 		break;
 	// pgup
@@ -594,14 +763,17 @@ void PanelConsole::cb_keyboard_special( unsigned char key ) {
 	
 	if ( bRightCtrl || bLeftCtrl ) 	bCtrl = true;
 	//else							bCtrl = false;
+	#ifdef DEBUG
 	cout <<"  bCtrl= "<< std::boolalpha << bCtrl <<" bRightCtrl="<< bRightCtrl <<" bLeftCtrl="<< bLeftCtrl << endl;
+	#endif
 }
 	
 
 
 void PanelConsole::cb_keyboard_special_up( unsigned char key ) {
-	cout << "PanelConsole::cb_keyboard_special_up( "<< (unsigned int) key <<" ) "<< endl;;
+	//if ( !bVisible )		return;
 	#ifdef DEBUG
+	cout << "PanelConsole::cb_keyboard_special_up( "<< (unsigned int) key <<" ) "<< endl;;
 	#endif
 	switch(key){ 
 	//  Right Ctrl
@@ -615,7 +787,9 @@ void PanelConsole::cb_keyboard_special_up( unsigned char key ) {
 		}	
 		break;
 	default :		{
+		#ifdef DEBUG
 		std::cout << "  Value : "<< (int)key << std::endl;
+		#endif
 		}
 		break;
 	}
@@ -623,7 +797,9 @@ void PanelConsole::cb_keyboard_special_up( unsigned char key ) {
 	if ( bRightCtrl || bLeftCtrl ) 	bCtrl = true;
 	else							bCtrl = false;
 
+	#ifdef DEBUG
 	cout <<"  bCtrl= "<< std::boolalpha << bCtrl <<" bRightCtrl="<< bRightCtrl <<" bLeftCtrl="<< bLeftCtrl << endl;
+	#endif
 }
 	
 

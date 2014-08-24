@@ -185,6 +185,10 @@ static void glutPassiveMotionFunc(int x, int y)	{
 
 void exec_cmd( string cmd  )	{
 	printf( "C standard :: exec_cmd( %s ) \"%s\"\n", cmd.c_str() );
+	if ( cmd.compare( "clear" ) == 0 )	{
+		pPC->clear();
+		return;
+	}
 	pPC->affiche( new string("Exec command ..") );
 }
 
@@ -262,7 +266,7 @@ static void CreateAllWindows()	{
 
 	//---------------------------------------------------------------------------------	
 	PanelConsole* pc;
-	pc = new PanelConsole( 100 );
+	pc = new PanelConsole( 100, 10 );
 	//pc->setPosAndSize( 10, 10, 400, 600);
 	pc->setPosAndSize( 250-2, 100, 400, wm.getHeight()-100);
 	pc->setPrompt( "console1> " );
@@ -271,7 +275,7 @@ static void CreateAllWindows()	{
 	pPC = pc;
 	
 	//---------------------------------------------------------------------------------	
-	pc = new PanelConsole( 100 );
+	pc = new PanelConsole( 100, 5 );
 	pc->setPosAndSize( 250-2-4+800, 100, 200+8, wm.getHeight()-100);
 	//pc->setPrompt( "rene@poste-002:/home/rene$ " );
 	pc->setPrompt( "console2> " );

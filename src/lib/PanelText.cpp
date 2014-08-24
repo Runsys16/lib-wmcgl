@@ -151,10 +151,14 @@ void PanelText::changeText( string str, bool build )	{
 
 void PanelText::changeText( string str, FONT type, bool build )	{
 	#ifdef DEBUG
-	cout << "PanelText::changeText( "<< str <<", "<< type <<" )" << endl;
+	cout << "PanelText::changeText( \""<< str <<"\", "<< type <<" )" << endl;
 	#endif
 	
-	if ( (type == typeFont) && text.compare(str) == 0 )	{
+	if ( str.size() == 0 )	{
+		text = str;
+	}
+	else if ( (type == typeFont) && text.compare(str) == 0 )	{
+		cout << "   Identique" << endl;
 		bChange = false;
 		return;
 	}
@@ -167,11 +171,50 @@ void PanelText::changeText( string str, FONT type, bool build )	{
 
 
 
+void PanelText::eraseText()	{
+	#ifdef DEBUG
+	cout << "PanelText::eraseText()"<< endl;
+	#endif
+	if ( pTextGL == NULL )	{
+		#ifdef DEBUG
+		cout << "PanelText::eraseText() text = NULL"<< endl;
+		#endif
+		return;
+	}
+	
+	textUtil->DeleteTextObj( pTextGL );
+	#ifdef DEBUG
+	cout << "  delete pTextGL"<< endl;
+	#endif
+	pTextGL = NULL; 
+
+	bChange = false;
+		
+	#ifdef DEBUG
+	cout << "PanelText::eraseText() text = \""<< text <<"\", type = "<< strFont() << endl;
+	#endif
+	
+}
+
+
+
 void PanelText::buildString()	{
 	#ifdef DEBUG
 	cout << "PanelText::buildString() font = "<< strFont() <<"  texte = \""<< text <<"\""<< endl;
 	#endif
-	if ( text.compare("") == 0 )	{ pTextGL = NULL; return; }
+	if ( text.compare("") == 0 )	{ 
+		if (pTextGL != NULL )	{
+			textUtil->DeleteTextObj( pTextGL );
+			#ifdef DEBUG
+			cout << "  delete pTextGL"<< endl;
+			#endif
+		}
+		#ifdef DEBUG
+		cout << "  pTextGL = NULL"<< endl;
+		#endif
+		pTextGL = NULL; 
+		return; 
+	}
 	
 	textUtil = WindowsManager::getInstance().getTextUtil();
 
@@ -202,11 +245,23 @@ void PanelText::buildString()	{
 
 
 int PanelText::getTextLenght()	{
-	return( textUtil->lenght( pTextGL, &text, DefaultNormalFont ) );
+	CTexFont * defaultFont;
+	switch (typeFont )	{
+		case NORMAL_FONT :		defaultFont = DefaultNormalFont;		break;
+		case SMALL_FONT :		defaultFont = DefaultSmallFont;			break;
+		case LARGE_FONT :		defaultFont = DefaultLargeFont;			break;
+	}
+	return( textUtil->lenght( pTextGL, &text, defaultFont ) );
 }
 
 int PanelText::getTextLenght( int nbChar )	{
-	return( textUtil->lenght( pTextGL, &text, DefaultNormalFont, nbChar ) );
+	CTexFont * defaultFont;
+	switch (typeFont )	{
+		case NORMAL_FONT :		defaultFont = DefaultNormalFont;		break;
+		case SMALL_FONT :		defaultFont = DefaultSmallFont;			break;
+		case LARGE_FONT :		defaultFont = DefaultLargeFont;			break;
+	}
+	return( textUtil->lenght( pTextGL, &text, defaultFont, nbChar ) );
 }
 
 

@@ -88,7 +88,7 @@ void WindowsManager::init()	{
 	//twFont.BuildText( cTextObj, &str, 0xffffffff, 0xffffffff, 1,  DefaultNormalFont, int _Sep, int _BgWidth)
 	color32 color		= COLOR32_WHITE;
 	color32 color_bg	= COLOR32_WHITE;
-	textUtil.BuildText( cTextObj, str, &color, &color_bg, 10,  DefaultNormalFont, 2, 100);
+	//textUtil.BuildText( cTextObj, str, &color, &color_bg, 10,  DefaultNormalFont, 2, 100);
 
 
 	panelMove = NULL;
@@ -287,6 +287,7 @@ void WindowsManager::idleGL(float elapsedTime)	{
 
 
 void WindowsManager::ChangeViewport(int _X0, int _Y0, int _Width, int _Height, int _OffsetX, int _OffsetY)	{
+	//return;
     if( _Width>0 && _Height>0 )
     {
         GLint vp[4];
@@ -309,7 +310,7 @@ void WindowsManager::ChangeViewport(int _X0, int _Y0, int _Width, int _Height, i
 
 void WindowsManager::displayGL()	{
 	//cout << "WindowsManager::displayGL()" << endl;
-	
+	//return;	
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
@@ -398,32 +399,43 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 
 
 void WindowsManager::keyboardFunc( unsigned char key, int x, int y)	{
+	#ifdef DEBUG
 	cout << "WindowsManager::keyboardFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
+	#endif
 	int nb = panels_cbKey.size();
 	for( int i=0; i<nb; i++ )	{
-		panels_cbKey[i]->cb_keyboard( key );
+		if ( panels_cbKey[i]->getVisible() )
+			panels_cbKey[i]->cb_keyboard( key );
 	}
 }
 
 void WindowsManager::keyboardUpFunc( unsigned char key, int x, int y)	{
+	#ifdef DEBUG
 	cout << "WindowsManager::keyboardUpFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
+	#endif
 }
 
 
 
 void WindowsManager::keyboardSpecialFunc( unsigned char key, int x, int y)	{
+	#ifdef DEBUG
 	cout << "WindowsManager::keyboardSpecialFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
+	#endif
 	int nb = panels_cbKey.size();
 	for( int i=0; i<nb; i++ )	{
-		panels_cbKey[i]->cb_keyboard_special( key );
+		if ( panels_cbKey[i]->getVisible() )
+			panels_cbKey[i]->cb_keyboard_special( key );
 	}
 }
 
 void WindowsManager::keyboardSpecialUpFunc( unsigned char key, int x, int y)	{
+	#ifdef DEBUG
 	cout << "WindowsManager::keyboardSpecialUpFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
+	#endif
 	int nb = panels_cbKey.size();
 	for( int i=0; i<nb; i++ )	{
-		panels_cbKey[i]->cb_keyboard_special_up( key );
+		if ( panels_cbKey[i]->getVisible() )
+			panels_cbKey[i]->cb_keyboard_special_up( key );
 	}
 }
 //------------------------------------------------------------

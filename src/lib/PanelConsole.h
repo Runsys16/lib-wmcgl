@@ -19,7 +19,8 @@ class PanelConsoleCallBack	{
 class PanelConsole : public PanelSimple	{
 	public:
 
-									PanelConsole( int );
+									PanelConsole();
+									PanelConsole( int, int );
 		
 		void						setPrompt( std::string );
 		void						setCallBackCmd( CB_CMD );
@@ -28,12 +29,21 @@ class PanelConsole : public PanelSimple	{
 		virtual void				displayGL();
 		virtual void				updatePos();
 		virtual void				idle(float);
+
+		void						addCmd(std::string cmd);
+		
 		virtual void				cb_keyboard( unsigned char );
 		virtual void				cb_keyboard_special( unsigned char );
 		virtual void				cb_keyboard_special_up( unsigned char );
 		
+		void						moveCursor();
+		void						scroll();
+		void						rotateBuffer();
 		void						addLine();
+		void						eraseTexts();
+		void						clear();
 		void						affiche( std::string * );
+		void						affiche( std::string );
 		void						addChar( char );
 		void						supChar();
 		void						delChar();
@@ -46,17 +56,22 @@ class PanelConsole : public PanelSimple	{
 		int							posWordSuiv();
 		void						wordPrec();
 		void						wordSuiv();
-		void						moveCursor();
 		
 	private:
+		int							maxCmd;
+		std::vector<std::string*> 	cmds;
 		std::vector<PanelText *>	texts;
 		std::string					prompt;
 		PanelText					cursor;
 		CB_CMD						cb_cmd;
 		PanelConsoleCallBack*		ppccb;
 		
+		int							heightLine;
+		
 		int 						currentLine;
 		int							currentPos;
+		int 						currentCmd;
+		std::string					svgCmd;
 		
 		float						cursorTime;
 		bool						bIns;

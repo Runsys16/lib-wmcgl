@@ -4,6 +4,7 @@
 
 #include <vector>
 
+
 class Panel {
 	public:
 		//-----------------------------------------------------------------------------------
@@ -20,8 +21,8 @@ class Panel {
 		virtual void		cb_keyboard( unsigned char ) 					{;};
 		virtual void		cb_keyboard_special( unsigned char )			{;};
 		virtual void		cb_keyboard_special_up( unsigned char )			{;};
+		virtual void		debug( bool )									{;};
 		
-
 		inline void			setParent( Panel* p )							{parent = p;};
 		inline Panel*		getParent()										{return parent;};
 		inline void			setPosAndSize(int x0, int y0, int dx0, int dy0)	{x=x0; y=y0; dx=dx0 ;dy=dy0;};
@@ -45,6 +46,8 @@ class Panel {
 	
 		inline bool			getVisible()									{return visible;};
 		inline void			setVisible(bool b)								{visible=b;};
+		
+		
 		//-----------------------------------------------------------------------------------
 	protected:
 		//-----------------------------------------------------------------------------------
@@ -68,7 +71,8 @@ class Panel {
 	
 		Panel* 				parent;
 		std::vector<Panel*> childs;
-
+		
+		bool				bDebug;
 };
 
 

@@ -210,6 +210,7 @@ install:
 #01##-----------------------------------------------------------------------------
 #01## this script run in src directory
 #01##-----------------------------------------------------------------------------
+#01#cd ./src
 #01#cat ./makefile.base >../makefile
 #01#echo "#-------------------------------------------------------------------------------------" >> ../makefile
 #01#echo "#        Scripts" >> ../makefile
@@ -269,11 +270,11 @@ $(OBJDIR)Panel.o :   $(SRCDIR)Panel.cpp  $(SRCDIR)Panel.h
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)PanelConsole.o :   $(SRCDIR)PanelConsole.cpp  $(SRCDIR)PanelConsole.h  $(SRCDIR)PanelSimple.h  $(SRCDIR)Panel.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)PanelText.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h 
+$(OBJDIR)PanelConsole.o :   $(SRCDIR)PanelConsole.cpp  $(SRCDIR)PanelConsole.h  $(SRCDIR)PanelSimple.h  $(SRCDIR)Panel.h  $(SRCDIR)PanelText.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h 
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)PanelSimple.o :   $(SRCDIR)PanelSimple.cpp  $(SRCDIR)PanelSimple.h  $(SRCDIR)Panel.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)ResourceManager.h  $(SRCDIR)Singleton.h  $(SRCDIR)Shader.h  $(SRCDIR)Mathlib.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h 
+$(OBJDIR)PanelSimple.o :   $(SRCDIR)PanelSimple.cpp  $(SRCDIR)PanelSimple.h  $(SRCDIR)Panel.h  $(SRCDIR)PanelText.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)ResourceManager.h  $(SRCDIR)Singleton.h  $(SRCDIR)Shader.h  $(SRCDIR)Mathlib.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h 
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 

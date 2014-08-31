@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "PanelSimple.h"
+#include "PanelText.h"
 #include "ResourceManager.h"
 #include "wm.h"
 //#include "../include/WindowsManager.h"
@@ -50,6 +51,9 @@ PanelSimple::PanelSimple()	{
 	}
 	
 	bTextOK = false;
+	
+	pPsDebug = NULL;
+	bDebug = false;
 }
 
 
@@ -79,37 +83,18 @@ void PanelSimple::buildText()	{
 void PanelSimple::updatePos() {
 	if ( bTextOK == false )			buildText();
 
-	/*
-	for ( int i=0; i<NB; i++ )	{
-		if ( tab[i] == NULL )	{
-			#ifdef DEBUG
-			cout << "PanelSimple::updatePos()" << endl;
-			#endif
-
-			char * cStr = new char[255];
-			sprintf( cStr, "### Panel ID %d ###.", getID() );
-			tab[i] = cStr;
-		}
+	if ( bDebug )	{
+		char	str[255];
+		
+		sprintf( str, "ID=%d, X=%d, Y=%d, DX=%d, DY=%d", getID(), getX(), getY(), getDX(), getDY() );
+		sDebug = string(str);
+		pPtDebug->changeText( sDebug, PanelText::NORMAL_FONT, true );
 	}
 
-	sprintf( tab[0], "--- Panel ID %d ---", getID() );
-	*/
+	//-----------------------------------------
+	// Calcul des positions
 	Panel::updatePos();
-/*
-	char cStr[255];
-	sprintf( cStr, "--- ID %d ---", getID() );
-	str[0] = cStr;
-
-//void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines, const CTexFont *_Font, int _Sep, int _BgWidth)
-	//twFont.BuildText( cTextObj, &str, 0xffffffff, 0xffffffff, 1,  DefaultNormalFont, int _Sep, int _BgWidth)
-	color32 color		= COLOR32_WHITE;
-	color32 color_bg	= COLOR32_WHITE;
-
-	str[1] = "essai de string dynamqiue de tres lognue string ...";
-	str[2] = "TEST TEST ...";
-	str[3] = "Ca fonctionne ...";
-	textUtil->BuildText( cTextObj, &(str[0]), &color, &color_bg, str.size(),  DefaultNormalFont, 0, 0);
-*/
+	//-----------------------------------------
 }
 
 
@@ -188,24 +173,51 @@ void PanelSimple::displayGL() {
 	glScissor( scx, scy, scdx, scdy );
 	glEnable( GL_SCISSOR_TEST );
 	
-	/*
-	
-	if ( ID != 0 )	{
-		textUtil->BeginGL();
-		textUtil->BindFont( DefaultNormalFont );
-		textUtil->DrawText( cTextObj, getX(), getY(), COLOR32_WHITE, COLOR32_RED );
-		textUtil->UnbindFont();
 
-		textUtil->EndGL();
-	}
-	*/
-	
+	// display	with scissor
 	Panel::displayGL();
 
 
 	glDisable( GL_SCISSOR_TEST );
 	
+	if ( bDebug && pPsDebug )		{
+		pPsDebug->displayGL();
+		//pPtDebug->displayGL();
+	}
 }
+
+
+
+void PanelSimple::debug( bool b )	{
+	bDebug = b;
+	
+	
+	if ( b && pPsDebug == NULL )	{
+		pPsDebug = new PanelSimple();
+		pPsDebug->setPosAndSize( 10, -20, 300, 20 );
+		
+		pPtDebug = new PanelText();
+		char	str[255];
+		
+		sprintf( str, "ID=%d\n X=%d, Y=%d, DX=%d, DY=%d", getID(), getX(), getY(), getDX(), getDY() );
+		sDebug = string(str);
+		cout <<" DebugPanel : "<< sDebug << endl;
+		
+		pPtDebug->changeText( sDebug, PanelText::NORMAL_FONT, true );
+		pPtDebug->setPos(0, 0);
+		pPsDebug->add( pPtDebug );
+		add( pPsDebug );
+	}
+
+	if ( b )	{
+		pPsDebug->setVisible( true );
+	}
+	else	{
+		pPsDebug->setVisible( false );
+	}
+}
+
+
 
 
 

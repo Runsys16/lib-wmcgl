@@ -7,7 +7,7 @@
 #include "wm.h"
 
 //#define DEBUG
-//#define DEBUG_CONST
+#define DEBUG_CONST
 
 #ifdef DEBUG_WM
 #	define DEBUG
@@ -37,6 +37,7 @@ PanelText::PanelText()	{
 	align = LEFT;
 	pTextGL = NULL;
 	bChange = false;
+	ID = 999;
 }
 
 
@@ -158,7 +159,9 @@ void PanelText::changeText( string str, FONT type, bool build )	{
 		text = str;
 	}
 	else if ( (type == typeFont) && text.compare(str) == 0 )	{
+		#ifdef DEBUG
 		cout << "   Identique" << endl;
+		#endif
 		bChange = false;
 		return;
 	}

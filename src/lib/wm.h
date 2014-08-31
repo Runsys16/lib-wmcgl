@@ -49,6 +49,7 @@ public:
 	void				movePanel( int, int);
 	void				movePanel( int, int, Panel* );
 	void				swapVisible();
+	void				debug(bool);
 	
 	/*
 	void			setWidth( int);
@@ -61,6 +62,8 @@ public:
 	*/
 
 
+	inline void			setDebug( bool b )				{debug(b);}
+	inline int			getDebug()						{return bDebug;}
 	inline void			setWidth( int w)				{width=w;}
 	inline int			getWidth()						{return width;}
 	inline void			setHeight( int h )				{height=h;}
@@ -118,6 +121,8 @@ private:
 	Panel*						panelMove;
 	Panel*						panelFocus;
 	std::vector<Panel *>		panels_cbKey;
+	
+	bool						bDebug;
 };
 
 #ifdef WM_CPP

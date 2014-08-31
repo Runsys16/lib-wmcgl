@@ -3,6 +3,7 @@
 
 
 #include "Panel.h"
+#include "PanelText.h"
 #include "Texture2D.h"
 #include "TextUtil.h"
 
@@ -15,6 +16,8 @@ class PanelSimple : public Panel {
 		virtual void		displayGL();
 		virtual void		updatePos();
 		
+		void				debug(bool);
+
 	private:
 		Texture2D*		m_pTexBackground;
 		
@@ -22,6 +25,11 @@ class PanelSimple : public Panel {
 		void * 							cTextObj;
 		TextUtil*						textUtil;
 		std::vector<std::string>		str;
+
+		//bool							bDebug;				in Panel.h
+		PanelSimple*					pPsDebug;
+		PanelText*						pPtDebug;
+		std::string						sDebug;
 };
 
 

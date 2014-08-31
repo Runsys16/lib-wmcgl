@@ -189,6 +189,11 @@ void exec_cmd( string cmd  )	{
 		pPC->clear();
 		return;
 	}
+	else if ( cmd.compare( "debug" ) == 0 )	{
+		WindowsManager& wm = WindowsManager::getInstance();
+		wm.setDebug( !wm.getDebug() );
+		return;
+	}
 	pPC->affiche( new string("Exec command ..") );
 }
 
@@ -252,7 +257,7 @@ static void CreateAllWindows()	{
 	wm.add( ps );
 	pStr = new string("Press ESC to quit");
 	ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 5 ) );
-	pStr = new string("Or key to test console");
+	pStr = new string("Or key to test console, enter word \"debug\" for debug mode on/off");
 	ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 20 ) );
 	
 	//---------------------------------------------------------------------------------	

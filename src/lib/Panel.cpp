@@ -24,6 +24,16 @@ Panel::Panel()	{
 	#ifdef DEBUG_CONST
 	cout << "Constructeur Panel ..." << endl;
 	#endif
+	init();
+}
+
+
+
+void Panel::init()	{
+	#ifdef DEBUG_CONST
+	cout << " Panel::init() ..." << endl;
+	#endif
+	
 	visible			= true;
 	canMove			= true;
 	mouseVisible	= true;
@@ -34,14 +44,6 @@ Panel::Panel()	{
 	dy_raw			= 0;
 	
 	ID = -1;
-}
-
-
-
-void Panel::init()	{
-	#ifdef DEBUG_CONST
-	cout << " Panel::init() ..." << endl;
-	#endif
 }
 
 
@@ -86,9 +88,12 @@ void Panel::updatePos()	{
 	x_raw = x;
 	y_raw = y;
 	Panel* current = parent;
+	//cout << "Panel::updatePos() ..."<<"ID="<< ID <<"x_raw="<< x_raw <<" y_raw="<< y_raw << endl;
 	while( current != NULL )	{
-		x_raw += current->getX();
-		y_raw += current->getY();
+		//cout << " 0-Panel::updatePos() ..."<<"ID="<< parent->getID() <<"x_raw="<< x_raw <<" y_raw="<< y_raw << endl;
+		x_raw += current->getPosX();
+		y_raw += current->getPosY();
+		//cout << " 1-Panel::updatePos() ..."<<"ID="<< current->getID() <<"x_raw="<< x_raw <<" y_raw="<< y_raw << endl;
 		current = current->getParent();
 	}
 
@@ -114,12 +119,6 @@ void Panel::displayGL()	{
 
 	
 }
-
-
-
-
-
-
 
 
 

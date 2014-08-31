@@ -92,7 +92,7 @@ void WindowsManager::init()	{
 
 
 	panelMove = NULL;
-
+	bDebug = false;
 }
 
 
@@ -255,6 +255,17 @@ void WindowsManager::swapVisible()	{
 	int nb = childs.size();
 	for (int i=0; i< nb; i++ )	{
 		childs[i]->setVisible( !childs[i]->getVisible() );
+	}
+}
+
+
+
+
+void WindowsManager::debug( bool b )	{
+	bDebug = b;
+	int nb = childs.size();
+	for (int i=0; i< nb; i++ )	{
+		childs[i]->debug( b );
 	}
 }
 

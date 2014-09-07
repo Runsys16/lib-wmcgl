@@ -282,6 +282,10 @@ $(OBJDIR)PanelText.o :   $(SRCDIR)PanelText.cpp  $(SRCDIR)PanelText.h  $(SRCDIR)
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
+$(OBJDIR)PanelWindow.o :   $(SRCDIR)PanelWindow.cpp  $(SRCDIR)PanelWindow.h  $(SRCDIR)PanelSimple.h  $(SRCDIR)Panel.h  $(SRCDIR)PanelText.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h 
+	@echo ---------   compilation de $@
+	$(CPP) -c $< -o $@  $(CFLAGS)
+
 $(OBJDIR)ResourceManager.o :   $(SRCDIR)ResourceManager.cpp  $(SRCDIR)ResourceManager.h  $(SRCDIR)Singleton.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)Shader.h  $(SRCDIR)Mathlib.h 
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)

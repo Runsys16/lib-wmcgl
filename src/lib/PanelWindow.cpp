@@ -1,5 +1,9 @@
+#include <typeinfo>
+
 #include "PanelWindow.h"
+#include "PanelText.h"
 #include "ResourceManager.h"
+
 
 using namespace std;
 
@@ -9,7 +13,7 @@ using namespace std;
 PanelWindow::PanelWindow( void )	{
 	PanelSimple();
 
-	ResourceManager& res = ResourceManager::getInstance();
+	_ResourceManager& res = _ResourceManager::getInstance();
 	
 	loadSkin( "bfs" );
 
@@ -20,17 +24,17 @@ PanelWindow::PanelWindow( void )	{
 
 void PanelWindow::loadSkin( string name )	{
 
-	ResourceManager& res = ResourceManager::getInstance();
+	_ResourceManager& res = _ResourceManager::getInstance();
 	
 	string nameFile = "/usr/share/wmcgl/images/" + name;
-	m_tex_tl = ((Texture2D*)res.LoadResource(ResourceManager::TEXTURE2D, nameFile + "_ul.png") );
-	m_tex_tr = ((Texture2D*)res.LoadResource(ResourceManager::TEXTURE2D, nameFile + "_ur.png") );
-	m_tex_bl = ((Texture2D*)res.LoadResource(ResourceManager::TEXTURE2D, nameFile + "_dl.png") );
-	m_tex_br = ((Texture2D*)res.LoadResource(ResourceManager::TEXTURE2D, nameFile + "_dr.png") );
-	m_tex_t = ((Texture2D*)res.LoadResource(ResourceManager::TEXTURE2D, nameFile + "_u.png") );
-	m_tex_b = ((Texture2D*)res.LoadResource(ResourceManager::TEXTURE2D, nameFile + "_d.png") );
-	m_tex_l = ((Texture2D*)res.LoadResource(ResourceManager::TEXTURE2D, nameFile + "_l.png") );
-	m_tex_r = ((Texture2D*)res.LoadResource(ResourceManager::TEXTURE2D, nameFile + "_r.png") );
+	m_tex_tl = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_ul.png") );
+	m_tex_tr = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_ur.png") );
+	m_tex_bl = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_dl.png") );
+	m_tex_br = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_dr.png") );
+	m_tex_t = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_u.png") );
+	m_tex_b = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_d.png") );
+	m_tex_l = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_l.png") );
+	m_tex_r = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_r.png") );
 	
 	borderSize = 8;
 }
@@ -61,6 +65,25 @@ void PanelWindow::setdSize(int dx0, int dy0)	{
 
 void PanelWindow::updatePos() {
 	Panel::updatePos();
+	/*
+	cout <<"ID : "<< getID() <<" nb childs : "<< childs.size() << endl;
+	if ( getID() == 14 || getID() == 15 )	{
+		Panel* ps = childs[0];
+		cout <<"  typeID : "<< typeid(*ps).name() << endl;
+		
+		if (ps )	{
+			if ( ps->getChilds().size() == 1 && typeid(*ps->getChilds()[0]) == typeid(PanelText) )	{
+				cout <<"  typeID : "<< typeid(*ps->getChilds()[0]).name() << endl;
+				PanelText* pt = dynamic_cast<PanelText*>(ps->getChilds()[0]);
+				cout <<"  text : "<< pt->getText() << endl;
+				cout <<"  visible : "<< boolalpha << pt->getVisible() << endl;
+				cout <<"  change : "<< boolalpha << pt->bChange << endl;
+				cout <<"  pTextGL : "<< pt->pTextGL << endl;
+				cout <<"  font : "<< pt->strFont() << endl;
+			}
+		}
+	}
+	*/
 }
 
 
@@ -68,7 +91,7 @@ void PanelWindow::updatePos() {
 //	Opengl
 //--------------------------------------------------------------
 
-void PanelWindow::displayGLtex( Texture2D* pTex, float X, float Y, float DX, float DY )	{
+void PanelWindow::displayGLtex( _Texture2D* pTex, float X, float Y, float DX, float DY )	{
 	pTex->Bind(0);
 	
 	glBegin(GL_QUADS);
@@ -99,19 +122,39 @@ void PanelWindow::displayGL( void )	{
 	if ( !visible )			return;
 	
 	Panel::displayGL();
-	
+	//cout << "PanelWindow::displayGL() m_tex_bl : " << m_tex_bl << endl;
 	float X, Y, DX, DY;
 	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP); 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP); 
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	/*
+    glPixelTransferf(GL_ALPHA_SCALE, 1);
+    glPixelTransferf(GL_ALPHA_BIAS, 0);
+    glPixelTransferf(GL_RED_BIAS, 1);
+    glPixelTransferf(GL_GREEN_BIAS, 1);
+    glPixelTransferf(GL_BLUE_BIAS, 1);
+
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    glPixelTransferf(GL_ALPHA_SCALE, 1);
+    
+    glPixelTransferf(GL_ALPHA_BIAS, 0);
+    glPixelTransferf(GL_RED_BIAS, 0);
+    glPixelTransferf(GL_GREEN_BIAS, 0);
+    glPixelTransferf(GL_BLUE_BIAS, 0);
+	*/
+	
 	glMatrixMode(GL_TEXTURE);
 	glLoadIdentity();
-	*/
+	
 	
 	// corners
 	X = getX() - borderSize;

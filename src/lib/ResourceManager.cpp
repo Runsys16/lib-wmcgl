@@ -5,9 +5,9 @@
 using namespace std;
 
 
-ResourceManager::~ResourceManager()
+_ResourceManager::~_ResourceManager()
 {
-	cout << "Destructeur ResourceManager ... " << endl;
+	cout << "Destructeur _ResourceManager ... " << endl;
 	Destroy();
 }
 
@@ -15,7 +15,7 @@ ResourceManager::~ResourceManager()
 
 
 
-void ResourceManager::Destroy()
+void _ResourceManager::Destroy()
 {
 	for(std::map<std::string, void*>::iterator it = m_ResDB.begin(); it != m_ResDB.end(); it++) {
 		string 	key = it->first;
@@ -23,7 +23,7 @@ void ResourceManager::Destroy()
 		{
 			case TEXTURE2D: {
 				std::cout << "Efface la ressource : " << (*it).first <<"    "<< (*it).second << std::endl;
-				delete (Texture2D*)(*it).second;
+				delete (_Texture2D*)(*it).second;
 				break;}
 			case SHADER: {
 				std::cout << "Efface la ressource : " << (*it).first <<"    "<< (*it).second << std::endl;
@@ -51,7 +51,7 @@ void ResourceManager::Destroy()
 
 
 
-bool ResourceManager::Delete( void * Res )	
+bool _ResourceManager::Delete( void * Res )	
 {
 	string key;
 	
@@ -63,11 +63,11 @@ bool ResourceManager::Delete( void * Res )
 			m_UseDB[key]--;
 			if (  m_UseDB[key] == 0 )
 			{
-				std::cout << "Efface la ressource : " << (*it).first <<"    "<< Res << std::endl;
+				std::cout << "WM - Efface la ressource : " << (*it).first <<"    "<< Res << std::endl;
 				
 				switch( m_TypeDB[key] )
 				{
-					case TEXTURE2D: 		DeleteTexture2D( (Texture2D*)Res );			break;
+					case TEXTURE2D: 		DeleteTexture2D( (_Texture2D*)Res );			break;
 					case SHADER:			DeleteShader( (Shader*)Res );				break;
 					//case TEXTURECUBEMAP:	DeleteCubeMap( (TextureCubemap*)Res );		break;
 					//case MESH:				DeleteMesh( (Mesh*)Res );					break;
@@ -96,14 +96,14 @@ bool ResourceManager::Delete( void * Res )
 			return false;
 		}
 	}
-	cout << "Ressource non trouve : " << Res << endl;
+	cout << "WM - Ressource non trouve : " << Res << endl;
 	return false;
 	//m_ResDB.clear();
 }
 
-void* ResourceManager::LoadResource(RES_TYPE type, const std::string& name)
+void* _ResourceManager::LoadResource(RES_TYPE type, const std::string& name)
 {
-	std::cout << "Loading resource " << name << "   --  ";//  << std::endl;
+	std::cout << "WM - Loading resource " << name << "   --  ";//  << std::endl;
 	// La ressource est déja chargée, on ne la recharge pas :
 	if(m_ResDB.find(name) != m_ResDB.end()) {
 		if ( name.find( ".obj" ) != std::string::npos )	{
@@ -129,8 +129,8 @@ void* ResourceManager::LoadResource(RES_TYPE type, const std::string& name)
 	switch(type) {
 	case TEXTURE2D: {
 		std::cout << "Chargement ....";//<< std::endl;
-		ptr = new Texture2D();
-		((Texture2D*)ptr)->Load(name);
+		ptr = new _Texture2D();
+		((_Texture2D*)ptr)->Load(name);
 		break;}
 	case SHADER: {
 		//std::cout << std::endl;
@@ -161,7 +161,7 @@ void* ResourceManager::LoadResource(RES_TYPE type, const std::string& name)
 	return ptr;
 }
 
-void* ResourceManager::LoadResourceM(RES_TYPE type, const std::string& name)
+void* _ResourceManager::LoadResourceM(RES_TYPE type, const std::string& name)
 {
 	// La ressource est déja chargée, on ne la recharge pas :
 	/*
@@ -185,7 +185,7 @@ void* ResourceManager::LoadResourceM(RES_TYPE type, const std::string& name)
 	*/
 
 	if(!ptr) {
-		std::cout << "Impossible de charger :" << name.c_str() << std::endl;
+		std::cout << "WM - Impossible de charger :" << name.c_str() << std::endl;
 		return NULL;
 	}
 
@@ -196,7 +196,7 @@ void* ResourceManager::LoadResourceM(RES_TYPE type, const std::string& name)
 	return ptr;
 }
 
-void* ResourceManager::NewResource(void* data, const std::string& name)
+void* _ResourceManager::NewResource(void* data, const std::string& name)
 {
 	if(!data) return NULL;
 
@@ -212,7 +212,7 @@ void* ResourceManager::NewResource(void* data, const std::string& name)
 
 
 /*
-void ResourceManager::List(void)
+void _ResourceManager::List(void)
 {
 	for(std::map<std::string, void*>::iterator it = m_ResDB.begin(); it != m_ResDB.end(); it++) {
 		std::string key = (*it).first;
@@ -223,7 +223,7 @@ void ResourceManager::List(void)
 
 */
 
-void ResourceManager::List( RES_TYPE TypeRecherche )
+void _ResourceManager::List( RES_TYPE TypeRecherche )
 {
 	char			text[80];
 	for(std::map<std::string, RES_TYPE>::iterator it = m_TypeDB.begin(); it != m_TypeDB.end(); it++) {
@@ -243,7 +243,7 @@ void ResourceManager::List( RES_TYPE TypeRecherche )
 
 
 
-void ResourceManager::ListShaders(void)
+void _ResourceManager::ListShaders(void)
 {
 	char			text[80];
 	
@@ -256,7 +256,7 @@ void ResourceManager::ListShaders(void)
 
 
 /*
-void ResourceManager::ListObjs(void)
+void _ResourceManager::ListObjs(void)
 {
 	char			text[80];
 	
@@ -267,7 +267,7 @@ void ResourceManager::ListObjs(void)
 }
 
 
-void ResourceManager::ListCubeMap(void)
+void _ResourceManager::ListCubeMap(void)
 {
 	char			text[80];
 	
@@ -280,7 +280,7 @@ void ResourceManager::ListCubeMap(void)
 */
 
 
-void ResourceManager::ListTextures(void)
+void _ResourceManager::ListTextures(void)
 {
 	char			text[80];
 	

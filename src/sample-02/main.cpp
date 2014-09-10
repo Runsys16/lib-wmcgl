@@ -155,7 +155,7 @@ static void glutKeyboardFunc(unsigned char key, int x, int y) {
 		break;
 	case 9: 
 		{
-			for (int i=0; i<10; i++ )	{
+			for (int i=0; i<pw.size(); i++ )	{
 				int b = pw[i]->getBorderSize();
 				if ( b >= 128 )	b = 0;
 			
@@ -231,9 +231,9 @@ static void CreateOneWindow()	{
 	pw.push_back( PW );
 	
 	int x, y, dx, dy;
-	x =  10+rand()%1400;
+	x =  10+rand()%1000;
 	y =  10+rand()%450;
-	dx = 200+rand()%200;
+	dx = 200+rand()%400;
 	dy = 200+rand()%200;
 
 	PW->setPosAndSize( x, y, dx, dy );
@@ -246,10 +246,10 @@ static void CreateOneWindow()	{
 
 
 	char Buff[255];
-	sprintf( Buff, "Fenetre PanelWindow no %d", pw.size() );
+	sprintf( Buff, "PanelWindow no %d", (int)pw.size() );
 	//pStr = new string("Press ESC to quit");
-	pStr = new string( Buff );
-	PanelText* pT = new PanelText( *pStr,	PanelText::NORMAL_FONT, 0, dy/2 );
+	//pStr = new string( Buff );
+	PanelText* pT = new PanelText( Buff,	PanelText::NORMAL_FONT, 0, dy/2 );
 	pT->setAlign( PanelText::CENTER );
 	ps->add( pT );
 
@@ -273,12 +273,12 @@ static void CreateAllWindows()	{
 	wm.add( ps );
 	int y = 10;
 	int dy = 15;
-	ps->add( new PanelText( "Fichier",		PanelText::LARGE_FONT, 5, y + 0*dy ) );
-	ps->add( new PanelText( "Edition",		PanelText::LARGE_FONT, 5, y + 1*dy ) );
-	ps->add( new PanelText( "Affichage",	PanelText::LARGE_FONT, 5, y + 2*dy ) );
-	ps->add( new PanelText( "Recherche",	PanelText::LARGE_FONT, 5, y + 3*dy ) );
-	ps->add( new PanelText( "Outils",		PanelText::LARGE_FONT, 5, y + 4*dy ) );
-	ps->add( new PanelText( "Aide",			PanelText::LARGE_FONT, 5, y + 5*dy ) );
+	ps->add( new PanelText( (char*)"Fichier",		PanelText::LARGE_FONT, 5, y + 0*dy ) );
+	ps->add( new PanelText( (char*)"Edition",		PanelText::LARGE_FONT, 5, y + 1*dy ) );
+	ps->add( new PanelText( (char*)"Affichage",	PanelText::LARGE_FONT, 5, y + 2*dy ) );
+	ps->add( new PanelText( (char*)"Recherche",	PanelText::LARGE_FONT, 5, y + 3*dy ) );
+	ps->add( new PanelText( (char*)"Outils",		PanelText::LARGE_FONT, 5, y + 4*dy ) );
+	ps->add( new PanelText( (char*)"Aide",			PanelText::LARGE_FONT, 5, y + 5*dy ) );
 	
 	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
@@ -310,9 +310,9 @@ static void CreateAllWindows()	{
 	ps->setPosAndSize( 650-4, 50+50+0, 400, 600);
 	wm.add( ps );
 
-	ps->add( new PanelText( "1 Essai de panelText SMALL_FONT", PanelText::SMALL_FONT, 40, 100 ) );
-	ps->add( new PanelText( "2 Essai de panelText NORMAL_FONT", PanelText::NORMAL_FONT, 60, 120 ) );
-	ps->add( new PanelText( "3 Essai de panelText LARGE_FONT", PanelText::LARGE_FONT, 80, 140 ) );
+	ps->add( new PanelText( (char*)"1 Essai de panelText SMALL_FONT", PanelText::SMALL_FONT, 40, 100 ) );
+	ps->add( new PanelText( (char*)"2 Essai de panelText NORMAL_FONT", PanelText::NORMAL_FONT, 60, 120 ) );
+	ps->add( new PanelText( (char*)"3 Essai de panelText LARGE_FONT", PanelText::LARGE_FONT, 80, 140 ) );
 
 	//---------------------------------------------------------------------------------	
 	PanelConsole* pc;
@@ -331,18 +331,7 @@ static void CreateAllWindows()	{
 	pc->setCallBackCmd( new CallBack() );
 	wm.add( pc );
 	
-	CreateOneWindow();
-	CreateOneWindow();
-	CreateOneWindow();
-	CreateOneWindow();
-	CreateOneWindow();
-	CreateOneWindow();
-	CreateOneWindow();
-	CreateOneWindow();
-	CreateOneWindow();
-	CreateOneWindow();
-	CreateOneWindow();
-	CreateOneWindow();
+	for (int i=0; i<3; i++ )		CreateOneWindow();
 
 	wm.setScreenSize( width, height );
 }

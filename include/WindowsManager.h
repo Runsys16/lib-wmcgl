@@ -6,7 +6,7 @@
 #include <map>
 
 
-class Texture2D;
+class _Texture2D;
 class Panel;
 class Font;
 class TextUtil;
@@ -219,6 +219,9 @@ class Panel {
 		inline void			setVisible(bool b)								{visible=b;};
 		
 		
+		inline 	std::vector<Panel*> getChilds()								{return childs;};
+		
+		
 		//-----------------------------------------------------------------------------------
 	protected:
 		//-----------------------------------------------------------------------------------
@@ -264,6 +267,7 @@ class PanelText : public Panel	{
 							PanelText( std::string );
 							PanelText( std::string, FONT );
 							PanelText( std::string, FONT, int, int );
+							PanelText( char*, FONT, int, int );
 
 		void 				buildString();
 		
@@ -271,6 +275,8 @@ class PanelText : public Panel	{
 		int					getTextLenght();
 		int					getTextLenght(int);
 
+		void 				changeText( char* );
+		void 				changeText( char*, FONT );
 		void 				changeText( std::string );
 		void 				changeText( std::string, FONT );
 		void 				changeText( std::string, bool );
@@ -282,7 +288,6 @@ class PanelText : public Panel	{
 		
 		inline void 		setAlign( ALIGN a )								{align = a;};
 		
-	private:
 		//----------------- functions
 		std::string			strFont();		
 		void				displayGLInternal();
@@ -297,6 +302,7 @@ class PanelText : public Panel	{
 		bool				bChange;
 		
 		void*				pTextGL;
+	private:
 	
 };
 
@@ -316,7 +322,7 @@ class PanelSimple : public Panel {
 		void				debug(bool);
 
 	private:
-		Texture2D*		m_pTexBackground;
+		_Texture2D*		m_pTexBackground;
 		
 		bool							bTextOK;
 		void * 							cTextObj;
@@ -427,20 +433,20 @@ class PanelWindow : public PanelSimple {
 		inline void 		setBorderSize( int n )											{ borderSize = n; };
 		inline int	 		getBorderSize()													{ return borderSize; };
 
-		void				displayGLtex( Texture2D* , float, float, float, float );
+		void				displayGLtex( _Texture2D* , float, float, float, float );
 
 		virtual void		displayGL();
 		virtual void		updatePos();
 		
 	private:
-		Texture2D*			m_tex_tl;
-		Texture2D*			m_tex_tr;
-		Texture2D*			m_tex_bl;
-		Texture2D*			m_tex_br;
-		Texture2D*			m_tex_t;
-		Texture2D*			m_tex_b;
-		Texture2D*			m_tex_l;
-		Texture2D*			m_tex_r;
+		_Texture2D*			m_tex_tl;
+		_Texture2D*			m_tex_tr;
+		_Texture2D*			m_tex_bl;
+		_Texture2D*			m_tex_br;
+		_Texture2D*			m_tex_t;
+		_Texture2D*			m_tex_b;
+		_Texture2D*			m_tex_l;
+		_Texture2D*			m_tex_r;
 		
 		int					borderSize;
 };

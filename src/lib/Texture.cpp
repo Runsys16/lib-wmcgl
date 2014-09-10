@@ -11,15 +11,16 @@
 #include <string>
 #include "ImageTools.h"
 
-bool Texture::s_bGenerateMipmaps = true;
+bool _Texture::s_bGenerateMipmaps = true;
 
-bool Texture::LoadFile(GLenum target, const std::string& name)
+bool _Texture::LoadFile(GLenum target, const std::string& name)
 {
 	unsigned int w, h, d;
 	//std::cout << std::endl;
 	GLubyte* ptr = ImageTools::OpenImage(name, w, h, d);
 	if(!ptr) {
-		std::cerr << "[Error] Impossible de charger la texture " << name << std::endl;
+		std::cout<<std::endl;
+		std::cerr << "[Error] WM -Impossible de charger la _Texture \""<< name <<"\""<< std::endl;
 		return false;
 	} 
 	//std::cout << "Profondeur "<< d << std::endl;
@@ -37,16 +38,16 @@ bool Texture::LoadFile(GLenum target, const std::string& name)
 	return true;
 }
 
-void Texture::LoadData(GLenum target, GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d)
+void _Texture::LoadData(GLenum target, GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d)
 {
-	//std::cout << "Texture::LoadData()  w=" << w << " h=" << h << " d=" << d << std::endl;
+	//std::cout << "_Texture::LoadData()  w=" << w << " h=" << h << " d=" << d << std::endl;
 	glTexImage2D(target, 0, d==3?GL_RGB:GL_RGBA, w, h, 0, d==3?GL_RGB:GL_RGBA, GL_UNSIGNED_BYTE, ptr);
-	//std::cout << "Texture::LoadData()  glTextImage2D" << std::endl;
+	//std::cout << "_Texture::LoadData()  glTextImage2D" << std::endl;
 }
 
 
 
-void Texture::Gen()
+void _Texture::Gen()
 {
 	Destroy();
 	glGenTextures(1, &m_nHandle);
@@ -54,7 +55,7 @@ void Texture::Gen()
 
 
 
-bool Texture::Load(const std::string& name)
+bool _Texture::Load(const std::string& name)
 {
 	Gen();
 
@@ -67,7 +68,7 @@ bool Texture::Load(const std::string& name)
 }
 
 
-void Texture::Destroy()
+void _Texture::Destroy()
 {
 	glDeleteTextures(1, &m_nHandle);
 }
@@ -76,21 +77,21 @@ void Texture::Destroy()
 
 
 
-void Texture::Bind() const {
+void _Texture::Bind() const {
 	glBindTexture(getTextureType(), m_nHandle);
 }
 
-void Texture::Bind(GLuint slot) const {
+void _Texture::Bind(GLuint slot) const {
 	glActiveTexture(GL_TEXTURE0+slot);
 	glEnable(getTextureType());
 	glBindTexture(getTextureType(), m_nHandle);
 }
 
-void Texture::Unbind() const {
+void _Texture::Unbind() const {
 	glBindTexture(getTextureType(), 0);
 }
 
-void Texture::Unbind(GLuint slot) const {
+void _Texture::Unbind(GLuint slot) const {
 	glActiveTexture(GL_TEXTURE0+slot);
 	glBindTexture(getTextureType(), 0);
 }

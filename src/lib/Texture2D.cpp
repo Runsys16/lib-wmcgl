@@ -12,9 +12,9 @@
 //#include "FrameBufferObject.h"
 
 
-bool Texture2D::Load(const std::string& name)
+bool _Texture2D::Load(const std::string& name)
 {
-	if(!Texture::Load(name))
+	if(!_Texture::Load(name))
 		return false;
 
 	
@@ -23,7 +23,7 @@ bool Texture2D::Load(const std::string& name)
 	glPixelStorei(GL_UNPACK_ALIGNMENT,1);
 	glPixelStorei(GL_PACK_ALIGNMENT,1);
 
-	if(!Texture::s_bGenerateMipmaps) {
+	if(!_Texture::s_bGenerateMipmaps) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
@@ -45,9 +45,9 @@ bool Texture2D::Load(const std::string& name)
 	return true;
 }
 
-bool Texture2D::Load(GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d)
+bool _Texture2D::Load(GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d)
 {
-	if(!Texture::Load(""))
+	if(!_Texture::Load(""))
 		return false;
 
 	Bind();

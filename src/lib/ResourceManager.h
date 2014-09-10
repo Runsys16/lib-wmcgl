@@ -10,7 +10,7 @@
 #include "Shader.h"
 #include <assert.h>
 
-SINGLETON_BEGIN( ResourceManager )
+SINGLETON_BEGIN( _ResourceManager )
 public:
 	enum RES_TYPE {TEXTURE2D, SHADER};
 
@@ -23,17 +23,17 @@ public:
 	
 
 	inline void*			getResource(const std::string& name)		{assert(m_ResDB.find(name)!=m_ResDB.end()); return m_ResDB.find(name)->second;}
-	inline Texture2D*		getTexture2D(const std::string& name)		{return (Texture2D*)getResource(name);}
+	inline _Texture2D*		getTexture2D(const std::string& name)		{return (_Texture2D*)getResource(name);}
 	inline Shader*			getShader(const std::string& name)			{return (Shader*)getResource(name);}
 
 	bool Delete( void * );
 	void Destroy();
 	
-	void DeleteTexture2D(Texture2D * ptr)								{ delete ptr;}
+	void DeleteTexture2D(_Texture2D * ptr)								{ delete ptr;}
 	void DeleteShader(Shader * ptr)										{ delete ptr;}
 
 protected:
-	~ResourceManager();
+	~_ResourceManager();
 
 private:
 	std::map<std::string, void*>	m_ResDB;

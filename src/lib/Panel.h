@@ -48,6 +48,9 @@ class Panel {
 		inline void			setVisible(bool b)								{visible=b;};
 		
 		
+		inline 	std::vector<Panel*> getChilds()								{return childs;};
+		
+		
 		//-----------------------------------------------------------------------------------
 	protected:
 		//-----------------------------------------------------------------------------------

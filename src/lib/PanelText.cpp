@@ -76,6 +76,20 @@ PanelText::PanelText( string str, FONT type, int x, int y )	{
 }
 
 
+PanelText::PanelText( char * cstr, FONT type, int x, int y )	{
+	typeFont = type;
+	#ifdef DEBUG_CONST
+	cout << "Constructeur PanelText( "<< cstr <<", "<< strFont() <<", "<< x <<", "<< y <<" )" << endl;
+	#endif
+
+	PanelText();
+
+	setPos(x, y);
+	changeText( cstr, type );
+	buildString();
+}
+
+
 //--------------------------------------------------------------------------------------------------------------------
 string PanelText::strFont() {
 	string retString = "";
@@ -97,6 +111,40 @@ string PanelText::strFont() {
 	return retString;	
 }
 
+
+
+//--------------------------------------------------------------------------------------------------------------------
+// ChangeText() functions
+//--------------------------------------------------------------------------------------------------------------------
+void PanelText::changeText( char* cstr )	{
+	#ifdef DEBUG
+	cout << "PanelText::changeText( "<< str <<", "<< strFont() <<" )" <<  endl;
+	#endif
+	
+	if ( text.compare(cstr) == 0 )		{
+		bChange = false;
+		return;
+	}
+
+	text = cstr;
+	bChange = true;
+}
+
+
+
+void PanelText::changeText( char* cstr, FONT type )	{
+	#ifdef DEBUG
+	cout << "PanelText::changeText( "<< str  <<", "<< strFont() <<" )" << endl;
+	#endif
+	
+	if ( (text.compare(cstr) == 0) && (type == typeFont) )		{
+		bChange = false;
+		return;
+	}
+
+	typeFont = type;
+	changeText( cstr );
+}
 
 
 void PanelText::changeText( string str )	{
@@ -174,6 +222,7 @@ void PanelText::changeText( string str, FONT type, bool build )	{
 
 
 
+//--------------------------------------------------------------------------------------------------------------------
 void PanelText::eraseText()	{
 	#ifdef DEBUG
 	cout << "PanelText::eraseText()"<< endl;
@@ -200,6 +249,7 @@ void PanelText::eraseText()	{
 }
 
 
+//--------------------------------------------------------------------------------------------------------------------
 
 void PanelText::buildString()	{
 	#ifdef DEBUG
@@ -283,9 +333,15 @@ void PanelText::updatePos() {
 	Panel::updatePos();
 
 	if ( pTextGL == NULL )	{
-		bChange = false;
-		return;	
+		if ( text.compare("") == 0 )	{
+			bChange = false;
+			return;	
+		}
+		else	{
+			bChange = true;
+		}
 	}
+
 
 	if ( bChange )	{
 		switch( typeFont )	{

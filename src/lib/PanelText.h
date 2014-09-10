@@ -18,6 +18,7 @@ class PanelText : public Panel	{
 							PanelText( std::string );
 							PanelText( std::string, FONT );
 							PanelText( std::string, FONT, int, int );
+							PanelText( char*, FONT, int, int );
 
 		void 				buildString();
 		
@@ -25,6 +26,8 @@ class PanelText : public Panel	{
 		int					getTextLenght();
 		int					getTextLenght(int);
 
+		void 				changeText( char* );
+		void 				changeText( char*, FONT );
 		void 				changeText( std::string );
 		void 				changeText( std::string, FONT );
 		void 				changeText( std::string, bool );
@@ -36,7 +39,6 @@ class PanelText : public Panel	{
 		
 		inline void 		setAlign( ALIGN a )								{align = a;};
 		
-	private:
 		//----------------- functions
 		std::string			strFont();		
 		void				displayGLInternal();
@@ -51,6 +53,7 @@ class PanelText : public Panel	{
 		bool				bChange;
 		
 		void*				pTextGL;
+	private:
 	
 };
 

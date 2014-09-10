@@ -10,14 +10,14 @@ class FrameBufferObject;
 // Textures 2D
 // -------------------------------
 
-class Texture2D : public Texture
+class _Texture2D : public _Texture
 {
 public:
 	virtual GLenum getTextureType() const {return GL_TEXTURE_2D;}
 	bool Load(const std::string& name);
 	bool Load(GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d);
 
-	Texture2D() : Texture() {}
+	_Texture2D() : _Texture() {}
 
 protected:
 	

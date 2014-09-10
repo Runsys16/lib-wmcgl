@@ -12,7 +12,7 @@
 // Textures abstraites
 // -------------------------------
 
-class Texture
+class _Texture
 {
 public:
 	virtual GLenum getTextureType() const = 0;
@@ -30,8 +30,8 @@ public:
 	void Bind() const;
 	void Unbind() const;
 
-	Texture() {m_nHandle=0;}
-	~Texture() {Destroy();}
+	_Texture() {m_nHandle=0;}
+	~_Texture() {Destroy();}
 
 protected:
 	//void Bind() const;

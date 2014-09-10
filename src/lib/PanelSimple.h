@@ -19,7 +19,7 @@ class PanelSimple : public Panel {
 		void				debug(bool);
 
 	private:
-		Texture2D*		m_pTexBackground;
+		_Texture2D*		m_pTexBackground;
 		
 		bool							bTextOK;
 		void * 							cTextObj;

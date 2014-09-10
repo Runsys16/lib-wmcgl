@@ -11,7 +11,7 @@ echo "#include <string>" >>${INCLUDE}
 echo "#include <map>" >>${INCLUDE}
 echo  >>${INCLUDE}
 echo  >>${INCLUDE}
-echo  "class Texture2D;" >>${INCLUDE}
+echo  "class _Texture2D;" >>${INCLUDE}
 echo  "class Panel;" >>${INCLUDE}
 echo  "class Font;" >>${INCLUDE}
 echo  "class TextUtil;" >>${INCLUDE}

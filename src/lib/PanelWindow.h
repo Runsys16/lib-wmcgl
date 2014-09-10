@@ -20,20 +20,20 @@ class PanelWindow : public PanelSimple {
 		inline void 		setBorderSize( int n )											{ borderSize = n; };
 		inline int	 		getBorderSize()													{ return borderSize; };
 
-		void				displayGLtex( Texture2D* , float, float, float, float );
+		void				displayGLtex( _Texture2D* , float, float, float, float );
 
 		virtual void		displayGL();
 		virtual void		updatePos();
 		
 	private:
-		Texture2D*			m_tex_tl;
-		Texture2D*			m_tex_tr;
-		Texture2D*			m_tex_bl;
-		Texture2D*			m_tex_br;
-		Texture2D*			m_tex_t;
-		Texture2D*			m_tex_b;
-		Texture2D*			m_tex_l;
-		Texture2D*			m_tex_r;
+		_Texture2D*			m_tex_tl;
+		_Texture2D*			m_tex_tr;
+		_Texture2D*			m_tex_bl;
+		_Texture2D*			m_tex_br;
+		_Texture2D*			m_tex_t;
+		_Texture2D*			m_tex_b;
+		_Texture2D*			m_tex_l;
+		_Texture2D*			m_tex_r;
 		
 		int					borderSize;
 };

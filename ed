@@ -1,5 +1,6 @@
 #!/bin/bash
 #----------------------------------------------------------------------------------------------------
+# Test GIT
 STR0="ed makefile src/depend.py src/build_makefile src/build_include src/makefile.base"
 STR1="src/lib/*.h"
 STR2="src/lib/*.cpp"

@@ -26,6 +26,7 @@ void PanelWindow::loadSkin( string name )	{
 
 	_ResourceManager& res = _ResourceManager::getInstance();
 	
+	cout <<"PanelWindow::loadSkin(\""<< name <<"\" ) m_text_tl : "<< m_tex_tl << endl;
 	string nameFile = "/usr/share/wmcgl/images/" + name;
 	m_tex_tl = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_ul.png") );
 	m_tex_tr = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_ur.png") );
@@ -35,6 +36,8 @@ void PanelWindow::loadSkin( string name )	{
 	m_tex_b = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_d.png") );
 	m_tex_l = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_l.png") );
 	m_tex_r = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_r.png") );
+	cout <<"  m_text_tl : "<< m_tex_tl << endl;
+	
 	
 	borderSize = 8;
 }

@@ -15,7 +15,7 @@
 #include <IL/il.h>
 
 
-namespace ImageTools {
+namespace _ImageTools {
 
 GLubyte* OpenImagePPM(const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d)
 {
@@ -126,24 +126,24 @@ GLubyte* OpenImage(const std::string& filename, unsigned int& w, unsigned int& h
 {
 	GLubyte* ptr = NULL;
 	if(filename.find(".ppm") != std::string::npos){
-		ptr = ImageTools::OpenImagePPM("./textures/"+filename, w, h, d);
-		if ( !ptr ) ptr = ImageTools::OpenImagePPM(filename, w, h, d);
+		ptr = _ImageTools::OpenImagePPM("./textures/"+filename, w, h, d);
+		if ( !ptr ) ptr = _ImageTools::OpenImagePPM(filename, w, h, d);
 	}
 	else {
-		ptr =  ImageTools::OpenImageDevIL("./textures/"+filename, w, h, d);
-		if ( !ptr ) ptr = ImageTools::OpenImageDevIL(filename, w, h, d);
+		ptr =  _ImageTools::OpenImageDevIL("./textures/"+filename, w, h, d);
+		if ( !ptr ) ptr = _ImageTools::OpenImageDevIL(filename, w, h, d);
 	}
 	if ( ptr == NULL )	{ std::cout << "Erreur de chargement de l'image " << filename << std::endl; }
 	return ptr;
 }
 
-void OpenImage(const std::string& filename, ImageData& img)
+void OpenImage(const std::string& filename, _ImageData& img)
 {
 	img.data = OpenImage(filename, img.w, img.h, img.d);
 }
 
 
-void ImageData::Destroy()
+void _ImageData::Destroy()
 {
 	if(data) {
 		delete [] data;
@@ -151,13 +151,13 @@ void ImageData::Destroy()
 	}
 }
 
-ivec3 ImageData::getColor(unsigned int x, unsigned int y) const
+ivec3 _ImageData::getColor(unsigned int x, unsigned int y) const
 {
 	int idx = (y * w + x) * d;
 	return ivec3( data[idx+0], data[idx+1], data[idx+2]);
 }
 /*
-ivec3 ImageData::getColor(float x, float y)
+ivec3 _ImageData::getColor(float x, float y)
 {
 	vec2  posF(	x, y );
 	ivec2 posI(	(int)(posF.x), (int)(posF.y) );

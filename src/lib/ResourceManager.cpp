@@ -103,7 +103,7 @@ bool _ResourceManager::Delete( void * Res )
 
 void* _ResourceManager::LoadResource(RES_TYPE type, const std::string& name)
 {
-	std::cout << "WM - Loading resource " << name << "   --  ";//  << std::endl;
+	std::cout << "WM - Loading resource " << name << "   --  " << std::endl;
 	// La ressource est déja chargée, on ne la recharge pas :
 	if(m_ResDB.find(name) != m_ResDB.end()) {
 		if ( name.find( ".obj" ) != std::string::npos )	{
@@ -128,9 +128,10 @@ void* _ResourceManager::LoadResource(RES_TYPE type, const std::string& name)
 	void* ptr = NULL;
 	switch(type) {
 	case TEXTURE2D: {
-		std::cout << "Chargement ....";//<< std::endl;
+		std::cout << "  Chargement ...." << std::endl;
 		ptr = new _Texture2D();
 		((_Texture2D*)ptr)->Load(name);
+		std::cout << "  pointeur : "<< ptr << std::endl;
 		break;}
 	case SHADER: {
 		//std::cout << std::endl;

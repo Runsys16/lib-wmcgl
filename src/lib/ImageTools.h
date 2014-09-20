@@ -10,9 +10,9 @@
 // retourne les données brutes
 // -------------------------------
 
-namespace ImageTools
+namespace _ImageTools
 {
-	class ImageData {
+	class _ImageData {
 	public:
 		GLubyte*	data;
 		unsigned int w, h, d;
@@ -20,12 +20,12 @@ namespace ImageTools
 		ivec3	getColor(unsigned int x, unsigned int y) const;
 	//	ivec3	getColor(float x, float y);
 
-		ImageData() {w = h = d = 0; data = NULL;}
-		~ImageData() {Destroy();}
+		_ImageData() {w = h = d = 0; data = NULL;}
+		~_ImageData() {Destroy();}
 		void Destroy();
 	};
 
-	void     OpenImage(const std::string& filename, ImageData& img);
+	void     OpenImage(const std::string& filename, _ImageData& img);
 	GLubyte* OpenImage(const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d);
 
 	GLubyte* OpenImagePPM(const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d);

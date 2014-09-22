@@ -72,6 +72,8 @@ install:
 	$(LN) $(INSTALLDIR)$(BINNAME).$(VER) $(INSTALLDIR)$(BINNAME)
 	@./src/build_include
 	$(CP) ./include/WindowsManager.h $(INCLUDEDIR)
+	#mkdir /usr/share/wmcgl
+	#ln -s /home/rene/programmes/opengl/lib-wmcgl/images /usr/share/wmcgl/images
 
 
 

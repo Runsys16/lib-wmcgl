@@ -128,32 +128,6 @@ void PanelWindow::displayGL( void )	{
 	//cout << "PanelWindow::displayGL() m_tex_bl : " << m_tex_bl << endl;
 	float X, Y, DX, DY;
 	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP); 
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	/*
-    glPixelTransferf(GL_ALPHA_SCALE, 1);
-    glPixelTransferf(GL_ALPHA_BIAS, 0);
-    glPixelTransferf(GL_RED_BIAS, 1);
-    glPixelTransferf(GL_GREEN_BIAS, 1);
-    glPixelTransferf(GL_BLUE_BIAS, 1);
-
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    
-    glPixelTransferf(GL_ALPHA_SCALE, 1);
-    
-    glPixelTransferf(GL_ALPHA_BIAS, 0);
-    glPixelTransferf(GL_RED_BIAS, 0);
-    glPixelTransferf(GL_GREEN_BIAS, 0);
-    glPixelTransferf(GL_BLUE_BIAS, 0);
-	*/
 	
 	glMatrixMode(GL_TEXTURE);
 	glLoadIdentity();

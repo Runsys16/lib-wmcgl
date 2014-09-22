@@ -262,6 +262,9 @@ void PanelConsole::addChar( char c ) {
 	
 	
 	texts[currentLine]->changeText( *val, PanelText::NORMAL_FONT, true );
+	cout <<"PanelConsole::addChar() "<< endl;
+	cout <<"  val             : \""<< *val <<"\""<< endl;;
+	cout <<"  texts[current]  : \""<< texts[currentLine]->getText() <<"\""<< endl;;
 	delete val;
 	incCursor();
 }
@@ -601,16 +604,22 @@ void PanelConsole::cb_keyboard( unsigned char key ) {
 	switch(key){ 
 	case '\r':		{
 		if ( cb_cmd || ppccb )	{
-			string str = texts[currentLine]->getText();
+			string* str = new string(texts[currentLine]->getText());
 			char		cmd[2048];
-			str.copy( cmd, str.size()-prompt.size(), prompt.size() );
-			//cout << "Exec command "<< cmd << endl;
+			int l = str->size()-prompt.size();
+			str->copy( cmd, str->size()-prompt.size(), prompt.size() );
+			cmd[l] = 0;
+			cout << "PanelConsole::cb_keyboard( "<< (unsigned int) key <<" ) "<< endl;;
+			cout << "  str : \""<< *str <<"\""<< endl;
+			cout << "  Size(s) str : "<< str->size() <<" prompt :"<< prompt.size() << endl;
+			cout << "  Exec command "<< cmd << endl;
 			
 			addLine();
 			currentCmd = cmds.size();
 			addCmd( cmd );
 			if ( cb_cmd )	(*cb_cmd)(cmd);
 			if ( ppccb )	(ppccb->callback_cmd)(cmd);
+			delete str;
 		}
 		else {
 			addLine();

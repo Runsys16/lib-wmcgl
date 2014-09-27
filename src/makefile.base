@@ -59,7 +59,10 @@ clean:
 	@$(RMDIR) $(OBJDIR)
 	@$(RMDIR) $(BINDIR)
 
-
+sample:
+	cd src/sample-00;make clean;make
+	cd src/sample-01;make clean;make
+	cd src/sample-02;make clean;make
 
 $(BIN): $(OBJ)
 	@echo ---------   edition des liens library $@

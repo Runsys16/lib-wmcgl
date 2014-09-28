@@ -19,8 +19,6 @@ BINNAME = libwmcgl.so
 LIBS	=  -lfreetype -lGL -lglut -lGLU -lGLEW -lIL -shared
 
 INCS =  -I"/usr/include" -I"/usr/include/freetype2" 
-CXXINCS =  -Wno-deprecated 
-CXXFLAGS = $(CXXINCS)  -O2  -shared
 CFLAGS = $(INCS) -O2 -fpic -fpermissive -mtune=core2 -Wno-deprecated -Wno-unused-result
 CFLAGS = $(INCS) -g -O2 -fpic -fpermissive -mtune=core2 -Wno-deprecated -Wno-unused-result
 

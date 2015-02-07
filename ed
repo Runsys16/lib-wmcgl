@@ -1,17 +1,25 @@
 #!/bin/bash
+#!/bin/bash
 #----------------------------------------------------------------------------------------------------
-# Test GIT
-STR0="ed makefile src/depend.py src/build_makefile src/build_include src/makefile.base"
-STR1="src/lib/*.h"
-STR2="src/lib/*.cpp"
+function getPathGrep() {
+	local PATH_GREP=$(dirname $1)
+	if [ "$PATH_GREP" == "." ]
+	then
+		PATH_GREP=$PATH_IDENT
+	else
+		PATH_GREP=$PATH_IDENT/${PATH_GREP:2}
+	fi
+	
+	echo $PATH_GREP
+}
 #----------------------------------------------------------------------------------------------------
 function get_window_id() {
-	WINDOW_ID=""
+	local WINDOW_ID=""
 	for n in $*
 	do
-		FILENAME=$(basename $n)
-		#echo Recherche de $FILENAME $n
-		WINDOW_ID=$(wmctrl -l | grep "lib-wmcgl"| grep "gedit" | grep "$FILENAME (" | cut -f1 -d" ")
+		local FILENAME=$(basename $n)" ("
+		local PATH_GREP=$(getPathGrep $n)
+		WINDOW_ID=$(wmctrl -l | grep "$PATH_GREP"| grep "gedit" | grep "$FILENAME" | cut -f1 -d" ")
 		if [ "$WINDOW_ID" != "" ]
 		then
 			break
@@ -20,56 +28,79 @@ function get_window_id() {
 	
     echo $WINDOW_ID
 }
-
 #----------------------------------------------------------------------------------------------------
 function get_workspace()	{
-	N=$(wmctrl -d | cut -d' ' -f8 | cut -d',' -f1)
+	local  N=$(wmctrl -d | cut -d' ' -f8 | cut -d',' -f1)
 	echo $N
 }
 
 #----------------------------------------------------------------------------------------------------
 function wait_id()	{
-	ID=""
+	local ID=""
 	while [ "$ID" == "" ]
 	do
 		ID=$(get_window_id $*)
 	done
 }
-
 #----------------------------------------------------------------------------------------------------
-function run_edit()	{
-	ID=$(get_window_id $*)
-	if [ "$ID" == "" ]
-	then
-		edition $*
-	fi
+function isOpen()	{
+	for i in $*
+	do
+		local FILE_GREP=$(basename $i)" ("
+		local PATH_GREP=$(getPathGrep $i)
+
+		local OUVERT=$(wmctrl -l | grep "$PATH_GREP" | grep "gedit" | grep "$FILE_GREP" )
+		if [ "$OUVERT" != "" ]
+		then
+			echo $OUVERT
+			return
+		fi
+	done
+	echo ""
 }
+#----------------------------------------------------------------------------------------------------
+function open()	{
+	
+	local OPEN=$(isOpen $*)
+	if [ "$OPEN" == "" ]
+	then
+		echo Edition ...
+		edition $* &>/dev/null
+		wait_id $*
+		wmctrl -i -r $(get_window_id $*) -e $SIZE
+		return
+	fi
+	echo $(isOpen $*)
+}
+#----------------------------------------------------------------------------------------------------
+#											MAIN
+#----------------------------------------------------------------------------------------------------
+STR1="./src/lib/*.h"
+STR0="./src/lib/*.cpp"
+STR2="ed makefile src/depend.py src/build_makefile src/build_include src/makefile.base"
+
+PATH_IDENT="programmes/opengl/lib-wmcgl"
+#----------------------------------------------------------------------------------------------------
+SCREEN_SIZE=$(xdpyinfo  | grep dimensions | sed "s/.*dimensions: *\(.*x.*\) pixels.*/\1/g")
+SCREEN_WIDTH=$(echo $SCREEN_SIZE | sed "s/\(.*\)x.*/\1/g")
+SCREEN_HEIGHT=$(echo $SCREEN_SIZE | sed "s/.*x\(.*\)/\1/g")
+
+WIDTH=$(( $SCREEN_WIDTH / 2 ))
+HEIGHT=$(( $SCREEN_HEIGHT - 0 )) 
+
 
 #----------------------------------------------------------------------------------------------------
-#----------------------------------------------------------------------------------------------------
+POS=$(( $SCREEN_WIDTH + 0 ))
+SIZE="0,$POS,0,$WIDTH,$HEIGHT"
+open $STR0
 
-OUVERT=$(wmctrl -l | grep "lib-wmcgl" | grep "gedit" | wc -l)
+POS=$(( 2*$SCREEN_WIDTH - $WIDTH ))
+SIZE="0,$POS,0,$WIDTH,$HEIGHT"
+open $STR1
 
-if [ "$OUVERT" == "3" ]
-then
-	echo Les fichiers sont deja edite ....
-	exit 0
-fi
-
-#----------------------------------------------------------------------------------------------------
-run_edit $STR0
-wait_id $STR0
-wmctrl -i -r $(get_window_id $STR0) -e 0,1000,0,800,1150
-
-#----------------------------------------------------------------------------------------------------
-run_edit $STR1
-wait_id $STR1
-wmctrl -i -r $(get_window_id $STR1) -e 0,1600,0,780,1150
-
-#----------------------------------------------------------------------------------------------------
-run_edit $STR2
-wait_id $STR2
-wmctrl -i -r $(get_window_id $STR2) -e 0,2400,0,780,1150
-
+POS=$(( ($SCREEN_WIDTH - $WIDTH) / 2 ))
+POS=$(( $SCREEN_WIDTH - $WIDTH ))
+SIZE="0,$POS,0,$WIDTH,$HEIGHT"
+open $STR2
 
 

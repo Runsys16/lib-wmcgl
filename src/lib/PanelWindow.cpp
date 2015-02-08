@@ -3,6 +3,7 @@
 #include "PanelWindow.h"
 #include "PanelText.h"
 #include "ResourceManager.h"
+#include "wm.h"
 
 
 using namespace std;
@@ -95,7 +96,8 @@ void PanelWindow::updatePos() {
 //--------------------------------------------------------------
 
 void PanelWindow::displayGLtex( _Texture2D* pTex, float X, float Y, float DX, float DY )	{
-	pTex->Bind(0);
+	//int slot = WindowsManager::getInstance().getSlot();
+	pTex->Bind( 0 );
 	
 	glBegin(GL_QUADS);
 
@@ -113,7 +115,7 @@ void PanelWindow::displayGLtex( _Texture2D* pTex, float X, float Y, float DX, fl
 
 	glEnd();
 
-	pTex->Unbind(0);
+	pTex->Unbind( 0 );
 
 }
 

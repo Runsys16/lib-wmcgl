@@ -57,7 +57,8 @@ public:
 
 	GLuint 				GenFont( CTexFont * );
 	void 				BindFont( const CTexFont * );
-	void 				UnbindFont( GLuint );
+	void 				BindFont( const CTexFont *, int );
+	void 				UnbindFont( int );
 	void 				UnbindFont();
 
 

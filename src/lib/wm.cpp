@@ -59,6 +59,9 @@ void WindowsManager::init()	{
 	#ifdef DEBUG_CONST
 	cout << "WindowsManager::init()" << endl;
 	#endif
+	// texture slot pour textutil
+	slot = 0;
+	
 	xm_old = -1;	
 	ym_old = -1;	
 	

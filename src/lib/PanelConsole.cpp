@@ -527,11 +527,12 @@ void PanelConsole::supWord()	{
 		return;
 	}
 
+	string str = texts[currentLine]->getText();
+
 	#ifdef DEBUG
 	cout << "  str : \""<< str <<"\""<< endl;;
 	#endif
 	
-	string str = texts[currentLine]->getText();
 	int pl = prompt.size();							// prompt size
 	int cl = str.size() - pl;						// command size
 	

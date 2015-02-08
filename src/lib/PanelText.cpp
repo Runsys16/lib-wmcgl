@@ -118,7 +118,7 @@ string PanelText::strFont() {
 //--------------------------------------------------------------------------------------------------------------------
 void PanelText::changeText( char* cstr )	{
 	#ifdef DEBUG
-	cout << "PanelText::changeText( "<< str <<", "<< strFont() <<" )" <<  endl;
+	cout << "PanelText::changeText( "<< cstr <<", "<< strFont() <<" )" <<  endl;
 	#endif
 	
 	if ( text.compare(cstr) == 0 )		{
@@ -134,7 +134,7 @@ void PanelText::changeText( char* cstr )	{
 
 void PanelText::changeText( char* cstr, FONT type )	{
 	#ifdef DEBUG
-	cout << "PanelText::changeText( "<< str  <<", "<< strFont() <<" )" << endl;
+	cout << "PanelText::changeText( "<< cstr  <<", "<< strFont() <<" )" << endl;
 	#endif
 	
 	if ( (text.compare(cstr) == 0) && (type == typeFont) )		{
@@ -324,12 +324,14 @@ int PanelText::getTextLenght( int nbChar )	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 void PanelText::updatePos() {
+	/*
 	#ifdef DEBUG
 	cout << "PanelText::updatePos()" << boolalpha << bChange;
 	cout << ", typeFont = "<< strFont();
 	cout << ", addr str = "<< &text;
 	cout << endl;
 	#endif
+	*/
 	Panel::updatePos();
 
 	if ( pTextGL == NULL )	{
@@ -422,26 +424,39 @@ void PanelText::displayGLInternal()	{
 	//glScissor( scx, scy, scdx, scdy );
 	//glEnable( GL_SCISSOR_TEST );
 	glColor4f( 0.0f, 0.0f, 0.0f, 0.0f );
-	//glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+	//glColor4f( 1.0f, 0.0f, 0.0f, 0.0f );
+	glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
 
 	int iTex;	
+	int slot = wm.getSlot();
+	
     glEnable(GL_TEXTURE_2D);
 	switch( typeFont )	{
 	case NORMAL_FONT :
+		#ifdef DEBUG
+		cout << "    PT: NORMAL_FONT"  << endl;
+		#endif
 		//iTex = textUtil->BindFont( DefaultNormalFont );
-		textUtil->BindFont( DefaultNormalFont );
+		textUtil->BindFont( DefaultNormalFont, slot );
 		break;
 	case SMALL_FONT :
+		#ifdef DEBUG
+		cout << "    PT: SMALL_FONT"  << endl;
+		#endif
 		//iTex = textUtil->BindFont( DefaultSmallFont );
-		textUtil->BindFont( DefaultSmallFont );
+		textUtil->BindFont( DefaultSmallFont, slot );
 		break;
 	case LARGE_FONT :
+		#ifdef DEBUG
+		cout << "    PT: LARGE_FONT"  << endl;
+		#endif
 		//iTex = textUtil->BindFont( DefaultLargeFont );
-		textUtil->BindFont( DefaultLargeFont );
+		textUtil->BindFont( DefaultLargeFont, slot );
 		break;
 	}
 	textUtil->DrawText( pTextGL, getX(), getY(), COLOR32_WHITE, COLOR32_RED );
-	textUtil->UnbindFont();
+	//textUtil->DrawText( pTextGL, 20, 30, COLOR32_WHITE, COLOR32_RED );
+	textUtil->UnbindFont( slot );
 
 	//glDisable( GL_SCISSOR_TEST );
 	textUtil->EndGL();
@@ -460,10 +475,10 @@ void PanelText::displayGL() {
 	int parentID = -1;
 	if ( this->getParent() )	parentID = this->getParent()->getID();
 	cout << "PT displayGL ... fenetre id : " << getID() <<"  parnet ID : "<< parentID << endl;
-	cout << "    PT:" << "-------------------" << endl;
-	cout << "    PT:" << text << endl;
-	cout << "    PT:" << getX() <<", "<< getY() <<", "<< getDX() <<", "<< getDY() << endl;
-	cout << "    PT:" << wm.getWidth() <<", "<< wm.getHeight() << endl;
+	cout << "        " << "-------------------" << endl;
+	cout << "   text:" << text << endl;
+	cout << "     PT:" << getX() <<", "<< getY() <<", "<< getDX() <<", "<< getDY() << endl;
+	cout << "     WM:" << wm.getWidth() <<", "<< wm.getHeight() << endl;
 #endif
 	
 

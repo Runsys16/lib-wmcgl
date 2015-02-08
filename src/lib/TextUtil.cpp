@@ -203,25 +203,21 @@ GLuint TextUtil::GenFont( CTexFont *_Font)
     return _Font->m_TexID;
 }
 
-void TextUtil::BindFont(const CTexFont *_Font)
-{
-	//cout << "TextUtil::BindFont() : "<< _Font->m_TexID << endl;
-	glActiveTexture(GL_TEXTURE0+0);
+void TextUtil::BindFont(const CTexFont *_Font)	{
+	BindFont( _Font, 0 );
+}
+
+void TextUtil::BindFont(const CTexFont *_Font, int slot)	{
+	glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, _Font->m_TexID);
 }
 
-void TextUtil::UnbindFont(GLuint _FontTexID)
-{
-    glBindTexture(GL_TEXTURE_2D, 0);
-    /*
-    if( _FontTexID>0 )
-        glDeleteTextures(1, &_FontTexID);
-    */
+void TextUtil::UnbindFont( int slot)	{
+    glBindTexture(GL_TEXTURE_2D, slot);
 }
 
-void TextUtil::UnbindFont()
-{
-    glBindTexture(GL_TEXTURE_2D, 0);
+void TextUtil::UnbindFont()	{
+	UnbindFont( 0 );
 }
 
 

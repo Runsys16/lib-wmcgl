@@ -72,6 +72,8 @@ public:
 	inline int			getOffsetX()					{return 0;}
 	inline int			getOffsetY()					{return 0;}
 	inline TextUtil*	getTextUtil()					{return &textUtil;}
+	inline void			setSlot( int s )				{slot=s;}
+	inline int			getSlot()						{return slot;}
 
 	void				ChangeViewport(int, int, int, int, int, int);
 
@@ -123,6 +125,7 @@ private:
 	std::vector<Panel *>		panels_cbKey;
 	
 	bool						bDebug;
+	int							slot;
 };
 
 #ifdef WM_CPP

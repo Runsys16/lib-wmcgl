@@ -60,6 +60,7 @@ public:
 	void 				BindFont( const CTexFont *, int );
 	void 				UnbindFont( int );
 	void 				UnbindFont();
+	inline void			setTabSize( int t)						{m_tab_size = t;};
 
 
 
@@ -98,6 +99,7 @@ protected:
     GLfloat             m_ProjMatrixInit[16];
     int                 m_WndWidth;
     int                 m_WndHeight;
+    int                 m_tab_size;
 
     struct Vec2         { GLfloat x, y; Vec2(){} Vec2(GLfloat _X, GLfloat _Y):x(_X),y(_Y){} Vec2(int _X, int _Y):x(GLfloat(_X)),y(GLfloat(_Y)){} };
     struct CTextObj

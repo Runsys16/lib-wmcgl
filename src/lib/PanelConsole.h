@@ -56,6 +56,7 @@ class PanelConsole : public PanelSimple	{
 		int							posWordSuiv();
 		void						wordPrec();
 		void						wordSuiv();
+		void						setTabSize( int );
 		
 	private:
 		int							maxCmd;
@@ -67,6 +68,7 @@ class PanelConsole : public PanelSimple	{
 		PanelConsoleCallBack*		ppccb;
 		
 		int							heightLine;
+		int							tabSize;
 		
 		int 						currentLine;
 		int							currentPos;

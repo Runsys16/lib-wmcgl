@@ -32,7 +32,7 @@ PanelConsole::PanelConsole()	{
 	#endif
 	
 	PanelSimple();
-
+	tabSize = 40;
 }
 
 
@@ -62,6 +62,7 @@ PanelConsole::PanelConsole(int nbLine, int max)	{
 	for( int i=0; i<nbLine; i++ )	{
 		texts.push_back( new PanelText() );
 		texts[i]->setPos( 0, i*heightLine );
+		texts[i]->setTabSize( tabSize );
 		this->add( texts[i] );
 	}
 	
@@ -139,6 +140,7 @@ void PanelConsole::rotateBuffer() {
 	texts.push_back( new PanelText() );
 	texts[ texts.size()-1 ]->setPosY( y );
 	texts[ texts.size()-1 ]->setPosX( 0 );
+	texts[ texts.size()-1 ]->setTabSize( tabSize );
 	this->add( texts[ texts.size()-1 ] );
 }
 
@@ -199,6 +201,7 @@ void PanelConsole::clear( ) {
 
 void PanelConsole::affiche( string* str ) {
 	texts[currentLine]->changeText(*str, PanelText::NORMAL_FONT, true );
+	texts[currentLine]->setTabSize( tabSize );
 	addLine();
 }
 
@@ -207,6 +210,7 @@ void PanelConsole::affiche( string* str ) {
 
 void PanelConsole::affiche( string str ) {
 	texts[currentLine]->changeText(str, PanelText::NORMAL_FONT, true );
+	texts[currentLine]->setTabSize( tabSize );
 	addLine();
 }
 
@@ -812,6 +816,11 @@ void PanelConsole::cb_keyboard_special_up( unsigned char key ) {
 	#endif
 }
 	
+
+void PanelConsole::setTabSize( int t ) {
+	texts[currentLine]->setTabSize( t );
+	tabSize = t;
+}
 
 
 //--------------------------------------------------------------------------------------------------------------------

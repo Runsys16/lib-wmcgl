@@ -33,6 +33,7 @@ class PanelText : public Panel	{
 		void 				changeText( std::string, bool );
 		void 				changeText( std::string, FONT, bool );
 		void 				eraseText( );
+		void				setTabSize( int );
 		
 		virtual void		displayGL();
 		virtual void		updatePos();
@@ -53,6 +54,7 @@ class PanelText : public Panel	{
 		bool				bChange;
 		
 		void*				pTextGL;
+		int					tabSize;
 	private:
 	
 };

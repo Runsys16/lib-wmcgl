@@ -120,6 +120,7 @@ public:
 	void 				BindFont( const CTexFont *, int );
 	void 				UnbindFont( int );
 	void 				UnbindFont();
+	inline void			setTabSize( int t)						{m_tab_size = t;};
 
 
 
@@ -158,6 +159,7 @@ protected:
     GLfloat             m_ProjMatrixInit[16];
     int                 m_WndWidth;
     int                 m_WndHeight;
+    int                 m_tab_size;
 
     struct Vec2         { GLfloat x, y; Vec2(){} Vec2(GLfloat _X, GLfloat _Y):x(_X),y(_Y){} Vec2(int _X, int _Y):x(GLfloat(_X)),y(GLfloat(_Y)){} };
     struct CTextObj
@@ -283,6 +285,7 @@ class PanelText : public Panel	{
 		void 				changeText( std::string, bool );
 		void 				changeText( std::string, FONT, bool );
 		void 				eraseText( );
+		void				setTabSize( int );
 		
 		virtual void		displayGL();
 		virtual void		updatePos();
@@ -303,6 +306,7 @@ class PanelText : public Panel	{
 		bool				bChange;
 		
 		void*				pTextGL;
+		int					tabSize;
 	private:
 	
 };
@@ -390,6 +394,7 @@ class PanelConsole : public PanelSimple	{
 		int							posWordSuiv();
 		void						wordPrec();
 		void						wordSuiv();
+		void						setTabSize( int );
 		
 	private:
 		int							maxCmd;
@@ -401,6 +406,7 @@ class PanelConsole : public PanelSimple	{
 		PanelConsoleCallBack*		ppccb;
 		
 		int							heightLine;
+		int							tabSize;
 		
 		int 						currentLine;
 		int							currentPos;

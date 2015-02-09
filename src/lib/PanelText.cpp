@@ -38,6 +38,7 @@ PanelText::PanelText()	{
 	pTextGL = NULL;
 	bChange = false;
 	ID = 999;
+	tabSize = 40;
 }
 
 
@@ -275,8 +276,9 @@ void PanelText::buildString()	{
 	color32 color_bg	= COLOR32_WHITE;
 
 	//if (pTextGL != NULL )	textUtil->DeleteTextObj( pTextGL );
+	textUtil->setTabSize( tabSize );
 	pTextGL = textUtil->NewTextObj();
- 
+
 
 	switch (typeFont )	{
 	case NORMAL_FONT :
@@ -315,6 +317,11 @@ int PanelText::getTextLenght( int nbChar )	{
 		case LARGE_FONT :		defaultFont = DefaultLargeFont;			break;
 	}
 	return( textUtil->lenght( pTextGL, &text, defaultFont, nbChar ) );
+}
+
+void PanelText::setTabSize( int t ) {
+	textUtil->setTabSize( t );
+	tabSize = t;
 }
 
 
@@ -425,7 +432,7 @@ void PanelText::displayGLInternal()	{
 	//glEnable( GL_SCISSOR_TEST );
 	glColor4f( 0.0f, 0.0f, 0.0f, 0.0f );
 	//glColor4f( 1.0f, 0.0f, 0.0f, 0.0f );
-	glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+	//glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
 
 	int iTex;	
 	int slot = wm.getSlot();

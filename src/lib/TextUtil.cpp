@@ -159,7 +159,7 @@ PFNGLBlendFuncSeparate glBlendFuncSeparate = NULL;
 GLuint TextUtil::GenFont( CTexFont *_Font)
 {
 	//cout << "TextUtil::GenFont()" << endl;
-	m_tab_size = 40;
+	//m_tab_size = 40;
 	if ( _Font->m_TexID != 0 )		return _Font->m_TexID;
 	
     GLuint TexID = 0;
@@ -287,9 +287,6 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
             if ( ch == '\t' )	{
             	int pos = x / m_tab_size;
             	x = (pos+1) * m_tab_size;
-            	//int pos = x / 40;
-            	//x = (pos+1) * 40;
-            	cout << m_tab_size << endl;
             	continue;
             }
 
@@ -413,6 +410,17 @@ int TextUtil::lenght(void *_TextObj, const std::string *_TextLines, CTexFont *_F
     
     return x;
 }
+
+
+//  ---------------------------------------------------------------------------
+
+void TextUtil::setTabSize( int t ) {
+	#ifdef DEBUG
+	cout << "TextUtil::setTabSize() : " << t << endl;
+	#endif
+	m_tab_size = t;
+}
+
 
 //  ---------------------------------------------------------------------------
 

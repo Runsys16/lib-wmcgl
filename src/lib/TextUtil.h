@@ -60,7 +60,7 @@ public:
 	void 				BindFont( const CTexFont *, int );
 	void 				UnbindFont( int );
 	void 				UnbindFont();
-	inline void			setTabSize( int t)						{m_tab_size = t;};
+	void				setTabSize( int );
 
 
 

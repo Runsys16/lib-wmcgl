@@ -320,6 +320,9 @@ int PanelText::getTextLenght( int nbChar )	{
 }
 
 void PanelText::setTabSize( int t ) {
+	#ifdef DEBUG
+	cout << "PanelText::setTabSize() : " << t << endl;
+	#endif
 	textUtil->setTabSize( t );
 	tabSize = t;
 }

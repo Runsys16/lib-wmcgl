@@ -202,6 +202,9 @@ void PanelConsole::clear( ) {
 void PanelConsole::affiche( string* str ) {
 	texts[currentLine]->changeText(*str, PanelText::NORMAL_FONT, true );
 	texts[currentLine]->setTabSize( tabSize );
+	for( int i=0; i<texts.size(); i++ )	{
+		texts[i]->setTabSize( tabSize );
+	}
 	addLine();
 }
 
@@ -211,6 +214,9 @@ void PanelConsole::affiche( string* str ) {
 void PanelConsole::affiche( string str ) {
 	texts[currentLine]->changeText(str, PanelText::NORMAL_FONT, true );
 	texts[currentLine]->setTabSize( tabSize );
+	for( int i=0; i<texts.size(); i++ )	{
+		texts[i]->setTabSize( tabSize );
+	}
 	addLine();
 }
 

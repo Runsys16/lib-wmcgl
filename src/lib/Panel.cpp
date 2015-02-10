@@ -6,7 +6,7 @@
 
 
 //#define DEBUG
-#define DEBUG_CONST
+//#define DEBUG_CONST
 
 #ifdef DEBUG_WM
 #	define DEBUG

@@ -118,7 +118,7 @@ void PanelConsole::scroll() {
 	if ( texts[currentLine]->getPosY() < (getDY()-heightLine+1) )	{
 		return;
 	}
-	cout << "--- scroll() "<< endl;
+	cout << "PanelConsole::scroll()"<< endl;
 	
 	int nb = texts.size();
 	for ( int i=0; i< nb; i++ )	{
@@ -126,8 +126,8 @@ void PanelConsole::scroll() {
 		y -= heightLine;
 		texts[i]->setPosY( y );
 	}
-	cout << "--- scroll  y(curretnLine)    = "<< texts[currentLine]->getPosY() << endl;
-	cout << "--- scroll  text(curretnLine) = "<< texts[currentLine]->getText() << endl;
+	//cout << "--- scroll  y(curretnLine)    = "<< texts[currentLine]->getPosY() << endl;
+	//cout << "--- scroll  text(curretnLine) = "<< texts[currentLine]->getText() << endl;
 }
 
 
@@ -272,9 +272,9 @@ void PanelConsole::addChar( char c ) {
 	
 	
 	texts[currentLine]->changeText( *val, PanelText::NORMAL_FONT, true );
-	cout <<"PanelConsole::addChar() "<< endl;
-	cout <<"  val             : \""<< *val <<"\""<< endl;;
-	cout <<"  texts[current]  : \""<< texts[currentLine]->getText() <<"\""<< endl;;
+	cout <<"PanelConsole::addChar() "<< *val << endl;
+	//cout <<"  val             : \""<< *val <<"\""<< endl;;
+	//cout <<"  texts[current]  : \""<< texts[currentLine]->getText() <<"\""<< endl;;
 	delete val;
 	incCursor();
 }

@@ -11,7 +11,7 @@ class PanelSimple : public Panel {
 	public:
 		PanelSimple();
 		
-		void				buildText();
+		//void				buildText();
 
 		virtual void		displayGL();
 		virtual void		updatePos();
@@ -26,6 +26,7 @@ class PanelSimple : public Panel {
 		TextUtil*						textUtil;
 		std::vector<std::string>		str;
 
+	protected:
 		//bool							bDebug;				in Panel.h
 		PanelSimple*					pPsDebug;
 		PanelText*						pPtDebug;

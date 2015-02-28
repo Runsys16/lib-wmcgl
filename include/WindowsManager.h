@@ -319,7 +319,7 @@ class PanelSimple : public Panel {
 	public:
 		PanelSimple();
 		
-		void				buildText();
+		//void				buildText();
 
 		virtual void		displayGL();
 		virtual void		updatePos();
@@ -334,6 +334,7 @@ class PanelSimple : public Panel {
 		TextUtil*						textUtil;
 		std::vector<std::string>		str;
 
+	protected:
 		//bool							bDebug;				in Panel.h
 		PanelSimple*					pPsDebug;
 		PanelText*						pPtDebug;
@@ -484,10 +485,12 @@ public:
 	Panel*				getByID(int);
 	int					getFreeID();
 	Panel*				findPanelMouseOver(int, int);
+	int					getOrder(Panel*);
 	void				movePanel( int, int);
 	void				movePanel( int, int, Panel* );
 	void				swapVisible();
 	void				debug(bool);
+	void				debug();
 	
 	/*
 	void			setWidth( int);

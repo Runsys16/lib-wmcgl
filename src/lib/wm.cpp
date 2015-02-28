@@ -217,6 +217,19 @@ Panel * WindowsManager::findPanelMouseOver( int xm, int ym)	{
 }
 
 
+
+int WindowsManager::getOrder( Panel* p )	{
+	int nb = childs.size();
+	
+	for ( int i=nb-1; i>=0; i-- )	{
+		if ( childs[i] = p )		return i;
+	}
+	
+	return -1;
+}
+
+
+
 void WindowsManager::movePanel( int xm, int ym)	{
 	#ifdef DEBUG
 	cout << "WindowsManager::movePanel( " << xm << ", " << ym << " )" << endl;
@@ -269,6 +282,15 @@ void WindowsManager::debug( bool b )	{
 	int nb = childs.size();
 	for (int i=0; i< nb; i++ )	{
 		childs[i]->debug( b );
+	}
+}
+
+
+void WindowsManager::debug()	{
+	bDebug = !bDebug;
+	int nb = childs.size();
+	for (int i=0; i< nb; i++ )	{
+		childs[i]->debug( bDebug );
 	}
 }
 

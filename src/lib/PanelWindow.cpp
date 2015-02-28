@@ -69,6 +69,15 @@ void PanelWindow::setdSize(int dx0, int dy0)	{
 
 void PanelWindow::updatePos() {
 	Panel::updatePos();
+	if ( bDebug )	{
+		WindowsManager& wm = WindowsManager::getInstance();
+		char	str[255];
+		
+		sprintf( str, "ID=%d, X=%d, Y=%d, DX=%d, DY=%d order=%d", getID(), getX(), getY(), getDX(), getDY(), wm.getOrder(this) );
+		sDebug = string(str);
+		pPtDebug->changeText( sDebug, PanelText::NORMAL_FONT, true );
+	}
+
 	/*
 	cout <<"ID : "<< getID() <<" nb childs : "<< childs.size() << endl;
 	if ( getID() == 14 || getID() == 15 )	{
@@ -96,8 +105,10 @@ void PanelWindow::updatePos() {
 //--------------------------------------------------------------
 
 void PanelWindow::displayGLtex( _Texture2D* pTex, float X, float Y, float DX, float DY )	{
-	//int slot = WindowsManager::getInstance().getSlot();
-	pTex->Bind( 0 );
+	int slot = WindowsManager::getInstance().getSlot();
+	slot = 0;
+	
+	pTex->Bind( slot );
 	
 	glBegin(GL_QUADS);
 
@@ -115,7 +126,7 @@ void PanelWindow::displayGLtex( _Texture2D* pTex, float X, float Y, float DX, fl
 
 	glEnd();
 
-	pTex->Unbind( 0 );
+	pTex->Unbind( slot );
 
 }
 
@@ -186,5 +197,9 @@ void PanelWindow::displayGL( void )	{
 	displayGLtex( m_tex_b, X, Y, DX, DY );
 	/*
 	*/
+	if ( bDebug && pPsDebug )		{
+		pPsDebug->displayGL();
+		//pPtDebug->displayGL();
+	}
 }
 

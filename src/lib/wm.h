@@ -46,10 +46,12 @@ public:
 	Panel*				getByID(int);
 	int					getFreeID();
 	Panel*				findPanelMouseOver(int, int);
+	int					getOrder(Panel*);
 	void				movePanel( int, int);
 	void				movePanel( int, int, Panel* );
 	void				swapVisible();
 	void				debug(bool);
+	void				debug();
 	
 	/*
 	void			setWidth( int);

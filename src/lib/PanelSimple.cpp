@@ -25,8 +25,8 @@
 
 using namespace std;
 
-#define NB	10
-static char*		tab[NB];
+//#define NB	10
+//static char*		tab[NB];
 
 PanelSimple::PanelSimple()	{	
 	#ifdef DEBUG_CONST
@@ -37,26 +37,27 @@ PanelSimple::PanelSimple()	{
 	m_pTexBackground = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, "background.tga") );
 	textUtil = WindowsManager::getInstance().getTextUtil();
 
-
+	/*
 	for ( int i=0; i<NB; i++ )	{
 		//char * cStr = new char[255];
 		//sprintf( cStr, "%d - Panel ... etc ...", i );
 		tab[i] = NULL;
 	}
 
-
 	
 	if ( DefaultNormalFont == NULL )	{
 		cout << "ERREUR : Font null ..." << endl;
 	}
+	*/
 	
-	bTextOK = false;
+	//bTextOK = false;
 	
 	pPsDebug = NULL;
+	pPtDebug = NULL;
 	bDebug = false;
 }
 
-
+/*
 void PanelSimple::buildText()	{
 	cTextObj = textUtil->NewTextObj();
 	char cStr[255];
@@ -78,17 +79,20 @@ void PanelSimple::buildText()	{
 
 	bTextOK = true;
 }
-
+*/
 
 void PanelSimple::updatePos() {
-	if ( bTextOK == false )			buildText();
+	//if ( bTextOK == false )			buildText();
 
 	if ( bDebug )	{
-		char	str[255];
+		if ( pPtDebug != NULL )	{
+			WindowsManager& wm = WindowsManager::getInstance();
+			char	str[255];
 		
-		sprintf( str, "ID=%d, X=%d, Y=%d, DX=%d, DY=%d", getID(), getX(), getY(), getDX(), getDY() );
-		sDebug = string(str);
-		pPtDebug->changeText( sDebug, PanelText::NORMAL_FONT, true );
+			sprintf( str, "ID=%d, X=%d, Y=%d, DX=%d, DY=%d order=%d", getID(), getX(), getY(), getDX(), getDY(), wm.getOrder(this) );
+			sDebug = string(str);
+			pPtDebug->changeText( sDebug, PanelText::NORMAL_FONT, true );
+		}
 	}
 
 	//-----------------------------------------
@@ -105,7 +109,7 @@ void PanelSimple::displayGL() {
 	//if (texBackground == null)			return;
 	//cout << "PanelSimple::displayGL()" << endl;
 	if (visible == false)			return;
-	if ( bTextOK == false )			return;
+	//if ( bTextOK == false )			return;
 
 	WindowsManager& wm = WindowsManager::getInstance();
 	
@@ -132,7 +136,8 @@ void PanelSimple::displayGL() {
 	DY = 1.0f;
 	*/
 	
-	m_pTexBackground->Bind(0);
+	//m_pTexBackground->Bind(wm.getSlot());
+	m_pTexBackground->Bind( 0 );
 	
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -153,7 +158,8 @@ void PanelSimple::displayGL() {
 
 	glEnd();
 
-	m_pTexBackground->Unbind(0);
+	m_pTexBackground->Unbind( 0 );
+	//m_pTexBackground->Unbind(wm.getSlot());
 
 
 
@@ -195,11 +201,14 @@ void PanelSimple::debug( bool b )	{
 	if ( b && pPsDebug == NULL )	{
 		pPsDebug = new PanelSimple();
 		pPsDebug->setPosAndSize( 10, -20, 300, 20 );
-		
+	}		
+
+	if ( b && pPtDebug == NULL )	{
+		WindowsManager& wm = WindowsManager::getInstance();
 		pPtDebug = new PanelText();
 		char	str[255];
 		
-		sprintf( str, "ID=%d\n X=%d, Y=%d, DX=%d, DY=%d", getID(), getX(), getY(), getDX(), getDY() );
+		sprintf( str, "ID=%d\n X=%d, Y=%d, DX=%d, DY=%d order=%d", getID(), getX(), getY(), getDX(), getDY(), wm.getOrder(this) );
 		sDebug = string(str);
 		cout <<" DebugPanel : "<< sDebug << endl;
 		
@@ -208,13 +217,15 @@ void PanelSimple::debug( bool b )	{
 		pPsDebug->add( pPtDebug );
 		add( pPsDebug );
 	}
-
+	/*
 	if ( b )	{
 		pPsDebug->setVisible( true );
 	}
 	else	{
 		pPsDebug->setVisible( false );
 	}
+	*/
+	pPsDebug->setVisible( bDebug );
 }
 
 

@@ -135,30 +135,34 @@ void PanelSimple::displayGL() {
 	DX = 1.0f;
 	DY = 1.0f;
 	*/
-	
+
 	//m_pTexBackground->Bind(wm.getSlot());
+	//glBlendColor( 0.0, 0.0, 0.0, 0.2);
 	m_pTexBackground->Bind( 0 );
 	
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
+	
 	glBegin(GL_QUADS);
-
-	glTexCoord2f(0, 1);
-	glVertex2f(X, Y);
-
-	glTexCoord2f(0, 0);
-	glVertex2f(X, Y + DY);
-
-	glTexCoord2f(1, 0);
-	glVertex2f(X + DX, Y + DY);
+	
+	//glColor4ui( 255, 255, 255, 255 );
 
 	glTexCoord2f(1, 1);
+	glVertex2f(X + DX, Y + DY);
+
+	glTexCoord2f(1, 0);
 	glVertex2f(X + DX, Y);
+
+	glTexCoord2f(0, 0);
+	glVertex2f(X, Y);
+
+	glTexCoord2f(0, 1);
+	glVertex2f(X, Y + DY);
 
 	glEnd();
 
 	m_pTexBackground->Unbind( 0 );
+
 	//m_pTexBackground->Unbind(wm.getSlot());
 
 
@@ -232,6 +236,14 @@ void PanelSimple::debug( bool b )	{
 
 
 
+
+void PanelSimple::setBackground( char * str_background )	{
+	_ResourceManager& res = _ResourceManager::getInstance();
+
+	_Texture2D* ret = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, str_background) );
+	if ( ret )
+	m_pTexBackground = ret;
+}
 
 
 

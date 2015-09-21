@@ -17,6 +17,7 @@ class PanelSimple : public Panel {
 		virtual void		updatePos();
 		
 		void				debug(bool);
+		void				setBackground( char *);
 
 	private:
 		_Texture2D*		m_pTexBackground;

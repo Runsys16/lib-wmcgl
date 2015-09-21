@@ -411,7 +411,9 @@ void WindowsManager::motionFunc(int x, int y)	{
 }
 
 void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
+	#ifdef DEBUG
 	cout << "WindowsManager::mouseFunc( " << button << ", " << state << ", " << x << ", " << y << " )" << endl;
+	#endif
 	
 	if ( button == 2 && state == 0 )	{
 		panelMove = findPanelMouseOver(x, y);
@@ -431,7 +433,9 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	if ( panelMove == NULL )		ID = -1;
 	else							ID = panelMove->getID();
 	
+	#ifdef DEBUG
 	cout << "WindowsManager::mouseFunc Addr : " << panelMove <<" ID "<< ID <<", " << bMovePanel << endl;;
+	#endif
 
 }
 

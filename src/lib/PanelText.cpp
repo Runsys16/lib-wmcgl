@@ -272,7 +272,7 @@ void PanelText::buildString()	{
 	
 	textUtil = WindowsManager::getInstance().getTextUtil();
 
-	color32 color		= COLOR32_BLACK;
+	color32 color		= COLOR32_WHITE;
 	color32 color_bg	= COLOR32_WHITE;
 
 	//if (pTextGL != NULL )	textUtil->DeleteTextObj( pTextGL );
@@ -433,7 +433,7 @@ void PanelText::displayGLInternal()	{
 #endif
 	//glScissor( scx, scy, scdx, scdy );
 	//glEnable( GL_SCISSOR_TEST );
-	glColor4f( 0.0f, 0.0f, 0.0f, 0.0f );
+	//glColor4f( 0.0f, 0.0f, 0.0f, 0.0f );
 	//glColor4f( 1.0f, 0.0f, 0.0f, 0.0f );
 	//glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
 

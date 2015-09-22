@@ -237,22 +237,29 @@ static void CreateOneWindow()	{
 	y =  10+rand()%450;
 	dx = 200+rand()%400;
 	dy = 200+rand()%200;
+	dx = 220;
+	dy = 5 * 42-10;
 
 	PW->setPosAndSize( x, y, dx, dy );
 	if ( pw.size()%3 == 0 )	PW->loadSkin( PanelWindow::RED );
 	if ( pw.size()%3 == 1 )	PW->loadSkin( PanelWindow::BLACK );
 
 	ps = new PanelSimple();
-	ps->setPosAndSize( 0, 0, dx, dy );
+	ps->setPosAndSize( x, y, dx, dy );
 	PW->add( ps );
 
 
 	char Buff[255];
+	/*
 	sprintf( Buff, "PanelWindow no %d", (int)pw.size() );
-	PanelText* pT = new PanelText( Buff,	PanelText::NORMAL_FONT, 0, 32/2-10 );
+	PanelText* pT = new PanelText( Buff,	PanelText::NORMAL_FONT, 0, 32/2-10, 0xffFF0000 );
 	pT->setAlign( PanelText::RIGHT );
 	ps->add( pT );
+	*/
 
+	/********************************************************************************************
+		Insertion des bouton
+	*/
 	PanelSimple* pButton;
 	PanelText* pText;
 	for ( int i=0; i<5		; i++ )	{
@@ -260,22 +267,27 @@ static void CreateOneWindow()	{
 		pButton ->setPosAndSize( 0, 0+42*i, 220, 32 );
 		pButton ->setBackground( (char*) texture[i%5] );
 
-		sprintf( Buff, "MENU %d", (int)i );
-
-		pText = new PanelText( Buff,	PanelText::LARGE_FONT, 0, 32/2-10 );
+		sprintf( Buff, "New MENU %d", (int)i );
+		
+		cout << "----- premier -------------------" << endl;
+		pText = new PanelText( Buff,	PanelText::NORMAL_FONT, 1, 32/2-10+1, 0xff000000);
 		pText->setAlign( PanelText::CENTER );
 		pButton->add( pText );
-
-		pText = new PanelText( Buff,	PanelText::LARGE_FONT, 0, 32/2-10 );
+		
+		cout << "----- deuxieme -------------------" << endl;
+		pText = new PanelText( Buff,	PanelText::NORMAL_FONT, 0, 32/2-10, 0xFFffFFff );
 		pText->setAlign( PanelText::CENTER );
 		pButton->add( pText );
+		
+		
 
 		ps->add( pButton );
 	}	
 	
 	//ps->setBackground( (char*) "white.png" );
+	ps->setBackground( NULL );
 
-	wm.add(PW);
+	wm.add(ps);
 	delete pStr;
 }
 
@@ -284,7 +296,6 @@ static void CreateAllWindows()	{
 	wm.setScreenSize( width-100, height-100 );
 
 	string * pStr;
-
 	PanelSimple  * ps;
 	PanelText* pt;
 	
@@ -323,7 +334,7 @@ static void CreateAllWindows()	{
 	ps->setPosAndSize( 50+0, 50+0, wm.getWidth(), 50+2);
 	wm.add( ps );
 	pStr = new string("Press ESC to quit");
-	ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 5 ) );
+	ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 5, 0xffffffff ) );
 	pStr = new string("Or key to test console, enter word \"debug\" for debug mode on/off");
 	ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 20 ) );
 	
@@ -352,7 +363,8 @@ static void CreateAllWindows()	{
 	pc->setPrompt( "console2> " );
 	pc->setCallBackCmd( new CallBack() );
 	wm.add( pc );
-	
+	/*
+	*/
 	for (int i=0; i<3; i++ )		CreateOneWindow();
 	CreateOneWindow();
 

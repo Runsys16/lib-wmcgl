@@ -39,6 +39,7 @@ PanelText::PanelText()	{
 	bChange = false;
 	ID = 999;
 	tabSize = 40;
+	color = 0xffffffff;
 }
 
 
@@ -48,6 +49,7 @@ PanelText::PanelText( string str )	{
 	#endif
 
 	PanelText();
+	color = 0xffffffff;
 
 	changeText( str );
 }
@@ -59,6 +61,7 @@ PanelText::PanelText( string str, FONT type )	{
 	cout << "Constructeur PanelText( "<< str <<", "<< strFont() <<" )" << endl;
 	#endif
 	PanelText();
+	color = 0xffffffff;
 
 	changeText( str, type, true );
 }
@@ -71,7 +74,21 @@ PanelText::PanelText( string str, FONT type, int x, int y )	{
 	#endif
 
 	PanelText();
+	color = 0xffffffff;
 
+	setPos(x, y);
+	changeText( str, type );
+}
+
+
+PanelText::PanelText( string str, FONT type, int x, int y, unsigned int c )	{
+	typeFont = type;
+	#ifdef DEBUG_CONST
+	cout << "Constructeur PanelText( "<< str <<", "<< strFont() <<", "<< x <<", "<< y <<" )" << endl;
+	#endif
+	
+	PanelText();
+	color = c;
 	setPos(x, y);
 	changeText( str, type );
 }
@@ -84,7 +101,22 @@ PanelText::PanelText( char * cstr, FONT type, int x, int y )	{
 	#endif
 
 	PanelText();
+	color = 0xffffffff;
 
+	setPos(x, y);
+	changeText( cstr, type );
+	buildString();
+}
+
+PanelText::PanelText( char * cstr, FONT type, int x, int y, unsigned int c )	{
+	typeFont = type;
+	#ifdef DEBUG_CONST
+	cout << "Constructeur PanelText( "<< cstr <<", "<< strFont() <<", "<< x <<", "<< y <<" )" << endl;
+	#endif
+
+	PanelText();
+	color = c;
+	
 	setPos(x, y);
 	changeText( cstr, type );
 	buildString();
@@ -272,8 +304,8 @@ void PanelText::buildString()	{
 	
 	textUtil = WindowsManager::getInstance().getTextUtil();
 
-	color32 color		= COLOR32_WHITE;
-	color32 color_bg	= COLOR32_WHITE;
+	color32 c		= COLOR32_WHITE;
+	color32 c_bg	= COLOR32_RED;
 
 	//if (pTextGL != NULL )	textUtil->DeleteTextObj( pTextGL );
 	textUtil->setTabSize( tabSize );
@@ -282,16 +314,17 @@ void PanelText::buildString()	{
 
 	switch (typeFont )	{
 	case NORMAL_FONT :
-		textUtil->GenFont( DefaultNormalFont );
-		textUtil->BuildText( pTextGL, &(text), &color, &color_bg, 1,  DefaultNormalFont, 0, 0);
+		textUtil->GenFont( DefaultNormalFont, color );
+		textUtil->BuildText( pTextGL, &(text), &c, &c_bg, 1,  DefaultNormalFont, 0xffffff00, 0xff0000ff);
 		break;
 	case SMALL_FONT :
-		textUtil->GenFont( DefaultSmallFont );
-		textUtil->BuildText( pTextGL, &(text), &color, &color_bg, 1,  DefaultSmallFont, 0, 0);
+		textUtil->GenFont( DefaultSmallFont, color );
+		textUtil->BuildText( pTextGL, &(text), &c, &c_bg, 1,  DefaultSmallFont, 0xffffff00, 0xff0000ff);
 		break;
 	case LARGE_FONT :
-		textUtil->GenFont( DefaultLargeFont );
-		textUtil->BuildText( pTextGL, &(text), &color, &color_bg, 1,  DefaultLargeFont, 0, 0);
+		textUtil->GenFont( DefaultLargeFont, color );
+		//textUtil->BuildText( pTextGL, &(text), &c, &c_bg, 1,  DefaultLargeFont, 0xffffff00, 0xff0000ff);
+		textUtil->BuildText( pTextGL, &(text), NULL, NULL, 1,  DefaultLargeFont, 0xffffff00, 0xff0000ff);
 		break;
 	}
 	bChange = false;
@@ -464,7 +497,8 @@ void PanelText::displayGLInternal()	{
 		textUtil->BindFont( DefaultLargeFont, slot );
 		break;
 	}
-	textUtil->DrawText( pTextGL, getX(), getY(), COLOR32_WHITE, COLOR32_RED );
+	//textUtil->DrawText( pTextGL, getX(), getY(), COLOR32_WHITE, COLOR32_RED );
+	textUtil->DrawText( pTextGL, getX(), getY(), color, COLOR32_RED );
 	//textUtil->DrawText( pTextGL, 20, 30, COLOR32_WHITE, COLOR32_RED );
 	textUtil->UnbindFont( slot );
 

@@ -18,7 +18,9 @@ class PanelText : public Panel	{
 							PanelText( std::string );
 							PanelText( std::string, FONT );
 							PanelText( std::string, FONT, int, int );
+							PanelText( std::string, FONT, int, int, unsigned int );
 							PanelText( char*, FONT, int, int );
+							PanelText( char*, FONT, int, int, unsigned int );
 
 		void 				buildString();
 		
@@ -34,6 +36,7 @@ class PanelText : public Panel	{
 		void 				changeText( std::string, FONT, bool );
 		void 				eraseText( );
 		void				setTabSize( int );
+		void				setColor( unsigned long l)						{ color = l; bChange = true; }
 		
 		virtual void		displayGL();
 		virtual void		updatePos();
@@ -50,6 +53,7 @@ class PanelText : public Panel	{
 		TextUtil*			textUtil;
 		FONT				typeFont;
 		std::string			text;
+		unsigned int		color;
 		//std::string			cmdLine;
 		bool				bChange;
 		

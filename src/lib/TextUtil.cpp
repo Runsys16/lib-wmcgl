@@ -154,9 +154,12 @@ PFNGLBlendFuncSeparate glBlendFuncSeparate = NULL;
 #   define CHECK_GL_ERROR ((void)(0))
 #endif
 
+GLuint TextUtil::GenFont( CTexFont *_Font )	{
+	return GenFont( _Font, (color32) 0xffffffff );
+}
 //  ---------------------------------------------------------------------------
 
-GLuint TextUtil::GenFont( CTexFont *_Font)
+GLuint TextUtil::GenFont( CTexFont *_Font, color32 color)
 {
 	//cout << "TextUtil::GenFont()" << endl;
 	//m_tab_size = 40;
@@ -174,11 +177,35 @@ GLuint TextUtil::GenFont( CTexFont *_Font)
     glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
     glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	/*    
+    */
+    float a, r, v, b;
+
+    a =  (float)((unsigned)(color&0xff000000) >>24 )/255.0;
+    r =  (float)((unsigned)(color&0x00ff0000) >>16 )/255.0;
+    v =  (float)((unsigned)(color&0x0000ff00) >>8  )/255.0;
+    b =  (float)((unsigned)(color&0x000000ff) >>0  )/255.0;
+	    
+	cout << "TextUtil::GenFont() Generate Texture ID : ";
+	cout << "color=" << color << endl;;
+	    
+	cout << "TextUtil::GenFont() Generate Texture ID : ";
+	cout << "a=" << a <<" r=" << r <<" v="<< v <<" b="<< b << endl;;
+    
     glPixelTransferf(GL_ALPHA_SCALE, 1);
     glPixelTransferf(GL_ALPHA_BIAS, 0);
     glPixelTransferf(GL_RED_BIAS, 1);
     glPixelTransferf(GL_GREEN_BIAS, 1);
-    glPixelTransferf(GL_BLUE_BIAS, 1);
+    glPixelTransferf(GL_BLUE_BIAS, 1 );
+    /*
+    glPixelTransferf(GL_ALPHA_SCALE, 1);
+    glPixelTransferi(GL_ALPHA_BIAS, (color&0xff000000) >>24 );
+    glPixelTransferi(GL_RED_BIAS,	(color&0x00ff0000) >>16);
+    glPixelTransferi(GL_GREEN_BIAS,	(color&0x0000ff00) >>8);
+    glPixelTransferi(GL_BLUE_BIAS,	(color&0x000000ff) >>0);
+   	*/
+    
     glTexImage2D(GL_TEXTURE_2D, 0, 4, _Font->m_TexWidth, _Font->m_TexHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, _Font->m_TexBytes);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -188,9 +215,6 @@ GLuint TextUtil::GenFont( CTexFont *_Font)
     glBindTexture(GL_TEXTURE_2D, 0);
     
     glPixelTransferf(GL_ALPHA_SCALE, 1);
-    //glPixelTransferf(GL_RED_SCALE, 0.5);
-    //glPixelTransferf(GL_RED_SCALE, 1);
-    
     glPixelTransferf(GL_ALPHA_BIAS, 0);
     glPixelTransferf(GL_RED_BIAS, 0);
     glPixelTransferf(GL_GREEN_BIAS, 0);
@@ -315,6 +339,15 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
                 TextObj->m_Colors.push_back(LineColor);
                 TextObj->m_Colors.push_back(LineColor);
             }
+            else	{
+            	LineColor = 0xffFF00FF;
+                TextObj->m_Colors.push_back(LineColor);
+                TextObj->m_Colors.push_back(LineColor);
+                TextObj->m_Colors.push_back(LineColor);
+                TextObj->m_Colors.push_back(LineColor);
+                TextObj->m_Colors.push_back(LineColor);
+                TextObj->m_Colors.push_back(LineColor);
+            }
 
             x = x1;
         }
@@ -329,7 +362,7 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
 
             if( _LineBgColors!=NULL )
             {
-                color32 LineBgColor = (_LineBgColors[Line]&0xff00ff00) | GLubyte(_LineBgColors[Line]>>16) | (GLubyte(_LineBgColors[Line])<<16);
+				color32 LineBgColor = (_LineBgColors[Line]&0xff00ff00) | GLubyte(_LineBgColors[Line]>>16) | (GLubyte(_LineBgColors[Line])<<16);
                 TextObj->m_BgColors.push_back(LineBgColor);
                 TextObj->m_BgColors.push_back(LineBgColor);
                 TextObj->m_BgColors.push_back(LineBgColor);
@@ -337,6 +370,16 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
                 TextObj->m_BgColors.push_back(LineBgColor);
                 TextObj->m_BgColors.push_back(LineBgColor);
             }
+           	else
+           	{
+                color32 LineBgColor = 0xffFFff00;
+                TextObj->m_BgColors.push_back(LineBgColor);
+                TextObj->m_BgColors.push_back(LineBgColor);
+                TextObj->m_BgColors.push_back(LineBgColor);
+                TextObj->m_BgColors.push_back(LineBgColor);
+                TextObj->m_BgColors.push_back(LineBgColor);
+                TextObj->m_BgColors.push_back(LineBgColor);
+           	}
         }
     }
 }
@@ -532,6 +575,7 @@ void TextUtil::DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 
         glDrawArrays(GL_TRIANGLES, 0, (int)TextObj->m_TextVerts.size());
     }
     
+	glColor4ub( 255, 255, 255, 255 );
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);

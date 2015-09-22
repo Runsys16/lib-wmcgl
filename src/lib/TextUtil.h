@@ -56,6 +56,7 @@ public:
 	void				ChangeViewport(int, int, int, int, int, int);
 
 	GLuint 				GenFont( CTexFont * );
+	GLuint 				GenFont( CTexFont *, color32 );
 	void 				BindFont( const CTexFont * );
 	void 				BindFont( const CTexFont *, int );
 	void 				UnbindFont( int );

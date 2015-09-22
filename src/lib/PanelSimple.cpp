@@ -146,7 +146,7 @@ void PanelSimple::displayGL() {
 	
 		glBegin(GL_QUADS);
 	
-		//glColor4ui( 255, 255, 255, 255 );
+		glColor4f( 1.0, 1.0, 1.0, 1.0 );
 
 		glTexCoord2f(1, 1);
 		glVertex2f(X + DX, Y + DY);

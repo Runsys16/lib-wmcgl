@@ -472,6 +472,7 @@ void PanelText::displayGLInternal()	{
 
 	int iTex;	
 	int slot = wm.getSlot();
+	//slot = 0;
 	
     glEnable(GL_TEXTURE_2D);
 	switch( typeFont )	{

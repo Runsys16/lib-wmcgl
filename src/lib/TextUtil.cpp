@@ -216,9 +216,9 @@ GLuint TextUtil::GenFont( CTexFont *_Font, color32 color)
     
     glPixelTransferf(GL_ALPHA_SCALE, 1);
     glPixelTransferf(GL_ALPHA_BIAS, 0);
-    glPixelTransferf(GL_RED_BIAS, 0);
+    glPixelTransferf(GL_RED_BIAS,   0);
     glPixelTransferf(GL_GREEN_BIAS, 0);
-    glPixelTransferf(GL_BLUE_BIAS, 0);
+    glPixelTransferf(GL_BLUE_BIAS,  0);
     
     
 	glPixelStorei(GL_UNPACK_ALIGNMENT,1);
@@ -233,6 +233,7 @@ void TextUtil::BindFont(const CTexFont *_Font)	{
 
 void TextUtil::BindFont(const CTexFont *_Font, int slot)	{
 	glActiveTexture(GL_TEXTURE0 + slot);
+	//cout << "Bind texture slot : "<< slot << endl;
     glBindTexture(GL_TEXTURE_2D, _Font->m_TexID);
 }
 

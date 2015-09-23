@@ -333,6 +333,7 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
 
             if( _LineColors!=NULL )
             {
+            	LineColor = 0xffFF00FF;
                 TextObj->m_Colors.push_back(LineColor);
                 TextObj->m_Colors.push_back(LineColor);
                 TextObj->m_Colors.push_back(LineColor);
@@ -364,6 +365,7 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
             if( _LineBgColors!=NULL )
             {
 				color32 LineBgColor = (_LineBgColors[Line]&0xff00ff00) | GLubyte(_LineBgColors[Line]>>16) | (GLubyte(_LineBgColors[Line])<<16);
+                LineBgColor = 0xffFFff00;
                 TextObj->m_BgColors.push_back(LineBgColor);
                 TextObj->m_BgColors.push_back(LineBgColor);
                 TextObj->m_BgColors.push_back(LineBgColor);

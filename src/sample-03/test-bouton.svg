@@ -24,6 +24,18 @@
      id="defs3459">
     <linearGradient
        inkscape:collect="always"
+       id="linearGradient4185">
+      <stop
+         style="stop-color:#000000;stop-opacity:1"
+         offset="0"
+         id="stop4187" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.63440859"
+         offset="1"
+         id="stop4189" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
        id="linearGradient4357">
       <stop
          style="stop-color:#ff002b;stop-opacity:1"
@@ -193,6 +205,26 @@
        x2="374.00009"
        y2="358.0654"
        gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4185"
+       id="linearGradient3381"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-1.677276,466.76555)"
+       x1="374.00009"
+       y1="272.71182"
+       x2="374.00009"
+       y2="358.0654" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4301"
+       id="linearGradient3383"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-1.677276,469.46597)"
+       x1="379.03781"
+       y1="273.60364"
+       x2="379.03781"
+       y2="321.71402" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -201,11 +233,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.78555346"
-     inkscape:cx="474.70804"
-     inkscape:cy="496.63202"
+     inkscape:zoom="0.78478632"
+     inkscape:cx="450.62533"
+     inkscape:cy="500.76326"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer4"
      showgrid="false"
      inkscape:window-width="1920"
      inkscape:window-height="1176"
@@ -346,6 +378,25 @@
        sodipodi:nodetypes="sssssss"
        inkscape:export-xdpi="37.59"
        inkscape:export-ydpi="37.59" />
+    <rect
+       inkscape:export-ydpi="34"
+       inkscape:export-xdpi="34"
+       style="display:inline;opacity:0.90399996;fill:url(#linearGradient3381);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.30699992;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect3377"
+       width="561.13971"
+       height="76.625961"
+       x="99.554298"
+       y="732.22656"
+       rx="23.58989"
+       ry="22.104763" />
+    <path
+       inkscape:export-ydpi="34"
+       inkscape:export-xdpi="34"
+       sodipodi:nodetypes="sssssss"
+       inkscape:connector-curvature="0"
+       id="path3379"
+       d="m 122.48978,734.92703 515.26875,0 c 7.22617,0 13.04363,3.92444 13.04363,8.7992 0,4.87475 -5.88232,7.83322 -13.04363,8.7992 -178.64099,24.09659 -351.01051,26.24299 -515.26875,0 -7.13567,-1.14004 -13.04363,-3.92445 -13.04363,-8.7992 0,-4.87476 5.81746,-8.7992 13.04363,-8.7992 z"
+       style="display:inline;opacity:0.90399996;fill:url(#linearGradient3383);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.30699992;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
   </g>
   <g
      inkscape:groupmode="layer"

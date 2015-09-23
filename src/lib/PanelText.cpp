@@ -451,6 +451,10 @@ void PanelText::displayGLInternal()	{
 	float width  = (float)wm.getWidth();
 	float height = (float)wm.getHeight();
 
+	int iProgId;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &iProgId);
+	glUseProgramObjectARB(0);
+		
 	textUtil->BeginGL();
 	
 	int scx, scy, scdx, scdy;
@@ -472,8 +476,8 @@ void PanelText::displayGLInternal()	{
 
 	int iTex;	
 	int slot = wm.getSlot();
-	//slot = 0;
-	
+	slot = 1;
+
     glEnable(GL_TEXTURE_2D);
 	switch( typeFont )	{
 	case NORMAL_FONT :
@@ -499,12 +503,16 @@ void PanelText::displayGLInternal()	{
 		break;
 	}
 	//textUtil->DrawText( pTextGL, getX(), getY(), COLOR32_WHITE, COLOR32_RED );
-	textUtil->DrawText( pTextGL, getX(), getY(), color, COLOR32_RED );
+	//textUtil->DrawText( pTextGL, getX(), getY(), color, COLOR32_RED );
+	textUtil->DrawText( pTextGL, getX(), getY(), color, 0 );
 	//textUtil->DrawText( pTextGL, 20, 30, COLOR32_WHITE, COLOR32_RED );
 	textUtil->UnbindFont( slot );
 
 	//glDisable( GL_SCISSOR_TEST );
 	textUtil->EndGL();
+
+	glUseProgramObjectARB( iProgId );
+		
 }
 	
 

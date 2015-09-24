@@ -310,6 +310,7 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
         {
             ch = Text[i];
             if ( ch == '\t' )	{
+            	if ( m_tab_size == 0 )	m_tab_size = 40;
             	int pos = x / m_tab_size;
             	x = (pos+1) * m_tab_size;
             	continue;

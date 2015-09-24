@@ -227,7 +227,8 @@ static void CreateOneWindow()	{
 	PanelSimple  * ps;
 	PanelText* pt;
 	
-	char *texture[] = { "bouton-jaune.png", "bouton-orange.png", "bouton-rouge.png", "bouton-vert.png", "bouton-bleu.png" };
+	char *texture[] = { (char*)"bouton-jaune.png", (char*)"bouton-orange.png", (char*)"bouton-rouge.png",\
+						(char*)"bouton-vert.png", (char*)"bouton-bleu.png", (char*)"bouton-noir.png" };
 	
 	PW = new PanelWindow();
 	pw.push_back( PW );
@@ -238,7 +239,7 @@ static void CreateOneWindow()	{
 	dx = 200+rand()%400;
 	dy = 200+rand()%200;
 	dx = 220;
-	dy = 5 * 42-10;
+	dy = 6 * 42-10;
 
 	PW->setPosAndSize( x, y, dx, dy );
 	if ( pw.size()%3 == 0 )	PW->loadSkin( PanelWindow::RED );
@@ -262,10 +263,10 @@ static void CreateOneWindow()	{
 	*/
 	PanelSimple* pButton;
 	PanelText* pText;
-	for ( int i=0; i<5		; i++ )	{
+	for ( int i=0; i<6		; i++ )	{
 		pButton = new PanelSimple();
 		pButton ->setPosAndSize( 0, 0+42*i, 220, 32 );
-		pButton ->setBackground( (char*) texture[i%5] );
+		pButton ->setBackground( (char*) texture[i%6] );
 
 		sprintf( Buff, "New MENU %d", (int)i );
 		

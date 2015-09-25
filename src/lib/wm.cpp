@@ -12,8 +12,9 @@
 #include "InternalFonts.h"
 
 
-#define DEBUG_CONST
+//#define DEBUG_CONST
 //#define DEBUG
+//#define DEBUG_DISPLAY
 
 #ifdef DEBUG_WM
 #	define DEBUG
@@ -95,6 +96,7 @@ void WindowsManager::init()	{
 
 
 	panelMove = NULL;
+	panelFocus = NULL;
 	bDebug = false;
 }
 
@@ -204,15 +206,52 @@ int WindowsManager::getFreeID()	{
 
 
 
+Panel * WindowsManager::getParentRoot( Panel* pChild)	{
+	if ( pChild == NULL )			return NULL;
+	Panel * pParent = pChild->getParent();
+	if ( pParent )	{
+		while( pParent->getParent() != NULL )	pParent = pParent->getParent();
+		return pParent;
+	}
+	return pChild;
+	
+}
+
+void WindowsManager::changeFocus( Panel* p )	{
+	//cout << "WindowsManager::passiveMotionFunc( " << x << ", " << y << " )" << endl;
+	if ( p != panelFocus )	{
+		if ( p )				p->haveFocus();
+		if (panelFocus )		panelFocus->lostFocus();
+	}
+	panelFocus = p;
+}
+
+
+
 Panel * WindowsManager::findPanelMouseOver( int xm, int ym)	{
+	#ifdef DEBUG
+	cout << "WindowsManager::findPanelMouseOver( " << xm << ", " << ym << " )";
+	#endif
+	#ifdef DEBUG
+	#endif
+
 	int nb = childs.size();
 	
 	for ( int i=nb-1; i>=0; i-- )	{
-		if ( childs[i]->isMouseOver( xm, ym ) )	{
-			return childs[i];
+		Panel * p = childs[i]->isMouseOver( xm, ym );
+		if ( p != NULL )	{
+			if ( p->getID() != 999 )	{
+				#ifdef DEBUG
+				cout << " Panel ID : "<< p->getID()  << endl;
+				#endif
+				return p;
+			}
 		}
 	}
 	
+	#ifdef DEBUG
+	cout << " - Panel ID : NULL" << endl;
+	#endif
 	return NULL;
 }
 
@@ -237,7 +276,10 @@ void WindowsManager::movePanel( int xm, int ym)	{
 	Panel * p;
 	
 	p = findPanelMouseOver( xm, ym );
-	movePanel( xm, ym, p );
+	if ( p ) {
+		p = getParentRoot( p );
+		if ( p )	movePanel( xm, ym, p );
+	}
 }
 
 
@@ -370,7 +412,7 @@ void WindowsManager::displayGL()	{
 		childs[i]->displayGL();
 	}
 	
-	#ifdef DEBUG
+	#ifdef DEBUG_DISPLAY
 	cout << "WindowsManager::displayGL()  Draw Texte" << endl;
 	#endif
 
@@ -399,7 +441,9 @@ void WindowsManager::clearBufferGL( GLbitfield bitField )	{
 //------------------------------------------------------------
 void WindowsManager::passiveMotionFunc(int x, int y)	{
 	//cout << "WindowsManager::passiveMotionFunc( " << x << ", " << y << " )" << endl;
-	findPanelMouseOver(x, y);
+	Panel * p = findPanelMouseOver(x, y);
+	
+	changeFocus( p );
 	
 	xm_old = -1;
 	ym_old = -1;
@@ -412,28 +456,47 @@ void WindowsManager::motionFunc(int x, int y)	{
 	}
 }
 
+static bool bClickLeft=false;
+
 void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	#ifdef DEBUG
 	cout << "WindowsManager::mouseFunc( " << button << ", " << state << ", " << x << ", " << y << " )" << endl;
 	#endif
+	Panel* p = findPanelMouseOver(x, y);
+	changeFocus( p );
+	bMovePanel = false;
 	
 	if ( button == 2 && state == 0 )	{
-		panelMove = findPanelMouseOver(x, y);
+		panelMove = getParentRoot( p );
 		if ( panelMove != NULL )	{
 			bMovePanel = true;
+			sup( panelMove );
+			add( panelMove );
 		}
 		//swapVisible();
 	}
 	else if ( button == 2 && state == 1 )	{
 		panelMove = NULL;
-		bMovePanel = false;
 		xm_old = -1;
 		ym_old = -1;
 	}
+	else if ( button == 0 && state == 1  && bClickLeft )	{
+		xm_old = -1;
+		ym_old = -1;
+		if ( panelFocus )			panelFocus->clickLeft( x, y );
+	}
 	
-	int ID;
-	if ( panelMove == NULL )		ID = -1;
-	else							ID = panelMove->getID();
+	if ( button == 0 && state == 0 )	{
+		Panel * pFocusParent = getParentRoot( p );
+		if ( pFocusParent )	{
+			sup( pFocusParent );
+			add( pFocusParent );
+		}
+		bClickLeft = true;
+	}
+	
+	int ID = -1;
+	if ( panelMove )			ID = panelMove->getID();
 	
 	#ifdef DEBUG
 	cout << "WindowsManager::mouseFunc Addr : " << panelMove <<" ID "<< ID <<", " << bMovePanel << endl;;

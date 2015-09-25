@@ -46,6 +46,7 @@ public:
 	void				supByID(int);
 	Panel*				getByID(int);
 	int					getFreeID();
+	Panel*				getParentRoot(Panel*);
 	Panel*				findPanelMouseOver(int, int);
 	int					getOrder(Panel*);
 	void				movePanel( int, int);
@@ -129,6 +130,9 @@ private:
 	
 	bool						bDebug;
 	int							slot;
+	
+private:
+	void						changeFocus(Panel *);
 };
 
 #ifdef WM_CPP

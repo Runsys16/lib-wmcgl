@@ -26,7 +26,10 @@ class PanelButton : public PanelSimple {
 		
 		//void				buildText();
 
-		virtual bool		isMouseOver( int, int);
+		virtual void		haveFocus();
+		virtual void		lostFocus();
+		virtual void		clickLeft( int, int);
+		virtual Panel*		isMouseOver( int, int);
 		virtual void		displayGL();
 		virtual void		updatePos();
 		void				debug(bool);
@@ -44,7 +47,7 @@ class PanelButton : public PanelSimple {
 
 		_Texture2D*		m_pTexCurrent;
 		
-		CALLBACK_DOWN	pCallBackDown;
+		CALLBACK_OVER	pCallBackDown;
 		CALLBACK_DOWN	pCallBackOver;;
 //	private:
 		/*	

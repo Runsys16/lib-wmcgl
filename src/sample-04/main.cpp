@@ -226,7 +226,7 @@ void call_back_over()	{
 }
 
 void call_back_down()	{
-	//cout << "CallBack Over()" << endl;
+	cout << "CallBack Down()" << endl;
 }
 
 
@@ -238,8 +238,14 @@ static void CreateOneWindow()	{
 	PanelSimple  * ps;
 	PanelText* pt;
 	
-	char *texture[] = { (char*)"bouton-jaune.png", (char*)"bouton-orange.png", (char*)"bouton-rouge.png",\
-						(char*)"bouton-vert.png", (char*)"bouton-bleu.png", (char*)"bouton-noir.png" };
+	char *texture[] = { (char*)"jaune-over.png", (char*)"orange-over.png", (char*)"rouge-over.png",\
+						(char*)"vert-over.png", (char*)"bleu-over.png", (char*)"noir-over.png" };
+	
+	char *texDown[] = { (char*)"jaune-down.png", (char*)"orange-down.png", (char*)"rouge-down.png",\
+						(char*)"vert-down.png", (char*)"bleu-down.png", (char*)"noir-down.png" };
+	
+	char *texOver[] = { (char*)"jaune-over.png", (char*)"orange-over.png", (char*)"rouge-over.png",\
+						(char*)"vert-over.png", (char*)"bleu-over.png", (char*)"noir-over.png" };
 	
 	PW = new PanelWindow();
 	pw.push_back( PW );
@@ -274,14 +280,14 @@ static void CreateOneWindow()	{
 	*/
 	PanelButton* pButton;
 	PanelText* pText;
-	for ( int i=0; i<5		; i++ )	{
+	for ( int i=0; i<6		; i++ )	{
 		pButton = new PanelButton();
 		pButton ->setPosAndSize( 0, 0+42*i, 220, 32 );
 		pButton ->setPush( (char*) texture[i%6] );
-		pButton ->setDown( (char*) texture[i%6] );
-		pButton ->setOver( (char*) texture[5] );
+		pButton ->setDown( (char*) texDown[i%6] );
+		pButton ->setOver( (char*) texOver[i%6] );
 		pButton->setCallBackOver( call_back_over );
-		pButton->setCallBackOver( call_back_down );
+		pButton->setCallBackDown( call_back_down );
 
 		sprintf( Buff, "New MENU %d", (int)i );
 		

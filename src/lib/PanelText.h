@@ -38,6 +38,7 @@ class PanelText : public Panel	{
 		void				setTabSize( int );
 		void				setColor( unsigned long l)						{ color = l; bChange = true; }
 		
+		virtual Panel*		isMouseOver( int, int);
 		virtual void		displayGL();
 		virtual void		updatePos();
 		

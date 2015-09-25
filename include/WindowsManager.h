@@ -189,7 +189,10 @@ class Panel {
 		void				add( Panel* );
 		void				sup( Panel* );
 		
-		virtual bool		isMouseOver( int, int);
+		virtual void		clickLeft( int, int)							{;}
+		virtual Panel*		isMouseOver( int, int);
+		virtual void		haveFocus()										{;}
+		virtual void		lostFocus()										{;}
 		virtual void		displayGL();
 		virtual void		updatePos();
 		virtual void		idle(float)										{;};
@@ -291,6 +294,7 @@ class PanelText : public Panel	{
 		void				setTabSize( int );
 		void				setColor( unsigned long l)						{ color = l; bChange = true; }
 		
+		virtual Panel*		isMouseOver( int, int);
 		virtual void		displayGL();
 		virtual void		updatePos();
 		
@@ -450,7 +454,10 @@ class PanelButton : public PanelSimple {
 		
 		//void				buildText();
 
-		virtual bool		isMouseOver( int, int);
+		virtual void		haveFocus();
+		virtual void		lostFocus();
+		virtual void		clickLeft( int, int);
+		virtual Panel*		isMouseOver( int, int);
 		virtual void		displayGL();
 		virtual void		updatePos();
 		void				debug(bool);
@@ -468,7 +475,7 @@ class PanelButton : public PanelSimple {
 
 		_Texture2D*		m_pTexCurrent;
 		
-		CALLBACK_DOWN	pCallBackDown;
+		CALLBACK_OVER	pCallBackDown;
 		CALLBACK_DOWN	pCallBackOver;;
 //	private:
 		/*	
@@ -551,6 +558,7 @@ public:
 	void				supByID(int);
 	Panel*				getByID(int);
 	int					getFreeID();
+	Panel*				getParentRoot(Panel*);
 	Panel*				findPanelMouseOver(int, int);
 	int					getOrder(Panel*);
 	void				movePanel( int, int);
@@ -634,6 +642,9 @@ private:
 	
 	bool						bDebug;
 	int							slot;
+	
+private:
+	void						changeFocus(Panel *);
 };
 
 

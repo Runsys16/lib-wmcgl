@@ -70,19 +70,20 @@ void Panel::sup( Panel* p)	{
 
 
 
-bool Panel::isMouseOver(int xm, int ym)	{
+Panel* Panel::isMouseOver(int xm, int ym)	{
 	#ifdef DEBUG
 	cout << "Panel::isMouseOver()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
 	#endif
-	if ( !visible )			return false;
+	if ( !visible )			return NULL;
 
 	int nb = childs.size();
 	for( int i=0; i<nb; i++ )	{
-		if ( childs[i]->isMouseOver(xm, ym) )		return true;
+		Panel * p = childs[i]->isMouseOver(xm, ym);
+		if ( p )		return p;
 	}
 
-	if ( x_raw <= xm && xm <= (x_raw+dx_raw) && y_raw <= ym && ym <= (y_raw+dy_raw) )		return true;
-	else																					return false;
+	if ( x_raw <= xm && xm <= (x_raw+dx_raw) && y_raw <= ym && ym <= (y_raw+dy_raw) )		return this;
+	else																					return NULL;
 }
 
 

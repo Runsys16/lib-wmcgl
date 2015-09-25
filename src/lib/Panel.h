@@ -14,7 +14,10 @@ class Panel {
 		void				add( Panel* );
 		void				sup( Panel* );
 		
-		virtual bool		isMouseOver( int, int);
+		virtual void		clickLeft( int, int)							{;}
+		virtual Panel*		isMouseOver( int, int);
+		virtual void		haveFocus()										{;}
+		virtual void		lostFocus()										{;}
 		virtual void		displayGL();
 		virtual void		updatePos();
 		virtual void		idle(float)										{;};

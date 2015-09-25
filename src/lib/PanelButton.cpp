@@ -74,23 +74,42 @@ void PanelButton::updatePos() {
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
-bool PanelButton::isMouseOver(int xm, int ym)	{
+void PanelButton::haveFocus()	{
+	#ifdef DEBUG_MOUSEOVER
+	cout << "PanelButton::haveFocus( "<< endl;
+	#endif
+	m_pTexCurrent = m_pTexOver;
+}
+/*----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------*/
+void PanelButton::lostFocus()	{
+	#ifdef DEBUG_MOUSEOVER
+	cout << "PanelButton::LostFocus( "<< endl;
+	#endif
+	m_pTexCurrent = m_pTexDown;
+}
+/*----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------*/
+void PanelButton::clickLeft( int xm, int ym)	{
+	if( pCallBackDown )		(*pCallBackDown)();
+}
+/*----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------*/
+Panel* PanelButton::isMouseOver(int xm, int ym)	{
 	#ifdef DEBUG_MOUSEOVER
 	cout << "PanelButton::isMouseOver( "<< xm <<", "<< ym <<" ) " << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
 	#endif
-	if ( !visible )			return false;
+	if ( !visible )			return NULL;
 
 	if ( x_raw <= xm && xm <= (x_raw+dx_raw) && y_raw <= ym && ym <= (y_raw+dy_raw) )	{
-		m_pTexCurrent = m_pTexOver;
 		#ifdef DEBUG_MOUSEOVER
-		cout << "OVER" << endl;
+		cout << "PanelButton::isMouseOver)  OVER" << endl;
 		#endif
 		if( pCallBackOver )		(*pCallBackOver)();
-		return true;
+		return this;
 	}
 	else	{
-		m_pTexCurrent = m_pTexDown;
-		return false;
+		return NULL;
 	}
 }
 /*----------------------------------------------------------------------------------------------------------------------------------

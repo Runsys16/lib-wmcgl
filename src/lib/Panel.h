@@ -13,8 +13,8 @@ class Panel {
 		void 				init();
 		void				add( Panel* );
 		void				sup( Panel* );
-		bool				isMouseOver( int, int);
 		
+		virtual bool		isMouseOver( int, int);
 		virtual void		displayGL();
 		virtual void		updatePos();
 		virtual void		idle(float)										{;};

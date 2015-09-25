@@ -399,6 +399,8 @@ void WindowsManager::clearBufferGL( GLbitfield bitField )	{
 //------------------------------------------------------------
 void WindowsManager::passiveMotionFunc(int x, int y)	{
 	//cout << "WindowsManager::passiveMotionFunc( " << x << ", " << y << " )" << endl;
+	findPanelMouseOver(x, y);
+	
 	xm_old = -1;
 	ym_old = -1;
 }

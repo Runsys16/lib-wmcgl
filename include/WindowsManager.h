@@ -188,8 +188,8 @@ class Panel {
 		void 				init();
 		void				add( Panel* );
 		void				sup( Panel* );
-		bool				isMouseOver( int, int);
 		
+		virtual bool		isMouseOver( int, int);
 		virtual void		displayGL();
 		virtual void		updatePos();
 		virtual void		idle(float)										{;};
@@ -332,7 +332,8 @@ class PanelSimple : public Panel {
 		void				debug(bool);
 		void				setBackground( char *);
 
-	private:
+//	private:
+	protected:
 		_Texture2D*		m_pTexBackground;
 		
 		bool							bTextOK;
@@ -340,7 +341,6 @@ class PanelSimple : public Panel {
 		TextUtil*						textUtil;
 		std::vector<std::string>		str;
 
-	protected:
 		//bool							bDebug;				in Panel.h
 		PanelSimple*					pPsDebug;
 		PanelText*						pPtDebug;
@@ -426,6 +426,67 @@ class PanelConsole : public PanelSimple	{
 		bool						bLeftCtrl;
 		bool						bCtrl;
 };
+
+
+
+
+
+
+typedef void (* CALLBACK_OVER)();
+typedef void (* CALLBACK_DOWN)();
+
+
+class PanelButtonCallBack	{
+	public :
+	virtual void					callback_down()=0;
+	virtual void					callback_over()					{};
+};
+
+
+class PanelButton : public PanelSimple {
+	public:
+		PanelButton();
+		
+		
+		//void				buildText();
+
+		virtual bool		isMouseOver( int, int);
+		virtual void		displayGL();
+		virtual void		updatePos();
+		void				debug(bool);
+		void				setPush( char *);
+		void				setDown( char *);
+		void				setOver( char *);
+		
+		void				setCallBackOver( CALLBACK_OVER p)		{ pCallBackOver = p; }
+		void				setCallBackDown( CALLBACK_DOWN p)		{ pCallBackDown = p; }
+
+	protected:
+		_Texture2D*		m_pTexPush;
+		_Texture2D*		m_pTexDown;
+		_Texture2D*		m_pTexOver;
+
+		_Texture2D*		m_pTexCurrent;
+		
+		CALLBACK_DOWN	pCallBackDown;
+		CALLBACK_DOWN	pCallBackOver;;
+//	private:
+		/*	
+	protected:
+		_Texture2D*		m_pTexBackground;
+		
+		bool							bTextOK;
+		void * 							cTextObj;
+		TextUtil*						textUtil;
+		std::vector<std::string>		str;
+
+		//bool							bDebug;				in Panel.h
+		PanelSimple*					pPsDebug;
+		PanelText*						pPtDebug;
+		std::string						sDebug;
+		*/
+};
+
 
 
 

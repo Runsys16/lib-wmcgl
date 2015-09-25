@@ -76,6 +76,11 @@ bool Panel::isMouseOver(int xm, int ym)	{
 	#endif
 	if ( !visible )			return false;
 
+	int nb = childs.size();
+	for( int i=0; i<nb; i++ )	{
+		if ( childs[i]->isMouseOver(xm, ym) )		return true;
+	}
+
 	if ( x_raw <= xm && xm <= (x_raw+dx_raw) && y_raw <= ym && ym <= (y_raw+dy_raw) )		return true;
 	else																					return false;
 }

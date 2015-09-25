@@ -30,6 +30,7 @@
 #include "Font.h"
 #include "TextUtil.h"
 
+#define DEBUG_CONST
 //#define DEBUG_WM
 
 

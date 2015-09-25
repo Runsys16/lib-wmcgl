@@ -19,7 +19,8 @@ class PanelSimple : public Panel {
 		void				debug(bool);
 		void				setBackground( char *);
 
-	private:
+//	private:
+	protected:
 		_Texture2D*		m_pTexBackground;
 		
 		bool							bTextOK;
@@ -27,7 +28,6 @@ class PanelSimple : public Panel {
 		TextUtil*						textUtil;
 		std::vector<std::string>		str;
 
-	protected:
 		//bool							bDebug;				in Panel.h
 		PanelSimple*					pPsDebug;
 		PanelText*						pPtDebug;

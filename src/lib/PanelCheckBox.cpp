@@ -49,6 +49,17 @@ PanelCheckBox::PanelCheckBox()	: PanelSimple(){
 	bDebug = false;
 	bVal = false;
 	pVal = NULL;
+	bUseInverse = false;
+	percent = 1.0;
+}
+/*----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------*/
+void PanelCheckBox::setPercent( float f ) {
+	percent = f;
+	float fDX = percent * (float)getPosDX();
+	float fDY = percent * (float)getPosDY();
+	dx = (int) fDX;
+	dy = (int) fDY;
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
@@ -128,6 +139,10 @@ void PanelCheckBox::displayGL() {
 	if ( bVal )		m_pTexCurrent = m_pTexTrue;
 	else			m_pTexCurrent = m_pTexFalse;
 	
+	if ( bUseInverse )	{
+		if (m_pTexCurrent == m_pTexTrue)	m_pTexCurrent = m_pTexFalse;
+		else								m_pTexCurrent = m_pTexTrue;
+	}
 
 	//m_pTexBackground->Bind(wm.getSlot());
 
@@ -163,8 +178,10 @@ void PanelCheckBox::displayGL() {
 	if ( m_pTexCurrent )		{
 		m_pTexCurrent->Bind( 0 );
 	
-		unsigned	dx = m_pTexCurrent->dx;
-		unsigned	dy = m_pTexCurrent->dy;
+		if ( percent >1.0 )	percent = 1.0;
+		
+		unsigned	dx = (unsigned)(float)m_pTexCurrent->dx * percent;
+		unsigned	dy = (unsigned)(float)m_pTexCurrent->dy * percent;
 	
 		glBegin(GL_QUADS);
 	

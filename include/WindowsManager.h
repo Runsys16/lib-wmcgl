@@ -525,8 +525,10 @@ class PanelCheckBox : public PanelSimple {
 		void				setCallBackFalse( CALLBACK_FALSE p)		{ pCallBackFalse = p; }
 		
 		bool				getVal()								{ return bVal; }
+		void				setPercent( float );
 		inline void			setVal( bool b )						{ bVal = b; }
 		inline void			setListener( bool* p)					{ pVal = p; }
+		inline void			setUseInverse( bool p)					{ bUseInverse = p; }
 
 	protected:
 		_Texture2D*		m_pTexTrue;
@@ -537,6 +539,9 @@ class PanelCheckBox : public PanelSimple {
 		
 		bool			bVal;
 		bool*			pVal;
+		bool			bUseInverse;
+		
+		float			percent;
 //	private:
 		/*	
 	protected:

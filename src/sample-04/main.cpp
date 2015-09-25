@@ -219,7 +219,7 @@ class CallBack : public PanelConsoleCallBack	{
 	};
 };
 
-
+PanelCheckBox* pCheck;
 
 void call_back_over()	{
 	//cout << "CallBack Over()" << endl;
@@ -227,6 +227,16 @@ void call_back_over()	{
 
 void call_back_down()	{
 	cout << "CallBack Down()" << endl;
+	pCheck->setVal( !pCheck->getVal() );
+}
+
+
+void call_back_check_true()	{
+	cout << "CallBack check true()" << endl;
+}
+
+void call_back_check_false()	{
+	cout << "CallBack check false()" << endl;
 }
 
 
@@ -256,7 +266,7 @@ static void CreateOneWindow()	{
 	dx = 200+rand()%400;
 	dy = 200+rand()%200;
 	dx = 220;
-	dy = 6 * 42-10;
+	dy = 6 * 42 + 20;
 
 	PW->setPosAndSize( x, y, dx, dy );
 	if ( pw.size()%3 == 0 )	PW->loadSkin( PanelWindow::RED );
@@ -302,13 +312,40 @@ static void CreateOneWindow()	{
 		pButton->add( pText );
 		
 		
-
 		ps->add( pButton );
 	}	
 	
 	//ps->setBackground( (char*) "white.png" );
 	ps->setBackground( NULL );
 
+	PanelCheckBox* pCheckBox;
+	
+	for ( int i=0; i<5; i++ )	{
+		PanelCheckBox* pCheckBox = new PanelCheckBox();
+		pCheckBox->setTrue( (char*)"check-true.png" );
+		pCheckBox->setFalse( (char*)"check-false.png" );
+		//pCheckBox->setBackground( (char*)"check-bg.png" );
+		pCheckBox->setCallBackFalse( call_back_check_false );
+		pCheckBox->setCallBackTrue( call_back_check_true );
+		pCheckBox->setBackground( NULL );
+		pCheckBox->setPosAndSize( 10, 6 * 42 +20*i, 24, 24 );
+
+		sprintf( Buff, "Check bouton %d", (int)i );
+		cout << "----- premier -------------------" << endl;
+		pText = new PanelText( Buff,	PanelText::NORMAL_FONT, 36, 6*42+20*i, 0xff000000);
+		pText->setAlign( PanelText::LEFT );
+		ps->add( pText );
+	
+		cout << "----- deuxieme -------------------" << endl;
+		pText = new PanelText( Buff,	PanelText::NORMAL_FONT, 35, 6*42+20*i, 0xFFffFFff );
+		pText->setAlign( PanelText::LEFT );
+		ps->add( pText );
+
+		pCheck = pCheckBox;
+
+		ps->add( pCheckBox );
+	}
+	
 	wm.add(ps);
 	delete pStr;
 }

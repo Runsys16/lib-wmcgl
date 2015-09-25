@@ -59,6 +59,7 @@ cat ${SRC}PanelText.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}PanelSimple.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}PanelConsole.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}PanelButton.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}PanelCheckBox.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}PanelWindow.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}wm.h | grep -v "WindowsManager::instance" | grep -v include | grep -v "#"    >> ${INCLUDE}
 

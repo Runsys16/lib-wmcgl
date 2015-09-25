@@ -273,7 +273,11 @@ $(OBJDIR)Panel.o :   $(SRCDIR)Panel.cpp  $(SRCDIR)Panel.h
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)PanelButton.o :   $(SRCDIR)PanelButton.cpp  $(SRCDIR)PanelButton.h  $(SRCDIR)Panel.h  $(SRCDIR)PanelText.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)ResourceManager.h  $(SRCDIR)Singleton.h  $(SRCDIR)Shader.h  $(SRCDIR)Mathlib.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h 
+$(OBJDIR)PanelButton.o :   $(SRCDIR)PanelButton.cpp  $(SRCDIR)PanelButton.h  $(SRCDIR)PanelSimple.h  $(SRCDIR)Panel.h  $(SRCDIR)PanelText.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)ResourceManager.h  $(SRCDIR)Singleton.h  $(SRCDIR)Shader.h  $(SRCDIR)Mathlib.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h 
+	@echo ---------   compilation de $@
+	$(CPP) -c $< -o $@  $(CFLAGS)
+
+$(OBJDIR)PanelCheckBox.o :   $(SRCDIR)PanelCheckBox.cpp  $(SRCDIR)PanelCheckBox.h  $(SRCDIR)PanelSimple.h  $(SRCDIR)Panel.h  $(SRCDIR)PanelText.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)ResourceManager.h  $(SRCDIR)Singleton.h  $(SRCDIR)Shader.h  $(SRCDIR)Mathlib.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h 
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 

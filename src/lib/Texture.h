@@ -32,6 +32,9 @@ public:
 
 	_Texture() {m_nHandle=0;}
 	~_Texture() {Destroy();}
+	
+	unsigned	dx;
+	unsigned	dy;
 
 protected:
 	//void Bind() const;

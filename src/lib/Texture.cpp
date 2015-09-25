@@ -37,6 +37,8 @@ bool _Texture::LoadFile(GLenum target, const std::string& name)
 	}
 	*/
 	LoadData(target, ptr, w, h, d);
+	dx = w;
+	dy = h;
 	std::cout << "  _Texture::LoadFile()  w=" << w << " h=" << h << " d=" << d << std::endl;
 
 	delete[] ptr;

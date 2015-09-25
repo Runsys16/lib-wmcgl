@@ -34,6 +34,7 @@ class PanelCheckBox : public PanelSimple {
 		
 		bool				getVal()								{ return bVal; }
 		inline void			setVal( bool b )						{ bVal = b; }
+		inline void			setListener( bool* p)					{ pVal = p; }
 
 	protected:
 		_Texture2D*		m_pTexTrue;
@@ -43,6 +44,7 @@ class PanelCheckBox : public PanelSimple {
 		CALLBACK_FALSE	pCallBackFalse;
 		
 		bool			bVal;
+		bool*			pVal;
 //	private:
 		/*	
 	protected:

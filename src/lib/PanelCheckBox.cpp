@@ -88,8 +88,8 @@ void PanelCheckBox::updatePos() {
 void PanelCheckBox::clickLeft( int xm, int ym)	{
 	bVal = !bVal;
 	if ( pVal )			*pVal = bVal;
-	if( bVal && pCallBackTrue )		(*pCallBackTrue)();
-	if( !bVal && pCallBackFalse )	(*pCallBackFalse)();
+	if( bVal && pCallBackTrue )			(*pCallBackTrue)();
+	else if( !bVal && pCallBackFalse )	(*pCallBackFalse)();
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/

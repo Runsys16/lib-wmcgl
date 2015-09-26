@@ -30,7 +30,7 @@ class Panel {
 		inline Panel*		getParent()										{return parent;};
 		inline void			setPosAndSize(int x0, int y0, int dx0, int dy0)	{x=x0; y=y0; dx=dx0 ;dy=dy0;};
 		inline void			setPos(int x0, int y0)							{x=x0; y=y0;};
-		inline void			setdSize(int dx0, int dy0)						{dx=dx0 ;dy=dy0;};
+		inline void			setSize(int dx0, int dy0)						{dx=dx0 ;dy=dy0;};
 		inline int			getX()											{return x_raw;};
 		inline int			getY()											{return y_raw;};
 		inline int			getDX()											{return dx_raw;};

@@ -91,7 +91,7 @@ void PanelButton::lostFocus()	{
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelButton::clickLeft( int xm, int ym)	{
-	if( pCallBackDown )		(*pCallBackDown)();
+	if( pCallBackDown )		(*pCallBackDown)(this);
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
@@ -105,7 +105,7 @@ Panel* PanelButton::isMouseOver(int xm, int ym)	{
 		#ifdef DEBUG_MOUSEOVER
 		cout << "PanelButton::isMouseOver)  OVER" << endl;
 		#endif
-		if( pCallBackOver )		(*pCallBackOver)();
+		if( pCallBackOver )		(*pCallBackOver)(this);
 		return this;
 	}
 	else	{

@@ -8,14 +8,15 @@
 #include "TextUtil.h"
 
 
-typedef void (* CALLBACK_OVER)();
-typedef void (* CALLBACK_DOWN)();
+class PanelButton;
 
+typedef void (* CALLBACK_OVER)(PanelButton*);
+typedef void (* CALLBACK_DOWN)(PanelButton*);
 
 class PanelButtonCallBack	{
 	public :
-	virtual void					callback_down()=0;
-	virtual void					callback_over()					{};
+	virtual void					callback_down(PanelButton*)=0;
+	virtual void					callback_over(PanelButton*)				{};
 };
 
 

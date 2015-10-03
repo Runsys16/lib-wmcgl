@@ -37,10 +37,14 @@ PanelButton::PanelButton()	: PanelSimple(){
 	#endif
 	//PanelSimple::PanelSimple();
 
+	//if (texBackground == null)			return;
 	
-	m_pTexPush = m_pTexBackground;
-	m_pTexDown = m_pTexBackground;
-	m_pTexOver = m_pTexBackground;
+	//m_pTexPush = m_pTexBackground;
+	//m_pTexDown = m_pTexBackground;
+	//m_pTexOver = m_pTexBackground;
+	m_pTexPush = NULL;
+	m_pTexDown = NULL;
+	m_pTexOver = NULL;
 	
 	m_pTexCurrent = NULL;
 
@@ -139,7 +143,29 @@ void PanelButton::displayGL() {
 #endif
 	
 
-	//m_pTexBackground->Bind(wm.getSlot());
+	if ( m_pTexBackground )	{
+		m_pTexBackground->Bind(0);
+		glBegin(GL_QUADS);
+	
+		glColor4f( 1.0, 1.0, 1.0, 1.0 );
+
+		glTexCoord2f(1, 1);
+		glVertex2f(X + DX, Y + DY);
+
+		glTexCoord2f(1, 0);
+		glVertex2f(X + DX, Y);
+
+		glTexCoord2f(0, 0);
+		glVertex2f(X, Y);
+
+		glTexCoord2f(0, 1);
+		glVertex2f(X, Y + DY);
+
+		glEnd();
+
+		m_pTexBackground->Unbind(0);
+	}
+
 	if ( m_pTexCurrent == NULL )	m_pTexCurrent = m_pTexDown;
 
 	if ( m_pTexCurrent )		{

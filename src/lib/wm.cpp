@@ -483,16 +483,16 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	else if ( button == 0 && state == 1  && bClickLeft )	{
 		xm_old = -1;
 		ym_old = -1;
-		if ( panelFocus )			panelFocus->clickLeft( x, y );
+		if ( panelFocus )			panelFocus->releaseLeft( x, y );
 	}
-	
-	if ( button == 0 && state == 0 )	{
+	else if ( button == 0 && state == 0 )	{
 		Panel * pFocusParent = getParentRoot( p );
 		if ( pFocusParent )	{
 			sup( pFocusParent );
 			add( pFocusParent );
 		}
 		bClickLeft = true;
+		if ( panelFocus )			panelFocus->clickLeft( x, y );
 	}
 	
 	int ID = -1;

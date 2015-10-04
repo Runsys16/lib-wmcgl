@@ -221,11 +221,11 @@ class CallBack : public PanelConsoleCallBack	{
 
 PanelCheckBox* pCheck;
 
-void call_back_over()	{
+void call_back_over(PanelButton* pPanel)	{
 	//cout << "CallBack Over()" << endl;
 }
 
-void call_back_down()	{
+void call_back_up(PanelButton* pPanel)	{
 	cout << "CallBack Down()" << endl;
 	pCheck->setVal( !pCheck->getVal() );
 }
@@ -248,10 +248,10 @@ static void CreateOneWindow()	{
 	PanelSimple  * ps;
 	PanelText* pt;
 	
-	char *texture[] = { (char*)"jaune-over.png", (char*)"orange-over.png", (char*)"rouge-over.png",\
+	char *texDown[] = { (char*)"jaune-over.png", (char*)"orange-over.png", (char*)"rouge-over.png",\
 						(char*)"vert-over.png", (char*)"bleu-over.png", (char*)"noir-over.png" };
 	
-	char *texDown[] = { (char*)"jaune-down.png", (char*)"orange-down.png", (char*)"rouge-down.png",\
+	char *texture[] = { (char*)"jaune-down.png", (char*)"orange-down.png", (char*)"rouge-down.png",\
 						(char*)"vert-down.png", (char*)"bleu-down.png", (char*)"noir-down.png" };
 	
 	char *texOver[] = { (char*)"jaune-over.png", (char*)"orange-over.png", (char*)"rouge-over.png",\
@@ -293,11 +293,11 @@ static void CreateOneWindow()	{
 	for ( int i=0; i<6		; i++ )	{
 		pButton = new PanelButton();
 		pButton ->setPosAndSize( 0, 0+42*i, 220, 32 );
-		pButton ->setPush( (char*) texture[i%6] );
+		pButton ->setUp( (char*) texture[i%6] );
 		pButton ->setDown( (char*) texDown[i%6] );
 		pButton ->setOver( (char*) texOver[i%6] );
 		pButton->setCallBackOver( call_back_over );
-		pButton->setCallBackDown( call_back_down );
+		pButton->setCallBackUp( call_back_up );
 
 		sprintf( Buff, "New MENU %d", (int)i );
 		

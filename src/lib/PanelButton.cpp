@@ -35,25 +35,41 @@ PanelButton::PanelButton()	: PanelSimple(){
 	#ifdef DEBUG_CONST
 	cout << "Constructeur PanelButton ..." << endl;
 	#endif
-	//PanelSimple::PanelSimple();
 
-	//if (texBackground == null)			return;
-	
-	//m_pTexPush = m_pTexBackground;
-	//m_pTexDown = m_pTexBackground;
-	//m_pTexOver = m_pTexBackground;
-	m_pTexPush = NULL;
+	init();
+}
+/*----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------*/
+PanelButton::PanelButton( PanelButtonCallBack* pCB)	: PanelSimple(){	
+	#ifdef DEBUG_CONST
+	cout << "Constructeur PanelButton ..." << endl;
+	#endif
+
+	//PanelButton::PanelButton();
+	init();
+	pPanelButtonCallBack = pCB;
+}
+/*----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------*/
+void PanelButton::init(){	
+	#ifdef DEBUG_CONST
+	cout << "Constructeur PanelButton ..." << endl;
+	#endif
+
+	m_pTexUp = NULL;
 	m_pTexDown = NULL;
 	m_pTexOver = NULL;
 	
 	m_pTexCurrent = NULL;
 
+	pCallBackUp   = NULL;
 	pCallBackDown = NULL;
 	pCallBackOver = NULL;
 	
 	pPsDebug = NULL;
 	pPtDebug = NULL;
 	bDebug = false;
+	pPanelButtonCallBack = NULL;
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
@@ -90,12 +106,19 @@ void PanelButton::lostFocus()	{
 	#ifdef DEBUG_MOUSEOVER
 	cout << "PanelButton::LostFocus( "<< endl;
 	#endif
-	m_pTexCurrent = m_pTexDown;
+	m_pTexCurrent = m_pTexUp;
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelButton::clickLeft( int xm, int ym)	{
-	if( pCallBackDown )		(*pCallBackDown)(this);
+	if( pCallBackDown )				(*pCallBackDown)(this);
+	if ( pPanelButtonCallBack )		pPanelButtonCallBack->cb_button_mouse_down(this);
+}
+/*----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------*/
+void PanelButton::releaseLeft( int xm, int ym)	{
+	if( pCallBackUp )				(*pCallBackUp)(this);
+	if ( pPanelButtonCallBack )		pPanelButtonCallBack->cb_button_mouse_up(this);
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
@@ -109,7 +132,9 @@ Panel* PanelButton::isMouseOver(int xm, int ym)	{
 		#ifdef DEBUG_MOUSEOVER
 		cout << "PanelButton::isMouseOver)  OVER" << endl;
 		#endif
-		if( pCallBackOver )		(*pCallBackOver)(this);
+		if( pCallBackOver )				(*pCallBackOver)(this);
+		if ( pPanelButtonCallBack )		pPanelButtonCallBack->cb_button_mouse_over(this);
+
 		return this;
 	}
 	else	{
@@ -166,7 +191,7 @@ void PanelButton::displayGL() {
 		m_pTexBackground->Unbind(0);
 	}
 
-	if ( m_pTexCurrent == NULL )	m_pTexCurrent = m_pTexDown;
+	if ( m_pTexCurrent == NULL )	m_pTexCurrent = m_pTexUp;
 
 	if ( m_pTexCurrent )		{
 		m_pTexCurrent->Bind( 0 );
@@ -262,16 +287,16 @@ void PanelButton::debug( bool b )	{
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
-void PanelButton::setPush( char * str_background )	{
+void PanelButton::setUp( char * str_background )	{
 	if ( str_background == NULL )		{
-		m_pTexPush = NULL;
+		m_pTexUp = NULL;
 		return;
 	}
 	_ResourceManager& res = _ResourceManager::getInstance();
 
 	_Texture2D* pResource = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, str_background) );
 
-	if ( pResource )	m_pTexPush = pResource;
+	if ( pResource )	m_pTexUp = pResource;
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/

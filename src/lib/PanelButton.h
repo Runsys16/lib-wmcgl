@@ -10,61 +10,51 @@
 
 class PanelButton;
 
-typedef void (* CALLBACK_OVER)(PanelButton*);
-typedef void (* CALLBACK_DOWN)(PanelButton*);
+typedef void (* CALLBACK_MOUSE)(PanelButton*);
+//typedef void (* CALLBACK_DOWN)(PanelButton*);
 
 class PanelButtonCallBack	{
 	public :
-	virtual void					callback_down(PanelButton*)=0;
-	virtual void					callback_over(PanelButton*)				{};
+	virtual void					cb_button_mouse_over(PanelButton*)				{;};
+	virtual void					cb_button_mouse_down(PanelButton*)				{;};
+	virtual void					cb_button_mouse_up(PanelButton*)				{;};
 };
 
 
 class PanelButton : public PanelSimple {
 	public:
 		PanelButton();
+		PanelButton( PanelButtonCallBack* );
+		void init();
 		
 		
-		//void				buildText();
-
 		virtual void		haveFocus();
 		virtual void		lostFocus();
 		virtual void		clickLeft( int, int);
+		virtual void		releaseLeft( int, int);
 		virtual Panel*		isMouseOver( int, int);
 		virtual void		displayGL();
 		virtual void		updatePos();
 		void				debug(bool);
-		void				setPush( char *);
+		void				setUp( char *);
 		void				setDown( char *);
 		void				setOver( char *);
 		
-		void				setCallBackOver( CALLBACK_OVER p)		{ pCallBackOver = p; }
-		void				setCallBackDown( CALLBACK_DOWN p)		{ pCallBackDown = p; }
+		void				setCallBackOver( CALLBACK_MOUSE p)		{ pCallBackOver = p; }
+		void				setCallBackUp( CALLBACK_MOUSE p)		{ pCallBackUp = p; }
+		void				setCallBackDown( CALLBACK_MOUSE p)		{ pCallBackDown = p; }
 
 	protected:
-		_Texture2D*		m_pTexPush;
-		_Texture2D*		m_pTexDown;
-		_Texture2D*		m_pTexOver;
+		PanelButtonCallBack*	pPanelButtonCallBack;
+		_Texture2D*				m_pTexUp;
+		_Texture2D*				m_pTexDown;
+		_Texture2D*				m_pTexOver;
 
-		_Texture2D*		m_pTexCurrent;
+		_Texture2D*				m_pTexCurrent;
 		
-		CALLBACK_OVER	pCallBackDown;
-		CALLBACK_DOWN	pCallBackOver;;
-//	private:
-		/*	
-	protected:
-		_Texture2D*		m_pTexBackground;
-		
-		bool							bTextOK;
-		void * 							cTextObj;
-		TextUtil*						textUtil;
-		std::vector<std::string>		str;
-
-		//bool							bDebug;				in Panel.h
-		PanelSimple*					pPsDebug;
-		PanelText*						pPtDebug;
-		std::string						sDebug;
-		*/
+		CALLBACK_MOUSE			pCallBackDown;
+		CALLBACK_MOUSE			pCallBackUp;
+		CALLBACK_MOUSE			pCallBackOver;;
 };
 
 

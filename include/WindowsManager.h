@@ -191,6 +191,13 @@ class Panel {
 		
 		virtual void		clickLeft( int, int)							{;}
 		virtual void		releaseLeft( int, int)							{;}
+
+		virtual void		clickUp( int, int)								{;}
+		virtual void		clickDown( int, int)							{;}
+
+		virtual void		clickRight( int, int)							{;}
+		virtual void		releaseRight( int, int)							{;}
+
 		virtual Panel*		isMouseOver( int, int);
 		virtual void		haveFocus()										{;}
 		virtual void		lostFocus()										{;}
@@ -350,6 +357,32 @@ class PanelSimple : public Panel {
 		PanelSimple*					pPsDebug;
 		PanelText*						pPtDebug;
 		std::string						sDebug;
+};
+
+
+
+
+
+
+class PanelScrollY : public PanelSimple {
+	public:
+		PanelScrollY();
+		
+		inline void			setDelta( int d )				{ y_delta = d; }
+		//void				buildText();
+		virtual void		clickUp( int, int);
+		virtual void		clickDown( int, int);
+		virtual Panel*		isMouseOver( int, int);
+		
+
+		virtual void		displayGL();
+		virtual void		updatePos();
+
+//	private:
+	protected:
+		int					y_scroll;
+		int					y_delta;
+		
 };
 
 

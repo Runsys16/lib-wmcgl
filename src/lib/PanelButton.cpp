@@ -235,15 +235,15 @@ void PanelButton::displayGL() {
 	cout << "    PS:" << "-----Scissor-------" << endl;
 	cout << "    PS:" << scx <<", "<< scy <<", "<< scdx <<", "<< scdy << endl;
 #endif
-	glScissor( scx, scy, scdx, scdy );
-	glEnable( GL_SCISSOR_TEST );
+	//glScissor( scx, scy, scdx, scdy );
+	//glEnable( GL_SCISSOR_TEST );
 	
 
 	// display	with scissor
 	Panel::displayGL();
 
 
-	glDisable( GL_SCISSOR_TEST );
+	//glDisable( GL_SCISSOR_TEST );
 	
 	if ( bDebug && pPsDebug )		{
 		pPsDebug->displayGL();

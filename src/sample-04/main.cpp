@@ -245,7 +245,8 @@ static void CreateOneWindow()	{
 	//WindowsManager& wm = WindowsManager::getInstance();
 	string * pStr;
 	PanelWindow  * PW;
-	PanelSimple  * ps;
+	//PanelSimple  * ps;
+	PanelScrollY  * ps;
 	PanelText* pt;
 	
 	char *texDown[] = { (char*)"jaune-over.png", (char*)"orange-over.png", (char*)"rouge-over.png",\
@@ -272,7 +273,7 @@ static void CreateOneWindow()	{
 	if ( pw.size()%3 == 0 )	PW->loadSkin( PanelWindow::RED );
 	if ( pw.size()%3 == 1 )	PW->loadSkin( PanelWindow::BLACK );
 
-	ps = new PanelSimple();
+	ps = new PanelScrollY();
 	ps->setPosAndSize( x, y, dx, dy );
 	PW->add( ps );
 

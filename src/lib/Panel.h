@@ -16,6 +16,13 @@ class Panel {
 		
 		virtual void		clickLeft( int, int)							{;}
 		virtual void		releaseLeft( int, int)							{;}
+
+		virtual void		clickUp( int, int)								{;}
+		virtual void		clickDown( int, int)							{;}
+
+		virtual void		clickRight( int, int)							{;}
+		virtual void		releaseRight( int, int)							{;}
+
 		virtual Panel*		isMouseOver( int, int);
 		virtual void		haveFocus()										{;}
 		virtual void		lostFocus()										{;}

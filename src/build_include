@@ -57,6 +57,7 @@ cat ${SRC}TextUtil.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}Panel.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}PanelText.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}PanelSimple.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}PanelScrollY.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}PanelConsole.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}PanelButton.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}PanelCheckBox.h | grep -v include | grep -v "#"   >> ${INCLUDE}

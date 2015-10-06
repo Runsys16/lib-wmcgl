@@ -217,6 +217,7 @@ Panel * WindowsManager::getParentRoot( Panel* pChild)	{
 	
 }
 
+
 void WindowsManager::changeFocus( Panel* p )	{
 	//cout << "WindowsManager::passiveMotionFunc( " << x << ", " << y << " )" << endl;
 	if ( p != panelFocus )	{

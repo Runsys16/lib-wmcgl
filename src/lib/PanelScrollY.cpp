@@ -39,7 +39,7 @@ PanelScrollY::PanelScrollY() : PanelSimple()	{
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
-void PanelScrollY::clickDown( int x, int y ) {
+void PanelScrollY::clickUp( int x, int y ) {
 	if ( y_scroll != 0 )	{
 		y_scroll += y_delta;
 		setPosY( getPosY() + y_delta );
@@ -48,7 +48,7 @@ void PanelScrollY::clickDown( int x, int y ) {
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
-void PanelScrollY::clickUp( int x, int y ) {
+void PanelScrollY::clickDown( int x, int y ) {
 	y_scroll -= y_delta;
 	setPosY( getPosY() - y_delta );
 	updatePos();

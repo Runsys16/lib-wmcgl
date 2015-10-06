@@ -33,7 +33,6 @@
 #define DEBUG_CONST
 //#define DEBUG_WM
 
-
 class WindowsManager {
 
 public:
@@ -46,6 +45,7 @@ public:
 	void				supByID(int);
 	Panel*				getByID(int);
 	int					getFreeID();
+	Panel*				getParentScroll(Panel*);
 	Panel*				getParentRoot(Panel*);
 	Panel*				findPanelMouseOver(int, int);
 	int					getOrder(Panel*);

@@ -192,8 +192,8 @@ class Panel {
 		virtual void		clickLeft( int, int)							{;}
 		virtual void		releaseLeft( int, int)							{;}
 
-		virtual void		clickUp( int, int)								{;}
-		virtual void		clickDown( int, int)							{;}
+		virtual void		clickUp( int, int);
+		virtual void		clickDown( int, int);
 
 		virtual void		clickRight( int, int)							{;}
 		virtual void		releaseRight( int, int)							{;}
@@ -635,7 +635,6 @@ class PanelWindow : public PanelSimple {
 
 
 
-
 class WindowsManager {
 
 public:
@@ -648,6 +647,7 @@ public:
 	void				supByID(int);
 	Panel*				getByID(int);
 	int					getFreeID();
+	Panel*				getParentScroll(Panel*);
 	Panel*				getParentRoot(Panel*);
 	Panel*				findPanelMouseOver(int, int);
 	int					getOrder(Panel*);

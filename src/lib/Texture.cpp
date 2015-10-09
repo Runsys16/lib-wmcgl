@@ -11,6 +11,9 @@
 #include <string>
 #include "ImageTools.h"
 
+
+//#define DEBUG 1
+
 bool _Texture::s_bGenerateMipmaps = true;
 
 bool _Texture::LoadFile(GLenum target, const std::string& name)
@@ -21,7 +24,9 @@ bool _Texture::LoadFile(GLenum target, const std::string& name)
 	GLubyte* ptr = NULL;
 	ptr = _ImageTools::OpenImage(name, w, h, d);
 	
+#ifdef DEBUG
 	std::cout << "  _Texture::LoadFile()  w=" << w << " h=" << h << " d=" << d << std::endl;
+#endif
 	if(ptr == NULL) {
 		std::cout << "  [Error] WM - Impossible de charger la _Texture \""<< name <<"\""<< std::endl;
 		std::cout << "  [Error] WM - Pointeur : "<< ptr << std::endl;
@@ -39,7 +44,9 @@ bool _Texture::LoadFile(GLenum target, const std::string& name)
 	LoadData(target, ptr, w, h, d);
 	dx = w;
 	dy = h;
+#ifdef DEBUG
 	std::cout << "  _Texture::LoadFile()  w=" << w << " h=" << h << " d=" << d << std::endl;
+#endif
 
 	delete[] ptr;
 	return true;
@@ -48,7 +55,9 @@ bool _Texture::LoadFile(GLenum target, const std::string& name)
 void _Texture::LoadData(GLenum target, GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d)
 {
 	glTexImage2D(target, 0, d==3?GL_RGB:GL_RGBA, w, h, 0, d==3?GL_RGB:GL_RGBA, GL_UNSIGNED_BYTE, ptr);
+#ifdef DEBUG
 	std::cout << "  _Texture::LoadData()  glTextImage2D" << std::endl;
+#endif
 }
 
 
@@ -70,7 +79,9 @@ bool _Texture::Load(const std::string& name)
 		return false;
 	}
 
+#ifdef DEBUG
 	std::cout << "  GenTexture ..." << std::endl;
+#endif
 	return true;
 }
 

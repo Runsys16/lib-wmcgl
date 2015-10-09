@@ -6,6 +6,10 @@
 #include "wm.h"
 
 
+
+//#define DEBUG	1
+
+
 using namespace std;
 
 //--------------------------------------------------------------
@@ -27,7 +31,9 @@ void PanelWindow::loadSkin( string name )	{
 
 	_ResourceManager& res = _ResourceManager::getInstance();
 	
+#ifdef DEBUG
 	cout <<"PanelWindow::loadSkin(\""<< name <<"\" ) m_text_tl : "<< m_tex_tl << endl;
+#endif
 	string nameFile = "/usr/share/wmcgl/images/" + name;
 	m_tex_tl = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_ul.png") );
 	m_tex_tr = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_ur.png") );
@@ -37,7 +43,9 @@ void PanelWindow::loadSkin( string name )	{
 	m_tex_b = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_d.png") );
 	m_tex_l = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_l.png") );
 	m_tex_r = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_r.png") );
+#ifdef DEBUG
 	cout <<"  m_text_tl : "<< m_tex_tl << endl;
+#endif
 	
 	
 	borderSize = 8;

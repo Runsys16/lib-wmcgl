@@ -43,6 +43,8 @@ void Panel::init()	{
 	dx_raw			= 0;
 	dy_raw			= 0;
 	
+	parent = NULL;
+	
 	ID = -1;
 }
 

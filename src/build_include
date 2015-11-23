@@ -56,6 +56,7 @@ EOF
 cat ${SRC}TextUtil.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}Panel.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}PanelText.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}PanelTextOmbre.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}PanelSimple.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}PanelScrollText.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}PanelScrollY.h | grep -v include | grep -v "#"   >> ${INCLUDE}

@@ -349,8 +349,8 @@ class PanelTextOmbre : public PanelText	{
 		void 				buildString();
 		
 		inline std::string	getText()										{return text;};
-		int					getTextLenght();
-		int					getTextLenght(int);
+//		int					getTextLenght();
+//		int					getTextLenght(int);
 
 		void 				changeText( char* );
 		void 				changeText( char*, FONT );
@@ -369,7 +369,7 @@ class PanelTextOmbre : public PanelText	{
 		inline void 		setAlign( ALIGN a )								{align = a;};
 		
 		//----------------- functions
-		std::string			strFont();		
+//		std::string			strFont();		
 		void				displayGLInternal();
 
 	/*

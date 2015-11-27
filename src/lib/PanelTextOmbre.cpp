@@ -145,7 +145,7 @@ PanelTextOmbre::PanelTextOmbre( char * cstr, FONT type, int x, int y, unsigned i
 	pTextOmbre.buildString();
 }
 
-
+/*
 //--------------------------------------------------------------------------------------------------------------------
 string PanelTextOmbre::strFont() {
 	string retString = "";
@@ -166,7 +166,7 @@ string PanelTextOmbre::strFont() {
 	}	
 	return retString;	
 }
-
+*/
 
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -174,7 +174,7 @@ string PanelTextOmbre::strFont() {
 //--------------------------------------------------------------------------------------------------------------------
 void PanelTextOmbre::changeText( char* cstr )	{
 	PanelText::changeText( cstr );
-	pTextOmbre.changeText( (char*)cstr );
+	pTextOmbre.changeText( cstr );
 }
 
 
@@ -281,25 +281,8 @@ void PanelTextOmbre::eraseText()	{
 	#ifdef DEBUG
 	cout << "PanelTextOmbre::eraseText()"<< endl;
 	#endif
-	if ( pTextGL == NULL )	{
-		#ifdef DEBUG
-		cout << "PanelTextOmbre::eraseText() text = NULL"<< endl;
-		#endif
-		return;
-	}
-	
-	textUtil->DeleteTextObj( pTextGL );
-	#ifdef DEBUG
-	cout << "  delete pTextGL"<< endl;
-	#endif
-	pTextGL = NULL; 
-
-	bChange = false;
-		
-	#ifdef DEBUG
-	cout << "PanelTextOmbre::eraseText() text = \""<< text <<"\", type = "<< strFont() << endl;
-	#endif
-	
+	PanelText::eraseText();
+	pTextOmbre.eraseText();
 }
 
 
@@ -309,53 +292,13 @@ void PanelTextOmbre::buildString()	{
 	#ifdef DEBUG
 	cout << "PanelTextOmbre::buildString() font = "<< strFont() <<"  texte = \""<< text <<"\""<< endl;
 	#endif
-	if ( text.compare("") == 0 )	{ 
-		if (pTextGL != NULL )	{
-			textUtil->DeleteTextObj( pTextGL );
-			#ifdef DEBUG
-			cout << "  delete pTextGL"<< endl;
-			#endif
-		}
-		#ifdef DEBUG
-		cout << "  pTextGL = NULL"<< endl;
-		#endif
-		pTextGL = NULL; 
-		return; 
-	}
-	
-	textUtil = WindowsManager::getInstance().getTextUtil();
-
-	color32 c		= COLOR32_WHITE;
-	color32 c_bg	= COLOR32_RED;
-
-	//if (pTextGL != NULL )	textUtil->DeleteTextObj( pTextGL );
-	textUtil->setTabSize( tabSize );
-	pTextGL = textUtil->NewTextObj();
-
-
-	switch (typeFont )	{
-	case NORMAL_FONT :
-		textUtil->GenFont( DefaultNormalFont, color );
-		textUtil->BuildText( pTextGL, &(text), &c, &c_bg, 1,  DefaultNormalFont, 0xffffff00, 0xff0000ff);
-		break;
-	case SMALL_FONT :
-		textUtil->GenFont( DefaultSmallFont, color );
-		textUtil->BuildText( pTextGL, &(text), &c, &c_bg, 1,  DefaultSmallFont, 0xffffff00, 0xff0000ff);
-		break;
-	case LARGE_FONT :
-		textUtil->GenFont( DefaultLargeFont, color );
-		//textUtil->BuildText( pTextGL, &(text), &c, &c_bg, 1,  DefaultLargeFont, 0xffffff00, 0xff0000ff);
-		textUtil->BuildText( pTextGL, &(text), NULL, NULL, 1,  DefaultLargeFont, 0xffffff00, 0xff0000ff);
-		break;
-	}
-	bChange = false;
-	
+	PanelText::buildString();
 	pTextOmbre.buildString();
-
 }
 
 
 
+/*
 int PanelTextOmbre::getTextLenght()	{
 	CTexFont * defaultFont;
 	switch (typeFont )	{
@@ -377,13 +320,13 @@ int PanelTextOmbre::getTextLenght( int nbChar )	{
 	pTextOmbre.getTextLenght( nbChar );
 	return( textUtil->lenght( pTextGL, &text, defaultFont, nbChar ) );
 }
-
+*/
 void PanelTextOmbre::setTabSize( int t ) {
 	#ifdef DEBUG
 	cout << "PanelTextOmbre::setTabSize() : " << t << endl;
 	#endif
-	textUtil->setTabSize( t );
-	tabSize = t;
+	PanelText::setTabSize( t );
+	pTextOmbre.setTabSize( t );
 }
 
 

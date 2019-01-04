@@ -19,7 +19,16 @@
 #	define DEBUG_CONST
 #endif
 
+#include <sys/stat.h>
 
+bool cfileexists(const char* filename){
+    struct stat buffer;
+    int exist = stat(filename,&buffer);
+    if(exist == 0)
+        return true;
+    else // -1
+        return false;
+}
 
 
 
@@ -37,23 +46,41 @@ Font::Font()	{
 
 	
 	pFont = new freetype::font_data;
-	pFont->init("/usr/share/fonts/truetype/msttcorefonts/Arial.ttf", 10);
-	(*pFonts)[(int)ARIAL] = pFont;
+	#define FILENAME "/usr/share/fonts/truetype/msttcorefonts/Arial.ttf"
+	if ( cfileexists(FILENAME) ) 
+		pFont->init("/usr/share/fonts/truetype/msttcorefonts/Arial.ttf", 10);
+    else
+		pFont->init("/usr/share/fonts/truetype/msttcorefonts/Arial.ttf", 10);
+    (*pFonts)[(int)ARIAL] = pFont;
 	
 	pFont = new freetype::font_data;
-	pFont->init("/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-B.ttf", 10);
+	#define FILENAME "/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-B.ttf"
+	if ( cfileexists(FILENAME) ) 
+    	pFont->init("/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-B.ttf", 10);
+    else
+    	pFont->init("/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf", 10);
 	(*pFonts)[(int)UBUNTU_B] = pFont;
 	
 	pFont = new freetype::font_data;
-	pFont->init("/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-RI.ttf", 10);
+	#define FILENAME "/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-RI.ttf"
+	if ( cfileexists(FILENAME) ) 
+    	pFont->init("/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-RI.ttf", 10);
+    else
+    	pFont->init("/usr/share/fonts/truetype/ubuntu/Ubuntu-RI.ttf", 10);
 	(*pFonts)[(int)UBUNTU_RI] = pFont;
 	
 	pFont = new freetype::font_data;
-	pFont->init("/usr/share/fonts/truetype/ubuntu-font-family/UbuntuMono-R.ttf", 12);
+	#define FILENAME "/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-R.ttf"
+	if ( cfileexists(FILENAME) ) 
+    	pFont->init("/usr/share/fonts/truetype/ubuntu-font-family/UbuntuMono-R.ttf", 12);
+    else
+    	pFont->init("/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf", 10);
 	(*pFonts)[(int)UBUNTU_R] = pFont;
 	//fonts[(int)3] = pFont;
 	
 	pFont = new freetype::font_data;
+	//#define FILENAME "/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-RI.ttf"
+	//if ( cfileexists(FILENAME) ) 
 	pFont->init("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 10);
 	(*pFonts)[(int)DEJA_VU_SANS_MONO] = pFont;
 	

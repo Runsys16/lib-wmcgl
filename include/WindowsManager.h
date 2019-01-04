@@ -233,6 +233,9 @@ class Panel {
 		inline bool			getVisible()									{return visible;};
 		inline void			setVisible(bool b)								{visible=b;};
 		
+		inline bool			getCanMove()									{return canMove;};
+		inline void			setCanMove(bool b)								{canMove=b;};
+		
 		
 		inline 	std::vector<Panel*> getChilds()								{return childs;};
 		
@@ -324,6 +327,7 @@ class PanelText : public Panel	{
 		
 		void*				pTextGL;
 		int					tabSize;
+		bool                bStatic;
 	private:
 	
 };
@@ -394,6 +398,8 @@ class PanelTextOmbre : public PanelText	{
 
 
 
+
+
 class PanelSimple : public Panel {
 	public:
 		PanelSimple();
@@ -405,10 +411,12 @@ class PanelSimple : public Panel {
 		
 		void				debug(bool);
 		void				setBackground( char *);
+		void				setBackground( GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d );
+		void				deleteBackground();
 
 //	private:
 	protected:
-		_Texture2D*		m_pTexBackground;
+		_Texture2D*		    m_pTexBackground;
 		
 		bool							bTextOK;
 		void * 							cTextObj;

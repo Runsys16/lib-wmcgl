@@ -29,7 +29,7 @@ bool _Texture::LoadFile(GLenum target, const std::string& name)
 #endif
 	if(ptr == NULL) {
 		std::cout << "  [Error] WM - Impossible de charger la _Texture \""<< name <<"\""<< std::endl;
-		std::cout << "  [Error] WM - Pointeur : "<< ptr << std::endl;
+		std::cout << "  [Error] WM - Pointeur : NULL"<< ptr << std::endl;
 		return false;
 	} 
 	//std::cout << "Profondeur "<< d << std::endl;

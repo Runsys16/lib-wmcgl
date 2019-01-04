@@ -167,7 +167,9 @@ GLuint TextUtil::GenFont( CTexFont *_Font, color32 color)
 	
     GLuint TexID = 0;
     glGenTextures(1, &(_Font->m_TexID) );
+    #ifdef DEBUG
 	cout << "TextUtil::GenFont() Generate Texture ID : " << _Font->m_TexID << endl;;
+	#endif
 	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
 
     glBindTexture(GL_TEXTURE_2D, _Font->m_TexID);
@@ -187,12 +189,14 @@ GLuint TextUtil::GenFont( CTexFont *_Font, color32 color)
     v =  (float)((unsigned)(color&0x0000ff00) >>8  )/255.0;
     b =  (float)((unsigned)(color&0x000000ff) >>0  )/255.0;
 	    
+    #ifdef DEBUG
 	cout << "TextUtil::GenFont() Generate Texture ID : ";
 	cout << "color=" << color << endl;;
 	    
 	cout << "TextUtil::GenFont() Generate Texture ID : ";
 	cout << "a=" << a <<" r=" << r <<" v="<< v <<" b="<< b << endl;;
-    
+    #endif
+        
     glPixelTransferf(GL_ALPHA_SCALE, 1);
     glPixelTransferf(GL_ALPHA_BIAS, 0);
     glPixelTransferf(GL_RED_BIAS, 1);

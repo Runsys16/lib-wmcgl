@@ -290,6 +290,7 @@ void WindowsManager::movePanel( int xm, int ym, Panel* p )	{
 	#endif
 
 	if ( p != NULL )	{
+	    if ( !p->getCanMove() )     return;
 		#ifdef DEBUG
 		cout << "WindowsManager::Mouse Over Panel.ID = " << p->getID() << endl;
 		#endif

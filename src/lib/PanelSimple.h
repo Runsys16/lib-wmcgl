@@ -2,6 +2,9 @@
 #define PANEL_SIMPLE_H
 
 
+#include <GL/glew.h>
+
+
 #include "Panel.h"
 #include "PanelText.h"
 #include "Texture2D.h"
@@ -18,10 +21,12 @@ class PanelSimple : public Panel {
 		
 		void				debug(bool);
 		void				setBackground( char *);
+		void				setBackground( GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d );
+		void				deleteBackground();
 
 //	private:
 	protected:
-		_Texture2D*		m_pTexBackground;
+		_Texture2D*		    m_pTexBackground;
 		
 		bool							bTextOK;
 		void * 							cTextObj;

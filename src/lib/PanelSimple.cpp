@@ -253,4 +253,22 @@ void PanelSimple::setBackground( char * str_background )	{
 
 
 
+void PanelSimple::setBackground( GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d  )	{
+    m_pTexBackground = NULL;
+
+	m_pTexBackground = new _Texture2D();
+	m_pTexBackground->Load( ptr, w, h, d );
+
+}
+
+void PanelSimple::deleteBackground()	{
+	_ResourceManager& res = _ResourceManager::getInstance();
+
+	res.Delete((void *)m_pTexBackground);
+
+    m_pTexBackground = NULL;
+}
+
+
+
 

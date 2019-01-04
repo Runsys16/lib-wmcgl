@@ -58,6 +58,9 @@ class Panel {
 		inline bool			getVisible()									{return visible;};
 		inline void			setVisible(bool b)								{visible=b;};
 		
+		inline bool			getCanMove()									{return canMove;};
+		inline void			setCanMove(bool b)								{canMove=b;};
+		
 		
 		inline 	std::vector<Panel*> getChilds()								{return childs;};
 		

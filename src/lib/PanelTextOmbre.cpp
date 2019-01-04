@@ -347,8 +347,10 @@ void PanelTextOmbre::setColor( unsigned long c ) {
 void PanelTextOmbre::updatePos() {
 	if ( pTextOmbre.getParent() != getParent() )
 	{
-		cout << "PanelTextOmbre::updatePos() ";
+        #ifdef DEBUG
+        cout << "PanelTextOmbre::updatePos() ";
 		cout << "setParent "<< endl;
+		#endif
 		pTextOmbre.setParent( getParent() );
 	}	
 	pTextOmbre.setPosX( x+1 );

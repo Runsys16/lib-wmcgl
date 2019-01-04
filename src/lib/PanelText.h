@@ -60,6 +60,7 @@ class PanelText : public Panel	{
 		
 		void*				pTextGL;
 		int					tabSize;
+		bool                bStatic;
 	private:
 	
 };

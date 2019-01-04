@@ -174,12 +174,13 @@ static void CreateAllWindows()	{
 
 	PanelSimple  * ps;
 	PanelText* pt;
+    string * pStr;
 	
 	
 	ps = new PanelSimple();
 	ps->setPosAndSize( 50+0, 50+50, 200, wm.getHeight()-100);
 	wm.add( ps );
-	int y = 100;
+	int y = 10;
 	int dy = 15;
 	ps->add( new PanelText( "Fichier",		PanelText::LARGE_FONT, 5, y + 0*dy ) );
 	ps->add( new PanelText( "Edition",		PanelText::LARGE_FONT, 5, y + 1*dy ) );
@@ -199,11 +200,16 @@ static void CreateAllWindows()	{
 	
 	ps = new PanelSimple();
 	ps->setPosAndSize( 50+0, 50+0, wm.getWidth(), 50+2);
+
+	pStr = new string("Press ESC to quit");
+	PanelText* pT = new PanelText( *pStr,	PanelText::NORMAL_FONT, 0, 20 );
+	pT->setAlign( PanelText::CENTER );
+	ps->add( pT );
 	wm.add( ps );
 	
 	
 	ps = new PanelSimple();
-	ps->setPosAndSize( 50+200, 50+200, 400, 600);
+	ps->setPosAndSize( 50+200-2, 50+50, 400, 600);
 	wm.add( ps );
 	
 	pt = new PanelText( "1 Essai de panelText", PanelText::SMALL_FONT );

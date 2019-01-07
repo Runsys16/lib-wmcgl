@@ -141,6 +141,30 @@ void WindowsManager::sup( Panel * p )	{
 }
 
 
+void WindowsManager::onTop( Panel * p )	{
+	#ifdef DEBUG
+	cout << "WindowsManager::add() " << endl;
+	#endif
+	
+    if (p)    {
+        sup(p);
+        add(p);
+    }
+}
+
+
+void WindowsManager::onBottom( Panel * p )	{
+	#ifdef DEBUG
+	cout << "WindowsManager::sup() " << endl;
+	#endif
+
+    if (p)    {
+        sup(p);
+        childs.insert( childs.begin(), p );
+    }
+}
+
+
 void WindowsManager::supByID( int id )	{
 	#ifdef DEBUG
 	cout << "WindowsManager::supByID( " << id << " )" << endl;

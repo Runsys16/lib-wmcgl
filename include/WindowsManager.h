@@ -68,6 +68,39 @@ extern CTexFont *DefaultLargeFont;
 void wmcglGenerateDefaultFonts();
 void wmcglDeleteDefaultFonts();
 
+
+
+// -------------------------------
+// Chargement d'images
+// retourne les donnees brutes
+// -------------------------------
+
+namespace _ImageTools
+{
+	class _ImageData {
+	public:
+		GLubyte*	data;
+		unsigned int w, h, d;
+
+		ivec3	getColor(unsigned int x, unsigned int y) const;
+	//	ivec3	getColor(float x, float y);
+
+		_ImageData() {w = h = d = 0; data = NULL;}
+		~_ImageData() {Destroy();}
+		void Destroy();
+	};
+
+	void     OpenImage(const std::string& filename, _ImageData& img);
+	GLubyte* OpenImage(const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d);
+
+	GLubyte* OpenImagePPM(const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d);
+	GLubyte* OpenImageDevIL(const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d);
+
+	
+
+}
+
+
 //  ---------------------------------------------------------------------------
 //
 //  @file       TwOpenGL.h
@@ -776,6 +809,8 @@ public:
 	void				setScreenSize(int, int);
 	void				add(Panel *);
 	void				sup(Panel *);
+	void				onTop(Panel *);
+	void				onBottom(Panel *);
 	void				supByID(int);
 	Panel*				getByID(int);
 	int					getFreeID();
@@ -812,6 +847,7 @@ public:
 	inline TextUtil*	getTextUtil()					{return &textUtil;}
 	inline void			setSlot( int s )				{slot=s;}
 	inline int			getSlot()						{return slot;}
+	inline Panel *  	getFocus()						{return panelFocus;}
 
 	void				ChangeViewport(int, int, int, int, int, int);
 

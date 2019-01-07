@@ -7,7 +7,7 @@
 
 // -------------------------------
 // Chargement d'images
-// retourne les données brutes
+// retourne les donnees brutes
 // -------------------------------
 
 namespace _ImageTools

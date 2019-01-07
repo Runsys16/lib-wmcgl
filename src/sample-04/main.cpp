@@ -317,7 +317,7 @@ static void CreateOneWindow()	{
 	}	
 	
 	//ps->setBackground( (char*) "white.png" );
-	ps->setBackground( NULL );
+	//ps->setBackground( NULL );
 
 	PanelCheckBox* pCheckBox;
 	

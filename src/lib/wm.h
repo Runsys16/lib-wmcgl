@@ -42,6 +42,8 @@ public:
 	void				setScreenSize(int, int);
 	void				add(Panel *);
 	void				sup(Panel *);
+	void				onTop(Panel *);
+	void				onBottom(Panel *);
 	void				supByID(int);
 	Panel*				getByID(int);
 	int					getFreeID();
@@ -78,6 +80,7 @@ public:
 	inline TextUtil*	getTextUtil()					{return &textUtil;}
 	inline void			setSlot( int s )				{slot=s;}
 	inline int			getSlot()						{return slot;}
+	inline Panel *  	getFocus()						{return panelFocus;}
 
 	void				ChangeViewport(int, int, int, int, int, int);
 

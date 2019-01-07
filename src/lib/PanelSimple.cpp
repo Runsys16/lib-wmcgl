@@ -247,8 +247,11 @@ void PanelSimple::setBackground( char * str_background )	{
 	_ResourceManager& res = _ResourceManager::getInstance();
 
 	_Texture2D* ret = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, str_background) );
+
 	if ( ret )
-	m_pTexBackground = ret;
+	    m_pTexBackground = ret;
+	else
+		std::cout << "  [Error] WM - PanelSimple::setBackground( \""<< str_background <<"\" )"<< std::endl;
 }
 
 

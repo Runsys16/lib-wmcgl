@@ -588,6 +588,13 @@ void WindowsManager::keyboardSpecialUpFunc( unsigned char key, int x, int y)	{
 			panels_cbKey[i]->cb_keyboard_special_up( key );
 	}
 }
+
+static GLubyte* WindowsManager::OpenImage( const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d)
+{
+return _ImageTools::OpenImage(filename,w,h,d);
+    
+}
+	
 //------------------------------------------------------------
 
 

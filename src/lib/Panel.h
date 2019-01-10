@@ -4,6 +4,7 @@
 
 #include <vector>
 
+typedef void (*displayGL_cb_t)(void);
 
 class Panel {
 	public:
@@ -61,6 +62,8 @@ class Panel {
 		inline bool			getCanMove()									{return canMove;};
 		inline void			setCanMove(bool b)								{canMove=b;};
 		
+
+		inline void			setDisplayGL(displayGL_cb_t cb)                 {displayGL_cb=cb;};
 		
 		inline 	std::vector<Panel*> getChilds()								{return childs;};
 		
@@ -90,6 +93,9 @@ class Panel {
 		std::vector<Panel*> childs;
 		
 		bool				bDebug;
+		
+		displayGL_cb_t      displayGL_cb;
+
 };
 
 

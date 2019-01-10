@@ -145,7 +145,7 @@ void PanelWindow::displayGLtex( _Texture2D* pTex, float X, float Y, float DX, fl
 void PanelWindow::displayGL( void )	{
 	if ( !visible )			return;
 	
-	Panel::displayGL();
+	PanelSimple::displayGL();
 	//cout << "PanelWindow::displayGL() m_tex_bl : " << m_tex_bl << endl;
 	float X, Y, DX, DY;
 	

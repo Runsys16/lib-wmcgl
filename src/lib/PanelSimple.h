@@ -26,7 +26,7 @@ class PanelSimple : public Panel {
 
 //	private:
 	protected:
-		_Texture2D*		    m_pTexBackground;
+		_Texture2D*		                m_pTexBackground;
 		
 		bool							bTextOK;
 		void * 							cTextObj;

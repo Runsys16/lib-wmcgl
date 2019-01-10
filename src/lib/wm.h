@@ -29,6 +29,7 @@
 #include "Panel.h"
 #include "Font.h"
 #include "TextUtil.h"
+#include "ImageTools.h"
 
 //#define DEBUG_CONST
 //#define DEBUG_WM
@@ -99,6 +100,7 @@ public:
 
 	void				call_back_keyboard( Panel * );
 	
+static GLubyte*                OpenImage( const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d);
 
 	inline static WindowsManager&	getInstance()			{ if (!instance) instance = new WindowsManager();return *instance;}
 	inline static void				Destroy()				{ if (instance) delete instance;instance=0;}

@@ -46,6 +46,8 @@ void Panel::init()	{
 	parent = NULL;
 	
 	ID = -1;
+	
+	displayGL_cb = NULL;
 }
 
 
@@ -145,7 +147,7 @@ void Panel::displayGL()	{
 		childs[i]->displayGL();
 	}
 
-	
+	if (displayGL_cb)   (*displayGL_cb)();
 }
 
 

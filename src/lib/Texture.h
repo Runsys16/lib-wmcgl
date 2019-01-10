@@ -35,6 +35,7 @@ public:
 	
 	unsigned	dx;
 	unsigned	dy;
+	
 
 protected:
 	//void Bind() const;

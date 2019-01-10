@@ -53,7 +53,7 @@ void wmcglDeleteDefaultFonts();
 
 EOF
 
-cat ${SRC}ImageTools.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+#cat ${SRC}ImageTools.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}TextUtil.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}Panel.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}PanelText.h | grep -v include | grep -v "#"   >> ${INCLUDE}

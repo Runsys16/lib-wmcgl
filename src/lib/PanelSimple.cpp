@@ -33,6 +33,8 @@ PanelSimple::PanelSimple()	{
 	cout << "Constructeur PanelSimple ..." << endl;
 	#endif
 
+    m_pTexBackground = NULL;
+	/*
 	_ResourceManager& res = _ResourceManager::getInstance();
 	m_pTexBackground = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, "background.tga") );
 	textUtil = WindowsManager::getInstance().getTextUtil();

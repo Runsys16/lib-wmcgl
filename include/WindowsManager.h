@@ -68,39 +68,6 @@ extern CTexFont *DefaultLargeFont;
 void wmcglGenerateDefaultFonts();
 void wmcglDeleteDefaultFonts();
 
-
-
-// -------------------------------
-// Chargement d'images
-// retourne les donnees brutes
-// -------------------------------
-
-namespace _ImageTools
-{
-	class _ImageData {
-	public:
-		GLubyte*	data;
-		unsigned int w, h, d;
-
-		ivec3	getColor(unsigned int x, unsigned int y) const;
-	//	ivec3	getColor(float x, float y);
-
-		_ImageData() {w = h = d = 0; data = NULL;}
-		~_ImageData() {Destroy();}
-		void Destroy();
-	};
-
-	void     OpenImage(const std::string& filename, _ImageData& img);
-	GLubyte* OpenImage(const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d);
-
-	GLubyte* OpenImagePPM(const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d);
-	GLubyte* OpenImageDevIL(const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d);
-
-	
-
-}
-
-
 //  ---------------------------------------------------------------------------
 //
 //  @file       TwOpenGL.h
@@ -212,6 +179,7 @@ protected:
 
 
 
+typedef void (*displayGL_cb_t)(void);
 
 class Panel {
 	public:
@@ -269,6 +237,8 @@ class Panel {
 		inline bool			getCanMove()									{return canMove;};
 		inline void			setCanMove(bool b)								{canMove=b;};
 		
+
+		inline void			setDisplayGL(displayGL_cb_t cb)                 {displayGL_cb=cb;};
 		
 		inline 	std::vector<Panel*> getChilds()								{return childs;};
 		
@@ -298,6 +268,9 @@ class Panel {
 		std::vector<Panel*> childs;
 		
 		bool				bDebug;
+		
+		displayGL_cb_t      displayGL_cb;
+
 };
 
 
@@ -449,7 +422,7 @@ class PanelSimple : public Panel {
 
 //	private:
 	protected:
-		_Texture2D*		    m_pTexBackground;
+		_Texture2D*		                m_pTexBackground;
 		
 		bool							bTextOK;
 		void * 							cTextObj;
@@ -866,6 +839,7 @@ public:
 
 	void				call_back_keyboard( Panel * );
 	
+static GLubyte*                OpenImage( const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d);
 
 	inline static WindowsManager&	getInstance()			{ if (!instance) instance = new WindowsManager();return *instance;}
 	inline static void				Destroy()				{ if (instance) delete instance;instance=0;}

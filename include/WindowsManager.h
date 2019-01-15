@@ -239,6 +239,9 @@ class Panel {
 		
 
 		inline void			setDisplayGL(displayGL_cb_t cb)                 {displayGL_cb=cb;};
+
+		inline void			x2Screen(int & x)                               {x += x_raw;};
+		inline void			y2Screen(int & y)                               {y += y_raw;};
 		
 		inline 	std::vector<Panel*> getChilds()								{return childs;};
 		

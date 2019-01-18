@@ -268,8 +268,15 @@ void PanelSimple::setBackground( GLubyte* ptr, unsigned int w, unsigned int h, u
 
 void PanelSimple::deleteBackground()	{
 	_ResourceManager& res = _ResourceManager::getInstance();
+    
+    if ( m_pTexBackground == NULL )         return;
 
-	res.Delete((void *)m_pTexBackground);
+	if (!res.Delete((void *)m_pTexBackground))
+	{
+		std::cout << "  [Error] WM - PanelSimple::deletetBackground"<< std::endl;
+	    delete m_pTexBackground;
+	    m_pTexBackground = NULL;
+	}
 
     m_pTexBackground = NULL;
 }

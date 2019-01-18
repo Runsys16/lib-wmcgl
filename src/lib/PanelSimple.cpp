@@ -10,7 +10,7 @@
 //#include "../include/WindowsManager.h"
 
 
-#define DEBUG
+//#define DEBUG
 //#define DEBUG_CONST
 
 #ifdef DEBUG_WM
@@ -273,7 +273,9 @@ void PanelSimple::deleteBackground()	{
 
 	if (!res.Delete((void *)m_pTexBackground))
 	{
+    	#ifdef DEBUG
 		std::cout << "  [Error] WM - PanelSimple::deletetBackground"<< std::endl;
+		#endif
 	    delete m_pTexBackground;
 	    m_pTexBackground = NULL;
 	}

@@ -2,7 +2,7 @@
 #include "ResourceManager.h"
 //#include "Console.h"
 
-#define DEBUG
+//#define DEBUG
 //#define DEBUG_CONST
 
 #ifdef DEBUG_WM

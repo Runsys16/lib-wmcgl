@@ -66,7 +66,7 @@ void WindowsManager::init()	{
 	xm_old = -1;	
 	ym_old = -1;	
 	
-	fonts = new Font();
+	fonts = new _Font();
 
 	wmcglGenerateDefaultFonts();
 	cTextObj = textUtil.NewTextObj();

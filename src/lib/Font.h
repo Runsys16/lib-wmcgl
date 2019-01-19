@@ -15,13 +15,13 @@
 #include FT_GLYPH_H
 */
  
-class Font 	{
+class _Font 	{
 	public:
 		enum FONT { ARIAL, UBUNTU_B, UBUNTU_RI, UBUNTU_R, DEJA_VU_SANS_MONO };
-		Font();
+		_Font();
 
-		void				print(Font::FONT, int, int, std::string );
-		void				print(Font::FONT, int, int, char* );
+		void				print(_Font::FONT, int, int, std::string );
+		void				print(_Font::FONT, int, int, char* );
 
 		/*
 		static CTexFont *DefaulttSmallFont = NULL;

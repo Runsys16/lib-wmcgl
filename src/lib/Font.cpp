@@ -34,9 +34,9 @@ bool cfileexists(const char* filename){
 
 using namespace std;
 
-Font::Font()	{
+_Font::_Font()	{
 	#ifdef DEBUG_CONST
-	cout << "Font::Font : Constructeur FONT..." << endl;
+	cout << "_Font::_Font : Constructeur FONT..." << endl;
 	#endif
 	freetype::font_data * pFont;
 
@@ -97,7 +97,7 @@ Font::Font()	{
 	
 }
 
-void Font::print( Font::FONT F, int x, int y, string str)	{
+void _Font::print( _Font::FONT F, int x, int y, string str)	{
 	WindowsManager& wm = WindowsManager::getInstance();
 	//map<int, freetype::font_data *>::iterator it;
 	map<int, void *>::iterator it;
@@ -118,9 +118,9 @@ void Font::print( Font::FONT F, int x, int y, string str)	{
 
 
 
-void Font::print( Font::FONT F, int x, int y, char * cStr)	{
+void _Font::print( _Font::FONT F, int x, int y, char * cStr)	{
 	#ifdef DEBUG
-	std::cout <<"void Font::print( Font::FONT : " << (int)F << ", int : "<< x <<", int : "<< y << ", char * : "<< cStr << ")" << std::endl;
+	std::cout <<"void _Font::print( _Font::FONT : " << (int)F << ", int : "<< x <<", int : "<< y << ", char * : "<< cStr << ")" << std::endl;
 	//std::cout << "Nombre de pFonts : " << pFonts->size() << std::endl;
 	#endif
 	//map<int, freetype::font_data *>::iterator it;
@@ -128,9 +128,9 @@ void Font::print( Font::FONT F, int x, int y, char * cStr)	{
 	WindowsManager& wm = WindowsManager::getInstance();
 	/*
 	#ifdef DEBUG
-	std::cout << "Font::print   Nombre de pFonts : " << std::endl;
-	std::cout << "Font::print   Adresse de  pFonts : " << &pFonts << std::endl;
-	std::cout << "Font::print   Nombre de pFonts : " << pFonts->size() << std::endl;
+	std::cout << "_Font::print   Nombre de pFonts : " << std::endl;
+	std::cout << "_Font::print   Adresse de  pFonts : " << &pFonts << std::endl;
+	std::cout << "_Font::print   Nombre de pFonts : " << pFonts->size() << std::endl;
 	#endif
 	*/
 	freetype::font_data *  pFont;

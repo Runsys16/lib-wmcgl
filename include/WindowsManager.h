@@ -8,7 +8,7 @@
 
 class _Texture2D;
 class Panel;
-class Font;
+class _Font;
 class TextUtil;
 
 #define color32 unsigned int
@@ -18,13 +18,13 @@ class TextUtil;
 /*
 */
  
-class Font 	{
+class _Font 	{
 	public:
 		enum FONT { ARIAL, UBUNTU_B, UBUNTU_RI, UBUNTU_R, DEJA_VU_SANS_MONO };
-		Font();
+		_Font();
 
-		void				print(Font::FONT, int, int, std::string );
-		void				print(Font::FONT, int, int, char* );
+		void				print(_Font::FONT, int, int, std::string );
+		void				print(_Font::FONT, int, int, char* );
 
 		/*
 		static CTexFont *DefaulttSmallFont = NULL;
@@ -817,7 +817,7 @@ public:
 	inline int			getWidth()						{return width;}
 	inline void			setHeight( int h )				{height=h;}
 	inline int			getHeight()						{return height;}
-	inline Font*		getFonts()						{return fonts;}
+	inline _Font*		getFonts()						{return fonts;}
 	inline int			getOffsetX()					{return 0;}
 	inline int			getOffsetY()					{return 0;}
 	inline TextUtil*	getTextUtil()					{return &textUtil;}
@@ -861,7 +861,7 @@ private:
 	int							height;
 	std::vector<Panel*>			childs;
 	//std::vector<Panel*>		panels;
-	Font*						fonts;
+	_Font*						fonts;
 	
 	int							xm_old;
 	int							ym_old;

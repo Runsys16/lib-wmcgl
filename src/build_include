@@ -13,7 +13,7 @@ echo  >>${INCLUDE}
 echo  >>${INCLUDE}
 echo  "class _Texture2D;" >>${INCLUDE}
 echo  "class Panel;" >>${INCLUDE}
-echo  "class Font;" >>${INCLUDE}
+echo  "class _Font;" >>${INCLUDE}
 echo  "class TextUtil;" >>${INCLUDE}
 echo  >>${INCLUDE}
 echo "#define color32 unsigned int" >>${INCLUDE}

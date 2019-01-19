@@ -75,7 +75,7 @@ public:
 	inline int			getWidth()						{return width;}
 	inline void			setHeight( int h )				{height=h;}
 	inline int			getHeight()						{return height;}
-	inline Font*		getFonts()						{return fonts;}
+	inline _Font*		getFonts()						{return fonts;}
 	inline int			getOffsetX()					{return 0;}
 	inline int			getOffsetY()					{return 0;}
 	inline TextUtil*	getTextUtil()					{return &textUtil;}
@@ -119,7 +119,7 @@ private:
 	int							height;
 	std::vector<Panel*>			childs;
 	//std::vector<Panel*>		panels;
-	Font*						fonts;
+	_Font*						fonts;
 	
 	int							xm_old;
 	int							ym_old;

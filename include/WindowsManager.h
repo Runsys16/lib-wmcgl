@@ -841,6 +841,9 @@ public:
 	void				keyboardSpecialFunc( unsigned char, int, int );
 
 	void				call_back_keyboard( Panel * );
+
+	inline void         startKeyboard()                 { bStopKeyboard = false; }
+	inline void         stopKeyboard()                  { bStopKeyboard = true; }
 	
 static GLubyte*                OpenImage( const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d);
 
@@ -877,6 +880,8 @@ private:
 	
 	bool						bDebug;
 	int							slot;
+
+	bool						bStopKeyboard;
 	
 private:
 	void						changeFocus(Panel *);

@@ -98,6 +98,8 @@ void WindowsManager::init()	{
 	panelMove = NULL;
 	panelFocus = NULL;
 	bDebug = false;
+	
+	bStopKeyboard = false;
 }
 
 
@@ -552,6 +554,7 @@ void WindowsManager::keyboardFunc( unsigned char key, int x, int y)	{
 	#ifdef DEBUG
 	cout << "WindowsManager::keyboardFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	#endif
+	if ( bStopKeyboard )        return;
 	int nb = panels_cbKey.size();
 	for( int i=0; i<nb; i++ )	{
 		if ( panels_cbKey[i]->getVisible() )
@@ -571,6 +574,7 @@ void WindowsManager::keyboardSpecialFunc( unsigned char key, int x, int y)	{
 	#ifdef DEBUG
 	cout << "WindowsManager::keyboardSpecialFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	#endif
+	if ( bStopKeyboard )        return;
 	int nb = panels_cbKey.size();
 	for( int i=0; i<nb; i++ )	{
 		if ( panels_cbKey[i]->getVisible() )
@@ -582,6 +586,7 @@ void WindowsManager::keyboardSpecialUpFunc( unsigned char key, int x, int y)	{
 	#ifdef DEBUG
 	cout << "WindowsManager::keyboardSpecialUpFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	#endif
+	if ( bStopKeyboard )        return;
 	int nb = panels_cbKey.size();
 	for( int i=0; i<nb; i++ )	{
 		if ( panels_cbKey[i]->getVisible() )

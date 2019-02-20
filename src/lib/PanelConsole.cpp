@@ -118,7 +118,9 @@ void PanelConsole::scroll() {
 	if ( texts[currentLine]->getPosY() < (getDY()-heightLine+1) )	{
 		return;
 	}
+	#ifdef DEBUG
 	cout << "PanelConsole::scroll()"<< endl;
+	#endif
 	
 	int nb = texts.size();
 	for ( int i=0; i< nb; i++ )	{
@@ -133,7 +135,10 @@ void PanelConsole::scroll() {
 
 void PanelConsole::rotateBuffer() {
 	int y = texts[ texts.size()-1 ]->getPosY() + heightLine;
+
+	#ifdef DEBUG
 	cout << "--- rotate buffer y = "<< y << endl;
+	#endif
 	currentLine--;
 	this->sup( texts[0] );
 	texts.erase( texts.begin() + 0 );
@@ -150,7 +155,9 @@ void PanelConsole::addLine() {
 	currentPos = 0;
 	//cursor.setPos( currentPos, 15*currentLine );
 	if ( currentLine >= texts.size() )	{
+    	#ifdef DEBUG
 		cout << "--- EraseLine "<< endl;
+		#endif
 		rotateBuffer();
 	
 	}
@@ -272,7 +279,9 @@ void PanelConsole::addChar( char c ) {
 	
 	
 	texts[currentLine]->changeText( *val, PanelText::NORMAL_FONT, true );
+    #ifdef DEBUG
 	cout <<"PanelConsole::addChar() "<< *val << endl;
+	#endif
 	//cout <<"  val             : \""<< *val <<"\""<< endl;;
 	//cout <<"  texts[current]  : \""<< texts[currentLine]->getText() <<"\""<< endl;;
 	delete val;
@@ -290,9 +299,15 @@ void PanelConsole::addChar( char c ) {
 
 
 void PanelConsole::delChar() {
+	#ifdef DEBUG
 	cout << "PanelConsole::delChar()" << endl;
+	#endif
+
 	if ( currentLine >= texts.size() )	{
+
+    	#ifdef DEBUG
 		cout <<"PanelConsole::delChar() *** max texts *** "<< endl;
+    	#endif
 		return;
 	}
 	if ( currentPos <= 0  )	{
@@ -300,8 +315,9 @@ void PanelConsole::delChar() {
 		return;
 	}
 	string str = texts[currentLine]->getText();
-	cout <<"  str =  \""<< str <<"\""<< endl;;
+
 	#ifdef DEBUG
+	cout <<"  str =  \""<< str <<"\""<< endl;;
 	#endif
 	
 	char buff[2048];
@@ -309,7 +325,10 @@ void PanelConsole::delChar() {
 	
 	
 	if ( prompt.size() >= str.size() )	{
+
+    	#ifdef DEBUG
 		cout << "  *** Debut de ligne *** "<< endl;
+    	#endif
 		return;
 	}
 	
@@ -325,10 +344,16 @@ void PanelConsole::delChar() {
 
 	if ( currentPos == cl )	{
 		str.copy( buff, str.size()-1, 0);
+    	#ifdef DEBUG
 		cout << "  buff : \""<< buff <<"\""<< endl;;
+    	#endif
+
 		buff[str.size()-1] = 0;
 		val = new string(buff);
+
+    	#ifdef DEBUG
 		cout << "  val : \""<< *val <<"\""<< endl;;
+    	#endif
 	}
 	else	{
 		char left[2048];
@@ -342,8 +367,11 @@ void PanelConsole::delChar() {
 
 		left[ll] = 0;
 		right[rl] = 0;
+
+    	#ifdef DEBUG
 		cout << "  left  : \""<< left <<"\""<< endl;;
 		cout << "  right : \""<< right <<"\""<< endl;;
+    	#endif
 		
 		char buff[2048];
 		sprintf( buff, "%s%s", left, right );
@@ -361,22 +389,32 @@ void PanelConsole::delChar() {
 
 
 void PanelConsole::supChar() {
+	#ifdef DEBUG
 	cout << "PanelConsole::supChar()" << endl;
+	#endif
+
 	if ( currentLine >= texts.size() )	{
+
+    	#ifdef DEBUG
 		cout <<"PanelConsole::supChar() *** max texts *** "<< endl;
+    	#endif
+
 		return;
 	}
 
 	string str = texts[currentLine]->getText();
-	cout << "  str : \""<< str <<"\""<< endl;;
+
 	#ifdef DEBUG
+	cout << "  str : \""<< str <<"\""<< endl;;
 	#endif
 	
 	
 	
 	
 	if ( prompt.size() >= str.size() )	{
+    	#ifdef DEBUG
 		cout << "  *** Debut de ligne *** "<< endl;
+    	#endif
 		return;
 	}
 	
@@ -388,16 +426,22 @@ void PanelConsole::supChar() {
 	string * val;
 
 	
+	#ifdef DEBUG
 	cout << "  CurretnPos = "<< currentPos <<" , cl = "<< cl<< endl;
+	#endif
 
 	if ( prompt.size() >= str.size() )	{
+        #ifdef DEBUG
 		cout << " *** Debut de ligne *** "<< endl;
+		#endif
 		return;
 	}
 	
 
 	if ( currentPos >= cl )	{
+        #ifdef DEBUG
 		cout << "  *** Fin de ligne *** "<< endl;
+		#endif
 		return;
 	}
 	else	{
@@ -413,8 +457,12 @@ void PanelConsole::supChar() {
 
 		left[ll] = 0;
 		right[rl] = 0;
+
+
+        #ifdef DEBUG
 		cout << "  left  : \""<< left <<"\""<< endl;;
 		cout << "  right : \""<< right <<"\""<< endl;;
+		#endif
 		
 		sprintf( buff, "%s%s", left, right );
 		val = new string(buff);
@@ -530,7 +578,10 @@ void PanelConsole::wordSuiv()	{
 
 
 void PanelConsole::supWord()	{
+    #ifdef DEBUG
 	cout << "PanelConsole::supWord()" << endl;
+	#endif
+	
 	int rightPos = posWordSuiv();
 
 	if ( currentLine >= texts.size() )	{
@@ -558,8 +609,11 @@ void PanelConsole::supWord()	{
 
 	left[ll] = 0;
 	right[rl] = 0;
+
+    #ifdef DEBUG
 	cout << "  left  : \""<< left <<"\""<< endl;;
 	cout << "  right : \""<< right <<"\""<< endl;;
+	#endif
 	
 	char buff[2048];
 	sprintf( buff, "%s%s", left, right );
@@ -585,24 +639,31 @@ void PanelConsole::delWord()	{
 //--------------------------------------------------------------------------------------------------------------------
 void PanelConsole::addCmd( string cmd ) {
 	#ifdef DEBUG
-	#endif
 	cout << "PanelConsole::addCmd( \""<< cmd <<"\" ) "<< endl;;
+	#endif
 	if ( cmds.size() == maxCmd )	{
+
 		#ifdef DEBUG
-		#endif
 		cout << "  delete cmd[0]  max = "<< maxCmd << endl;;
-		delete cmds[0];
+		#endif
+
+    	delete cmds[0];
 		cmds.erase( cmds.begin()+0 );
 		currentCmd--;
 	}
 	
 	string * pStr = new string( cmd );
 	cmds.push_back( pStr );
-	cout << "  CurrentCmd : "<< currentCmd << endl;;
-	currentCmd++;
+
 	#ifdef DEBUG
-	#endif
 	cout << "  CurrentCmd : "<< currentCmd << endl;;
+    #endif
+    
+	currentCmd++;
+
+	#ifdef DEBUG
+	cout << "  CurrentCmd : "<< currentCmd << endl;;
+	#endif
 }
 
 
@@ -611,6 +672,7 @@ void PanelConsole::cb_keyboard( unsigned char key ) {
 	#ifdef DEBUG
 	cout << "PanelConsole::cb_keyboard( "<< (unsigned int) key <<" ) "<< endl;;
 	#endif
+
 	static int n=0;
 	switch(key){ 
 	case '\r':		{
@@ -620,10 +682,13 @@ void PanelConsole::cb_keyboard( unsigned char key ) {
 			int l = str->size()-prompt.size();
 			str->copy( cmd, str->size()-prompt.size(), prompt.size() );
 			cmd[l] = 0;
+
+    	#ifdef DEBUG
 			cout << "PanelConsole::cb_keyboard( "<< (unsigned int) key <<" ) "<< endl;;
 			cout << "  str : \""<< *str <<"\""<< endl;
 			cout << "  Size(s) str : "<< str->size() <<" prompt :"<< prompt.size() << endl;
 			cout << "  Exec command "<< cmd << endl;
+	    #endif
 			
 			addLine();
 			currentCmd = cmds.size();
@@ -686,8 +751,9 @@ void PanelConsole::cb_keyboard( unsigned char key ) {
 void PanelConsole::cb_keyboard_special( unsigned char key ) {
 	//if ( !bVisible )		return;
 	#ifdef DEBUG
-	#endif
 	cout << "PanelConsole::cb_keyboard_special( "<< (unsigned int) key <<" ) "<< endl;;
+	#endif
+
 	switch(key){ 
 	//  Right Ctrl
 	case 250:	{
@@ -718,7 +784,9 @@ void PanelConsole::cb_keyboard_special( unsigned char key ) {
 				currentPos = 0;
 				moveCursor();
 			}
+        	#ifdef DEBUG
 			cout << "  CurrentCmd : "<< currentCmd<<"/"<< cmds.size() << endl;;
+			#endif
 		}
 		break;
 	// right
@@ -743,7 +811,9 @@ void PanelConsole::cb_keyboard_special( unsigned char key ) {
 				currentPos = 0;
 				moveCursor();
 			}
+        	#ifdef DEBUG
 			cout << "  CurrentCmd : "<< currentCmd <<"/"<< cmds.size() << endl;;
+			#endif
 		}	
 		break;
 	// pgup
@@ -776,7 +846,9 @@ void PanelConsole::cb_keyboard_special( unsigned char key ) {
 		}
 		break;
 	default :		{
+    	#ifdef DEBUG
 		std::cout << "  Value : "<< (int)key << std::endl;
+		#endif
 		}
 		break;
 	}

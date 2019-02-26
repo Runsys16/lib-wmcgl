@@ -481,6 +481,8 @@ class PanelScrollText : public PanelSimple	{
 		void						wordPrec();
 		void						wordSuiv();
 		void						setTabSize( int );
+
+		void						setColor( long );
 		
 	private:
 		int							maxCmd;
@@ -489,6 +491,8 @@ class PanelScrollText : public PanelSimple	{
 		
 		int							heightLine;
 		int							tabSize;
+		
+		int                         color;
 		
 		int 						currentLine;
 		int							currentPos;
@@ -499,6 +503,7 @@ class PanelScrollText : public PanelSimple	{
 		bool						bRightCtrl;
 		bool						bLeftCtrl;
 		bool						bCtrl;
+		
 };
 
 
@@ -581,6 +586,7 @@ class PanelConsole : public PanelSimple	{
 		void						wordPrec();
 		void						wordSuiv();
 		void						setTabSize( int );
+		void                        setColor(long);
 		
 	private:
 		int							maxCmd;
@@ -604,6 +610,7 @@ class PanelConsole : public PanelSimple	{
 		bool						bRightCtrl;
 		bool						bLeftCtrl;
 		bool						bCtrl;
+		long                        color;
 };
 
 

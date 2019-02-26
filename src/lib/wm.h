@@ -33,6 +33,7 @@
 
 //#define DEBUG_CONST
 //#define DEBUG_WM
+//#define DEBUG
 
 class WindowsManager {
 

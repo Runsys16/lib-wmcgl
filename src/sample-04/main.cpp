@@ -222,12 +222,17 @@ class CallBack : public PanelConsoleCallBack	{
 PanelCheckBox* pCheck;
 
 void call_back_over(PanelButton* pPanel)	{
-	//cout << "CallBack Over()" << endl;
+	cout << "Button CallBack Over()" << endl;
 }
 
 void call_back_up(PanelButton* pPanel)	{
-	cout << "CallBack Down()" << endl;
+	cout << "Button CallBack up()" << endl;
 	pCheck->setVal( !pCheck->getVal() );
+}
+
+void call_back_down(PanelButton* pPanel)	{
+	cout << "Button CallBack down()" << endl;
+	//pCheck->setVal( !pCheck->getVal() );
 }
 
 
@@ -299,6 +304,7 @@ static void CreateOneWindow()	{
 		pButton ->setOver( (char*) texOver[i%6] );
 		pButton->setCallBackOver( call_back_over );
 		pButton->setCallBackUp( call_back_up );
+		pButton->setCallBackDown( call_back_down );
 
 		sprintf( Buff, "New MENU %d", (int)i );
 		

@@ -57,6 +57,7 @@ class PanelConsole : public PanelSimple	{
 		void						wordPrec();
 		void						wordSuiv();
 		void						setTabSize( int );
+		void                        setColor(long);
 		
 	private:
 		int							maxCmd;
@@ -80,6 +81,7 @@ class PanelConsole : public PanelSimple	{
 		bool						bRightCtrl;
 		bool						bLeftCtrl;
 		bool						bCtrl;
+		long                        color;
 };
 
 #endif

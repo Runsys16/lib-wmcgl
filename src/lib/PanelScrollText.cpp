@@ -212,6 +212,7 @@ void PanelScrollText::affiche( string* str ) {
 	texts[currentLine]->setTabSize( tabSize );
 	for( int i=0; i<texts.size(); i++ )	{
 		texts[i]->setTabSize( tabSize );
+	    texts[i]->setColor( color );
 	}
 	addLine();
 }
@@ -224,6 +225,7 @@ void PanelScrollText::affiche( string str ) {
 	texts[currentLine]->setTabSize( tabSize );
 	for( int i=0; i<texts.size(); i++ )	{
 		texts[i]->setTabSize( tabSize );
+	    texts[i]->setColor( color );
 	}
 	addLine();
 }
@@ -237,6 +239,22 @@ void PanelScrollText::affiche( string str ) {
 void PanelScrollText::setTabSize( int t ) {
 	texts[currentLine]->setTabSize( t );
 	tabSize = t;
+}
+
+
+//--------------------------------------------------------------------------------------------------------------------
+//
+//						Callback keyboard functions....
+//
+//--------------------------------------------------------------------------------------------------------------------
+
+void PanelScrollText::setColor( long c ) {
+    printf( "%08X", c );
+    color = c;
+    for ( int i=0; i<texts.size(); i++ )
+    {
+	    texts[i]->setColor( c );
+	}
 }
 
 

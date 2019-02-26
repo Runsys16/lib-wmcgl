@@ -201,6 +201,22 @@ void PanelConsole::clear( ) {
 }
 
 
+//--------------------------------------------------------------------------------------------------------------------
+//
+//						Callback keyboard functions....
+//
+//--------------------------------------------------------------------------------------------------------------------
+
+void PanelConsole::setColor( long c ) {
+    color = c;
+    
+    for ( int i=0; i<texts.size(); i++ )
+    {
+	    texts[i]->setColor( c );
+	}
+	
+}
+
 
 
 
@@ -211,6 +227,7 @@ void PanelConsole::affiche( string* str ) {
 	texts[currentLine]->setTabSize( tabSize );
 	for( int i=0; i<texts.size(); i++ )	{
 		texts[i]->setTabSize( tabSize );
+		texts[i]->setColor( color );
 	}
 	addLine();
 }
@@ -223,6 +240,7 @@ void PanelConsole::affiche( string str ) {
 	texts[currentLine]->setTabSize( tabSize );
 	for( int i=0; i<texts.size(); i++ )	{
 		texts[i]->setTabSize( tabSize );
+		texts[i]->setColor( color );
 	}
 	addLine();
 }

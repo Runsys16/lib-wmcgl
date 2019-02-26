@@ -471,7 +471,7 @@ void PanelText::displayGLInternal()	{
 	//glScissor( scx, scy, scdx, scdy );
 	//glEnable( GL_SCISSOR_TEST );
 	//glColor4f( 0.0f, 0.0f, 0.0f, 0.0f );
-	//glColor4f( 1.0f, 0.0f, 0.0f, 0.0f );
+	//glColor4f( 1.0f, 0.0f, 0.0f, 1.0f );
 	//glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
 
 	int iTex;	
@@ -504,6 +504,8 @@ void PanelText::displayGLInternal()	{
 	}
 	//textUtil->DrawText( pTextGL, getX(), getY(), COLOR32_WHITE, COLOR32_RED );
 	//textUtil->DrawText( pTextGL, getX(), getY(), color, COLOR32_RED );
+
+	//glColor4f( 1.0f, 0.0f, 0.0f, 1.0f );
 	textUtil->DrawText( pTextGL, getX(), getY(), color, 0 );
 	//textUtil->DrawText( pTextGL, 20, 30, COLOR32_WHITE, COLOR32_RED );
 	textUtil->UnbindFont( slot );

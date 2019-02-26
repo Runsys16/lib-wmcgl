@@ -38,7 +38,7 @@ PanelSimple::PanelSimple()	{
 	_ResourceManager& res = _ResourceManager::getInstance();
 	m_pTexBackground = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, "background.tga") );
 	textUtil = WindowsManager::getInstance().getTextUtil();
-
+    */
 	/*
 	for ( int i=0; i<NB; i++ )	{
 		//char * cStr = new char[255];

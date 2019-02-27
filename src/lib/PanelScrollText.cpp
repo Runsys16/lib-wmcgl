@@ -237,7 +237,8 @@ void PanelScrollText::affiche( string str ) {
 //--------------------------------------------------------------------------------------------------------------------
 
 void PanelScrollText::setTabSize( int t ) {
-	texts[currentLine]->setTabSize( t );
+    cout <<"CurrentLine : "<< currentLine << endl;
+	//texts[currentLine]->setTabSize( t );
 	tabSize = t;
 }
 
@@ -249,7 +250,7 @@ void PanelScrollText::setTabSize( int t ) {
 //--------------------------------------------------------------------------------------------------------------------
 
 void PanelScrollText::setColor( long c ) {
-    printf( "%08X", c );
+    //printf( "%08X", c );
     color = c;
     for ( int i=0; i<texts.size(); i++ )
     {

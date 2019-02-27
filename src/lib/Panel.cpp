@@ -48,6 +48,8 @@ void Panel::init()	{
 	ID = -1;
 	
 	displayGL_cb = NULL;
+	
+	bHaveMove = false;
 }
 
 

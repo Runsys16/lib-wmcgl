@@ -70,6 +70,9 @@ class Panel {
 		
 		inline 	std::vector<Panel*> getChilds()								{return childs;};
 		
+		inline void			haveMove()                                      { bHaveMove = true;}
+		inline bool			getHaveMove()                                   { return bHaveMove;}
+		inline void			resetHaveMove()                                 { bHaveMove = false;}
 		
 		//-----------------------------------------------------------------------------------
 	protected:
@@ -98,6 +101,8 @@ class Panel {
 		bool				bDebug;
 		
 		displayGL_cb_t      displayGL_cb;
+		
+		bool                bHaveMove;
 
 };
 

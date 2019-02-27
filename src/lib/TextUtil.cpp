@@ -263,7 +263,8 @@ void *TextUtil::NewTextObj()
 void TextUtil::DeleteTextObj(void *_TextObj)
 {
     //assert(_TextObj!=NULL);
-    delete static_cast<CTextObj *>(_TextObj);
+    if (_TextObj!=NULL)
+        delete static_cast<CTextObj *>(_TextObj);
 }
 
 //  ---------------------------------------------------------------------------

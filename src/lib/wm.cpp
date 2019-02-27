@@ -131,6 +131,8 @@ void WindowsManager::sup( Panel * p )	{
 	cout << "WindowsManager::sup() " << endl;
 	#endif
 
+    if ( panelFocus == p)   panelFocus = NULL;
+
 	int nb = childs.size();
 	int id = p->getID();
 	
@@ -140,6 +142,8 @@ void WindowsManager::sup( Panel * p )	{
 			break;
 		}
 	}
+	
+	
 }
 
 

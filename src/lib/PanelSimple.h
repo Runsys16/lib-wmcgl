@@ -24,6 +24,7 @@ class PanelSimple : public Panel {
 		void				setBackground( GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d );
 		void				deleteBackground();
 
+
 //	private:
 	protected:
 		_Texture2D*		                m_pTexBackground;

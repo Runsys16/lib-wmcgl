@@ -184,15 +184,18 @@ void PanelSimple::displayGL() {
 	cout << "    PS:" << "-----Scissor-------" << endl;
 	cout << "    PS:" << scx <<", "<< scy <<", "<< scdx <<", "<< scdy << endl;
 #endif
-	glScissor( scx, scy, scdx, scdy );
-	glEnable( GL_SCISSOR_TEST );
+    if ( parent == NULL )
+    {
+	    glScissor( scx, scy, scdx, scdy );
+	    glEnable( GL_SCISSOR_TEST );
+	}
 	
 
 	// display	with scissor
 	Panel::displayGL();
 
-
-	glDisable( GL_SCISSOR_TEST );
+    if ( parent == NULL )
+    	glDisable( GL_SCISSOR_TEST );
 	
 	if ( bDebug && pPsDebug )		{
 		pPsDebug->displayGL();
@@ -282,6 +285,12 @@ void PanelSimple::deleteBackground()	{
 
     m_pTexBackground = NULL;
 }
+
+
+
+
+
+
 
 
 

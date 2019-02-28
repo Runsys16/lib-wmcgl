@@ -47,7 +47,12 @@ void Panel::init()	{
 	
 	ID = -1;
 	
-	displayGL_cb = NULL;
+	displayGL_cb        = NULL;
+	click_left_cb       = NULL;
+	release_left_cb     = NULL;
+	click_right_cb      = NULL;
+    release_right_cb    = NULL;
+
 	
 	bHaveMove = false;
 }
@@ -76,13 +81,43 @@ void Panel::sup( Panel* p)	{
 
 
 
+void Panel::clickLeft( int x, int y)
+{
+    if (click_left_cb)      (*click_left_cb)(Screen2x(x), Screen2y(y));
+}
+
+
+
+void Panel::releaseLeft( int x, int y)
+{
+    if (release_left_cb)      (*release_left_cb)(x,y);
+}
+
+
+
+void Panel::clickRight( int x, int y)
+{
+    if (click_right_cb)      (*click_right_cb)(x,y);
+}
+
+
+
+void Panel::releaseRight( int x, int y)
+{
+    if (release_right_cb)      (*release_right_cb)(x,y);
+}
+
+
+
 Panel* Panel::isMouseOver(int xm, int ym)	{
 	#ifdef DEBUG
 	cout << "Panel::isMouseOver()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
 	#endif
+
 	if ( !visible )			return NULL;
 
 	int nb = childs.size();
+	//cout << "Panel::isMouseOver() nb = " << nb << endl;
 	for( int i=0; i<nb; i++ )	{
 		Panel * p = childs[i]->isMouseOver(xm, ym);
 		if ( p )		return p;
@@ -153,6 +188,21 @@ void Panel::displayGL()	{
 }
 
 
+
+
+
+void Panel::deleteChilds()	{
+	//_ResourceManager& res = _ResourceManager::getInstance();
+    if ( childs.size() == 0 )           return;
+
+    childs.clear();
+    /*    
+	int nb = childs.size();
+	for ( int i=nb; i>0; i++ )	{
+			childs.erase( childs.begin()+i-1 );
+	}
+	*/
+}
 
 
 

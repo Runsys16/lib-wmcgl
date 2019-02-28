@@ -519,7 +519,7 @@ void PanelText::displayGLInternal()	{
 	
 Panel* PanelText::isMouseOver(int xm, int ym)	{
 	#ifdef DEBUG
-	cout << "Panel::isMouseOver()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
+	cout << "PanelText::isMouseOver()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
 	#endif
 	return NULL;
 

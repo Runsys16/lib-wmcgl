@@ -179,6 +179,11 @@ protected:
 
 
 
+typedef void (*click_left_cb_t)(int,int);
+typedef void (*release_left_cb_t)(int,int);
+typedef void (*click_right_cb_t)(int,int);
+typedef void (*release_right_cb_t)(int,int);
+
 typedef void (*displayGL_cb_t)(void);
 
 class Panel {
@@ -190,14 +195,14 @@ class Panel {
 		void				add( Panel* );
 		void				sup( Panel* );
 		
-		virtual void		clickLeft( int, int)							{;}
-		virtual void		releaseLeft( int, int)							{;}
+		virtual void		clickLeft( int, int);
+		virtual void		releaseLeft( int, int);
 
 		virtual void		clickUp( int, int);
 		virtual void		clickDown( int, int);
 
-		virtual void		clickRight( int, int)							{;}
-		virtual void		releaseRight( int, int)							{;}
+		virtual void		clickRight( int, int);
+		virtual void		releaseRight( int, int);
 
 		virtual Panel*		isMouseOver( int, int);
 		virtual void		haveFocus()										{;}
@@ -243,12 +248,21 @@ class Panel {
 		inline void			x2Screen(int & x)                               {x += x_raw;};
 		inline void			y2Screen(int & y)                               {y += y_raw;};
 		
+		inline int			Screen2x(int x)                                 {return x - x_raw;};
+		inline int			Screen2y(int y)                                 {return y - y_raw;};
+		
 		inline 	std::vector<Panel*> getChilds()								{return childs;};
 		
 		inline void			haveMove()                                      { bHaveMove = true;}
 		inline bool			getHaveMove()                                   { return bHaveMove;}
 		inline void			resetHaveMove()                                 { bHaveMove = false;}
 		
+		inline void			setClickLeft( click_left_cb_t cb)               { click_left_cb = cb;}
+		inline void			setReleaseLeft( click_left_cb_t cb)             { release_left_cb = cb;}
+		inline void			setClickRight( click_left_cb_t cb)              { click_right_cb = cb;}
+		inline void			setReleaseRight( click_left_cb_t cb)            { release_right_cb = cb;}
+		void				deleteChilds();
+
 		//-----------------------------------------------------------------------------------
 	protected:
 		//-----------------------------------------------------------------------------------
@@ -276,6 +290,10 @@ class Panel {
 		bool				bDebug;
 		
 		displayGL_cb_t      displayGL_cb;
+		click_left_cb_t     click_left_cb;
+		release_left_cb_t   release_left_cb;
+		click_right_cb_t    click_right_cb;
+		release_right_cb_t  release_right_cb;
 		
 		bool                bHaveMove;
 
@@ -427,6 +445,7 @@ class PanelSimple : public Panel {
 		void				setBackground( char *);
 		void				setBackground( GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d );
 		void				deleteBackground();
+
 
 //	private:
 	protected:

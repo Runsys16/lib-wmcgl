@@ -55,6 +55,7 @@ void Panel::init()	{
 
 	
 	bHaveMove = false;
+	bScissor = false;
 }
 
 

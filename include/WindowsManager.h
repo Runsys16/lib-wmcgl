@@ -261,7 +261,11 @@ class Panel {
 		inline void			setReleaseLeft( click_left_cb_t cb)             { release_left_cb = cb;}
 		inline void			setClickRight( click_left_cb_t cb)              { click_right_cb = cb;}
 		inline void			setReleaseRight( click_left_cb_t cb)            { release_right_cb = cb;}
+		
+		inline void			setScissor(bool b)                              { bScissor = b;}
+		
 		void				deleteChilds();
+		
 
 		//-----------------------------------------------------------------------------------
 	protected:
@@ -296,6 +300,7 @@ class Panel {
 		release_right_cb_t  release_right_cb;
 		
 		bool                bHaveMove;
+		bool                bScissor;
 
 };
 
@@ -439,7 +444,7 @@ class PanelSimple : public Panel {
 		//void				buildText();
 
 		virtual void		displayGL();
-		virtual void		updatePos();
+		 virtual void		updatePos();
 		
 		void				debug(bool);
 		void				setBackground( char *);

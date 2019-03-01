@@ -17,7 +17,7 @@ class PanelSimple : public Panel {
 		//void				buildText();
 
 		virtual void		displayGL();
-		virtual void		updatePos();
+		 virtual void		updatePos();
 		
 		void				debug(bool);
 		void				setBackground( char *);

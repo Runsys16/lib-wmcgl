@@ -113,12 +113,14 @@ void PanelButton::lostFocus()	{
 void PanelButton::clickLeft( int xm, int ym)	{
 	if( pCallBackDown )				(*pCallBackDown)(this);
 	if ( pPanelButtonCallBack )		pPanelButtonCallBack->cb_button_mouse_down(this);
+	PanelSimple::clickLeft( xm, ym);
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelButton::releaseLeft( int xm, int ym)	{
 	if( pCallBackUp )				(*pCallBackUp)(this);
 	if ( pPanelButtonCallBack )		pPanelButtonCallBack->cb_button_mouse_up(this);
+	PanelSimple::releaseLeft( xm, ym);
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/

@@ -184,7 +184,7 @@ void PanelSimple::displayGL() {
 	cout << "    PS:" << "-----Scissor-------" << endl;
 	cout << "    PS:" << scx <<", "<< scy <<", "<< scdx <<", "<< scdy << endl;
 #endif
-    if ( parent == NULL )
+    if ( parent == NULL || bScissor )
     {
 	    glScissor( scx, scy, scdx, scdy );
 	    glEnable( GL_SCISSOR_TEST );
@@ -194,7 +194,7 @@ void PanelSimple::displayGL() {
 	// display	with scissor
 	Panel::displayGL();
 
-    if ( parent == NULL )
+    if ( parent == NULL || bScissor )
     	glDisable( GL_SCISSOR_TEST );
 	
 	if ( bDebug && pPsDebug )		{

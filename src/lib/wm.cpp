@@ -10,6 +10,7 @@
 //#include "../include/WindowsManager.h"
 #include "Font.h"
 #include "InternalFonts.h"
+#include "ResourceManager.h"
 
 
 //#define DEBUG_CONST
@@ -603,6 +604,15 @@ static GLubyte* WindowsManager::OpenImage( const std::string& filename, unsigned
 {
 return _ImageTools::OpenImage(filename,w,h,d);
     
+}
+
+
+	
+static void WindowsManager::loadResourceImage( const std::string& filename )
+{
+	_ResourceManager& res = _ResourceManager::getInstance();
+
+	res.LoadResource(_ResourceManager::TEXTURE2D, filename );
 }
 	
 //------------------------------------------------------------

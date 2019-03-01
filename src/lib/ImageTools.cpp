@@ -10,10 +10,12 @@
 #include <fstream>
 #include <string.h>
 #include <assert.h>
+#include <mutex>
 
 #undef _UNICODE
 #include <IL/il.h>
 
+std::mutex lock_load_imageDEVIL;
 
 namespace _ImageTools {
 
@@ -68,6 +70,9 @@ GLubyte* OpenImagePPM(const std::string& filename, unsigned int& w, unsigned int
 
 GLubyte* OpenImageDevIL(const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d)
 {
+    lock_load_imageDEVIL.lock();
+    
+    
 	static bool first = true;
 	if(first) {
 		first = false;
@@ -92,7 +97,10 @@ GLubyte* OpenImageDevIL(const std::string& filename, unsigned int& w, unsigned i
 
     // Chargement de l'image
 	if (!ilLoadImage((char*)filename.c_str()))
+	{
+        lock_load_imageDEVIL.unlock();
 		return NULL;
+    }
 
 
     // Récupération de la taille de l'image
@@ -118,6 +126,7 @@ GLubyte* OpenImageDevIL(const std::string& filename, unsigned int& w, unsigned i
     ilBindImage(0);
     ilDeleteImages(1, &ilTexture);
 
+    lock_load_imageDEVIL.unlock();
 	return img;
 }
 

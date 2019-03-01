@@ -883,6 +883,10 @@ public:
 	
 static GLubyte*                OpenImage( const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d);
 
+
+static void                loadResourceImage( const std::string& );
+
+
 	inline static WindowsManager&	getInstance()			{ if (!instance) instance = new WindowsManager();return *instance;}
 	inline static void				Destroy()				{ if (instance) delete instance;instance=0;}
 	

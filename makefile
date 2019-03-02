@@ -20,7 +20,7 @@ LIBS	=  -lfreetype -lGL -lglut -lGLU -lGLEW -lIL -shared
 
 INCS =  -I"/usr/include" -I"/usr/include/freetype2" 
 CFLAGS = $(INCS) -O2 -fpic -fpermissive -mtune=core2 -Wno-deprecated -Wno-unused-result
-CFLAGS = $(INCS) -g -O2 -fpic -fpermissive -mtune=core2 -Wno-deprecated -Wno-unused-result
+CFLAGS = $(INCS) -g -O2 -fpic -fpermissive -mtune=core2 -Wno-deprecated -Wno-unused-result -std=c++11
 
 
 
@@ -285,6 +285,10 @@ $(OBJDIR)PanelConsole.o :   $(SRCDIR)PanelConsole.cpp  $(SRCDIR)PanelConsole.h  
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
+$(OBJDIR)PanelEditText.o :   $(SRCDIR)PanelEditText.cpp  $(SRCDIR)PanelEditText.h  $(SRCDIR)PanelSimple.h  $(SRCDIR)Panel.h  $(SRCDIR)PanelText.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h  $(SRCDIR)ImageTools.h  $(SRCDIR)Mathlib.h 
+	@echo ---------   compilation de $@
+	$(CPP) -c $< -o $@  $(CFLAGS)
+
 $(OBJDIR)PanelScrollText.o :   $(SRCDIR)PanelScrollText.cpp  $(SRCDIR)PanelScrollText.h  $(SRCDIR)PanelSimple.h  $(SRCDIR)Panel.h  $(SRCDIR)PanelText.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h  $(SRCDIR)ImageTools.h  $(SRCDIR)Mathlib.h 
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
@@ -333,7 +337,7 @@ $(OBJDIR)glInfo.o :   $(SRCDIR)glInfo.cpp  $(SRCDIR)glInfo.h  $(SRCDIR)Singleton
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)wm.o :   $(SRCDIR)wm.cpp  $(SRCDIR)wm.h  $(SRCDIR)Panel.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)ImageTools.h  $(SRCDIR)Mathlib.h 
+$(OBJDIR)wm.o :   $(SRCDIR)wm.cpp  $(SRCDIR)wm.h  $(SRCDIR)Panel.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)ImageTools.h  $(SRCDIR)Mathlib.h  $(SRCDIR)ResourceManager.h  $(SRCDIR)Singleton.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)Shader.h 
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 

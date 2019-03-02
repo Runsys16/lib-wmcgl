@@ -34,7 +34,7 @@ class Panel {
 		virtual void		lostFocus()										{;}
 		virtual void		displayGL();
 		virtual void		updatePos();
-		virtual void		idle(float)										{;};
+		virtual void		idle(float);//										{;};
 		virtual void		cb_keyboard( unsigned char ) 					{;};
 		virtual void		cb_keyboard_special( unsigned char )			{;};
 		virtual void		cb_keyboard_special_up( unsigned char )			{;};

@@ -373,7 +373,51 @@ void WindowsManager::debug()	{
 
 
 void WindowsManager::call_back_keyboard( Panel * p )	{
+    cout << "call_back_keyboard() Callback nb panel : "<< panels_cbKey.size() << endl;
 	panels_cbKey.push_back(p);
+}
+
+
+
+
+
+
+
+void WindowsManager::sup_call_back_keyboard( Panel * p )	{
+    cout << "sup_call_back_keyboard() Callback nb panel : "<< panels_cbKey.size() << endl;
+	for( int i=0; i<panels_cbKey.size(); i++) 
+	{
+	    if ( p == panels_cbKey[i] )
+	    {
+	        cout << "sup_call_back_keyboard() panel trouve... SUPPRESSION" << endl;
+	        panels_cbKey[i] = NULL;
+	        panels_cbKey.erase(panels_cbKey.begin()+i);
+	        return;
+	    }
+	}
+    
+    cout << "sup_call_back_keyboard() [ERREUR] panel n existe pas..." << endl;
+}
+
+
+
+
+
+
+
+bool WindowsManager::is_call_back_keyboard( Panel * p )	{
+    cout << "is_call_back_keyboard() Callback nb panel : "<< panels_cbKey.size() << endl;
+	for( int i=0; i<panels_cbKey.size(); i++) 
+	{
+	    if ( p == panels_cbKey[i] )
+	    {
+	        cout << "panel trouve..." << endl;
+	        return true;
+	    }
+	}
+    
+    cout << "is_call_back_keyboard() [ERREUR] panel non trouve..." << endl;
+    return false;
 }
 
 
@@ -476,7 +520,7 @@ void WindowsManager::passiveMotionFunc(int x, int y)	{
 	//cout << "WindowsManager::passiveMotionFunc( " << x << ", " << y << " )" << endl;
 	Panel * p = findPanelMouseOver(x, y);
 	
-	changeFocus( p );
+	//changeFocus( p );
 	
 	xm_old = -1;
 	ym_old = -1;
@@ -496,8 +540,14 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	cout << "WindowsManager::mouseFunc( " << button << ", " << state << ", " << x << ", " << y << " )" << endl;
 	#endif
 	Panel* p = findPanelMouseOver(x, y);
-	changeFocus( p );
+	
+	//changeFocus( p );
 	bMovePanel = false;
+
+	if ( button >= 0 && button <=2 )
+	{
+	    changeFocus( p );
+	}
 	
 	if ( button == 2 && state == 0 )	{
 		panelMove = getParentRoot( p );

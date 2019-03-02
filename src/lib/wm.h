@@ -100,14 +100,16 @@ public:
 	void				keyboardSpecialFunc( unsigned char, int, int );
 
 	void				call_back_keyboard( Panel * );
+	void				sup_call_back_keyboard( Panel * );
+	bool				is_call_back_keyboard( Panel * );
 
 	inline void         startKeyboard()                 { bStopKeyboard = false; }
 	inline void         stopKeyboard()                  { bStopKeyboard = true; }
 	
-static GLubyte*                OpenImage( const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d);
+static GLubyte*         OpenImage( const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d);
 
 
-static void                loadResourceImage( const std::string& );
+static void             loadResourceImage( const std::string& );
 
 
 	inline static WindowsManager&	getInstance()			{ if (!instance) instance = new WindowsManager();return *instance;}
@@ -146,7 +148,7 @@ private:
 
 	bool						bStopKeyboard;
 	
-private:
+public:
 	void						changeFocus(Panel *);
 };
 

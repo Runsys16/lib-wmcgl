@@ -31,6 +31,9 @@ using namespace std;
 //void * cTextObj;
 
 
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 WindowsManager::WindowsManager()	{
 	#ifdef DEBUG_CONST
 	cout << "Constructeur WindowsManager ..." << endl;
@@ -38,8 +41,9 @@ WindowsManager::WindowsManager()	{
 	init();
 	//Font * 	font = new Font();
 };
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 WindowsManager::WindowsManager( int w, int h )	{
 	#ifdef DEBUG_CONST
 	cout << "Constructeur WindowsManager( w,  h ) ..." << endl;
@@ -47,16 +51,17 @@ WindowsManager::WindowsManager( int w, int h )	{
 	setScreenSize( w, h );
 	init();
 }
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 WindowsManager::~WindowsManager()	{
 	#ifdef DEBUG_CONST
 	cout << "Destructeur WindowsManager ..." << endl;
 	#endif
 };
-
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::init()	{
 	#ifdef DEBUG_CONST
 	cout << "WindowsManager::init()" << endl;
@@ -102,10 +107,9 @@ void WindowsManager::init()	{
 	
 	bStopKeyboard = false;
 }
-
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::setScreenSize( int w, int h )	{
 	#ifdef DEBUG
 	cout << "WindowsManager::setScreenSize( " << w << ", " << h << " );" << endl;
@@ -113,8 +117,9 @@ void WindowsManager::setScreenSize( int w, int h )	{
 	width = w;
 	height = h;
 }
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::add( Panel * p )	{
 	#ifdef DEBUG
 	cout << "WindowsManager::add() " << endl;
@@ -125,8 +130,9 @@ void WindowsManager::add( Panel * p )	{
 	childs.push_back( p );
 	p->setParent( NULL );
 }
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::sup( Panel * p )	{
 	#ifdef DEBUG
 	cout << "WindowsManager::sup() " << endl;
@@ -146,8 +152,9 @@ void WindowsManager::sup( Panel * p )	{
 	
 	
 }
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::onTop( Panel * p )	{
 	#ifdef DEBUG
 	cout << "WindowsManager::add() " << endl;
@@ -158,8 +165,9 @@ void WindowsManager::onTop( Panel * p )	{
         add(p);
     }
 }
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::onBottom( Panel * p )	{
 	#ifdef DEBUG
 	cout << "WindowsManager::sup() " << endl;
@@ -170,8 +178,9 @@ void WindowsManager::onBottom( Panel * p )	{
         childs.insert( childs.begin(), p );
     }
 }
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::supByID( int id )	{
 	#ifdef DEBUG
 	cout << "WindowsManager::supByID( " << id << " )" << endl;
@@ -189,8 +198,9 @@ void WindowsManager::supByID( int id )	{
 		}
 	}
 }
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 Panel* WindowsManager::getByID( int id )	{
 	#ifdef DEBUG
 	cout << "WindowsManager::getByID( " << id << " )" << endl;
@@ -205,8 +215,9 @@ Panel* WindowsManager::getByID( int id )	{
 	}
 	return NULL;
 }
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 int WindowsManager::getFreeID()	{
 	#ifdef DEBUG
 	cout << "WindowsManager::getFreeID() : ";// << endl;
@@ -232,11 +243,9 @@ int WindowsManager::getFreeID()	{
 	#endif
 	return i;
 }
-
-
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 Panel * WindowsManager::getParentRoot( Panel* pChild)	{
 	if ( pChild == NULL )			return NULL;
 	Panel * pParent = pChild->getParent();
@@ -247,8 +256,9 @@ Panel * WindowsManager::getParentRoot( Panel* pChild)	{
 	return pChild;
 	
 }
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::changeFocus( Panel* p )	{
 	//cout << "WindowsManager::passiveMotionFunc( " << x << ", " << y << " )" << endl;
 	if ( p != panelFocus )	{
@@ -257,9 +267,9 @@ void WindowsManager::changeFocus( Panel* p )	{
 	}
 	panelFocus = p;
 }
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 Panel * WindowsManager::findPanelMouseOver( int xm, int ym)	{
 	#ifdef DEBUG
 	cout << "WindowsManager::findPanelMouseOver( " << xm << ", " << ym << " )";
@@ -286,9 +296,9 @@ Panel * WindowsManager::findPanelMouseOver( int xm, int ym)	{
 	#endif
 	return NULL;
 }
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 int WindowsManager::getOrder( Panel* p )	{
 	int nb = childs.size();
 	
@@ -298,9 +308,9 @@ int WindowsManager::getOrder( Panel* p )	{
 	
 	return -1;
 }
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::movePanel( int xm, int ym)	{
 	#ifdef DEBUG
 	cout << "WindowsManager::movePanel( " << xm << ", " << ym << " )" << endl;
@@ -313,8 +323,9 @@ void WindowsManager::movePanel( int xm, int ym)	{
 		if ( p )	movePanel( xm, ym, p );
 	}
 }
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::movePanel( int xm, int ym, Panel* p )	{
 	#ifdef DEBUG
 	cout << "WindowsManager::movePanel( " << xm << ", " << ym << " )" << endl;
@@ -339,19 +350,18 @@ void WindowsManager::movePanel( int xm, int ym, Panel* p )	{
 		ym_old = ym;
 	}
 }
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::swapVisible()	{
 	int nb = childs.size();
 	for (int i=0; i< nb; i++ )	{
 		childs[i]->setVisible( !childs[i]->getVisible() );
 	}
 }
-
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::debug( bool b )	{
 	bDebug = b;
 	int nb = childs.size();
@@ -359,8 +369,9 @@ void WindowsManager::debug( bool b )	{
 		childs[i]->debug( b );
 	}
 }
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::debug()	{
 	bDebug = !bDebug;
 	int nb = childs.size();
@@ -368,65 +379,58 @@ void WindowsManager::debug()	{
 		childs[i]->debug( bDebug );
 	}
 }
-
-
-
-
+//-----------------------------------------------
+// Traitement des focntions callback pour
+// la gestion des evenements souris
+//-----------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::call_back_keyboard( Panel * p )	{
-    cout << "call_back_keyboard() Callback nb panel : "<< panels_cbKey.size() << endl;
+    //cout << "call_back_keyboard() Callback nb panel : "<< panels_cbKey.size() << endl;
 	panels_cbKey.push_back(p);
 }
-
-
-
-
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::sup_call_back_keyboard( Panel * p )	{
-    cout << "sup_call_back_keyboard() Callback nb panel : "<< panels_cbKey.size() << endl;
+    //cout << "sup_call_back_keyboard() Callback nb panel : "<< panels_cbKey.size() << endl;
 	for( int i=0; i<panels_cbKey.size(); i++) 
 	{
 	    if ( p == panels_cbKey[i] )
 	    {
-	        cout << "sup_call_back_keyboard() panel trouve... SUPPRESSION" << endl;
+	        //cout << "sup_call_back_keyboard() panel trouve... SUPPRESSION" << endl;
 	        panels_cbKey[i] = NULL;
 	        panels_cbKey.erase(panels_cbKey.begin()+i);
 	        return;
 	    }
 	}
     
-    cout << "sup_call_back_keyboard() [ERREUR] panel n existe pas..." << endl;
+    //cout << "sup_call_back_keyboard() [ERREUR] panel n existe pas..." << endl;
 }
-
-
-
-
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 bool WindowsManager::is_call_back_keyboard( Panel * p )	{
-    cout << "is_call_back_keyboard() Callback nb panel : "<< panels_cbKey.size() << endl;
+    //cout << "is_call_back_keyboard() Callback nb panel : "<< panels_cbKey.size() << endl;
 	for( int i=0; i<panels_cbKey.size(); i++) 
 	{
 	    if ( p == panels_cbKey[i] )
 	    {
-	        cout << "panel trouve..." << endl;
+	        //cout << "panel trouve..." << endl;
 	        return true;
 	    }
 	}
     
-    cout << "is_call_back_keyboard() [ERREUR] panel non trouve..." << endl;
+    //cout << "is_call_back_keyboard() [ERREUR] panel non trouve..." << endl;
     return false;
 }
-
-
-
-
 //------------------------------------------------------------
 //               opengl function	s
 //------------------------------------------------------------
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::idleGL(float elapsedTime)	{
 	//cout << "WindowsManager::idleGL()" << endl;
 	int nb = childs.size();
@@ -439,8 +443,9 @@ void WindowsManager::idleGL(float elapsedTime)	{
 		childs[i]->updatePos();
 	}
 }
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::ChangeViewport(int _X0, int _Y0, int _Width, int _Height, int _OffsetX, int _OffsetY)	{
 	//return;
     if( _Width>0 && _Height>0 )
@@ -460,9 +465,9 @@ void WindowsManager::ChangeViewport(int _X0, int _Y0, int _Width, int _Height, i
         glMatrixMode(matrixMode);
     }
 }
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::displayGL()	{
 	//cout << "WindowsManager::displayGL()" << endl;
 	//return;	
@@ -511,11 +516,12 @@ void WindowsManager::clearBufferGL()	{
 void WindowsManager::clearBufferGL( GLbitfield bitField )	{
 	glClear(bitField);
 }
-
-
 //------------------------------------------------------------
 //               glut callback function	
 //------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::passiveMotionFunc(int x, int y)	{
 	//cout << "WindowsManager::passiveMotionFunc( " << x << ", " << y << " )" << endl;
 	Panel * p = findPanelMouseOver(x, y);
@@ -525,16 +531,22 @@ void WindowsManager::passiveMotionFunc(int x, int y)	{
 	xm_old = -1;
 	ym_old = -1;
 }
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::motionFunc(int x, int y)	{
 	//cout << "WindowsManager::motionFunc( " << x << ", " << y << " )" << endl;
 	if ( bMovePanel && panelMove != NULL )	{
 		movePanel( x, y, panelMove );
 	}
 }
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 static bool bClickLeft=false;
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	#ifdef DEBUG
 	cout << "WindowsManager::mouseFunc( " << button << ", " << state << ", " << x << ", " << y << " )" << endl;
@@ -603,9 +615,9 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	#endif
 
 }
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::keyboardFunc( unsigned char key, int x, int y)	{
 	#ifdef DEBUG
 	cout << "WindowsManager::keyboardFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
@@ -617,15 +629,17 @@ void WindowsManager::keyboardFunc( unsigned char key, int x, int y)	{
 			panels_cbKey[i]->cb_keyboard( key );
 	}
 }
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::keyboardUpFunc( unsigned char key, int x, int y)	{
 	#ifdef DEBUG
 	cout << "WindowsManager::keyboardUpFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	#endif
 }
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::keyboardSpecialFunc( unsigned char key, int x, int y)	{
 	#ifdef DEBUG
 	cout << "WindowsManager::keyboardSpecialFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
@@ -637,7 +651,9 @@ void WindowsManager::keyboardSpecialFunc( unsigned char key, int x, int y)	{
 			panels_cbKey[i]->cb_keyboard_special( key );
 	}
 }
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::keyboardSpecialUpFunc( unsigned char key, int x, int y)	{
 	#ifdef DEBUG
 	cout << "WindowsManager::keyboardSpecialUpFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
@@ -649,15 +665,16 @@ void WindowsManager::keyboardSpecialUpFunc( unsigned char key, int x, int y)	{
 			panels_cbKey[i]->cb_keyboard_special_up( key );
 	}
 }
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 static GLubyte* WindowsManager::OpenImage( const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d)
 {
 return _ImageTools::OpenImage(filename,w,h,d);
-    
 }
-
-
-	
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 static void WindowsManager::loadResourceImage( const std::string& filename )
 {
 	_ResourceManager& res = _ResourceManager::getInstance();

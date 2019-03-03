@@ -930,9 +930,9 @@ void PanelConsole::idle(float elapsedTime) {
 	
 	if ( cursorTime >= 0.0 )	{
 		cursorTime += elapsedTime;
-		if ( cursorTime >= 0.2f )		{
+		if ( cursorTime >= 0.5f )		{
 			cursor.setVisible( !cursor.getVisible() );
-			cursorTime -= 0.2f;
+			cursorTime -= 0.5f;
 		}
 	}
 	else	{

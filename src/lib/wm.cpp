@@ -571,7 +571,7 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 		//swapVisible();
 	}
 	else if ( button == 2 && state == 1 )	{
-	    panelMove->haveMove();
+	    if ( panelMove != NULL)     panelMove->haveMove();
 		panelMove = NULL;
 		xm_old = -1;
 		ym_old = -1;

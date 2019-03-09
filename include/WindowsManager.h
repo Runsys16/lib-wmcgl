@@ -251,7 +251,7 @@ class Panel {
 		inline int			Screen2x(int x)                                 {return x - x_raw;};
 		inline int			Screen2y(int y)                                 {return y - y_raw;};
 		
-		inline 	std::vector<Panel*> getChilds()								{return childs;};
+		inline 	std::vector<Panel*>& getChilds()							{return childs;};
 		
 		inline void			haveMove()                                      { bHaveMove = true;}
 		inline bool			getHaveMove()                                   { return bHaveMove;}

@@ -43,6 +43,7 @@ PanelCheckBox::PanelCheckBox()	: PanelSimple(){
 	
 	pCallBackTrue  = NULL;
 	pCallBackFalse = NULL;
+	pCallBackMouse = NULL;
 	
 	pPsDebug = NULL;
 	pPtDebug = NULL;
@@ -90,6 +91,8 @@ void PanelCheckBox::clickLeft( int xm, int ym)	{
 	if ( pVal )			*pVal = bVal;
 	if( bVal && pCallBackTrue )			(*pCallBackTrue)();
 	else if( !bVal && pCallBackFalse )	(*pCallBackFalse)();
+	
+	if ( pCallBackMouse )       (*pCallBackMouse)(this);
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/

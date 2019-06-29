@@ -7,9 +7,11 @@
 #include "Texture2D.h"
 #include "TextUtil.h"
 
+class PanelCheckBox;
 
 typedef void (* CALLBACK_TRUE)();
 typedef void (* CALLBACK_FALSE)();
+typedef void (* CALLBACK_CHECK)(PanelCheckBox*);
 
 
 
@@ -31,6 +33,7 @@ class PanelCheckBox : public PanelSimple {
 		
 		void				setCallBackTrue( CALLBACK_TRUE p)		{ pCallBackTrue  = p; }
 		void				setCallBackFalse( CALLBACK_FALSE p)		{ pCallBackFalse = p; }
+		void				setCallBackMouse( CALLBACK_CHECK p)		{ pCallBackMouse = p; }
 		
 		bool				getVal()								{ return bVal; }
 		void				setPercent( float );
@@ -44,6 +47,7 @@ class PanelCheckBox : public PanelSimple {
 
 		CALLBACK_TRUE	pCallBackTrue;;
 		CALLBACK_FALSE	pCallBackFalse;
+		CALLBACK_CHECK  pCallBackMouse;
 		
 		bool			bVal;
 		bool*			pVal;

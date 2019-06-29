@@ -264,6 +264,7 @@ static void CreateOneWindow()	{
 						(char*)"vert-over.png", (char*)"bleu-over.png", (char*)"noir-over.png" };
 	
 	PW = new PanelWindow();
+	PW->setBackground( (char*)"background.tga" );
 	pw.push_back( PW );
 	
 	int x, y, dx, dy;
@@ -354,6 +355,8 @@ static void CreateOneWindow()	{
 	}
 	
 	wm.add(ps);
+    ps->setBackground( (char*)"background.tga" );
+
 	delete pStr;
 }
 
@@ -372,6 +375,7 @@ static void CreateAllWindows()	{
 	
 	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
+	ps->setBackground( (char*)"background.tga" );
 	ps->setPosAndSize( 50+0, 50+50, 200, wm.getHeight()-100);
 	wm.add( ps );
 	int y = 10;
@@ -386,11 +390,13 @@ static void CreateAllWindows()	{
 	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
 	ps->setPosAndSize( 50+wm.getWidth()-200, 50+50, 200, wm.getHeight()-100);
+	ps->setBackground( (char*)"background.tga" );
 	wm.add( ps );
 	
 	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
 	ps->setPosAndSize( 50+0, 50+wm.getHeight()-50-2, wm.getWidth(), 50+2);
+	ps->setBackground( (char*)"background.tga" );
 	wm.add( ps );
 	//ps->add( new PanelText( *(new string("Press ESC to quit")),	PanelText::NORMAL_FONT, 10, 5 ) );
 	pStr = new string("Press ESC to quit");
@@ -402,6 +408,7 @@ static void CreateAllWindows()	{
 	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
 	ps->setPosAndSize( 50+0, 50+0, wm.getWidth(), 50+2);
+	ps->setBackground( (char*)"background.tga" );
 	wm.add( ps );
 	pStr = new string("Press ESC to quit");
 	ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 5, 0xffffffff ) );
@@ -411,6 +418,7 @@ static void CreateAllWindows()	{
 	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
 	ps->setPosAndSize( 650-4, 50+50+0, 400, 600);
+	ps->setBackground( (char*)"background.tga" );
 	wm.add( ps );
 
 	ps->add( new PanelText( (char*)"1 Essai de panelText SMALL_FONT", PanelText::SMALL_FONT, 40, 100 ) );
@@ -422,6 +430,7 @@ static void CreateAllWindows()	{
 	pc = new PanelConsole( 100, 10 );
 	pc->setPosAndSize( 250-2, 100, 400, wm.getHeight()-100);
 	pc->setPrompt( "console1> " );
+	pc->setBackground( (char*)"background.tga" );
 	wm.add( pc );
 	pc->setCallBackCmd( exec_cmd );
 	pPC = pc;
@@ -432,6 +441,7 @@ static void CreateAllWindows()	{
 	//pc->setPrompt( "rene@poste-002:/home/rene$ " );
 	pc->setPrompt( "console2> " );
 	pc->setCallBackCmd( new CallBack() );
+	pc->setBackground( (char*)"background.tga" );
 	wm.add( pc );
 	/*
 	*/

@@ -860,6 +860,9 @@ class PanelWindow : public PanelSimple {
 
 		void				displayGLtex( _Texture2D* , float, float, float, float );
 
+		virtual void		clickLeft( int, int);
+		virtual void		releaseLeft( int, int);
+
 		virtual void		displayGL();
 		virtual void		updatePos();
 		
@@ -968,6 +971,8 @@ static void             loadResourceImage( const std::string& );
 	inline static WindowsManager&	getInstance()			{ if (!instance) instance = new WindowsManager();return *instance;}
 	inline static void				Destroy()				{ if (instance) delete instance;instance=0;}
 	
+	static void				        genereMipMap(bool b);
+
 	WindowsManager();
 	WindowsManager(int, int);
 	~WindowsManager();

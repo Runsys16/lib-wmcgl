@@ -22,6 +22,9 @@ class PanelWindow : public PanelSimple {
 
 		void				displayGLtex( _Texture2D* , float, float, float, float );
 
+		virtual void		clickLeft( int, int);
+		virtual void		releaseLeft( int, int);
+
 		virtual void		displayGL();
 		virtual void		updatePos();
 		

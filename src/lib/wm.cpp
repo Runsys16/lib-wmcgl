@@ -589,6 +589,8 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 		}
 		bClickLeft = true;
 		if ( panelFocus )			panelFocus->clickLeft( x, y );
+    	//cout << " clickLeft : "<< endl;
+		
 	}
 	else if ( button == 3 && state == 0 )	{
 		if ( p )	p->clickUp( x, y );
@@ -680,6 +682,13 @@ static void WindowsManager::loadResourceImage( const std::string& filename )
 	_ResourceManager& res = _ResourceManager::getInstance();
 
 	res.LoadResource(_ResourceManager::TEXTURE2D, filename );
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+static void WindowsManager::genereMipMap(bool b)
+{
+    _Texture::EnableGenerateMipmaps(b);
 }
 	
 //------------------------------------------------------------

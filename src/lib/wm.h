@@ -30,6 +30,7 @@
 #include "Font.h"
 #include "TextUtil.h"
 #include "ImageTools.h"
+#include "Texture.h"
 
 //#define DEBUG_CONST
 //#define DEBUG_WM
@@ -115,6 +116,8 @@ static void             loadResourceImage( const std::string& );
 	inline static WindowsManager&	getInstance()			{ if (!instance) instance = new WindowsManager();return *instance;}
 	inline static void				Destroy()				{ if (instance) delete instance;instance=0;}
 	
+	static void				        genereMipMap(bool b);
+
 	WindowsManager();
 	WindowsManager(int, int);
 	~WindowsManager();

@@ -263,6 +263,7 @@ class Panel {
 		inline void			setReleaseRight( click_left_cb_t cb)            { release_right_cb = cb;}
 		
 		inline void			setScissor(bool b)                              { bScissor = b;}
+		inline void			setFantome(bool b)                              { bFantome = b;}
 		
 		void				deleteChilds();
 		
@@ -301,6 +302,7 @@ class Panel {
 		
 		bool                bHaveMove;
 		bool                bScissor;
+		bool                bFantome;
 
 };
 

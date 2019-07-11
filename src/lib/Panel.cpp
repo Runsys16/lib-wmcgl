@@ -56,6 +56,7 @@ void Panel::init()	{
 	
 	bHaveMove = false;
 	bScissor = false;
+	bFantome = false;
 }
 
 
@@ -116,6 +117,7 @@ Panel* Panel::isMouseOver(int xm, int ym)	{
 	#endif
 
 	if ( !visible )			return NULL;
+	if ( bFantome )			return NULL;
 
 	int nb = childs.size();
 	//cout << "Panel::isMouseOver() nb = " << nb << endl;

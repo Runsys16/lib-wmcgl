@@ -568,6 +568,7 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 			sup( panelMove );
 			add( panelMove );
 		}
+		if ( panelFocus )			panelFocus->clickRight( x, y );
 		//swapVisible();
 	}
 	else if ( button == 2 && state == 1 )	{
@@ -575,6 +576,7 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 		panelMove = NULL;
 		xm_old = -1;
 		ym_old = -1;
+		if ( panelFocus )			panelFocus->releaseRight( x, y );
 	}
 	else if ( button == 0 && state == 1  && bClickLeft )	{
 		xm_old = -1;

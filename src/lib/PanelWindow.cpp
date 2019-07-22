@@ -23,6 +23,7 @@ PanelWindow::PanelWindow( void )	{
 	loadSkin( "bfs" );
 
 	borderSize = 8;
+    bFantome = false;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -111,6 +112,198 @@ void PanelWindow::updatePos() {
 		}
 	}
 	*/
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+Panel* PanelWindow::isMouseOverUpperLeft(int xm, int ym)	{
+	#ifdef DEBUG
+	cout << "Panel::isMouseOverBorder()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
+	#endif
+
+    if (        ( xm>x_raw-borderSize && xm<x_raw )
+            &&  ( ym>y_raw-borderSize && ym<y_raw ) )
+    
+    {
+        glutSetCursor(0X10);        
+        mouseOverBorder = MOB_UPPER_LEFT;
+        return this;
+    }
+	return NULL;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+Panel* PanelWindow::isMouseOverUpper(int xm, int ym)	{
+	#ifdef DEBUG
+	cout << "Panel::isMouseOverBorder()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
+	#endif
+
+    if (        ( xm>x_raw && xm<x_raw+dx_raw )
+            &&  ( ym>y_raw-borderSize && ym<y_raw ) )
+    {
+        glutSetCursor(0X0C);        
+        mouseOverBorder = MOB_UPPER;
+        return this;
+    }
+    
+    
+	return NULL;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+Panel* PanelWindow::isMouseOverUpperRight(int xm, int ym)	{
+	#ifdef DEBUG
+	cout << "Panel::isMouseOverBorder()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
+	#endif
+
+    if (        ( xm>x_raw+borderSize && xm<x_raw+borderSize+dx_raw )
+            &&  ( ym>y_raw-borderSize && ym<y_raw ) )
+    {
+        mouseOverBorder = MOB_UPPER_RIGHT;
+        glutSetCursor(0X11);        
+        return this;
+    }
+    
+	return NULL;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+Panel* PanelWindow::isMouseOverLeft(int xm, int ym)	{
+	#ifdef DEBUG
+	cout << "Panel::isMouseOverBorder()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
+	#endif
+
+    if (        ( xm>x_raw-borderSize && xm<x_raw )
+            &&  ( ym>y_raw && ym<y_raw+dy_raw ) )
+    {
+        glutSetCursor(0X0E);        
+        mouseOverBorder = MOB_LEFT;
+        return this;
+    }
+	return NULL;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+Panel* PanelWindow::isMouseOverRight(int xm, int ym)	{
+	#ifdef DEBUG
+	cout << "Panel::isMouseOverBorder()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
+	#endif
+
+    if (        ( xm>x_raw+dx_raw && xm<x_raw+dx_raw+borderSize )
+            &&  ( ym>y_raw && ym<y_raw+dy_raw ) )
+    {
+        mouseOverBorder = MOB_RIGHT;
+        glutSetCursor(0X0F);        
+        return this;
+    }
+	return NULL;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+Panel* PanelWindow::isMouseOverBottomLeft(int xm, int ym)	{
+	#ifdef DEBUG
+	cout << "Panel::isMouseOverBorder()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
+	#endif
+
+    if (        ( xm>x_raw-borderSize && xm<x_raw )
+            &&  ( ym>y_raw+dy_raw && ym<y_raw+dy_raw+borderSize ) )
+    {
+        glutSetCursor(0X13);        
+        mouseOverBorder = MOB_BOTTOM_LEFT;
+        return this;
+    }
+	return NULL;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+Panel* PanelWindow::isMouseOverBottom(int xm, int ym)	{
+	#ifdef DEBUG
+	cout << "Panel::isMouseOverBorder()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
+	#endif
+
+    if (        ( xm>x_raw && xm<x_raw+dx_raw )
+            &&  ( ym>y_raw+dy_raw && ym<y_raw+dy_raw+borderSize ) )
+    {
+        glutSetCursor(0X0D);        
+        mouseOverBorder = MOB_BOTTOM;
+        return this;
+    }
+	return NULL;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+Panel* PanelWindow::isMouseOverBottomRight(int xm, int ym)	{
+	#ifdef DEBUG
+	cout << "Panel::isMouseOverBorder()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
+	#endif
+
+    if (        ( xm>x_raw+dx_raw && xm<x_raw+dx_raw+borderSize )
+            &&  ( ym>y_raw+dy_raw && ym<y_raw+dy_raw+borderSize ) )
+    {
+        mouseOverBorder = MOB_BOTTOM_RIGHT;
+        glutSetCursor(0X12);        
+        return this;
+    }
+	return NULL;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+Panel* PanelWindow::isMouseOverBorder(int xm, int ym)	{
+	#ifdef DEBUG
+	cout << "Panel::isMouseOverBorder()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
+	#endif
+
+    Panel* p;
+    p = isMouseOverUpperLeft(xm, ym);
+    if ( p!=NULL )      return p;	
+    p = isMouseOverUpper(xm, ym);
+    if ( p!=NULL )      return p;	
+    p = isMouseOverUpperRight(xm, ym);
+    if ( p!=NULL )      return p;	
+    p = isMouseOverLeft(xm, ym);
+    if ( p!=NULL )      return p;	
+    p = isMouseOverRight(xm, ym);
+    if ( p!=NULL )      return p;	
+    p = isMouseOverBottomLeft(xm, ym);
+    if ( p!=NULL )      return p;	
+    p = isMouseOverBottom(xm, ym);
+    if ( p!=NULL )      return p;	
+    p = isMouseOverBottomRight(xm, ym);
+    if ( p!=NULL )      return p;	
+	
+    mouseOverBorder = MOB_FREE;
+	return NULL;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+Panel* PanelWindow::isMouseOver(int xm, int ym)	{
+	#ifdef DEBUG
+	cout << "Panel::isMouseOver()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
+	#endif
+	//cout << "Panel::isMouseOver()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
+
+	if ( !visible )			return NULL;
+	if ( bFantome )			return NULL;
+
+	int nb = childs.size();
+	//cout << "Panel::isMouseOver() nb = " << nb << endl;
+	for( int i=0; i<nb; i++ )	{
+		Panel * p = childs[i]->isMouseOver(xm, ym);
+		if ( p )		return p;
+	}
+
+	if (        x_raw-borderSize <= xm && xm <= (x_raw+dx_raw+borderSize) 
+	        &&  y_raw-borderSize <= ym && ym <= (y_raw+dy_raw+borderSize) )     		    return this;
+	else																					return NULL;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

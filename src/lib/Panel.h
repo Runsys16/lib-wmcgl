@@ -3,6 +3,7 @@
 
 
 #include <vector>
+#include "Constante.h"
 
 typedef void (*click_left_cb_t)(int,int);
 typedef void (*release_left_cb_t)(int,int);
@@ -30,6 +31,7 @@ class Panel {
 		virtual void		releaseRight( int, int);
 
 		virtual Panel*		isMouseOver( int, int);
+		virtual Panel*		isMouseOverBorder( int, int);
 		virtual void		haveFocus()										{;}
 		virtual void		lostFocus()										{;}
 		virtual void		displayGL();
@@ -90,6 +92,8 @@ class Panel {
 		inline void			setScissor(bool b)                              { bScissor = b;}
 		inline void			setFantome(bool b)                              { bFantome = b;}
 		
+		inline int 			getMouseOverBorder()                            { return mouseOverBorder;}
+
 		void				deleteChilds();
 		
 
@@ -97,6 +101,7 @@ class Panel {
 	protected:
 		//-----------------------------------------------------------------------------------
 		int					ID;
+		int					TYPE;
 		int					x_raw;
 		int					y_raw;
 		int					dx_raw;
@@ -113,6 +118,7 @@ class Panel {
 		bool				visible;
 		bool				canMove;
 		bool				mouseVisible;
+		int                 mouseOverBorder;
 	
 		Panel* 				parent;
 		std::vector<Panel*> childs;

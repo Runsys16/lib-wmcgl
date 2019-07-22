@@ -205,6 +205,7 @@ class Panel {
 		virtual void		releaseRight( int, int);
 
 		virtual Panel*		isMouseOver( int, int);
+		virtual Panel*		isMouseOverBorder( int, int);
 		virtual void		haveFocus()										{;}
 		virtual void		lostFocus()										{;}
 		virtual void		displayGL();
@@ -265,6 +266,8 @@ class Panel {
 		inline void			setScissor(bool b)                              { bScissor = b;}
 		inline void			setFantome(bool b)                              { bFantome = b;}
 		
+		inline int 			getMouseOverBorder()                            { return mouseOverBorder;}
+
 		void				deleteChilds();
 		
 
@@ -272,6 +275,7 @@ class Panel {
 	protected:
 		//-----------------------------------------------------------------------------------
 		int					ID;
+		int					TYPE;
 		int					x_raw;
 		int					y_raw;
 		int					dx_raw;
@@ -288,6 +292,7 @@ class Panel {
 		bool				visible;
 		bool				canMove;
 		bool				mouseVisible;
+		int                 mouseOverBorder;
 	
 		Panel* 				parent;
 		std::vector<Panel*> childs;
@@ -862,6 +867,17 @@ class PanelWindow : public PanelSimple {
 
 		void				displayGLtex( _Texture2D* , float, float, float, float );
 
+        Panel *             isMouseOverUpperLeft(int,int);
+        Panel *             isMouseOverUpper(int,int);
+        Panel *             isMouseOverUpperRight(int,int);
+        Panel *             isMouseOverLeft(int,int);
+        Panel *             isMouseOverRight(int,int);
+        Panel *             isMouseOverBottomLeft(int,int);
+        Panel *             isMouseOverBottom(int,int);
+        Panel *             isMouseOverBottomRight(int,int);
+
+        virtual Panel*      isMouseOverBorder(int, int);
+        virtual Panel*      isMouseOver(int, int);
 		virtual void		clickLeft( int, int);
 		virtual void		releaseLeft( int, int);
 
@@ -880,6 +896,8 @@ class PanelWindow : public PanelSimple {
 		
 		int					borderSize;
 };
+
+
 
 
 
@@ -999,8 +1017,11 @@ private:
 	std::string					str[10];
 
 	bool						bMovePanel;
+	bool						bResize;
+	
 	Panel*						panelMove;
 	Panel*						panelFocus;
+	Panel*						panelResize;
 	std::vector<Panel *>		panels_cbKey;
 	
 	bool						bDebug;

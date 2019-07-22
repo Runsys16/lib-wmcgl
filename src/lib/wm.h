@@ -36,6 +36,9 @@
 //#define DEBUG_WM
 //#define DEBUG
 
+#include "Constante.h"
+
+
 class WindowsManager {
 
 public:
@@ -142,8 +145,11 @@ private:
 	std::string					str[10];
 
 	bool						bMovePanel;
+	bool						bResize;
+	
 	Panel*						panelMove;
 	Panel*						panelFocus;
+	Panel*						panelResize;
 	std::vector<Panel *>		panels_cbKey;
 	
 	bool						bDebug;

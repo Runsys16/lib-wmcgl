@@ -130,6 +130,16 @@ Panel* Panel::isMouseOver(int xm, int ym)	{
 	else																					return NULL;
 }
 
+Panel* Panel::isMouseOverBorder(int xm, int ym)	{
+	#ifdef DEBUG
+	cout << "Panel::isMouseOverBorder()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
+	#endif
+    
+    mouseOverBorder = MOB_FREE;
+    
+	return NULL;
+}
+
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void Panel::clickUp(int xm, int ym)	{

@@ -269,6 +269,7 @@ static void CreateAllWindows()	{
 	
 	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
+	ps->setBackground( (char*)"background.tga" );
 	ps->setPosAndSize( 50+0, 50+50, 200, wm.getHeight()-100);
 	wm.add( ps );
 	int y = 10;
@@ -282,11 +283,13 @@ static void CreateAllWindows()	{
 	
 	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
+	ps->setBackground( (char*)"background.tga" );
 	ps->setPosAndSize( 50+wm.getWidth()-200, 50+50, 200, wm.getHeight()-100);
 	wm.add( ps );
 	
 	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
+	ps->setBackground( (char*)"background.tga" );
 	ps->setPosAndSize( 50+0, 50+wm.getHeight()-50-2, wm.getWidth(), 50+2);
 	wm.add( ps );
 	//ps->add( new PanelText( *(new string("Press ESC to quit")),	PanelText::NORMAL_FONT, 10, 5 ) );
@@ -299,6 +302,7 @@ static void CreateAllWindows()	{
 	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
 	ps->setPosAndSize( 50+0, 50+0, wm.getWidth(), 50+2);
+	ps->setBackground( (char*)"background.tga" );
 	wm.add( ps );
 	pStr = new string("Press ESC to quit");
 	ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 5 ) );
@@ -307,6 +311,7 @@ static void CreateAllWindows()	{
 	
 	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
+	ps->setBackground( (char*)"background.tga" );
 	ps->setPosAndSize( 650-4, 50+50+0, 400, 600);
 	wm.add( ps );
 
@@ -317,6 +322,7 @@ static void CreateAllWindows()	{
 	//---------------------------------------------------------------------------------	
 	PanelConsole* pc;
 	pc = new PanelConsole( 100, 10 );
+	pc->setBackground( (char*)"background.tga" );
 	pc->setPosAndSize( 250-2, 100, 400, wm.getHeight()-100);
 	pc->setPrompt( "console1> " );
 	wm.add( pc );
@@ -325,6 +331,7 @@ static void CreateAllWindows()	{
 	
 	//---------------------------------------------------------------------------------	
 	pc = new PanelConsole( 100, 5 );
+	pc->setBackground( (char*)"background.tga" );
 	pc->setPosAndSize( 250-2-4+800, 100, 200+8, wm.getHeight()-100);
 	//pc->setPrompt( "rene@poste-002:/home/rene$ " );
 	pc->setPrompt( "console2> " );

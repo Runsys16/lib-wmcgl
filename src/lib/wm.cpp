@@ -101,11 +101,13 @@ void WindowsManager::init()	{
 	//textUtil.BuildText( cTextObj, str, &color, &color_bg, 10,  DefaultNormalFont, 2, 100);
 
 
-	panelMove = NULL;
-	panelFocus = NULL;
-	bDebug = false;
-	
+	panelMove   = NULL;
+	panelFocus  = NULL;
+	panelResize = NULL;
+
+	bDebug        = false;
 	bStopKeyboard = false;
+	bResize       = false;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -124,11 +126,13 @@ void WindowsManager::add( Panel * p )	{
 	#ifdef DEBUG
 	cout << "WindowsManager::add() " << endl;
 	#endif
+	//cout << "WindowsManager::add() "<< p->getID() << endl;
 	
 	if ( p->getID() == -1 )	p->setID( getFreeID() );
 	
 	childs.push_back( p );
 	p->setParent( NULL );
+	panelFocus = p;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -163,6 +167,7 @@ void WindowsManager::onTop( Panel * p )	{
     if (p)    {
         sup(p);
         add(p);
+        panelFocus = p;
     }
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -260,11 +265,12 @@ Panel * WindowsManager::getParentRoot( Panel* pChild)	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::changeFocus( Panel* p )	{
-	//cout << "WindowsManager::passiveMotionFunc( " << x << ", " << y << " )" << endl;
+	//cout << "WindowsManager::changeFocus( " << x << ", " << y << " )" << endl;
 	if ( p != panelFocus )	{
 		if ( p )				p->haveFocus();
 		if (panelFocus )		panelFocus->lostFocus();
 	}
+	//panelFocus = getParentRoot(p);
 	panelFocus = p;
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -530,14 +536,97 @@ void WindowsManager::passiveMotionFunc(int x, int y)	{
 	
 	xm_old = -1;
 	ym_old = -1;
+
+    bool bOver = false;
+
+	p = findPanelMouseOver(x, y);
+	p = getParentRoot( p );
+	
+	panelResize = NULL;
+	
+    if ( p != NULL )
+    {
+	    Panel * pp = p->isMouseOverBorder( x, y );
+	    if ( pp != NULL )	
+	    {
+		    cout << " Resize  Panel ID : "<< pp->getID()  << endl;
+		    bOver = true;
+        	panelResize = pp;
+        }
+    }
+
+	if ( !bOver )   	            glutSetCursor(0);
+	
+	
+	#ifdef DEBUG
+    if ( p != NULL )
+        cout << "WindowsManager::passiveMotionFunc() sur ID=" << p->getID() << endl;
+    else
+        cout << "WindowsManager::passiveMotionFunc() NULL" << endl;
+    #endif
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::motionFunc(int x, int y)	{
-	//cout << "WindowsManager::motionFunc( " << x << ", " << y << " )" << endl;
+	#ifdef DEBUG
+    if ( panelMove != NULL )
+    	cout << "WindowsManager::motionFunc( " << x << ", " << y << " )  ID "<< panelMove->getID() << endl;
+	else
+    	cout << "WindowsManager::motionFunc( " << x << ", " << y << " )  panelMove NULL " << endl;
+    #endif
+    	
 	if ( bMovePanel && panelMove != NULL )	{
+    	#ifdef DEBUG
+    	cout << "WindowsManager::motionFunc( " << x << ", " << y << " )  ID "<< panelMove->getID() << endl;
+        #endif
+
 		movePanel( x, y, panelMove );
+		panelFocus = panelMove;
+	}
+	else
+	if( bResize && panelResize != NULL)
+	{
+    	#ifdef DEBUG
+    	cout << "WindowsManager::motionFunc( " << x << ", " << y << " )" << endl;
+    	cout << "   ID = " << panelResize->getID() << endl;
+    	cout << "   getMouseOverBorder=" << panelResize->getMouseOverBorder() << endl;
+        #endif
+        
+                
+        int xx   = panelResize->getX();
+        int yy   = panelResize->getY();
+        int dxx  = panelResize->getDX();
+        int dyy  = panelResize->getDY();
+        int delta;
+        
+    	switch( panelResize->getMouseOverBorder() )
+    	{
+    	    case MOB_UPPER:
+    	        delta = 2 * (y - ym_old);
+    	        yy   += delta;
+    	        dyy  -= delta;
+    	        panelResize->setPosAndSize(xx, yy, dxx, dyy);
+    	        break; 
+    	    case MOB_BOTTOM:
+    	        delta = 2 * (y - ym_old);
+    	        dyy  += delta;
+    	        panelResize->setPosAndSize(xx, yy, dxx, dyy);
+    	        break; 
+    	    case MOB_LEFT:
+    	        delta = 2 * (x - xm_old);
+    	        xx   += delta;
+    	        dxx  -= delta;
+    	        panelResize->setPosAndSize(xx, yy, dxx, dyy);
+    	        break; 
+    	    case MOB_RIGHT:
+    	        delta = 2 * (x - xm_old);
+    	        dxx  += delta;
+    	        panelResize->setPosAndSize(xx, yy, dxx, dyy);
+    	        break; 
+    	}
+        xm_old = x;
+        ym_old = y;
 	}
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -556,10 +645,12 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	//changeFocus( p );
 	bMovePanel = false;
 
+    
 	if ( button >= 0 && button <=2 )
 	{
 	    changeFocus( p );
 	}
+	
 	
 	if ( button == 2 && state == 0 )	{
 		panelMove = getParentRoot( p );
@@ -577,20 +668,42 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 		xm_old = -1;
 		ym_old = -1;
 		if ( panelFocus )			panelFocus->releaseRight( x, y );
+    	//cout << " releaseRight : "<< panelFocus->getID() << endl;
 	}
-	else if ( button == 0 && state == 1  && bClickLeft )	{
+	//else if ( button == 0 && state == 1  && bClickLeft )	{
+	else if ( button == 0 && state == 1  )	{
 		xm_old = -1;
 		ym_old = -1;
 		if ( panelFocus )			panelFocus->releaseLeft( x, y );
+
+	    if ( bResize )
+	    {
+	        panelResize->haveMove();
+	        panelResize = NULL;
+    		bResize = false;
+    	    cout << " Release Left resize "<< endl;
+        }
+    	//cout << " clickLeft 0-1 bClickLeft: "<< endl;
 	}
 	else if ( button == 0 && state == 0 )	{
-		Panel * pFocusParent = getParentRoot( p );
-		if ( pFocusParent )	{
-			sup( pFocusParent );
-			add( pFocusParent );
+	    if ( panelResize != NULL )
+	    {
+            cout << " clickLeft avec resize : "<< endl;
+		    xm_old = x;
+		    ym_old = y;
+		    bResize = true;
+	    }
+	    else
+	    {
+		    Panel * pFocusParent = getParentRoot( p );
+		    if ( pFocusParent )	{
+			    sup( pFocusParent );
+			    add( pFocusParent );
+		    }
+		    bClickLeft = true;
+		
+		    if ( panelFocus )			panelFocus->clickLeft( x, y );
 		}
-		bClickLeft = true;
-		if ( panelFocus )			panelFocus->clickLeft( x, y );
     	//cout << " clickLeft : "<< endl;
 		
 	}

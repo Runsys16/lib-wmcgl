@@ -22,6 +22,17 @@ class PanelWindow : public PanelSimple {
 
 		void				displayGLtex( _Texture2D* , float, float, float, float );
 
+        Panel *             isMouseOverUpperLeft(int,int);
+        Panel *             isMouseOverUpper(int,int);
+        Panel *             isMouseOverUpperRight(int,int);
+        Panel *             isMouseOverLeft(int,int);
+        Panel *             isMouseOverRight(int,int);
+        Panel *             isMouseOverBottomLeft(int,int);
+        Panel *             isMouseOverBottom(int,int);
+        Panel *             isMouseOverBottomRight(int,int);
+
+        virtual Panel*      isMouseOverBorder(int, int);
+        virtual Panel*      isMouseOver(int, int);
 		virtual void		clickLeft( int, int);
 		virtual void		releaseLeft( int, int);
 

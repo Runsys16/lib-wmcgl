@@ -754,8 +754,6 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 			    add( pFocusParent );
 		    }
 		    bClickLeft = true;
-		
-		    if ( panelFocus )			panelFocus->clickLeft( x, y );
 		}
 
         if ( panelFocus )			panelFocus->clickLeft( x, y );

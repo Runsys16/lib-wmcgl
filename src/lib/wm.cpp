@@ -513,12 +513,15 @@ void WindowsManager::displayGL()	{
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 }
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::clearBufferGL()	{
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
-	
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::clearBufferGL( GLbitfield bitField )	{
 	glClear(bitField);
 }
@@ -549,7 +552,7 @@ void WindowsManager::passiveMotionFunc(int x, int y)	{
 	    Panel * pp = p->isMouseOverBorder( x, y );
 	    if ( pp != NULL )	
 	    {
-		    cout << " Resize  Panel ID : "<< pp->getID()  << endl;
+		    //cout << " Resize  Panel ID : "<< pp->getID()  << endl;
 		    bOver = true;
         	panelResize = pp;
         }
@@ -594,35 +597,83 @@ void WindowsManager::motionFunc(int x, int y)	{
         #endif
         
                 
-        int xx   = panelResize->getX();
-        int yy   = panelResize->getY();
-        int dxx  = panelResize->getDX();
-        int dyy  = panelResize->getDY();
+        int xx   = panelResize->getPosX();
+        int yy   = panelResize->getPosY();
+        int dxx  = panelResize->getPosDX();
+        int dyy  = panelResize->getPosDY();
         int delta;
         
     	switch( panelResize->getMouseOverBorder() )
     	{
-    	    case MOB_UPPER:
-    	        delta = 2 * (y - ym_old);
-    	        yy   += delta;
-    	        dyy  -= delta;
-    	        panelResize->setPosAndSize(xx, yy, dxx, dyy);
-    	        break; 
-    	    case MOB_BOTTOM:
-    	        delta = 2 * (y - ym_old);
-    	        dyy  += delta;
-    	        panelResize->setPosAndSize(xx, yy, dxx, dyy);
-    	        break; 
-    	    case MOB_LEFT:
-    	        delta = 2 * (x - xm_old);
+    	    case MOB_UPPER_LEFT:
+    	        delta = x - xm_old;
     	        xx   += delta;
     	        dxx  -= delta;
-    	        panelResize->setPosAndSize(xx, yy, dxx, dyy);
+    	        panelResize->setPosX(xx);
+    	        panelResize->setPosDX(dxx);
+    	        delta = y - ym_old;
+    	        yy   += delta;
+    	        dyy  -= delta;
+    	        panelResize->setPosY(yy);
+    	        panelResize->setPosDY(dyy);
+    	        break; 
+    	    case MOB_UPPER_RIGHT:
+    	        delta = x - xm_old;
+    	        dxx  -= -delta;
+    	        panelResize->setPosDX(dxx);
+    	        delta = y - ym_old;
+    	        yy   += delta;
+    	        dyy  -= delta;
+    	        panelResize->setPosY(yy);
+    	        panelResize->setPosDY(dyy);
+    	        break; 
+    	    case MOB_BOTTOM_LEFT:
+    	        delta = x - xm_old;
+    	        xx   += delta;
+    	        dxx  -= delta;
+    	        panelResize->setPosX(xx);
+    	        panelResize->setPosDX(dxx);
+    	        delta = y - ym_old;
+    	        yy   += -delta;
+    	        dyy  -= -delta;
+    	        //panelResize->setPosY(yy);
+    	        panelResize->setPosDY(dyy);
+    	        break; 
+    	    case MOB_BOTTOM_RIGHT:
+    	        delta = x - xm_old;
+    	        xx   += -delta;
+    	        dxx  -= -delta;
+    	        //panelResize->setPosX(xx);
+    	        panelResize->setPosDX(dxx);
+    	        delta = y - ym_old;
+    	        yy   += -delta;
+    	        dyy  -= -delta;
+    	        //panelResize->setPosY(yy);
+    	        panelResize->setPosDY(dyy);
+    	        break; 
+    	    case MOB_UPPER:
+    	        delta = y - ym_old;
+    	        yy   += delta;
+    	        dyy  -= delta;
+    	        panelResize->setPosY(yy);
+    	        panelResize->setPosDY(dyy);
+    	        break; 
+    	    case MOB_BOTTOM:
+    	        delta = y - ym_old;
+    	        dyy  += delta;
+    	        panelResize->setPosDY(dyy);
+    	        break; 
+    	    case MOB_LEFT:
+    	        delta = x - xm_old;
+    	        xx   += delta;
+    	        dxx  -= delta;
+    	        panelResize->setPosX(xx);
+    	        panelResize->setPosDX(dxx);
     	        break; 
     	    case MOB_RIGHT:
-    	        delta = 2 * (x - xm_old);
+    	        delta = x - xm_old;
     	        dxx  += delta;
-    	        panelResize->setPosAndSize(xx, yy, dxx, dyy);
+    	        panelResize->setPosDX(dxx);
     	        break; 
     	}
         xm_old = x;
@@ -681,17 +732,19 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	        panelResize->haveMove();
 	        panelResize = NULL;
     		bResize = false;
-    	    cout << " Release Left resize "<< endl;
+    	    //cout << " Release Left resize "<< endl;
         }
     	//cout << " clickLeft 0-1 bClickLeft: "<< endl;
 	}
 	else if ( button == 0 && state == 0 )	{
 	    if ( panelResize != NULL )
 	    {
-            cout << " clickLeft avec resize : "<< endl;
+            //cout << " clickLeft avec resize : "<< endl;
 		    xm_old = x;
 		    ym_old = y;
 		    bResize = true;
+			sup( panelResize );
+			add( panelResize );
 	    }
 	    else
 	    {
@@ -704,6 +757,8 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 		
 		    if ( panelFocus )			panelFocus->clickLeft( x, y );
 		}
+
+        if ( panelFocus )			panelFocus->clickLeft( x, y );
     	//cout << " clickLeft : "<< endl;
 		
 	}

@@ -228,6 +228,7 @@ static void CreateOneWindow()	{
 	PanelText* pt;
 	
 	PW = new PanelWindow();
+	PW->setBackground( (char*)"background.tga" );
 	pw.push_back( PW );
 	
 	int x, y, dx, dy;

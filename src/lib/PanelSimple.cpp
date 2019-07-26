@@ -91,7 +91,7 @@ void PanelSimple::updatePos() {
 			WindowsManager& wm = WindowsManager::getInstance();
 			char	str[255];
 		
-			sprintf( str, "ID=%d, X=%d, Y=%d, DX=%d, DY=%d order=%d", getID(), getX(), getY(), getDX(), getDY(), wm.getOrder(this) );
+			sprintf( str, "ID=%d, X=%d, Y=%d, DX=%d, DY=%d order=%d", getID(), getX(), getY(), getDX(), getDY(), wm.getNbPanel()-wm.getOrder(this) );
 			sDebug = string(str);
 			pPtDebug->changeText( sDebug, PanelText::NORMAL_FONT, true );
 		}

@@ -74,6 +74,7 @@ public:
 	*/
 
 
+	inline int 			getNbPanel()	     			{return childs.size();}
 	inline void			setDebug( bool b )				{debug(b);}
 	inline int			getDebug()						{return bDebug;}
 	inline void			setWidth( int w)				{width=w;}

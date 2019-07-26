@@ -124,7 +124,7 @@ void WindowsManager::setScreenSize( int w, int h )	{
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::add( Panel * p )	{
 	#ifdef DEBUG
-	cout << "WindowsManager::add() " << endl;
+	cout << "WindowsManager::add() ID="<< p->getID() <<" nb="<< childs.size() << endl;
 	#endif
 	//cout << "WindowsManager::add() "<< p->getID() << endl;
 	
@@ -132,17 +132,25 @@ void WindowsManager::add( Panel * p )	{
 	
 	childs.push_back( p );
 	p->setParent( NULL );
-	panelFocus = p;
+
+	#ifdef DEBUG
+	int nb = childs.size();
+	for ( int i=0; i<nb; i++ )	{
+		cout << i <<" - "<< childs[i]->getID() << endl;
+	}
+
+
+	//panelFocus = p;
+	cout << "WindowsManager::add() nb="<< childs.size() << endl;
+	#endif
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::sup( Panel * p )	{
 	#ifdef DEBUG
-	cout << "WindowsManager::sup() " << endl;
+	cout << "WindowsManager::sup() ID="<< p->getID() <<" nb="<< childs.size()  << endl;
 	#endif
-
-    if ( panelFocus == p)   panelFocus = NULL;
 
 	int nb = childs.size();
 	int id = p->getID();
@@ -153,35 +161,46 @@ void WindowsManager::sup( Panel * p )	{
 			break;
 		}
 	}
-	
-	
+
+
+    if ( panelFocus == p)   panelFocus = NULL;
+
+	#ifdef DEBUG
+	cout << "WindowsManager::sup() nb="<< childs.size()  << endl;
+	#endif
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::onTop( Panel * p )	{
 	#ifdef DEBUG
-	cout << "WindowsManager::add() " << endl;
+	cout << "WindowsManager::onTop() ID="<< p->getID() <<" nb="<< childs.size() << endl;
 	#endif
 	
     if (p)    {
         sup(p);
         add(p);
-        panelFocus = p;
+        //panelFocus = p;
     }
+	#ifdef DEBUG
+	cout << "WindowsManager::onTop() nb="<< childs.size() << endl;
+	#endif
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::onBottom( Panel * p )	{
 	#ifdef DEBUG
-	cout << "WindowsManager::sup() " << endl;
+	cout << "WindowsManager::onBottom() ID="<< p->getID() <<" nb="<< childs.size() << endl;
 	#endif
 
     if (p)    {
         sup(p);
         childs.insert( childs.begin(), p );
     }
+	#ifdef DEBUG
+	cout << "WindowsManager::onBottom() nb="<< childs.size() << endl;
+	#endif
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -307,9 +326,10 @@ Panel * WindowsManager::findPanelMouseOver( int xm, int ym)	{
 //--------------------------------------------------------------------------------------------------------------------
 int WindowsManager::getOrder( Panel* p )	{
 	int nb = childs.size();
+	//cout << "WindowsManager::getOrder() nb="<< nb << endl;
 	
-	for ( int i=nb-1; i>=0; i-- )	{
-		if ( childs[i] = p )		return i;
+	for ( int i=0; i<nb; i++ )	{
+		if ( childs[i] == p )		return i;
 	}
 	
 	return -1;

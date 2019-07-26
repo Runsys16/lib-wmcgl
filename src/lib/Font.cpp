@@ -46,32 +46,32 @@ _Font::_Font()	{
 
 	
 	pFont = new freetype::font_data;
-	#define FILENAME "/usr/share/fonts/truetype/msttcorefonts/Arial.ttf"
-	if ( cfileexists(FILENAME) ) 
+	#define FILENAME0 "/usr/share/fonts/truetype/msttcorefonts/Arial.ttf"
+	if ( cfileexists(FILENAME0) ) 
 		pFont->init("/usr/share/fonts/truetype/msttcorefonts/Arial.ttf", 10);
     else
 		pFont->init("/usr/share/fonts/truetype/msttcorefonts/Arial.ttf", 10);
     (*pFonts)[(int)ARIAL] = pFont;
 	
 	pFont = new freetype::font_data;
-	#define FILENAME "/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-B.ttf"
-	if ( cfileexists(FILENAME) ) 
+	#define FILENAME1 "/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-B.ttf"
+	if ( cfileexists(FILENAME1) ) 
     	pFont->init("/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-B.ttf", 10);
     else
     	pFont->init("/usr/share/fonts/truetype/ubuntu/Ubuntu-B.ttf", 10);
 	(*pFonts)[(int)UBUNTU_B] = pFont;
 	
 	pFont = new freetype::font_data;
-	#define FILENAME "/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-RI.ttf"
-	if ( cfileexists(FILENAME) ) 
+	#define FILENAME2 "/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-RI.ttf"
+	if ( cfileexists(FILENAME2) ) 
     	pFont->init("/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-RI.ttf", 10);
     else
     	pFont->init("/usr/share/fonts/truetype/ubuntu/Ubuntu-RI.ttf", 10);
 	(*pFonts)[(int)UBUNTU_RI] = pFont;
 	
 	pFont = new freetype::font_data;
-	#define FILENAME "/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-R.ttf"
-	if ( cfileexists(FILENAME) ) 
+	#define FILENAME3 "/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-R.ttf"
+	if ( cfileexists(FILENAME3) ) 
     	pFont->init("/usr/share/fonts/truetype/ubuntu-font-family/UbuntuMono-R.ttf", 12);
     else
     	pFont->init("/usr/share/fonts/truetype/ubuntu/Ubuntu-R.ttf", 10);

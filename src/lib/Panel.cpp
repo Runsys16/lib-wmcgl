@@ -168,7 +168,7 @@ void Panel::updatePos()	{
 	x_raw = x;
 	y_raw = y;
 	Panel* current = parent;
-	//cout << "Panel::updatePos() ..."<<"ID="<< ID <<"x_raw="<< x_raw <<" y_raw="<< y_raw << endl;
+	//cout << "Panel::updatePos() ..."<<"ID="<< ID <<" x_raw="<< x_raw <<" y_raw="<< y_raw << endl;
 	while( current != NULL )	{
 		//cout << " 0-Panel::updatePos() ..."<<"ID="<< parent->getID() <<"x_raw="<< x_raw <<" y_raw="<< y_raw << endl;
 		x_raw += current->getPosX();
@@ -180,6 +180,7 @@ void Panel::updatePos()	{
 	dx_raw = dx;
 	dy_raw = dy;
 
+	//cout << "                      "<<"ID="<< ID <<" x_raw="<< x_raw <<" y_raw="<< y_raw << endl;
 	int nb = childs.size();
 	for( int i=0; i<nb; i++ )	{
 		childs[i]->updatePos();

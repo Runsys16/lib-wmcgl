@@ -177,11 +177,17 @@ void WindowsManager::onTop( Panel * p )	{
 	cout << "WindowsManager::onTop() ID="<< p->getID() <<" nb="<< childs.size() << endl;
 	#endif
 	
-    if (p)    {
-        sup(p);
-        add(p);
-        //panelFocus = p;
-    }
+	int nb = childs.size();
+	int id = p->getID();
+	
+	for ( int i=0; i<nb; i++ )	{
+		if ( childs[i]->getID() == id )	{
+			childs.erase( childs.begin()+i );
+			childs.push_back(p);
+			break;
+		}
+	}
+
 	#ifdef DEBUG
 	cout << "WindowsManager::onTop() nb="<< childs.size() << endl;
 	#endif
@@ -362,8 +368,7 @@ void WindowsManager::movePanel( int xm, int ym, Panel* p )	{
 		#ifdef DEBUG
 		cout << "WindowsManager::Mouse Over Panel.ID = " << p->getID() << endl;
 		#endif
-		sup( p );
-		add( p );
+		onTop( p );
 		
 		if ( xm_old != -1 && ym_old != -1 )	{
 			int dx = xm - xm_old;
@@ -698,6 +703,8 @@ void WindowsManager::motionFunc(int x, int y)	{
     	}
         xm_old = x;
         ym_old = y;
+        //cout << "panelResize() ID = "<< panelResize->getID() << endl;
+        panelResize->updatePos();
 	}
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -727,8 +734,7 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 		panelMove = getParentRoot( p );
 		if ( panelMove != NULL )	{
 			bMovePanel = true;
-			sup( panelMove );
-			add( panelMove );
+			onTop( panelMove );
 		}
 		if ( panelFocus )			panelFocus->clickRight( x, y );
 		//swapVisible();
@@ -763,15 +769,13 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 		    xm_old = x;
 		    ym_old = y;
 		    bResize = true;
-			sup( panelResize );
-			add( panelResize );
+			onTop( panelResize );
 	    }
 	    else
 	    {
 		    Panel * pFocusParent = getParentRoot( p );
 		    if ( pFocusParent )	{
-			    sup( pFocusParent );
-			    add( pFocusParent );
+			    onTop( pFocusParent );
 		    }
 		    bClickLeft = true;
 		}

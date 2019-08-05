@@ -101,13 +101,15 @@ void WindowsManager::init()	{
 	//textUtil.BuildText( cTextObj, str, &color, &color_bg, 10,  DefaultNormalFont, 2, 100);
 
 
-	panelMove   = NULL;
-	panelFocus  = NULL;
-	panelResize = NULL;
+	panelMove           = NULL;
+	panelFocus          = NULL;
+	panelResize         = NULL;
+    panelMotionMiddle   = NULL;
 
 	bDebug        = false;
 	bStopKeyboard = false;
 	bResize       = false;
+	bMotionMiddle = false;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -706,6 +708,11 @@ void WindowsManager::motionFunc(int x, int y)	{
         //cout << "panelResize() ID = "<< panelResize->getID() << endl;
         panelResize->updatePos();
 	}
+	else
+	if( bMotionMiddle && panelMotionMiddle != NULL)
+	{
+	    panelMotionMiddle->motionMiddle(x,y);
+	}
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -784,8 +791,23 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
     	//cout << " clickLeft : "<< endl;
 		
 	}
+	else if ( button == 1 && state == 0 )	{
+    	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
+    	panelMotionMiddle = p;
+    	bMotionMiddle = true;
+		if ( p )	p->clickMiddle( x, y );
+	}
+	else if ( button == 1 && state == 1 )	{
+    	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
+		if ( p )	p->releaseMiddle( x, y );
+		bMotionMiddle = false;
+    	panelMotionMiddle = NULL;
+	}
 	else if ( button == 3 && state == 0 )	{
-		if ( p )	p->clickUp( x, y );
+    	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
+		//if ( p )	p->clickUp( x, y );
+		if ( p )	p->wheelUp( x, y );
+    
 	/*
 		Panel * pFocusParent = getParentRoot( p );
 		bClickLeft = true;
@@ -793,7 +815,9 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	*/
 	}
 	else if ( button == 4 && state == 0 )	{
-		if ( p )	p->clickDown( x, y );
+    	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
+		//if ( p )	p->clickDown( x, y );
+		if ( p )	p->wheelDown( x, y );
 	/*
 		Panel * pFocusParent = getParentRoot( p );
 		bClickLeft = true;

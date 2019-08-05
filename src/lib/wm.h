@@ -147,10 +147,12 @@ private:
 
 	bool						bMovePanel;
 	bool						bResize;
+	bool						bMotionMiddle;
 	
 	Panel*						panelMove;
 	Panel*						panelFocus;
 	Panel*						panelResize;
+	Panel*						panelMotionMiddle;
 	std::vector<Panel *>		panels_cbKey;
 	
 	bool						bDebug;

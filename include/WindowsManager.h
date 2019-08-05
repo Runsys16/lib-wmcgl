@@ -204,6 +204,13 @@ class Panel {
 		virtual void		clickRight( int, int);
 		virtual void		releaseRight( int, int);
 
+		virtual void		clickMiddle( int, int)                          {;};
+		virtual void		motionMiddle( int, int)                         {;};
+		virtual void		releaseMiddle( int, int)                        {;};
+
+		virtual void		wheelUp( int, int)                              {;};
+		virtual void		wheelDown( int, int)                            {;};
+
 		virtual Panel*		isMouseOver( int, int);
 		virtual Panel*		isMouseOverBorder( int, int);
 		virtual void		haveFocus()										{;}
@@ -1019,10 +1026,12 @@ private:
 
 	bool						bMovePanel;
 	bool						bResize;
+	bool						bMotionMiddle;
 	
 	Panel*						panelMove;
 	Panel*						panelFocus;
 	Panel*						panelResize;
+	Panel*						panelMotionMiddle;
 	std::vector<Panel *>		panels_cbKey;
 	
 	bool						bDebug;

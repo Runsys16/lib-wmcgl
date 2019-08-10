@@ -153,6 +153,7 @@ void WindowsManager::sup( Panel * p )	{
 	#ifdef DEBUG
 	cout << "WindowsManager::sup() ID="<< p->getID() <<" nb="<< childs.size()  << endl;
 	#endif
+    if ( panelFocus == p)   panelFocus = NULL;
 
 	int nb = childs.size();
 	int id = p->getID();
@@ -165,7 +166,6 @@ void WindowsManager::sup( Panel * p )	{
 	}
 
 
-    if ( panelFocus == p)   panelFocus = NULL;
 
 	#ifdef DEBUG
 	cout << "WindowsManager::sup() nb="<< childs.size()  << endl;
@@ -292,10 +292,10 @@ Panel * WindowsManager::getParentRoot( Panel* pChild)	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::changeFocus( Panel* p )	{
-	//cout << "WindowsManager::changeFocus( " << x << ", " << y << " )" << endl;
+	cout << "WindowsManager::changeFocus( " << p->getID() << " )" << endl;
 	if ( p != panelFocus )	{
-		if ( p )				p->haveFocus();
-		if (panelFocus )		panelFocus->lostFocus();
+		if ( p!=NULL )				    p->haveFocus();
+		//if (panelFocus!=NULL )		    panelFocus->lostFocus();
 	}
 	//panelFocus = getParentRoot(p);
 	panelFocus = p;

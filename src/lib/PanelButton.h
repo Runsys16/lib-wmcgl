@@ -35,7 +35,13 @@ class PanelButton : public PanelSimple {
 		virtual Panel*		isMouseOver( int, int);
 		virtual void		displayGL();
 		virtual void		updatePos();
+
 		void				debug(bool);
+
+		void				texUp();
+		void				texDown();
+		void				texOver();
+		
 		void				setUp( char *);
 		void				setDown( char *);
 		void				setOver( char *);

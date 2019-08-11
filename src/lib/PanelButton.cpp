@@ -114,6 +114,7 @@ void PanelButton::clickLeft( int xm, int ym)	{
 	if( pCallBackDown )				(*pCallBackDown)(this);
 	if ( pPanelButtonCallBack )		pPanelButtonCallBack->cb_button_mouse_down(this);
 	PanelSimple::clickLeft( xm, ym);
+	texDown();
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
@@ -121,6 +122,7 @@ void PanelButton::releaseLeft( int xm, int ym)	{
 	if( pCallBackUp )				(*pCallBackUp)(this);
 	if ( pPanelButtonCallBack )		pPanelButtonCallBack->cb_button_mouse_up(this);
 	PanelSimple::releaseLeft( xm, ym);
+	texUp();
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
@@ -131,6 +133,7 @@ Panel* PanelButton::isMouseOver(int xm, int ym)	{
 	if ( !visible )			return NULL;
 
 	if ( x_raw <= xm && xm <= (x_raw+dx_raw) && y_raw <= ym && ym <= (y_raw+dy_raw) )	{
+    	texOver();
 		#ifdef DEBUG_MOUSEOVER
 		cout << "PanelButton::isMouseOver)  OVER" << endl;
 		#endif
@@ -140,8 +143,33 @@ Panel* PanelButton::isMouseOver(int xm, int ym)	{
 		return this;
 	}
 	else	{
+	    texUp();
 		return NULL;
 	}
+}
+/*----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------*/
+void PanelButton::texOver()	{
+	#ifdef DEBUG_MOUSEOVER
+	cout << "PanelButton::haveFocus( "<< endl;
+	#endif
+	m_pTexCurrent = m_pTexOver;
+}
+/*----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------*/
+void PanelButton::texDown()	{
+	#ifdef DEBUG_MOUSEOVER
+	cout << "PanelButton::haveFocus( "<< endl;
+	#endif
+	m_pTexCurrent = m_pTexDown;
+}
+/*----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------*/
+void PanelButton::texUp()	{
+	#ifdef DEBUG_MOUSEOVER
+	cout << "PanelButton::haveFocus( "<< endl;
+	#endif
+	m_pTexCurrent = m_pTexUp;
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/

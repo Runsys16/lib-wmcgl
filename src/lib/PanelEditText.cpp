@@ -55,6 +55,7 @@ PanelEditText::PanelEditText()	{
 
     text =  new PanelText();
     add(text);
+	text->changeText((char*)"");
 	cursor.changeText( "|", PanelText::NORMAL_FONT, true );
 	this->add( &cursor );
 	moveCursor();

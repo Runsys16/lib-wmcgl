@@ -530,6 +530,9 @@ class PanelEditText : public PanelSimple	{
 		void						wordSuiv();
 		void						setTabSize( int );
 		void                        setColor(long);
+
+		inline std::string	        getText()					{ return text->getText(); };
+		inline void      	        changeText(std::string s)   { return text->changeText(s); };
 		
 	private:
 		PanelText *                 text;

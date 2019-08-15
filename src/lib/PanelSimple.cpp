@@ -64,32 +64,27 @@ PanelSimple::PanelSimple()	{
 	pPtDebug = NULL;
 	bDebug = false;
 }
+
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
-/*
-void PanelSimple::buildText()	{
-	cTextObj = textUtil->NewTextObj();
-	char cStr[255];
-	sprintf( cStr, "--- ID %d ---", getID() );
-	//str = new str::string()[30];
-	str.push_back( cStr );
-	str.push_back( cStr );
-	str.push_back( cStr );
-	str.push_back( cStr );
+void PanelSimple::setColor(long c)
+{
+    int nb = childs.size();
+    for( int i=0; i<nb; i++ )
+    {
+        Panel * child = childs[i];
+        if ( typeid(*child) == typeid(PanelText) )
+        {
+            dynamic_cast<PanelText*>(child)->setColor(c);
+            //cout << "child : PanelText OK" << endl;
+        }
 
-	str[1] = "essai de string dynamqiue de tres lognue string ...";
-	str[2] = "TEST TEST ...";
-	str[3] = "Ca fonctionne ...";
-
-	color32 color		= COLOR32_WHITE;
-	color32 color_bg	= COLOR32_WHITE;
-	textUtil->GenFont( DefaultNormalFont );
-	textUtil->BuildText( cTextObj, &str[0], &color, &color_bg, str.size(),  DefaultNormalFont, 10, 0);
-
-	bTextOK = true;
+        //cout <<"child :non PanelText OK" << endl;
+        //cout <<"PanelText name:"<<  typeid(PanelText).name() <<" --- child name:"<< typeid(*child).name() << endl;
+    }
+	//cout <<"ID : "<< getID() <<" PanelWindow::releaseLeft("<< xm <<", "<< ym <<")"<< endl;
 }
-*/
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------

@@ -457,6 +457,8 @@ class PanelSimple : public Panel {
 		
 		//void				buildText();
 
+		void                setColor(long);
+
 		virtual void		displayGL();
 		virtual void		updatePos();
 		virtual void        debug(bool);

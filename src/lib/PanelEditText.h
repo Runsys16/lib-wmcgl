@@ -53,7 +53,7 @@ class PanelEditText : public PanelSimple	{
 		void                        setColor(long);
 
 		inline std::string	        getText()					{ return text->getText(); };
-		inline void      	        changeText(std::string s)   { return text->changeText(s); };
+		inline void      	        changeText(std::string s)   { text->changeText(s, PanelText::NORMAL_FONT, true ); };
 		
 	private:
 		PanelText *                 text;

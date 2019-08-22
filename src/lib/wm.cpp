@@ -292,7 +292,7 @@ Panel * WindowsManager::getParentRoot( Panel* pChild)	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::changeFocus( Panel* p )	{
-	cout << "WindowsManager::changeFocus( " << p->getID() << " )" << endl;
+	//cout << "WindowsManager::changeFocus( " << p->getID() << " )" << endl;
 	if ( p != panelFocus )	{
 		if ( p!=NULL )				    p->haveFocus();
 		//if (panelFocus!=NULL )		    panelFocus->lostFocus();

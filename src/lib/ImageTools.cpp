@@ -11,16 +11,47 @@
 #include <string.h>
 #include <assert.h>
 #include <mutex>
+#include <string>
 
 #undef _UNICODE
 #include <IL/il.h>
 
+
+
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+
+bool isFileExist( char* pathname )
+{
+    struct stat   buffer;   
+    if ( stat( pathname, &buffer) == 0 )
+    {
+        if ( (buffer.st_mode & S_IFMT) ==  S_IFREG )
+        {
+            return true;
+        }
+    }
+    else
+        return false;
+
+}
+
+
+
+
+#define DEBUG
 std::mutex lock_load_imageDEVIL;
 
 namespace _ImageTools {
 
 GLubyte* OpenImagePPM(const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d)
 {
+#ifdef DEBUG
+	std::cout <<"  _ImageTools::OpenImagePPM("<< filename <<" w="<< w <<" h="<< h <<" d="<< d <<")"<< std::endl;
+#endif
 
 	char head[70];
 	int i,j;
@@ -70,6 +101,9 @@ GLubyte* OpenImagePPM(const std::string& filename, unsigned int& w, unsigned int
 
 GLubyte* OpenImageDevIL(const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d)
 {
+#ifdef DEBUG
+	std::cout <<"_ImageTools::OpenImageDevIL("<< filename <<" w="<< w <<" h="<< h <<" d="<< d <<")"<< std::endl;
+#endif
     lock_load_imageDEVIL.lock();
     
     
@@ -98,6 +132,7 @@ GLubyte* OpenImageDevIL(const std::string& filename, unsigned int& w, unsigned i
     // Chargement de l'image
 	if (!ilLoadImage((char*)filename.c_str()))
 	{
+    	std::cout <<"  [Erreur]_Texture::OpenImageDevIL('...')"<< std::endl;
         lock_load_imageDEVIL.unlock();
 		return NULL;
     }
@@ -133,16 +168,34 @@ GLubyte* OpenImageDevIL(const std::string& filename, unsigned int& w, unsigned i
 
 GLubyte* OpenImage(const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d)
 {
+#ifdef DEBUG
+	std::cout <<"_ImageTools::OpenImage("<< filename <<" w="<< w <<" h="<< h <<" d="<< d <<")"<< std::endl;
+#endif
 	GLubyte* ptr = NULL;
+	
 	if(filename.find(".ppm") != std::string::npos){
-		ptr = _ImageTools::OpenImagePPM("./textures/"+filename, w, h, d);
-		if ( !ptr ) ptr = _ImageTools::OpenImagePPM(filename, w, h, d);
+		//ptr = _ImageTools::OpenImagePPM("./textures/"+filename, w, h, d);
+		//if ( !ptr ) ptr = _ImageTools::OpenImagePPM(filename, w, h, d);
+
+		std::string f = "./textures/"+filename;
+        if( isFileExist((char*)f.c_str()) )
+    		ptr =  _ImageTools::OpenImagePPM(f, w, h, d);
+        else
+    		ptr =  _ImageTools::OpenImagePPM(filename, w, h, d);
 	}
 	else {
-		ptr =  _ImageTools::OpenImageDevIL("./textures/"+filename, w, h, d);
-		if ( !ptr ) ptr = _ImageTools::OpenImageDevIL(filename, w, h, d);
+		std::string f = "./textures/"+filename;
+        if( isFileExist((char*)f.c_str()) )
+    		ptr =  _ImageTools::OpenImageDevIL(f, w, h, d);
+        else
+    		ptr =  _ImageTools::OpenImageDevIL(filename, w, h, d);
 	}
+
 	if ( ptr == NULL )	{ std::cout << "Erreur de chargement de l'image " << filename << std::endl; }
+
+#ifdef DEBUG
+	std::cout <<"_ImageTools::OpenImage(...) OK"<< std::endl;
+#endif
 	return ptr;
 }
 

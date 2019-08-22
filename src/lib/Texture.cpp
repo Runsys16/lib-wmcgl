@@ -12,7 +12,11 @@
 #include "ImageTools.h"
 
 
-//#define DEBUG 1
+
+
+
+
+#define DEBUG 1
 
 bool _Texture::s_bGenerateMipmaps = true;
 
@@ -57,7 +61,7 @@ void _Texture::LoadData(GLenum target, GLubyte* ptr, unsigned int w, unsigned in
 {
 	glTexImage2D(target, 0, d==3?GL_RGB:GL_RGBA, w, h, 0, d==3?GL_RGB:GL_RGBA, GL_UNSIGNED_BYTE, ptr);
 #ifdef DEBUG
-	std::cout << "  _Texture::LoadData()  glTextImage2D" << std::endl;
+	std::cout << "_Texture::LoadData()  glTextImage2D" << std::endl;
 #endif
 }
 
@@ -65,6 +69,9 @@ void _Texture::LoadData(GLenum target, GLubyte* ptr, unsigned int w, unsigned in
 
 void _Texture::Gen()
 {
+#ifdef DEBUG
+	std::cout << "_Texture::Gen()" << std::endl;
+#endif
 	Destroy();
 	glGenTextures(1, &m_nHandle);
 }
@@ -73,22 +80,32 @@ void _Texture::Gen()
 
 bool _Texture::Load(const std::string& name)
 {
+#ifdef DEBUG
+	std::cout <<"_Texture::Load(name='"<< name <<"')  GenTexture ..." << std::endl;
+#endif
 	Gen();
 
 	if(m_nHandle == 0){
-		std::cerr << "Identifiant de texture incorrect" << std::endl;
+		std::cout << "  [Erreur] Identifiant de texture incorrect" << std::endl;
+		return true;
 		return false;
 	}
-
+	else
+	{
 #ifdef DEBUG
-	std::cout << "  GenTexture ..." << std::endl;
+	    std::cout <<"  m_nHandle = "<< m_nHandle << std::endl;
 #endif
+	}
+
 	return true;
 }
 
 
 void _Texture::Destroy()
 {
+#ifdef DEBUG
+	std::cout << "_Texture::Destroy()   m_nHandle = "<< m_nHandle << std::endl;
+#endif
 	glDeleteTextures(1, &m_nHandle);
 }
 

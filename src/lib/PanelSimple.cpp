@@ -262,9 +262,13 @@ void PanelSimple::setBackground( char * str_background )	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 void PanelSimple::setBackground( GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d  )	{
+    std::cout << "PanelSimple::setBackground(ptr, w, h, d)"<< std::endl;
     m_pTexBackground = NULL;
 
+    std::cout << "  new _Texture2D()"<< std::endl;
 	m_pTexBackground = new _Texture2D();
+    
+    std::cout << "  load(ptr,w, h, d)"<< std::endl;
 	m_pTexBackground->Load( ptr, w, h, d );
 
 }

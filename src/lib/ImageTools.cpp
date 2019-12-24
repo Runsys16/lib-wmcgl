@@ -42,7 +42,9 @@ bool isFileExist( char* pathname )
 
 
 
-#define DEBUG
+//#define DEBUG
+
+
 std::mutex lock_load_imageDEVIL;
 
 namespace _ImageTools {

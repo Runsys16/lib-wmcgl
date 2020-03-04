@@ -208,6 +208,13 @@ void PanelScrollText::clear( ) {
 
 
 void PanelScrollText::affiche( string* str ) {
+	#ifdef DEBUG
+    printf( "PanelScrollText::affiche( (string*)\"");
+    printf( str->c_str() );
+    printf( "\" )");
+    printf( "\n" );
+    #endif
+        
 	texts[currentLine]->changeText(*str, PanelText::NORMAL_FONT, true );
 	texts[currentLine]->setTabSize( tabSize );
 	for( int i=0; i<texts.size(); i++ )	{
@@ -221,6 +228,13 @@ void PanelScrollText::affiche( string* str ) {
 
 
 void PanelScrollText::affiche( string str ) {
+	#ifdef DEBUG
+    printf( "PanelScrollText::affiche( (string)\"");
+    printf( str.c_str() );
+    printf( "\" )");
+    printf( "\n" );
+    #endif
+
 	texts[currentLine]->changeText(str, PanelText::NORMAL_FONT, true );
 	texts[currentLine]->setTabSize( tabSize );
 	for( int i=0; i<texts.size(); i++ )	{
@@ -237,7 +251,9 @@ void PanelScrollText::affiche( string str ) {
 //--------------------------------------------------------------------------------------------------------------------
 
 void PanelScrollText::setTabSize( int t ) {
+    #ifdef DEBUG
     cout <<"CurrentLine : "<< currentLine << endl;
+    #endif
 	//texts[currentLine]->setTabSize( t );
 	tabSize = t;
 }

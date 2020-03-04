@@ -16,7 +16,7 @@
 
 
 
-#define DEBUG 1
+//#define DEBUG 1
 
 bool _Texture::s_bGenerateMipmaps = true;
 

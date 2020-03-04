@@ -314,6 +314,7 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
         for( i=0; i<Len; ++i )
         {
             ch = Text[i];
+            if ( ch > 0x7f )    continue;
             if ( ch == '\t' )	{
             	if ( m_tab_size == 0 )	m_tab_size = 40;
             	int pos = x / m_tab_size;

@@ -87,6 +87,19 @@ bool _Texture::Load(const std::string& name)
 
 	if(m_nHandle == 0){
 		std::cout << "  [Erreur] Identifiant de texture incorrect" << std::endl;
+		
+		int err = glGetError();
+		switch(err)
+		{
+		case GL_NO_ERROR:                       std::cout << "  GL_NO_ERROR" << std::endl;   break;
+		case GL_INVALID_ENUM:                   std::cout << "  GL_INVALID_ENUM" << std::endl;   break;
+		case GL_INVALID_VALUE:                  std::cout << "  GL_INVALID_VALUE" << std::endl;   break;
+		case GL_INVALID_OPERATION:              std::cout << "  GL_INVALID_OPERATION" << std::endl;   break;
+		case GL_INVALID_FRAMEBUFFER_OPERATION:  std::cout << "  GL_INVALID_FRAMEBUFFER_OPERATION" << std::endl;   break;
+		case GL_STACK_UNDERFLOW:                std::cout << "  GL_STACK_UNDERFLOW" << std::endl;   break;
+		case GL_STACK_OVERFLOW:                 std::cout << "  GL_STACK_OVERFLOW" << std::endl;   break;
+		}
+		
 		return true;
 		return false;
 	}

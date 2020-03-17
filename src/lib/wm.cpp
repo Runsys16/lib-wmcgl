@@ -110,6 +110,7 @@ void WindowsManager::init()	{
 	bStopKeyboard = false;
 	bResize       = false;
 	bMotionMiddle = false;
+	bMotionLeft   = false;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -713,6 +714,11 @@ void WindowsManager::motionFunc(int x, int y)	{
 	{
 	    panelMotionMiddle->motionMiddle(x,y);
 	}
+	else
+	if( bMotionLeft && panelMotionLeft != NULL)
+	{
+	    panelMotionLeft->motionLeft(x,y);
+	}
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -756,6 +762,9 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	}
 	//else if ( button == 0 && state == 1  && bClickLeft )	{
 	else if ( button == 0 && state == 1  )	{
+    	panelMotionLeft = NULL;
+    	bMotionLeft = false;
+
 		xm_old = -1;
 		ym_old = -1;
 		if ( panelFocus )			panelFocus->releaseLeft( x, y );
@@ -770,6 +779,9 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
     	//cout << " clickLeft 0-1 bClickLeft: "<< endl;
 	}
 	else if ( button == 0 && state == 0 )	{
+    	panelMotionLeft = p;
+    	bMotionLeft = true;
+
 	    if ( panelResize != NULL )
 	    {
             //cout << " clickLeft avec resize : "<< endl;

@@ -247,6 +247,7 @@ void PanelText::changeText( string str, FONT type, bool build )	{
 		return;
 	}
 	
+	//cout << "PanelText::changeText( \""<< str <<"\", "<< typeFont <<" : "<< strFont() <<" )" << endl;
 	typeFont = type;
 	text = str;
 
@@ -312,19 +313,30 @@ void PanelText::buildString()	{
 	pTextGL = textUtil->NewTextObj();
 
 
+	//cout << "PanelText::buildString() \""<< text <<"\", "<< typeFont <<" : "<< strFont() <<" )" << endl;
+
 	switch (typeFont )	{
 	case NORMAL_FONT :
+	    {
+    	//cout << "NORMAL_FONT : "<< typeFont  << endl;
 		textUtil->GenFont( DefaultNormalFont, color );
 		textUtil->BuildText( pTextGL, &(text), &c, &c_bg, 1,  DefaultNormalFont, 0xffffff00, 0xff0000ff);
+		}
 		break;
 	case SMALL_FONT :
+		{
+    	//cout << "SMALL_FONT : "<< typeFont << endl;
 		textUtil->GenFont( DefaultSmallFont, color );
 		textUtil->BuildText( pTextGL, &(text), &c, &c_bg, 1,  DefaultSmallFont, 0xffffff00, 0xff0000ff);
+		}
 		break;
 	case LARGE_FONT :
+		{
+    	//cout << "LARGE_FONT : "<< typeFont << endl;
 		textUtil->GenFont( DefaultLargeFont, color );
 		//textUtil->BuildText( pTextGL, &(text), &c, &c_bg, 1,  DefaultLargeFont, 0xffffff00, 0xff0000ff);
 		textUtil->BuildText( pTextGL, &(text), NULL, NULL, 1,  DefaultLargeFont, 0xffffff00, 0xff0000ff);
+		}
 		break;
 	}
 	bChange = false;

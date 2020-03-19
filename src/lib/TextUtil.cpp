@@ -161,6 +161,7 @@ GLuint TextUtil::GenFont( CTexFont *_Font )	{
 
 GLuint TextUtil::GenFont( CTexFont *_Font, color32 color)
 {
+#define DEBEUG
 	//cout << "TextUtil::GenFont()" << endl;
 	//m_tab_size = 40;
 	if ( _Font->m_TexID != 0 )		return _Font->m_TexID;
@@ -276,16 +277,26 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
     //assert(_Font!=NULL);
 
     m_FontTexID = GenFont(_Font);
-    m_FontTex = _Font;
-    UnbindFont();
-	/*
+   
+    //if ( m_FontTex == DefaultNormalFont )   cout << "TextUtil::BuildText() -- NORMAL_FONT" << endl;
+	///*
     if( _Font != m_FontTex )
     {
-        UnbindFont(m_FontTexID);
+        /*
+        cout << "  UnbindFont"<< endl;
+        cout << "  _Font = "<< _Font << endl;
+        cout << "  m_FontTexID = "<< m_FontTexID << endl;
+        */
+        //UnbindFont(m_FontTexID);
+        //UnbindFont(m_FontTex->m_TexID);
         _Font->m_TexID = m_FontTexID;
 	    m_FontTexID = GenFont(_Font);
     }
-    */
+    m_FontTex = _Font;
+    //*/
+    //UnbindFont();
+
+
     CTextObj *TextObj = static_cast<CTextObj *>(_TextObj);
     TextObj->m_TextVerts.resize(0);
     TextObj->m_TextUVs.resize(0);

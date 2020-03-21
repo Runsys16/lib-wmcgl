@@ -804,19 +804,25 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 		
 	}
 	else if ( button == 1 && state == 0 )	{
+	#ifdef DEBUG
     	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
+	#endif
     	panelMotionMiddle = p;
     	bMotionMiddle = true;
 		if ( p )	p->clickMiddle( x, y );
 	}
 	else if ( button == 1 && state == 1 )	{
+	#ifdef DEBUG
     	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
-		if ( p )	p->releaseMiddle( x, y );
+	#endif
+		if ( panelMotionMiddle )	panelMotionMiddle->releaseMiddle( x, y );
 		bMotionMiddle = false;
     	panelMotionMiddle = NULL;
 	}
 	else if ( button == 3 && state == 0 )	{
+	#ifdef DEBUG
     	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
+	#endif
 		//if ( p )	p->clickUp( x, y );
 		if ( p )	p->wheelUp( x, y );
     
@@ -827,7 +833,9 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	*/
 	}
 	else if ( button == 4 && state == 0 )	{
+	#ifdef DEBUG
     	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
+	#endif
 		//if ( p )	p->clickDown( x, y );
 		if ( p )	p->wheelDown( x, y );
 	/*

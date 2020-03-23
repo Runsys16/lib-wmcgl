@@ -63,20 +63,28 @@ PanelSimple::PanelSimple()	{
 	pPsDebug = NULL;
 	pPtDebug = NULL;
 	bDebug = false;
+	
+	c = 0xffffffff;
 }
 
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
-void PanelSimple::setColor(long c)
+void PanelSimple::setColor(long l)
 {
     int nb = childs.size();
+    c = l;
     for( int i=0; i<nb; i++ )
     {
         Panel * child = childs[i];
         if ( typeid(*child) == typeid(PanelText) )
         {
             dynamic_cast<PanelText*>(child)->setColor(c);
+            //cout << "child : PanelText OK" << endl;
+        }
+        if ( typeid(*child) == typeid(PanelTextOmbre) )
+        {
+            dynamic_cast<PanelTextOmbre*>(child)->setColor(c);
             //cout << "child : PanelText OK" << endl;
         }
 
@@ -117,6 +125,8 @@ void PanelSimple::displayGL() {
 	//if ( bTextOK == false )			return;
 
 	WindowsManager& wm = WindowsManager::getInstance();
+	
+	//glColor4b( (c&0xff000000)>>24, (c&0x00ff0000)>>16, (c&0x0000ff00)>>8, (c&0xff) );
 	
 	float width  = (float)wm.getWidth();
 	float height = (float)wm.getHeight();

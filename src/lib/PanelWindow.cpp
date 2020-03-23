@@ -64,6 +64,12 @@ void PanelWindow::loadSkin( SKIN s )	{
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
+void PanelWindow::setColor( long l)	{
+	PanelSimple::setColor(l);
+};
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void PanelWindow::setPosAndSize(int x0, int y0, int dx0, int dy0)	{
 	x=x0; y=y0; dx=dx0 ;dy=dy0;
 };
@@ -361,6 +367,18 @@ void PanelWindow::displayGL( void )	{
 	glMatrixMode(GL_TEXTURE);
 	glLoadIdentity();
 	
+	unsigned char a = (c&0xff000000)>>24;
+	unsigned char r = (c&0x00ff0000)>>16;
+	unsigned char g = (c&0x0000ff00)>>8;
+	unsigned char b = (c&0x000000ff);
+	/*
+	float R = (float)r/255.0;
+	float G = (float)g/255.0;
+	float B = (float)b/255.0;
+	float A = (float)a/255.0;
+	*/
+	//glColor4b( (c&0xff000000)>>24, (c&0x00ff0000)>>16, (c&0x0000ff00)>>8, (c&0xff) );
+	glColor4f( r,g,b,a );
 	
 	// corners
 	X = getX() - borderSize;

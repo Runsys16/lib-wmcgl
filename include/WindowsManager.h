@@ -483,6 +483,8 @@ class PanelSimple : public Panel {
 		PanelSimple*					pPsDebug;
 		PanelText*						pPtDebug;
 		std::string						sDebug;
+		
+		unsigned long                   c;
 };
 
 
@@ -878,6 +880,8 @@ class PanelWindow : public PanelSimple {
 		void				loadSkin( std::string );
 		void				loadSkin( SKIN );
 		
+		void				setColor( long );
+
 		void				setPosAndSize(int, int, int, int);
 		void				setPos(int, int);
 		void				setdSize(int, int);

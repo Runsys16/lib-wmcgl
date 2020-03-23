@@ -7,6 +7,7 @@
 
 #include "Panel.h"
 #include "PanelText.h"
+#include "PanelTextOmbre.h"
 #include "Texture2D.h"
 #include "TextUtil.h"
 
@@ -40,6 +41,8 @@ class PanelSimple : public Panel {
 		PanelSimple*					pPsDebug;
 		PanelText*						pPtDebug;
 		std::string						sDebug;
+		
+		unsigned long                   c;
 };
 
 

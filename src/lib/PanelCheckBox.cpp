@@ -148,6 +148,12 @@ void PanelCheckBox::displayGL() {
 	}
 
 	//m_pTexBackground->Bind(wm.getSlot());
+	unsigned char a = (c&0xff000000)>>24;
+	unsigned char r = (c&0x00ff0000)>>16;
+	unsigned char g = (c&0x0000ff00)>>8;
+	unsigned char b = (c&0x000000ff);
+
+	glColor4f( r,g,b,a );
 
 	if ( m_pTexBackground )		{
 		m_pTexBackground->Bind( 0 );
@@ -159,7 +165,7 @@ void PanelCheckBox::displayGL() {
 		
 		
 	
-		glColor4f( 1.0, 1.0, 1.0, 1.0 );
+		//glColor4f( 1.0, 1.0, 1.0, 1.0 );
 
 		glTexCoord2f(1, 1);
 		glVertex2f(X + dx, Y + dy);
@@ -188,7 +194,7 @@ void PanelCheckBox::displayGL() {
 	
 		glBegin(GL_QUADS);
 	
-		glColor4f( 1.0, 1.0, 1.0, 1.0 );
+		//glColor4f( 1.0, 1.0, 1.0, 1.0 );
 
 		glTexCoord2f(1, 1);
 		glVertex2f(X + dx, Y + dy);

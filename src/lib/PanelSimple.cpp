@@ -5,6 +5,8 @@
 
 #include "PanelSimple.h"
 #include "PanelText.h"
+#include "PanelButton.h"
+#include "PanelCheckBox.h"
 #include "ResourceManager.h"
 #include "wm.h"
 //#include "../include/WindowsManager.h"
@@ -87,6 +89,16 @@ void PanelSimple::setColor(long l)
             dynamic_cast<PanelTextOmbre*>(child)->setColor(c);
             //cout << "child : PanelText OK" << endl;
         }
+        if ( typeid(*child) == typeid(PanelButton) )
+        {
+            dynamic_cast<PanelButton*>(child)->setColor(c);
+            //cout << "child : PanelText OK" << endl;
+        }
+        if ( typeid(*child) == typeid(PanelCheckBox) )
+        {
+            dynamic_cast<PanelCheckBox*>(child)->setColor(c);
+            //cout << "child : PanelText OK" << endl;
+        }
 
         //cout <<"child :non PanelText OK" << endl;
         //cout <<"PanelText name:"<<  typeid(PanelText).name() <<" --- child name:"<< typeid(*child).name() << endl;
@@ -144,15 +156,13 @@ void PanelSimple::displayGL() {
 	cout << "    PS:" << wm.getWidth() <<", "<< wm.getHeight() << endl;
 #endif
 	
-	/*
-	X = -0.9f;
-	Y =  -1.9f;
-	DX = 1.0f;
-	DY = 1.0f;
-	*/
+	unsigned char a = (c&0xff000000)>>24;
+	unsigned char r = (c&0x00ff0000)>>16;
+	unsigned char g = (c&0x0000ff00)>>8;
+	unsigned char b = (c&0x000000ff);
 
-	//m_pTexBackground->Bind(wm.getSlot());
-	//glBlendColor( 0.0, 0.0, 0.0, 0.2);
+	glColor4f( r,g,b,a );
+
 	if ( m_pTexBackground )		{
 		m_pTexBackground->Bind( 0 );
 	
@@ -161,7 +171,7 @@ void PanelSimple::displayGL() {
 	
 		glBegin(GL_QUADS);
 	
-		glColor4f( 1.0, 1.0, 1.0, 1.0 );
+		//glColor4f( 1.0, 1.0, 1.0, 1.0 );
 
 		glTexCoord2f(1, 1);
 		glVertex2f(X + DX, Y + DY);

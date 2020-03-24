@@ -7,6 +7,7 @@
 #include "PanelText.h"
 #include "PanelButton.h"
 #include "PanelCheckBox.h"
+#include "PanelWindow.h"
 #include "ResourceManager.h"
 #include "wm.h"
 //#include "../include/WindowsManager.h"
@@ -82,22 +83,22 @@ void PanelSimple::setColor(long l)
         if ( typeid(*child) == typeid(PanelText) )
         {
             dynamic_cast<PanelText*>(child)->setColor(c);
-            //cout << "child : PanelText OK" << endl;
         }
         if ( typeid(*child) == typeid(PanelTextOmbre) )
         {
             dynamic_cast<PanelTextOmbre*>(child)->setColor(c);
-            //cout << "child : PanelText OK" << endl;
         }
         if ( typeid(*child) == typeid(PanelButton) )
         {
             dynamic_cast<PanelButton*>(child)->setColor(c);
-            //cout << "child : PanelText OK" << endl;
         }
         if ( typeid(*child) == typeid(PanelCheckBox) )
         {
             dynamic_cast<PanelCheckBox*>(child)->setColor(c);
-            //cout << "child : PanelText OK" << endl;
+        }
+        if ( typeid(*child) == typeid(PanelWindow) )
+        {
+            dynamic_cast<PanelWindow*>(child)->setColor(c);
         }
 
         //cout <<"child :non PanelText OK" << endl;

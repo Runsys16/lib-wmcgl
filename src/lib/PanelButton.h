@@ -28,8 +28,8 @@ class PanelButton : public PanelSimple {
 		void init();
 		
 		
-		virtual void		haveFocus();
-		virtual void		lostFocus();
+		virtual void		haveCapture();
+		virtual void		lostCapture();
 		virtual void		clickLeft( int, int);
 		virtual void		releaseLeft( int, int);
 		virtual Panel*		isMouseOver( int, int);

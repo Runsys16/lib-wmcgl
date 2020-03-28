@@ -11,6 +11,7 @@
 #include "Font.h"
 #include "InternalFonts.h"
 #include "ResourceManager.h"
+#include "PanelEditText.h"
 
 
 //#define DEBUG_CONST
@@ -102,6 +103,7 @@ void WindowsManager::init()	{
 
 
 	panelMove           = NULL;
+	panelCapture        = NULL;
 	panelFocus          = NULL;
 	panelResize         = NULL;
     panelMotionMiddle   = NULL;
@@ -143,7 +145,7 @@ void WindowsManager::add( Panel * p )	{
 	}
 
 
-	//panelFocus = p;
+	//panelCapture = p;
 	cout << "WindowsManager::add() nb="<< childs.size() << endl;
 	#endif
 }
@@ -151,10 +153,12 @@ void WindowsManager::add( Panel * p )	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::sup( Panel * p )	{
+//#define DEBUG
 	#ifdef DEBUG
 	cout << "WindowsManager::sup() ID="<< p->getID() <<" nb="<< childs.size()  << endl;
 	#endif
-    if ( panelFocus == p)   panelFocus = NULL;
+    if ( panelCapture == p)   panelCapture = NULL;
+    if ( panelFocus == p)     panelFocus   = NULL;
 
 	int nb = childs.size();
 	int id = p->getID();
@@ -171,6 +175,7 @@ void WindowsManager::sup( Panel * p )	{
 	#ifdef DEBUG
 	cout << "WindowsManager::sup() nb="<< childs.size()  << endl;
 	#endif
+//#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -202,11 +207,19 @@ void WindowsManager::onBottom( Panel * p )	{
 	#ifdef DEBUG
 	cout << "WindowsManager::onBottom() ID="<< p->getID() <<" nb="<< childs.size() << endl;
 	#endif
-
+	Panel* pC_SVG;
+	Panel* pF_SVG;
+    
+    pC_SVG = panelCapture;
+    pF_SVG = panelFocus;
+    
     if (p)    {
         sup(p);
         childs.insert( childs.begin(), p );
     }
+    
+    panelCapture = pC_SVG;
+    panelFocus   = pF_SVG;
 	#ifdef DEBUG
 	cout << "WindowsManager::onBottom() nb="<< childs.size() << endl;
 	#endif
@@ -292,21 +305,39 @@ Panel * WindowsManager::getParentRoot( Panel* pChild)	{
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
+void WindowsManager::changeCapture( Panel* p )	{
+//#define DEBUG
+    #ifdef DEBUG
+	cout << "WindowsManager::changeCapture( " << (p!=NULL?p->getID():0) << " )" << endl;
+	#endif
+	if ( panelCapture )	    panelCapture->lostCapture();
+
+	panelCapture = p;
+	if ( panelCapture)      panelCapture->haveCapture();
+	
+//#undef DEBUG
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::changeFocus( Panel* p )	{
-	//cout << "WindowsManager::changeFocus( " << p->getID() << " )" << endl;
-	if ( p != panelFocus )	{
-		if ( p!=NULL )				    p->haveFocus();
-		//if (panelFocus!=NULL )		    panelFocus->lostFocus();
-	}
-	//panelFocus = getParentRoot(p);
+//#define DEBUG
+    #ifdef DEBUG
+	cout << "WindowsManager::changeFocus( " << (p!=NULL?p->getID():0) << " )" << endl;
+	#endif
+    if ( panelFocus )       panelFocus->lostFocus();
+
 	panelFocus = p;
+	if ( panelFocus )       panelFocus->haveFocus();
+//#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
 Panel * WindowsManager::findPanelMouseOver( int xm, int ym)	{
+//#define DEBUG
 	#ifdef DEBUG
-	cout << "WindowsManager::findPanelMouseOver( " << xm << ", " << ym << " )";
+	cout << "WindowsManager::findPanelMouseOver( " << xm << ", " << ym << " )"<< endl;
 	#endif
 	#ifdef DEBUG
 	#endif
@@ -318,7 +349,7 @@ Panel * WindowsManager::findPanelMouseOver( int xm, int ym)	{
 		if ( p != NULL )	{
 			if ( p->getID() != 999 )	{
 				#ifdef DEBUG
-				cout << " Panel ID : "<< p->getID()  << endl;
+				cout << "Panel ID : "<< p->getID()  << endl;
 				#endif
 				return p;
 			}
@@ -326,9 +357,10 @@ Panel * WindowsManager::findPanelMouseOver( int xm, int ym)	{
 	}
 	
 	#ifdef DEBUG
-	cout << " - Panel ID : NULL" << endl;
+	cout << "Panel ID : NULL" << endl;
 	#endif
 	return NULL;
+//#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -421,21 +453,21 @@ void WindowsManager::debug()	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::call_back_keyboard( Panel * p )	{
-    //cout << "call_back_keyboard() Callback nb panel : "<< panels_cbKey.size() << endl;
-	panels_cbKey.push_back(p);
+    //cout << "call_back_keyboard() Callback nb panel : "<< panelCallBackKeys.size() << endl;
+	panelCallBackKeys.push_back(p);
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::sup_call_back_keyboard( Panel * p )	{
-    //cout << "sup_call_back_keyboard() Callback nb panel : "<< panels_cbKey.size() << endl;
-	for( int i=0; i<panels_cbKey.size(); i++) 
+    //cout << "sup_call_back_keyboard() Callback nb panel : "<< panelCallBackKeys.size() << endl;
+	for( int i=0; i<panelCallBackKeys.size(); i++) 
 	{
-	    if ( p == panels_cbKey[i] )
+	    if ( p == panelCallBackKeys[i] )
 	    {
 	        //cout << "sup_call_back_keyboard() panel trouve... SUPPRESSION" << endl;
-	        panels_cbKey[i] = NULL;
-	        panels_cbKey.erase(panels_cbKey.begin()+i);
+	        panelCallBackKeys[i] = NULL;
+	        panelCallBackKeys.erase(panelCallBackKeys.begin()+i);
 	        return;
 	    }
 	}
@@ -446,10 +478,10 @@ void WindowsManager::sup_call_back_keyboard( Panel * p )	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 bool WindowsManager::is_call_back_keyboard( Panel * p )	{
-    //cout << "is_call_back_keyboard() Callback nb panel : "<< panels_cbKey.size() << endl;
-	for( int i=0; i<panels_cbKey.size(); i++) 
+    //cout << "is_call_back_keyboard() Callback nb panel : "<< panelCallBackKeys.size() << endl;
+	for( int i=0; i<panelCallBackKeys.size(); i++) 
 	{
-	    if ( p == panels_cbKey[i] )
+	    if ( p == panelCallBackKeys[i] )
 	    {
 	        //cout << "panel trouve..." << endl;
 	        return true;
@@ -563,7 +595,7 @@ void WindowsManager::passiveMotionFunc(int x, int y)	{
 	//cout << "WindowsManager::passiveMotionFunc( " << x << ", " << y << " )" << endl;
 	Panel * p = findPanelMouseOver(x, y);
 	
-	//changeFocus( p );
+	//changeCapture( p );
 	
 	xm_old = -1;
 	ym_old = -1;
@@ -613,7 +645,7 @@ void WindowsManager::motionFunc(int x, int y)	{
         #endif
 
 		movePanel( x, y, panelMove );
-		panelFocus = panelMove;
+		panelCapture = panelMove;
 	}
 	else
 	if( bResize && panelResize != NULL)
@@ -723,51 +755,70 @@ void WindowsManager::motionFunc(int x, int y)	{
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
-static bool bClickLeft=false;
+//static bool bClickLeft=false;
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+bool WindowsManager::isPanelFocus(Panel*p)
+{
+    if ( typeid(*p) == typeid(PanelEditText) )      return true;
+    return false;
+}
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
+//#define DEBUG
 	#ifdef DEBUG
 	cout << "WindowsManager::mouseFunc( " << button << ", " << state << ", " << x << ", " << y << " )" << endl;
 	#endif
 	Panel* p = findPanelMouseOver(x, y);
 	
-	//changeFocus( p );
 	bMovePanel = false;
 
-    
-	if ( button >= 0 && button <=2 )
+    //
+    // Si appuie sur les 3 boutons (pas de wheel)
+    //
+	if ( button >= 0 && button <=2 && state == 0 )
 	{
-	    changeFocus( p );
+	    changeCapture( p );
+	    //if ( isPanelFocus(p) )      changeFocus(p);
+	    changeFocus(p);
 	}
-	
-	
-	if ( button == 2 && state == 0 )	{
-		panelMove = getParentRoot( p );
-		if ( panelMove != NULL )	{
-			bMovePanel = true;
-			onTop( panelMove );
+    //
+	// bouton gauche appuye
+    //
+	if ( button == 0 && state == 0 )	{
+    	panelMotionLeft = p;
+    	bMotionLeft = true;
+
+	    if ( panelResize != NULL )	    {
+		    xm_old = x;
+		    ym_old = y;
+		    bResize = true;
+			onTop( panelResize );
+	    }
+	    else	    {
+		    Panel * pCaptureParent = getParentRoot( p );
+		    if ( pCaptureParent )	{
+			    onTop( pCaptureParent );
+		    }
 		}
-		if ( panelFocus )			panelFocus->clickRight( x, y );
-		//swapVisible();
+	    #ifdef DEBUG
+	    cout << "  Click gauche panelCapture="<< panelCapture << endl;
+	    #endif
+		
+        if ( panelCapture )			panelCapture->clickLeft( x, y );
 	}
-	else if ( button == 2 && state == 1 )	{
-	    if ( panelMove != NULL)     panelMove->haveMove();
-		panelMove = NULL;
-		xm_old = -1;
-		ym_old = -1;
-		if ( panelFocus )			panelFocus->releaseRight( x, y );
-    	//cout << " releaseRight : "<< panelFocus->getID() << endl;
-	}
-	//else if ( button == 0 && state == 1  && bClickLeft )	{
+	// bouton gauche relache
 	else if ( button == 0 && state == 1  )	{
-    	panelMotionLeft = NULL;
     	bMotionLeft = false;
 
 		xm_old = -1;
 		ym_old = -1;
-		if ( panelFocus )			panelFocus->releaseLeft( x, y );
+		
+		if ( panelCapture )			panelCapture->releaseLeft( x, y );
+    	panelMotionLeft = NULL;
 
 	    if ( bResize )
 	    {
@@ -776,34 +827,13 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
     		bResize = false;
     	    //cout << " Release Left resize "<< endl;
         }
-    	//cout << " clickLeft 0-1 bClickLeft: "<< endl;
+	    #ifdef DEBUG
+	    cout << "  Release gauche panelCapture="<< panelCapture << endl;
+	    #endif
 	}
-	else if ( button == 0 && state == 0 )	{
-    	panelMotionLeft = p;
-    	bMotionLeft = true;
-
-	    if ( panelResize != NULL )
-	    {
-            //cout << " clickLeft avec resize : "<< endl;
-		    xm_old = x;
-		    ym_old = y;
-		    bResize = true;
-			onTop( panelResize );
-	    }
-	    else
-	    {
-		    Panel * pFocusParent = getParentRoot( p );
-		    if ( pFocusParent )	{
-			    onTop( pFocusParent );
-		    }
-		    bClickLeft = true;
-		}
-
-        if ( panelFocus )			panelFocus->clickLeft( x, y );
-    	//cout << " clickLeft : "<< endl;
-		
-	}
-	else if ( button == 1 && state == 0 )	{
+	// bouton milieu appuye
+	else 
+	if ( button == 1 && state == 0 )	{
 	#ifdef DEBUG
     	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
 	#endif
@@ -811,7 +841,9 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
     	bMotionMiddle = true;
 		if ( p )	p->clickMiddle( x, y );
 	}
-	else if ( button == 1 && state == 1 )	{
+	// bouton milieu relache
+	else 
+	if ( button == 1 && state == 1 )	{
 	#ifdef DEBUG
     	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
 	#endif
@@ -819,30 +851,39 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 		bMotionMiddle = false;
     	panelMotionMiddle = NULL;
 	}
-	else if ( button == 3 && state == 0 )	{
-	#ifdef DEBUG
-    	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
-	#endif
-		//if ( p )	p->clickUp( x, y );
-		if ( p )	p->wheelUp( x, y );
-    
-	/*
-		Panel * pFocusParent = getParentRoot( p );
-		bClickLeft = true;
-		if ( pFocusParent )			pFocusParent->clickUp( x, y );
-	*/
+	else 
+	// bouton droite appuye
+	if ( button == 2 && state == 0 )	{
+		panelMove = getParentRoot( p );
+		if ( panelMove != NULL )	{
+			bMovePanel = true;
+			onTop( panelMove );
+		}
+		if ( panelCapture )			panelCapture->clickRight( x, y );
+		//swapVisible();
 	}
-	else if ( button == 4 && state == 0 )	{
+	// bouton droite relache
+	else if ( button == 2 && state == 1 )	{
+	    if ( panelMove != NULL)     panelMove->haveMove();
+		panelMove = NULL;
+		xm_old = -1;
+		ym_old = -1;
+		if ( panelCapture )			panelCapture->releaseRight( x, y );
+    	//cout << " releaseRight : "<< panelCapture->getID() << endl;
+	}
+	else 
+	if ( button == 3 && state == 0 )	{
 	#ifdef DEBUG
     	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
 	#endif
-		//if ( p )	p->clickDown( x, y );
+		if ( p )	p->wheelUp( x, y );
+	}
+	else
+	if ( button == 4 && state == 0 )	{
+	#ifdef DEBUG
+    	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
+	#endif
 		if ( p )	p->wheelDown( x, y );
-	/*
-		Panel * pFocusParent = getParentRoot( p );
-		bClickLeft = true;
-		if ( pFocusParent )			pFocusParent->clickDown( x, y );
-	*/
 	}
 	
 	int ID = -1;
@@ -851,7 +892,7 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	#ifdef DEBUG
 	cout << "WindowsManager::mouseFunc Addr : " << panelMove <<" ID "<< ID <<", " << bMovePanel << endl;;
 	#endif
-
+//#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -861,10 +902,10 @@ void WindowsManager::keyboardFunc( unsigned char key, int x, int y)	{
 	cout << "WindowsManager::keyboardFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	#endif
 	if ( bStopKeyboard )        return;
-	int nb = panels_cbKey.size();
+	int nb = panelCallBackKeys.size();
 	for( int i=0; i<nb; i++ )	{
-		if ( panels_cbKey[i]->getVisible() )
-			panels_cbKey[i]->cb_keyboard( key );
+		if ( panelCallBackKeys[i]->getVisible() )
+			panelCallBackKeys[i]->cb_keyboard( key );
 	}
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -883,10 +924,10 @@ void WindowsManager::keyboardSpecialFunc( unsigned char key, int x, int y)	{
 	cout << "WindowsManager::keyboardSpecialFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	#endif
 	if ( bStopKeyboard )        return;
-	int nb = panels_cbKey.size();
+	int nb = panelCallBackKeys.size();
 	for( int i=0; i<nb; i++ )	{
-		if ( panels_cbKey[i]->getVisible() )
-			panels_cbKey[i]->cb_keyboard_special( key );
+		if ( panelCallBackKeys[i]->getVisible() )
+			panelCallBackKeys[i]->cb_keyboard_special( key );
 	}
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -897,10 +938,10 @@ void WindowsManager::keyboardSpecialUpFunc( unsigned char key, int x, int y)	{
 	cout << "WindowsManager::keyboardSpecialUpFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	#endif
 	if ( bStopKeyboard )        return;
-	int nb = panels_cbKey.size();
+	int nb = panelCallBackKeys.size();
 	for( int i=0; i<nb; i++ )	{
-		if ( panels_cbKey[i]->getVisible() )
-			panels_cbKey[i]->cb_keyboard_special_up( key );
+		if ( panelCallBackKeys[i]->getVisible() )
+			panelCallBackKeys[i]->cb_keyboard_special_up( key );
 	}
 }
 //--------------------------------------------------------------------------------------------------------------------

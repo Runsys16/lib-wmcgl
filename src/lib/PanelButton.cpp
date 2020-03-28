@@ -94,17 +94,17 @@ void PanelButton::updatePos() {
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
-void PanelButton::haveFocus()	{
+void PanelButton::haveCapture()	{
 	#ifdef DEBUG_MOUSEOVER
-	cout << "PanelButton::haveFocus( "<< endl;
+	cout << "PanelButton::haveCapture( "<< endl;
 	#endif
 	m_pTexCurrent = m_pTexOver;
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
-void PanelButton::lostFocus()	{
+void PanelButton::lostCapture()	{
 	#ifdef DEBUG_MOUSEOVER
-	cout << "PanelButton::LostFocus( "<< endl;
+	cout << "PanelButton::LostCapture( "<< endl;
 	#endif
 	m_pTexCurrent = m_pTexUp;
 }
@@ -151,7 +151,7 @@ Panel* PanelButton::isMouseOver(int xm, int ym)	{
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelButton::texOver()	{
 	#ifdef DEBUG_MOUSEOVER
-	cout << "PanelButton::haveFocus( "<< endl;
+	cout << "PanelButton::haveCapture( "<< endl;
 	#endif
 	m_pTexCurrent = m_pTexOver;
 }
@@ -159,7 +159,7 @@ void PanelButton::texOver()	{
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelButton::texDown()	{
 	#ifdef DEBUG_MOUSEOVER
-	cout << "PanelButton::haveFocus( "<< endl;
+	cout << "PanelButton::haveCapture( "<< endl;
 	#endif
 	m_pTexCurrent = m_pTexDown;
 }
@@ -167,7 +167,7 @@ void PanelButton::texDown()	{
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelButton::texUp()	{
 	#ifdef DEBUG_MOUSEOVER
-	cout << "PanelButton::haveFocus( "<< endl;
+	cout << "PanelButton::haveCapture( "<< endl;
 	#endif
 	m_pTexCurrent = m_pTexUp;
 }

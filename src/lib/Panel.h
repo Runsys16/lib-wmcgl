@@ -41,8 +41,13 @@ class Panel {
 
 		virtual Panel*		isMouseOver( int, int);
 		virtual Panel*		isMouseOverBorder( int, int);
-		virtual void		haveFocus()										{;}
-		virtual void		lostFocus()										{;}
+
+		virtual void		haveFocus() 	    							{ bFocus = true;}
+		virtual void		lostFocus() 									{ bFocus = false;}
+
+		virtual void		haveCapture()	    							{;}
+		virtual void		lostCapture()									{;}
+
 		virtual void		displayGL();
 		virtual void		updatePos();
 		virtual void		idle(float);//										{;};
@@ -143,6 +148,8 @@ class Panel {
 		bool                bHaveMove;
 		bool                bScissor;
 		bool                bFantome;
+		bool                bFocus;
+		bool                bCapture;
 
 };
 

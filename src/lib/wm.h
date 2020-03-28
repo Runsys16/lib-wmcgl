@@ -62,6 +62,8 @@ public:
 	void				swapVisible();
 	void				debug(bool);
 	void				debug();
+	void			    changeCapture(Panel *);
+	void			    changeFocus(Panel *);
 	
 	/*
 	void			setWidth( int);
@@ -87,7 +89,8 @@ public:
 	inline TextUtil*	getTextUtil()					{return &textUtil;}
 	inline void			setSlot( int s )				{slot=s;}
 	inline int			getSlot()						{return slot;}
-	inline Panel *  	getFocus()						{return panelFocus;}
+	inline Panel *  	getCapture()    				{return panelCapture;}
+	inline Panel *  	getFocus()      				{return panelFocus;}
 
 	void				ChangeViewport(int, int, int, int, int, int);
 
@@ -97,6 +100,7 @@ public:
 	void				clearBufferGL( GLbitfield );
 		
 	void				passiveMotionFunc(int, int);
+    bool                isPanelFocus(Panel *);
 	void				motionFunc(int, int);
 	void				mouseFunc(int, int, int, int);
 	void				keyboardUpFunc( unsigned char, int, int );
@@ -151,19 +155,18 @@ private:
 	bool						bMotionLeft;
 	
 	Panel*						panelMove;
+	Panel*						panelCapture;
 	Panel*						panelFocus;
 	Panel*						panelResize;
 	Panel*						panelMotionMiddle;
 	Panel*						panelMotionLeft;
-	std::vector<Panel *>		panels_cbKey;
+	std::vector<Panel *>		panelCallBackKeys;
 	
 	bool						bDebug;
 	int							slot;
 
 	bool						bStopKeyboard;
 	
-public:
-	void						changeFocus(Panel *);
 };
 
 #ifdef WM_CPP

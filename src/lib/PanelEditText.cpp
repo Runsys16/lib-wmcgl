@@ -46,6 +46,7 @@ PanelEditText::PanelEditText()	{
 	bCtrl = false;
 	bRightCtrl = false;
 	bLeftCtrl = false;
+	bFocus = false;
 
 	heightLine = 13;
 			
@@ -242,19 +243,16 @@ void PanelEditText::delChar() {
 //
 //--------------------------------------------------------------------------------------------------------------------
 void PanelEditText::supChar() {
+#define DEBUG
 	#ifdef DEBUG
 	cout << "PanelEditText::supChar()" << endl;
 	#endif
-
 
 	string str = text->getText();
 
 	#ifdef DEBUG
 	cout << "  str : \""<< str <<"\""<< endl;;
 	#endif
-	
-	
-	
 	
 	if ( prompt.size() >= str.size() )	{
     	#ifdef DEBUG
@@ -319,7 +317,7 @@ void PanelEditText::supChar() {
 	text->changeText( *val, PanelText::NORMAL_FONT, true );
 	delete val;
 	//decCursor();
-
+#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -482,7 +480,14 @@ void PanelEditText::cb_keyboard( unsigned char key ) {
 	#ifdef DEBUG
 	cout << "PanelEditText::cb_keyboard( "<< (unsigned int) key <<" ) "<< endl;;
 	#endif
+    
+    WindowsManager& wm = WindowsManager::getInstance();
+	Panel* parent = wm.getParentRoot(this);
 
+    if (!bFocus)                    return;
+    if (!parent->getVisible())      return;
+    
+    
 	static int n=0;
 	switch(key){ 
 	case '\r':		{
@@ -546,7 +551,7 @@ void PanelEditText::cb_keyboard( unsigned char key ) {
 		#ifdef DEBUG
 		std::cout << "  Value : "<< (int)key << std::endl;
 		#endif
-		addChar(  key ); 
+		if ( key >= ' ')		addChar(  key ); 
 		}		
 		break;
 	}
@@ -721,7 +726,12 @@ void PanelEditText::setTabSize( int t ) {
 void PanelEditText::idle(float elapsedTime) {
 	//cout << "ElapsedTime : "<< elapsedTime << endl;
 	//cout << "cursorTime  : "<< cursorTime << endl;
-	
+	if ( !bFocus )
+	{
+	    cursor.setVisible( false );
+	    return;
+	}
+
 	if ( cursorTime >= 0.0 )	{
 		cursorTime += elapsedTime;
 		if ( cursorTime >= 0.5f )		{

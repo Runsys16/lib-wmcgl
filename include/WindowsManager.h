@@ -215,8 +215,13 @@ class Panel {
 
 		virtual Panel*		isMouseOver( int, int);
 		virtual Panel*		isMouseOverBorder( int, int);
-		virtual void		haveFocus()										{;}
-		virtual void		lostFocus()										{;}
+
+		virtual void		haveFocus() 	    							{ bFocus = true;}
+		virtual void		lostFocus() 									{ bFocus = false;}
+
+		virtual void		haveCapture()	    							{;}
+		virtual void		lostCapture()									{;}
+
 		virtual void		displayGL();
 		virtual void		updatePos();
 		virtual void		idle(float);//										{;};
@@ -317,6 +322,8 @@ class Panel {
 		bool                bHaveMove;
 		bool                bScissor;
 		bool                bFantome;
+		bool                bFocus;
+		bool                bCapture;
 
 };
 
@@ -762,8 +769,8 @@ class PanelButton : public PanelSimple {
 		void init();
 		
 		
-		virtual void		haveFocus();
-		virtual void		lostFocus();
+		virtual void		haveCapture();
+		virtual void		lostCapture();
 		virtual void		clickLeft( int, int);
 		virtual void		releaseLeft( int, int);
 		virtual Panel*		isMouseOver( int, int);
@@ -958,6 +965,8 @@ public:
 	void				swapVisible();
 	void				debug(bool);
 	void				debug();
+	void			    changeCapture(Panel *);
+	void			    changeFocus(Panel *);
 	
 	/*
 	void			setWidth( int);
@@ -983,7 +992,8 @@ public:
 	inline TextUtil*	getTextUtil()					{return &textUtil;}
 	inline void			setSlot( int s )				{slot=s;}
 	inline int			getSlot()						{return slot;}
-	inline Panel *  	getFocus()						{return panelFocus;}
+	inline Panel *  	getCapture()    				{return panelCapture;}
+	inline Panel *  	getFocus()      				{return panelFocus;}
 
 	void				ChangeViewport(int, int, int, int, int, int);
 
@@ -993,6 +1003,7 @@ public:
 	void				clearBufferGL( GLbitfield );
 		
 	void				passiveMotionFunc(int, int);
+    bool                isPanelFocus(Panel *);
 	void				motionFunc(int, int);
 	void				mouseFunc(int, int, int, int);
 	void				keyboardUpFunc( unsigned char, int, int );
@@ -1047,19 +1058,18 @@ private:
 	bool						bMotionLeft;
 	
 	Panel*						panelMove;
+	Panel*						panelCapture;
 	Panel*						panelFocus;
 	Panel*						panelResize;
 	Panel*						panelMotionMiddle;
 	Panel*						panelMotionLeft;
-	std::vector<Panel *>		panels_cbKey;
+	std::vector<Panel *>		panelCallBackKeys;
 	
 	bool						bDebug;
 	int							slot;
 
 	bool						bStopKeyboard;
 	
-public:
-	void						changeFocus(Panel *);
 };
 
 

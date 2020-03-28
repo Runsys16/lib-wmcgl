@@ -37,7 +37,7 @@ PanelTextOmbre::PanelTextOmbre()	{
 	align = LEFT;
 	pTextGL = NULL;
 	bChange = false;
-	ID = 999;
+	ID = 9001;
 	tabSize = 40;
 	color = 0xffffffff;
 	pTextOmbre.setColor( 0xff000000 );

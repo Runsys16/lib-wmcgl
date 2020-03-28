@@ -192,27 +192,37 @@ void Panel::clickDown(int xm, int ym)	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 void Panel::updatePos()	{
-	//cout << "Panel::updatePos() ..." << endl;
+//#define DEBUG
+
 	x_raw = x;
 	y_raw = y;
 	Panel* current = parent;
-	//cout << "Panel::updatePos() ..."<<"ID="<< ID <<" x_raw="<< x_raw <<" y_raw="<< y_raw << endl;
+	#ifdef DEBUG
+	cout << "Panel::updatePos() ..."<<"ID="<< ID <<" raw("<< x_raw <<","<< y_raw <<")"<< endl;
+	#endif
 	while( current != NULL )	{
-		//cout << " 0-Panel::updatePos() ..."<<"ID="<< parent->getID() <<"x_raw="<< x_raw <<" y_raw="<< y_raw << endl;
+    	#ifdef DEBUG
+		cout << "  parent ID="<< current->getID() <<" rel("<< current->getPosX() <<","<< current->getPosY() <<")"<< endl;
+    	#endif
 		x_raw += current->getPosX();
 		y_raw += current->getPosY();
-		//cout << " 1-Panel::updatePos() ..."<<"ID="<< current->getID() <<"x_raw="<< x_raw <<" y_raw="<< y_raw << endl;
+    	#ifdef DEBUG
+		cout << "  calcul  raw("<< x_raw <<","<< y_raw <<")"<< endl;
+    	#endif
 		current = current->getParent();
 	}
 
 	dx_raw = dx;
 	dy_raw = dy;
 
-	//cout << "                      "<<"ID="<< ID <<" x_raw="<< x_raw <<" y_raw="<< y_raw << endl;
+	#ifdef DEBUG
+	cout << "  ID="<< ID <<" raw("<< x_raw <<","<< y_raw <<") delta("<< dx <<","<< dy <<")"<< endl;
+	#endif
 	int nb = childs.size();
 	for( int i=0; i<nb; i++ )	{
 		childs[i]->updatePos();
 	}
+//#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

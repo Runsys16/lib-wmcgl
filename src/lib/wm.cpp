@@ -347,7 +347,7 @@ Panel * WindowsManager::findPanelMouseOver( int xm, int ym)	{
 	for ( int i=nb-1; i>=0; i-- )	{
 		Panel * p = childs[i]->isMouseOver( xm, ym );
 		if ( p != NULL )	{
-			if ( p->getID() != 999 )	{
+			if ( p->getID() < 9000 )	{
 				#ifdef DEBUG
 				cout << "Panel ID : "<< p->getID()  << endl;
 				#endif

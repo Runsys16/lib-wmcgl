@@ -37,7 +37,7 @@ PanelText::PanelText()	{
 	align = LEFT;
 	pTextGL = NULL;
 	bChange = false;
-	ID = 999;
+	ID = 9000;
 	tabSize = 40;
 	color = 0xffffffff;
 }

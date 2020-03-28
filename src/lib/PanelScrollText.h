@@ -68,6 +68,8 @@ class PanelScrollText : public PanelSimple	{
 		bool						bLeftCtrl;
 		bool						bCtrl;
 		
+		int                         oldDY;
+		
 };
 
 #endif

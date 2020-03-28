@@ -246,8 +246,6 @@ void PanelScrollText::affiche( string str ) {
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
-//						Callback keyboard functions....
-//
 //--------------------------------------------------------------------------------------------------------------------
 
 void PanelScrollText::setTabSize( int t ) {
@@ -258,8 +256,6 @@ void PanelScrollText::setTabSize( int t ) {
 	tabSize = t;
 }
 //--------------------------------------------------------------------------------------------------------------------
-//
-//						Callback keyboard functions....
 //
 //--------------------------------------------------------------------------------------------------------------------
 void PanelScrollText::setColor( long c ) {
@@ -287,7 +283,7 @@ void PanelScrollText::updatePos() {
 	#ifdef DEBUG
 	cout << "PanelScrollText::updatePos()" << endl;;
 	#endif
-    
+
     if ( oldDY != getPosDY() )
     {
         int decal, y;

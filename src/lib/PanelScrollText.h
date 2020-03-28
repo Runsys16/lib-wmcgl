@@ -24,13 +24,6 @@ class PanelScrollText : public PanelSimple	{
 									PanelScrollText( int, int );
 		
 		void						setPrompt( std::string );
-
-		virtual void				displayGL();
-		virtual void				updatePos();
-		virtual void				idle(float);
-
-		
-		
 		void						scroll();
 		void						rotateBuffer();
 		void						addLine();
@@ -45,9 +38,14 @@ class PanelScrollText : public PanelSimple	{
 		void						wordPrec();
 		void						wordSuiv();
 		void						setTabSize( int );
-
 		void						setColor( long );
 		
+		virtual void				displayGL();
+		virtual void				updatePos();
+		virtual void				idle(float);
+		
+inline  int                         getHeightLine()                     { return heightLine; }
+
 	private:
 		int							maxCmd;
 		std::vector<PanelText *>	texts;

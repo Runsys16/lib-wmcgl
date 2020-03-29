@@ -157,8 +157,10 @@ void WindowsManager::sup( Panel * p )	{
 	#ifdef DEBUG
 	cout << "WindowsManager::sup() ID="<< p->getID() <<" nb="<< childs.size()  << endl;
 	#endif
-    if ( panelCapture == p)   panelCapture = NULL;
-    if ( panelFocus == p)     panelFocus   = NULL;
+    //if ( panelCapture == p)   panelCapture = NULL;
+    //if ( panelFocus == p)     panelFocus   = NULL;
+    if ( panelCapture == p)   changeCapture(NULL);
+    if ( panelFocus == p)     changeFocus(NULL);
 
 	int nb = childs.size();
 	int id = p->getID();
@@ -310,10 +312,10 @@ void WindowsManager::changeCapture( Panel* p )	{
     #ifdef DEBUG
 	cout << "WindowsManager::changeCapture( " << (p!=NULL?p->getID():0) << " )" << endl;
 	#endif
-	if ( panelCapture )	    panelCapture->lostCapture();
+	if ( panelCapture!=NULL )	    panelCapture->lostCapture();
 
 	panelCapture = p;
-	if ( panelCapture)      panelCapture->haveCapture();
+	if ( panelCapture!=NULL)        panelCapture->haveCapture();
 	
 //#undef DEBUG
 }

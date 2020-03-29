@@ -152,15 +152,72 @@ void WindowsManager::add( Panel * p )	{
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
+void WindowsManager::supCapture( Panel * p )	{
+//#define DEBUG
+	#ifdef DEBUG
+	cout << "WindowsManager::supCapture() ID="<< p->getID() <<" nb="<< childs.size()  << endl;
+	#endif
+
+    if ( panelCapture == p  ){
+        changeCapture(NULL); 
+        return;
+    }
+
+    std::vector<Panel*>& childs = p->getChilds();
+    
+    if ( p != NULL )
+    {
+        for( int i=0; i<childs.size(); i++ )
+        {
+            Panel* child = childs[i];
+            if ( panelCapture == child  ){
+                changeCapture(NULL); 
+                return;
+            }
+        }
+    }
+//#undef DEBUG    
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void WindowsManager::supFocus( Panel * p )	{
+//#define DEBUG
+	#ifdef DEBUG
+	cout << "WindowsManager::supFocus() ID="<< p->getID() <<" nb="<< childs.size()  << endl;
+	#endif
+
+    if ( panelFocus == p  ){
+        changeFocus(NULL); 
+        return;
+    }
+
+    std::vector<Panel*>& childs = p->getChilds();
+    
+    if ( p != NULL )
+    {
+        for( int i=0; i<childs.size(); i++ )
+        {
+            Panel* child = childs[i];
+            if ( panelFocus == child  ){
+                changeFocus(NULL); 
+                return;
+            }
+        }
+    }
+//#undef DEBUG    
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::sup( Panel * p )	{
 //#define DEBUG
 	#ifdef DEBUG
 	cout << "WindowsManager::sup() ID="<< p->getID() <<" nb="<< childs.size()  << endl;
 	#endif
-    //if ( panelCapture == p)   panelCapture = NULL;
-    //if ( panelFocus == p)     panelFocus   = NULL;
-    if ( panelCapture == p)   changeCapture(NULL);
-    if ( panelFocus == p)     changeFocus(NULL);
+
+    supCapture(p);
+    supFocus(p);
 
 	int nb = childs.size();
 	int id = p->getID();
@@ -171,8 +228,6 @@ void WindowsManager::sup( Panel * p )	{
 			break;
 		}
 	}
-
-
 
 	#ifdef DEBUG
 	cout << "WindowsManager::sup() nb="<< childs.size()  << endl;
@@ -312,10 +367,10 @@ void WindowsManager::changeCapture( Panel* p )	{
     #ifdef DEBUG
 	cout << "WindowsManager::changeCapture( " << (p!=NULL?p->getID():0) << " )" << endl;
 	#endif
-	if ( panelCapture!=NULL )	    panelCapture->lostCapture();
+	//if ( panelCapture!=NULL )	    panelCapture->lostCapture();
 
 	panelCapture = p;
-	if ( panelCapture!=NULL)        panelCapture->haveCapture();
+	//if ( panelCapture!=NULL)        panelCapture->haveCapture();
 	
 //#undef DEBUG
 }
@@ -327,10 +382,10 @@ void WindowsManager::changeFocus( Panel* p )	{
     #ifdef DEBUG
 	cout << "WindowsManager::changeFocus( " << (p!=NULL?p->getID():0) << " )" << endl;
 	#endif
-    if ( panelFocus )       panelFocus->lostFocus();
+    //if ( panelFocus )       panelFocus->lostFocus();
 
 	panelFocus = p;
-	if ( panelFocus )       panelFocus->haveFocus();
+	//if ( panelFocus )       panelFocus->haveFocus();
 //#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------

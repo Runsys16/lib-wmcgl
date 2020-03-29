@@ -47,6 +47,8 @@ public:
 	void				init();
 	void				setScreenSize(int, int);
 	void				add(Panel *);
+	void				supCapture(Panel *);
+	void				supFocus(Panel *);
 	void				sup(Panel *);
 	void				onTop(Panel *);
 	void				onBottom(Panel *);

@@ -382,10 +382,10 @@ void WindowsManager::changeFocus( Panel* p )	{
     #ifdef DEBUG
 	cout << "WindowsManager::changeFocus( " << (p!=NULL?p->getID():0) << " )" << endl;
 	#endif
-    //if ( panelFocus )       panelFocus->lostFocus();
+    if ( panelFocus )       panelFocus->lostFocus();
 
 	panelFocus = p;
-	//if ( panelFocus )       panelFocus->haveFocus();
+	if ( panelFocus )       panelFocus->haveFocus();
 //#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -404,12 +404,12 @@ Panel * WindowsManager::findPanelMouseOver( int xm, int ym)	{
 	for ( int i=nb-1; i>=0; i-- )	{
 		Panel * p = childs[i]->isMouseOver( xm, ym );
 		if ( p != NULL )	{
-			if ( p->getID() < 9000 )	{
+			//if ( p->getID() < 9000 )	{
 				#ifdef DEBUG
 				cout << "Panel ID : "<< p->getID()  << endl;
 				#endif
 				return p;
-			}
+			//}
 		}
 	}
 	
@@ -955,6 +955,7 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::keyboardFunc( unsigned char key, int x, int y)	{
+//#define DEBUG
 	#ifdef DEBUG
 	cout << "WindowsManager::keyboardFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	#endif
@@ -964,6 +965,7 @@ void WindowsManager::keyboardFunc( unsigned char key, int x, int y)	{
 		if ( panelCallBackKeys[i]->getVisible() )
 			panelCallBackKeys[i]->cb_keyboard( key );
 	}
+//#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

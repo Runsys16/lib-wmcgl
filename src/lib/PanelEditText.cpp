@@ -60,6 +60,8 @@ PanelEditText::PanelEditText()	{
 	cursor.changeText( "|", PanelText::NORMAL_FONT, true );
 	this->add( &cursor );
 	moveCursor();
+	
+	ID = 9010;
 
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -109,10 +111,10 @@ void PanelEditText::setColor( long c ) {
 //
 //--------------------------------------------------------------------------------------------------------------------
 void PanelEditText::addChar( char c ) {
-	//#ifdef DEBUG
+	#ifdef DEBUG
 	cout <<"PanelEditText::addChar() "<< endl;
 	cout <<"  currentPos   : \""<< currentPos <<"\""<< endl;;
-	//#endif
+	#endif
 
 	string str = text->getText();
 	// prompt lenght
@@ -476,6 +478,7 @@ void PanelEditText::delWord()	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 void PanelEditText::cb_keyboard( unsigned char key ) {
+//#define DEBUG
 	//if ( !bVisible )		return;
 	#ifdef DEBUG
 	cout << "PanelEditText::cb_keyboard( "<< (unsigned int) key <<" ) "<< endl;;
@@ -483,6 +486,10 @@ void PanelEditText::cb_keyboard( unsigned char key ) {
     
     WindowsManager& wm = WindowsManager::getInstance();
 	Panel* parent = wm.getParentRoot(this);
+
+	#ifdef DEBUG
+	cout << " bFocus"<< (bFocus ? "True" : "False") << endl;;
+	#endif
 
     if (!bFocus)                    return;
     if (!parent->getVisible())      return;
@@ -555,6 +562,7 @@ void PanelEditText::cb_keyboard( unsigned char key ) {
 		}		
 		break;
 	}
+//#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -724,6 +732,7 @@ void PanelEditText::setTabSize( int t ) {
 //
 //--------------------------------------------------------------------------------------------------------------------
 void PanelEditText::idle(float elapsedTime) {
+
 	//cout << "ElapsedTime : "<< elapsedTime << endl;
 	//cout << "cursorTime  : "<< cursorTime << endl;
 	if ( !bFocus )

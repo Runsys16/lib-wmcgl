@@ -179,6 +179,9 @@ protected:
 
 
 
+using namespace std;
+
+
 typedef void (*click_left_cb_t)(int,int);
 typedef void (*release_left_cb_t)(int,int);
 typedef void (*click_right_cb_t)(int,int);
@@ -282,6 +285,10 @@ class Panel {
 		
 		inline int 			getMouseOverBorder()                            { return mouseOverBorder;}
 
+    	inline  void        setExtraString(string s)                        { sExtra = s; }
+    	inline  string&     getExtraString()                                { return sExtra; }
+	
+
 		void				deleteChilds();
 		
 
@@ -324,6 +331,8 @@ class Panel {
 		bool                bFantome;
 		bool                bFocus;
 		bool                bCapture;
+
+    	string              sExtra;
 
 };
 
@@ -1028,7 +1037,7 @@ static void             loadResourceImage( const std::string& );
 
 	inline static WindowsManager&	getInstance()			{ if (!instance) instance = new WindowsManager();return *instance;}
 	inline static void				Destroy()				{ if (instance) delete instance;instance=0;}
-	
+
 	static void				        genereMipMap(bool b);
 
 	WindowsManager();

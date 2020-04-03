@@ -3,7 +3,11 @@
 
 
 #include <vector>
+#include <string>
 #include "Constante.h"
+
+using namespace std;
+
 
 typedef void (*click_left_cb_t)(int,int);
 typedef void (*release_left_cb_t)(int,int);
@@ -108,6 +112,10 @@ class Panel {
 		
 		inline int 			getMouseOverBorder()                            { return mouseOverBorder;}
 
+    	inline  void        setExtraString(string s)                        { sExtra = s; }
+    	inline  string&     getExtraString()                                { return sExtra; }
+	
+
 		void				deleteChilds();
 		
 
@@ -150,6 +158,8 @@ class Panel {
 		bool                bFantome;
 		bool                bFocus;
 		bool                bCapture;
+
+    	string              sExtra;
 
 };
 

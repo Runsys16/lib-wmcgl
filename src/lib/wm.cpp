@@ -825,7 +825,7 @@ bool WindowsManager::isPanelFocus(Panel*p)
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
-//#define DEBUG
+#define DEBUG
 	#ifdef DEBUG
 	cout << "WindowsManager::mouseFunc( " << button << ", " << state << ", " << x << ", " << y << " )" << endl;
 	#endif
@@ -862,10 +862,18 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 		    }
 		}
 	    #ifdef DEBUG
-	    cout << "  Click gauche panelCapture="<< panelCapture << endl;
+	    cout << "  Click gauche panelCapture=";
 	    #endif
 		
-        if ( panelCapture )			panelCapture->clickLeft( x, y );
+        if ( panelCapture ){
+    	    #ifdef DEBUG
+            cout  << panelCapture->getExtraString() <<" adr="<< panelCapture << endl;
+            panelCapture->clickLeft( x, y );
+    	    #endif
+        }
+	    #ifdef DEBUG
+        cout << endl;
+	    #endif
 	}
 	// bouton gauche relache
 	else if ( button == 0 && state == 1  )	{
@@ -949,7 +957,7 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	#ifdef DEBUG
 	cout << "WindowsManager::mouseFunc Addr : " << panelMove <<" ID "<< ID <<", " << bMovePanel << endl;;
 	#endif
-//#undef DEBUG
+#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

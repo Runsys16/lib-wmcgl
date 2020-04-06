@@ -60,6 +60,10 @@ void Panel::init()	{
 	click_right_cb      = NULL;
     release_right_cb    = NULL;
 
+	panel_click_left       = NULL;
+	panel_release_left     = NULL;
+	panel_click_right      = NULL;
+    panel_release_right    = NULL;
 	
 	bHaveMove = false;
 	bScissor = false;
@@ -96,7 +100,8 @@ void Panel::sup( Panel* p)	{
 //--------------------------------------------------------------------------------------------------------------------
 void Panel::clickLeft( int x, int y)
 {
-    if (click_left_cb)      (*click_left_cb)(Screen2x(x), Screen2y(y));
+    if (click_left_cb)              (*click_left_cb)(Screen2x(x), Screen2y(y));
+    if (panel_click_left)           clickLeft( Screen2x(x), Screen2y(y) );
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -104,6 +109,7 @@ void Panel::clickLeft( int x, int y)
 void Panel::releaseLeft( int x, int y)
 {
     if (release_left_cb)      (*release_left_cb)(x,y);
+    if (panel_release_left)   releaseLeft( Screen2x(x), Screen2y(y) );
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

@@ -280,6 +280,11 @@ class Panel {
 		inline void			setClickRight( click_left_cb_t cb)              { click_right_cb = cb;}
 		inline void			setReleaseRight( click_left_cb_t cb)            { release_right_cb = cb;}
 		
+		inline void			setPanelClickLeft( Panel* p )                   { panel_click_left   = p;}
+		inline void			setPanelReleaseLeft( Panel* p )                 { panel_release_left = p;}
+		inline void			setPanelClickRight( Panel* p  )                 { panel_click_right  = p;}
+		inline void			setPanelReleaseRight( Panel* p )                { panel_release_right= p;}
+		
 		inline void			setScissor(bool b)                              { bScissor = b;}
 		inline void			setFantome(bool b)                              { bFantome = b;}
 		
@@ -333,6 +338,11 @@ class Panel {
 		bool                bCapture;
 
     	string              sExtra;
+
+        Panel*              panel_click_left;
+        Panel*              panel_release_left;
+        Panel*              panel_click_right;
+        Panel*              panel_release_right;
 
 };
 

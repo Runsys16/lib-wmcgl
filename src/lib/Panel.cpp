@@ -5,6 +5,7 @@
 //
 //--------------------------------------------------------------------------------------------------------------------
 #include "Panel.h"
+#include "wm.h"
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
@@ -109,7 +110,7 @@ void Panel::clickLeft( int x, int y)
 void Panel::releaseLeft( int x, int y)
 {
     if (release_left_cb)      (*release_left_cb)(x,y);
-    if (panel_release_left)   releaseLeft( Screen2x(x), Screen2y(y) );
+    if (panel_release_left)   panel_release_left->releaseLeft( x, y );
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -130,29 +131,44 @@ void Panel::releaseRight( int x, int y)
 //--------------------------------------------------------------------------------------------------------------------
 Panel* Panel::isMouseOver(int xm, int ym)	{
 //#define DEBUG
-	if ( !visible )			return NULL;
-	if ( bFantome )			return NULL;
-
 	#ifdef DEBUG
-	cout << "Panel::isMouseOver("<< xm <<", "<< ym <<")"
-	<<" ID="<< getID() <<"  "<< x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw ;
+	WindowsManager& wm = WindowsManager::getInstance();
+	wm.logf( (char*)"Panel::isMouseOver(%d,%d) \"%s\" id=%d (%d, %d, %d, %d)", xm, ym, getExtraString().c_str(), getID(),
+	                 x_raw, y_raw, dx_raw, dy_raw );
+	wm.log_tab(true);
 	#endif
+	if ( !visible || bFantome )
+	{
+	    #ifdef DEBUG
+	    wm.log_tab(false);
+	    #endif
+        return NULL;
+    }
+
 
 	int nb = childs.size();
 	for( int i=0; i<nb; i++ )	{
 		Panel * p = childs[i]->isMouseOver(xm, ym);
-		if ( p )		return p;
+		if ( p )		{
+    	    #ifdef DEBUG
+        	wm.logf( (char*)"OK-Panel::isMouseOver(%d,%d)", xm, ym );
+		    wm.log_tab(false);
+		    #endif
+		    return p;
+		}
 	}
 
 	if ( x_raw <= xm && xm <= (x_raw+dx_raw) && y_raw <= ym && ym <= (y_raw+dy_raw) ){
 	    #ifdef DEBUG
-	    cout <<  "  Found ID="<< getID() << endl;
+      	wm.logf( (char*)"OK-Panel::isMouseOver() = %s", getExtraString().c_str() );
+        wm.log_tab(false);
 	    #endif
 	    return this;
 	}
 	else {
 	    #ifdef DEBUG
-	    cout <<  "  Not Found ID="<< getID() << endl;
+       	wm.logf( (char*)"NOK-Panel::isMouseOver(%d,%d)", xm, ym );
+        wm.log_tab(false);
 	    #endif
 	    return NULL;
 	}

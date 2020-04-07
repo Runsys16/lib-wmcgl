@@ -45,6 +45,13 @@ public:
 
 
 	void				init();
+
+    void                log_tab( bool );
+    void                log( char*  );
+    void                logf(char *, ...);
+
+
+
 	void				setScreenSize(int, int);
 	void				add(Panel *);
 	void				supCapture(Panel *);
@@ -168,6 +175,9 @@ private:
 	int							slot;
 
 	bool						bStopKeyboard;
+        
+    string                      sTab;
+    int                         nb_tab;
 	
 };
 

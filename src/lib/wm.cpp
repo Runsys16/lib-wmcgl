@@ -239,7 +239,7 @@ void WindowsManager::sup( Panel * p )	{
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::onTop( Panel * p )	{
 	#ifdef DEBUG
-	cout << "WindowsManager::onTop() ID="<< p->getID() <<" nb="<< childs.size() << endl;
+	//cout << "WindowsManager::onTop() ID="<< p->getID() <<" nb="<< childs.size() << endl;
 	#endif
 	
 	int nb = childs.size();
@@ -254,7 +254,7 @@ void WindowsManager::onTop( Panel * p )	{
 	}
 
 	#ifdef DEBUG
-	cout << "WindowsManager::onTop() nb="<< childs.size() << endl;
+	//cout << "WindowsManager::onTop() nb="<< childs.size() << endl;
 	#endif
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -825,11 +825,12 @@ bool WindowsManager::isPanelFocus(Panel*p)
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
-#define DEBUG
+//#define DEBUG
 	#ifdef DEBUG
 	cout << "WindowsManager::mouseFunc( " << button << ", " << state << ", " << x << ", " << y << " )" << endl;
 	#endif
 	Panel* p = findPanelMouseOver(x, y);
+	cout << "  find panel \"" << (p!=NULL? p->getExtraString():"NULL") <<"\" button :"<< button << ", " << state << ", " << x << ", " << y << " )" << endl;
 	
 	bMovePanel = false;
 
@@ -957,7 +958,7 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	#ifdef DEBUG
 	cout << "WindowsManager::mouseFunc Addr : " << panelMove <<" ID "<< ID <<", " << bMovePanel << endl;;
 	#endif
-#undef DEBUG
+//#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

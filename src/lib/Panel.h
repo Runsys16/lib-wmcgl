@@ -95,6 +95,8 @@ class Panel {
 		inline void			x2Screen(int & x)                               {x += x_raw;};
 		inline void			y2Screen(int & y)                               {y += y_raw;};
 		
+		inline void			xy2Screen(int& x, int& y)                       {x += x_raw;y += y_raw;}
+		
 		inline int			Screen2x(int x)                                 {return x - x_raw;};
 		inline int			Screen2y(int y)                                 {return y - y_raw;};
 		

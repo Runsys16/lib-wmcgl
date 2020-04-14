@@ -272,6 +272,7 @@ void TextUtil::DeleteTextObj(void *_TextObj)
 
 void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines, CTexFont *_Font, int _Sep, int _BgWidth)
 {
+//#define DEBUG
     //assert(m_Drawing==true);
     //assert(_TextObj!=NULL);
     //assert(_Font!=NULL);
@@ -403,6 +404,7 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
            	}
         }
     }
+//#undef DEBUG
 }
 
 //  ---------------------------------------------------------------------------

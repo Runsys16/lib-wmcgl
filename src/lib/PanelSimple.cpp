@@ -216,6 +216,7 @@ void PanelSimple::displayGL() {
 	
 
 	// display	with scissor
+	glColor4f( 1.0, 1.0, 1.0, 1.0 );
 	Panel::displayGL();
 
     if ( parent == NULL || bScissor )

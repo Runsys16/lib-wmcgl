@@ -20,7 +20,6 @@
 
 
 using namespace std;
-
 //--------------------------------------------------------------------------------------------------------------------
 //
 //						Constructeurs ....
@@ -281,10 +280,10 @@ void PanelText::eraseText()	{
 	#endif
 	
 }
-
-
 //--------------------------------------------------------------------------------------------------------------------
-
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 void PanelText::buildString()	{
 	#ifdef DEBUG
 	cout << "PanelText::buildString() font = "<< strFont() <<"  texte = \""<< text <<"\""<< endl;
@@ -341,9 +340,10 @@ void PanelText::buildString()	{
 	}
 	bChange = false;
 }
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 int PanelText::getTextLenght()	{
 	CTexFont * defaultFont;
 	switch (typeFont )	{
@@ -353,7 +353,10 @@ int PanelText::getTextLenght()	{
 	}
 	return( textUtil->lenght( pTextGL, &text, defaultFont ) );
 }
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 int PanelText::getTextLenght( int nbChar )	{
 	CTexFont * defaultFont;
 	switch (typeFont )	{
@@ -363,7 +366,10 @@ int PanelText::getTextLenght( int nbChar )	{
 	}
 	return( textUtil->lenght( pTextGL, &text, defaultFont, nbChar ) );
 }
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 void PanelText::setTabSize( int t ) {
 	#ifdef DEBUG
 	cout << "PanelText::setTabSize() : " << t << endl;
@@ -371,11 +377,23 @@ void PanelText::setTabSize( int t ) {
 	textUtil->setTabSize( t );
 	tabSize = t;
 }
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelText::setColor( int l)
+{
+    color = l;
+    //bChange = true;
+	//cout << "PanelText::setColor(" << hex << nColor << ")" << endl;
+}
 //--------------------------------------------------------------------------------------------------------------------
 //
 //						Virtuals fonctions....
+//
+//--------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------
+//
 //
 //--------------------------------------------------------------------------------------------------------------------
 void PanelText::updatePos() {
@@ -456,8 +474,10 @@ void PanelText::updatePos() {
 	
 
 }
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 void PanelText::displayGLInternal()	{
 	WindowsManager& wm = WindowsManager::getInstance();
 	float width  = (float)wm.getWidth();
@@ -514,12 +534,10 @@ void PanelText::displayGLInternal()	{
 		textUtil->BindFont( DefaultLargeFont, slot );
 		break;
 	}
-	//textUtil->DrawText( pTextGL, getX(), getY(), COLOR32_WHITE, COLOR32_RED );
-	//textUtil->DrawText( pTextGL, getX(), getY(), color, COLOR32_RED );
 
-	//glColor4f( 1.0f, 0.0f, 0.0f, 1.0f );
+	cout << "PanelText::displayGLInternal() color =" << hex << color << "  "<< text << endl;
 	textUtil->DrawText( pTextGL, getX(), getY(), color, 0 );
-	//textUtil->DrawText( pTextGL, 20, 30, COLOR32_WHITE, COLOR32_RED );
+
 	textUtil->UnbindFont( slot );
 
 	//glDisable( GL_SCISSOR_TEST );
@@ -528,7 +546,10 @@ void PanelText::displayGLInternal()	{
 	glUseProgramObjectARB( iProgId );
 		
 }
-	
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 Panel* PanelText::isMouseOver(int xm, int ym)	{
 	#ifdef DEBUG
 	cout << "PanelText::isMouseOver()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
@@ -538,13 +559,13 @@ Panel* PanelText::isMouseOver(int xm, int ym)	{
 	if ( x_raw <= xm && xm <= (x_raw+dx_raw) && y_raw <= ym && ym <= (y_raw+dy_raw) )		return this;
 	else																					return NULL;
 }
-
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 void PanelText::displayGL() {
 	if (visible == false)			return;
-	if (bChange)					return;
+	//if (bChange)					return;
 	if ( pTextGL == NULL )			return;	
 
 #ifdef DEBUG
@@ -558,7 +579,18 @@ void PanelText::displayGL() {
 	cout << "     PT:" << getX() <<", "<< getY() <<", "<< getDX() <<", "<< getDY() << endl;
 	cout << "     WM:" << wm.getWidth() <<", "<< wm.getHeight() << endl;
 #endif
-	
+
+    /*
+    if ( color != 0xffffffff )      cout << "displa1" <<hex <<color<< endl;
+
+	unsigned char a = (color&0xff000000)>>24;
+	unsigned char r = (color&0x00ff0000)>>16;
+	unsigned char g = (color&0x0000ff00)>>8;
+	unsigned char b = (color&0x000000ff);
+
+    if ( color != 0xffffffff )      cout << "displa2" << hex <<color<< endl;
+	glColor4f( r,g,b,a );
+	*/
 
 	switch( typeFont )	{
 		case NORMAL_FONT :
@@ -569,7 +601,8 @@ void PanelText::displayGL() {
 	}	
 	
 }
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 

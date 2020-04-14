@@ -36,7 +36,7 @@ class PanelText : public Panel	{
 		void 				changeText( std::string, FONT, bool );
 		void 				eraseText( );
 		void				setTabSize( int );
-		void				setColor( unsigned long l)						{ color = l; bChange = true; }
+		void				setColor( int l);
 		
 		virtual Panel*		isMouseOver( int, int);
 		virtual void		displayGL();
@@ -48,20 +48,20 @@ class PanelText : public Panel	{
 		std::string			strFont();		
 		void				displayGLInternal();
 
+	protected:
 		//----------------- members
 		ALIGN				align;
 
 		TextUtil*			textUtil;
 		FONT				typeFont;
 		std::string			text;
-		unsigned int		color;
+		int    	            color;
 		//std::string			cmdLine;
 		bool				bChange;
 		
 		void*				pTextGL;
 		int					tabSize;
 		bool                bStatic;
-	private:
 	
 };
 

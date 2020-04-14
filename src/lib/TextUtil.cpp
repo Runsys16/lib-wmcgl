@@ -158,6 +158,11 @@ GLuint TextUtil::GenFont( CTexFont *_Font )	{
 	return GenFont( _Font, (color32) 0xffffffff );
 }
 //  ---------------------------------------------------------------------------
+TextUtil::TextUtil()
+{
+    m_tab_size = 40;
+}
+
 
 GLuint TextUtil::GenFont( CTexFont *_Font, color32 color)
 {
@@ -305,6 +310,9 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
     TextObj->m_Colors.resize(0);
     TextObj->m_BgColors.resize(0);
 
+    if ( m_tab_size < 0 )	m_tab_size = 40;
+    if ( m_tab_size > 100 )	m_tab_size = 40;
+
     int x, x1, y, y1, i, Len;
     unsigned char ch;
     const unsigned char *Text;
@@ -331,6 +339,9 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
             	if ( m_tab_size == 0 )	m_tab_size = 40;
             	int pos = x / m_tab_size;
             	x = (pos+1) * m_tab_size;
+            	//std::string s = _TextLines[Line];
+                //cout << "tabulation "<< m_tab_size <<"  x=" << x <<"   "<< s << endl;
+
             	continue;
             }
 

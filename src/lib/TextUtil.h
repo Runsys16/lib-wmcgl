@@ -42,6 +42,7 @@ const color32 COLOR32_BLUE      = 0xff0000ff;   // Blue
 class TextUtil  {
 
 public:
+    TextUtil();
 
     void *      NewTextObj();
     void        DeleteTextObj(void *_TextObj);

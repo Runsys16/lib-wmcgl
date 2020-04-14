@@ -535,7 +535,7 @@ void PanelText::displayGLInternal()	{
 		break;
 	}
 
-	cout << "PanelText::displayGLInternal() color =" << hex << color << "  "<< text << endl;
+	//cout << "PanelText::displayGLInternal() color =" << hex << color << "  "<< text << endl;
 	textUtil->DrawText( pTextGL, getX(), getY(), color, 0 );
 
 	textUtil->UnbindFont( slot );

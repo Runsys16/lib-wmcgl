@@ -77,7 +77,7 @@ void WindowsManager::init()	{
 
 	wmcglGenerateDefaultFonts();
 	cTextObj = textUtil.NewTextObj();
-	
+	textUtil.setTabSize(40);
 	
 	if ( DefaultNormalFont == NULL )	{
 		cout << "ERREUR : Font null ..." << endl;

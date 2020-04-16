@@ -158,8 +158,10 @@ void PanelCheckBox::displayGL() {
 	if ( m_pTexBackground )		{
 		m_pTexBackground->Bind( 0 );
 	
-		unsigned	dx = m_pTexBackground->dx;
-		unsigned	dy = m_pTexBackground->dy;
+		//unsigned	dx = m_pTexBackground->dx;
+		//unsigned	dy = m_pTexBackground->dy;
+		unsigned	dx = DX;
+		unsigned	dy = DY;
 	
 		glBegin(GL_QUADS);
 		
@@ -187,10 +189,14 @@ void PanelCheckBox::displayGL() {
 	if ( m_pTexCurrent )		{
 		m_pTexCurrent->Bind( 0 );
 	
+		/*
 		if ( percent >1.0 )	percent = 1.0;
 		
 		unsigned	dx = (unsigned)(float)m_pTexCurrent->dx * percent;
 		unsigned	dy = (unsigned)(float)m_pTexCurrent->dy * percent;
+        */
+		unsigned	dx = DX;
+		unsigned	dy = DY;
 	
 		glBegin(GL_QUADS);
 	

@@ -166,7 +166,7 @@ TextUtil::TextUtil()
 
 GLuint TextUtil::GenFont( CTexFont *_Font, color32 color)
 {
-#define DEBEUG
+#define DEBUG
 	//cout << "TextUtil::GenFont()" << endl;
 	//m_tab_size = 40;
 	if ( _Font->m_TexID != 0 )		return _Font->m_TexID;
@@ -235,6 +235,7 @@ GLuint TextUtil::GenFont( CTexFont *_Font, color32 color)
 	glPixelStorei(GL_PACK_ALIGNMENT,1);
 
     return _Font->m_TexID;
+#undef DEBUG
 }
 
 void TextUtil::BindFont(const CTexFont *_Font)	{

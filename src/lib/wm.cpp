@@ -12,6 +12,7 @@
 #include "InternalFonts.h"
 #include "ResourceManager.h"
 #include "PanelEditText.h"
+#include "PanelConsole.h"
 
 
 //#define DEBUG_CONST
@@ -883,6 +884,7 @@ void WindowsManager::motionFunc(int x, int y)	{
 bool WindowsManager::isPanelFocus(Panel*p)
 {
     if ( typeid(*p) == typeid(PanelEditText) )      return true;
+    if ( typeid(*p) == typeid(PanelConsole) )       return true;
     return false;
 }
 //--------------------------------------------------------------------------------------------------------------------

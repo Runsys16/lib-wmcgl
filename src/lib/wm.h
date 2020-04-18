@@ -36,6 +36,7 @@
 //#define DEBUG_WM
 //#define DEBUG
 
+#include "Mathlib.h"
 #include "Constante.h"
 
 
@@ -123,6 +124,9 @@ public:
 
 	inline void         startKeyboard()                 { bStopKeyboard = false; }
 	inline void         stopKeyboard()                  { bStopKeyboard = true; }
+	inline float        getMouseX()                      { return mouseX; }
+	inline float        getMouseY()                      { return mouseY; }
+	inline int          getMouseState(int but)          { return iMouseButton[but]; }
 	
 static GLubyte*         OpenImage( const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d);
 
@@ -178,6 +182,10 @@ private:
         
     string                      sTab;
     int                         nb_tab;
+    
+    float                       mouseX;
+    float                       mouseY;
+    int                         iMouseButton[10];
 	
 };
 

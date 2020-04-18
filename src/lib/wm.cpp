@@ -709,6 +709,8 @@ void WindowsManager::clearBufferGL( GLbitfield bitField )	{
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::passiveMotionFunc(int x, int y)	{
 //#define DEBUG
+    mouseX = x;
+    mouseY = y;
 	#ifdef DEBUG
     logf( (char*)"WindowsManager::passiveMotionFunc(%d, %d)", x, y );
     log_tab(true);
@@ -754,6 +756,8 @@ void WindowsManager::passiveMotionFunc(int x, int y)	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::motionFunc(int x, int y)	{
+    mouseX = x;
+    mouseY = y;
 	#ifdef DEBUG
     if ( panelMove != NULL )
     	cout << "WindowsManager::motionFunc( " << x << ", " << y << " )  ID "<< panelMove->getID() << endl;
@@ -892,6 +896,9 @@ bool WindowsManager::isPanelFocus(Panel*p)
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 //#define DEBUG
+    mouseX = x;
+    mouseY = y;
+    iMouseButton[button] = state;
 	#ifdef DEBUG
 	logf( (char*)"WindowsManager::mouseFunc(button %d, state %d, x %d, y %d)", button, state, x, y );
 	log_tab(true);

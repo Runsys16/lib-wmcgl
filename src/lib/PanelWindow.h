@@ -23,6 +23,7 @@ class PanelWindow : public PanelSimple {
 		inline int	 		getBorderSize()													{ return borderSize; };
 
 		void				displayGLtex( _Texture2D* , float, float, float, float );
+		void				displayGLBordure();
 
         Panel *             isMouseOverUpperLeft(int,int);
         Panel *             isMouseOverUpper(int,int);

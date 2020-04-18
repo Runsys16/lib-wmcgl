@@ -356,14 +356,7 @@ void PanelWindow::displayGLtex( _Texture2D* pTex, float X, float Y, float DX, fl
 //--------------------------------------------------------------------------------------------------------------------
 //	Opengl
 //--------------------------------------------------------------------------------------------------------------------
-void PanelWindow::displayGL( void )	{
-	if ( !visible )			return;
-	
-	PanelSimple::displayGL();
-	//cout << "PanelWindow::displayGL() m_tex_bl : " << m_tex_bl << endl;
-	float X, Y, DX, DY;
-	
-	
+void PanelWindow::displayGLBordure()	{
 	glMatrixMode(GL_TEXTURE);
 	glLoadIdentity();
 	
@@ -380,6 +373,9 @@ void PanelWindow::displayGL( void )	{
 	//glColor4b( (c&0xff000000)>>24, (c&0x00ff0000)>>16, (c&0x0000ff00)>>8, (c&0xff) );
 	glColor4f( r,g,b,a );
 	
+	//cout << "PanelWindow::displayGL() m_tex_bl : " << m_tex_bl << endl;
+	float X, Y, DX, DY;
+
 	// corners
 	X = getX() - borderSize;
 	Y = getY() - borderSize;
@@ -435,5 +431,15 @@ void PanelWindow::displayGL( void )	{
 		pPsDebug->displayGL();
 		//pPtDebug->displayGL();
 	}
+}
+//--------------------------------------------------------------------------------------------------------------------
+//	Opengl
+//--------------------------------------------------------------------------------------------------------------------
+void PanelWindow::displayGL( void )	{
+	if ( !visible )			return;
+	
+	PanelSimple::displayGL();
+	
+	displayGLBordure();
 }
 

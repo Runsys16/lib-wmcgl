@@ -498,6 +498,9 @@ class PanelSimple : public Panel {
 		
 		void				setBackground( char *);
 		void				setBackground( GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d );
+inline	void                setBackground( _Texture2D* p )          { m_pTexBackground = p; }
+inline _Texture2D*          getBackground()                         { return m_pTexBackground; }
+		
 		void				deleteBackground();
 
 
@@ -515,7 +518,7 @@ class PanelSimple : public Panel {
 		PanelText*						pPtDebug;
 		std::string						sDebug;
 		
-		unsigned long                   c;
+		unsigned int                    c;
 };
 
 
@@ -921,6 +924,7 @@ class PanelWindow : public PanelSimple {
 		inline int	 		getBorderSize()													{ return borderSize; };
 
 		void				displayGLtex( _Texture2D* , float, float, float, float );
+		void				displayGLBordure();
 
         Panel *             isMouseOverUpperLeft(int,int);
         Panel *             isMouseOverUpper(int,int);

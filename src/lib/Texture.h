@@ -30,7 +30,7 @@ public:
 	void Bind() const;
 	void Unbind() const;
 
-	_Texture() {m_nHandle=0;}
+	_Texture() {m_nHandle=0; /*std::cout << "_Texture::_Texture()" << std::endl;*/}
 	~_Texture() {Destroy();}
 	
 	unsigned	dx;

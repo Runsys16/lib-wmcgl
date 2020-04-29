@@ -133,7 +133,7 @@ GLubyte* OpenImageDevIL(const std::string& filename, unsigned int& w, unsigned i
 	}
 
     // Génération d'une nouvelle texture
-    ILuint ilTexture;
+    ILuint ilTexture = 0;
     ilGenImages(1, &ilTexture);
     ilBindImage(ilTexture);
 
@@ -154,15 +154,21 @@ GLubyte* OpenImageDevIL(const std::string& filename, unsigned int& w, unsigned i
 	int w0 = w;
 	int h0 = h;
 	int	d0 = d;
-	//std::cout <<  "width:"<< w0 <<" height:"<< h0 <<" bpp:"<< d0;// << std::endl;
-
+	//std::cout <<  "width:"<< w0 <<" height:"<< h0 <<" bpp:"<< d0 << std::endl;
+    ILboolean success;
+    
 	if(d==4)
-		ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+		success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+	else
+	if(d==3)
+		success = ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+	
 
+    //d = 4;
     // Récupération des pixels de l'image
     const unsigned char* Pixels = ilGetData();
 
-	GLubyte* img = new GLubyte[(size_t)(w) * (size_t)(h) * (size_t)(d)];
+	GLubyte* img = new GLubyte[(size_t)(w) * (size_t)(h) * (size_t)(d) + 100];
 	memcpy(img, Pixels, (size_t)(w) * (size_t)(h) * (size_t)(d));
 
     // Suppression de la texture

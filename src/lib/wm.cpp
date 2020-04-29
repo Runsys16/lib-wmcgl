@@ -1090,14 +1090,14 @@ void WindowsManager::keyboardSpecialUpFunc( unsigned char key, int x, int y)	{
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
-static GLubyte* WindowsManager::OpenImage( const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d)
+ GLubyte* WindowsManager::OpenImage( const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d)
 {
 return _ImageTools::OpenImage(filename,w,h,d);
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
-static void WindowsManager::loadResourceImage( const std::string& filename )
+void WindowsManager::loadResourceImage( const std::string& filename )
 {
 	_ResourceManager& res = _ResourceManager::getInstance();
 
@@ -1106,7 +1106,7 @@ static void WindowsManager::loadResourceImage( const std::string& filename )
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
-static void WindowsManager::genereMipMap(bool b)
+void WindowsManager::genereMipMap(bool b)
 {
     _Texture::EnableGenerateMipmaps(b);
 }

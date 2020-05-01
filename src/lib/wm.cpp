@@ -1046,6 +1046,9 @@ void WindowsManager::keyboardFunc( unsigned char key, int x, int y)	{
 	cout << "WindowsManager::keyboardFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	#endif
 	if ( bStopKeyboard )        return;
+	if ( panelFocus!= NULL )    panelFocus->cb_keyboard( key );
+	return;
+	
 	int nb = panelCallBackKeys.size();
 	for( int i=0; i<nb; i++ )	{
 		if ( panelCallBackKeys[i]->isVisible() )
@@ -1060,6 +1063,11 @@ void WindowsManager::keyboardUpFunc( unsigned char key, int x, int y)	{
 	#ifdef DEBUG
 	cout << "WindowsManager::keyboardUpFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	#endif
+
+
+//	if ( panelFocus!= NULL )    panelFocus->cb_keyboard_special_up( key );
+//	return;
+	
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -1071,6 +1079,10 @@ void WindowsManager::keyboardSpecialFunc( unsigned char key, int x, int y)	{
 	#endif
 	if ( bStopKeyboard )        return;
 	int nb = panelCallBackKeys.size();
+
+	if ( panelFocus!= NULL )    panelFocus->cb_keyboard_special( key );
+	return;
+	
 	#ifdef DEBUG
 	cout << "WindowsManager::keyboardSpecialFunc( " << nb <<" fenetres panelCallBackKeys " << endl;
 	#endif
@@ -1092,6 +1104,10 @@ void WindowsManager::keyboardSpecialUpFunc( unsigned char key, int x, int y)	{
 	cout << "WindowsManager::keyboardSpecialUpFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	#endif
 	if ( bStopKeyboard )        return;
+
+	if ( panelFocus!= NULL )    panelFocus->cb_keyboard_special_up( key );
+	return;
+	
 	int nb = panelCallBackKeys.size();
 	#ifdef DEBUG
 	cout << "WindowsManager::keyboardSpecialFunc( " << nb <<" fenetres panelCallBackKeys " << endl;

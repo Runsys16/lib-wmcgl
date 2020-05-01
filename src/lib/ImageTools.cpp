@@ -168,7 +168,7 @@ GLubyte* OpenImageDevIL(const std::string& filename, unsigned int& w, unsigned i
     // Récupération des pixels de l'image
     const unsigned char* Pixels = ilGetData();
 
-	GLubyte* img = new GLubyte[(size_t)(w) * (size_t)(h) * (size_t)(d) + 100];
+	GLubyte* img = new GLubyte[(size_t)(w) * (size_t)(h) * (size_t)(d) + 8*4];
 	memcpy(img, Pixels, (size_t)(w) * (size_t)(h) * (size_t)(d));
 
     // Suppression de la texture

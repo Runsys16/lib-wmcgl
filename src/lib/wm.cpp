@@ -114,6 +114,8 @@ void WindowsManager::init()	{
 	bResize       = false;
 	bMotionMiddle = false;
 	bMotionLeft   = false;
+
+	panelCallBackKeys.clear();
 	
 	sTab = "";
 	nb_tab = 0;
@@ -1046,7 +1048,7 @@ void WindowsManager::keyboardFunc( unsigned char key, int x, int y)	{
 	if ( bStopKeyboard )        return;
 	int nb = panelCallBackKeys.size();
 	for( int i=0; i<nb; i++ )	{
-		if ( panelCallBackKeys[i]->getVisible() )
+		if ( panelCallBackKeys[i]->isVisible() )
 			panelCallBackKeys[i]->cb_keyboard( key );
 	}
 //#undef DEBUG
@@ -1063,29 +1065,44 @@ void WindowsManager::keyboardUpFunc( unsigned char key, int x, int y)	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::keyboardSpecialFunc( unsigned char key, int x, int y)	{
+#define DEBUG
 	#ifdef DEBUG
 	cout << "WindowsManager::keyboardSpecialFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	#endif
 	if ( bStopKeyboard )        return;
 	int nb = panelCallBackKeys.size();
+	#ifdef DEBUG
+	cout << "WindowsManager::keyboardSpecialFunc( " << nb <<" fenetres panelCallBackKeys " << endl;
+	#endif
 	for( int i=0; i<nb; i++ )	{
-		if ( panelCallBackKeys[i]->getVisible() )
+		if ( panelCallBackKeys[i]->isVisible() )
+		{
+		    //if ( panelCallBackKeys[i]->cb_keyboard_special != NULL )
 			panelCallBackKeys[i]->cb_keyboard_special( key );
+	    }
 	}
+#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::keyboardSpecialUpFunc( unsigned char key, int x, int y)	{
+#define DEBUG
 	#ifdef DEBUG
 	cout << "WindowsManager::keyboardSpecialUpFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	#endif
 	if ( bStopKeyboard )        return;
 	int nb = panelCallBackKeys.size();
+	#ifdef DEBUG
+	cout << "WindowsManager::keyboardSpecialFunc( " << nb <<" fenetres panelCallBackKeys " << endl;
+	#endif
 	for( int i=0; i<nb; i++ )	{
-		if ( panelCallBackKeys[i]->getVisible() )
+		if ( panelCallBackKeys[i]->isVisible() )
+		{
 			panelCallBackKeys[i]->cb_keyboard_special_up( key );
+	    }
 	}
+#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

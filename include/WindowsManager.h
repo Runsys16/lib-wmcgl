@@ -235,6 +235,7 @@ class Panel {
 		virtual void		cb_keyboard_special( unsigned char )			{;};
 		virtual void		cb_keyboard_special_up( unsigned char )			{;};
 		virtual void		debug( bool )									{;};
+		virtual bool		isVisible(); 									
 		
 		inline void			setParent( Panel* p )							{parent = p;};
 		inline Panel*		getParent()										{return parent;};

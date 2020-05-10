@@ -1123,9 +1123,9 @@ void WindowsManager::keyboardSpecialUpFunc( unsigned char key, int x, int y)	{
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
- GLubyte* WindowsManager::OpenImage( const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d)
+GLubyte* WindowsManager::OpenImage( const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d)
 {
-return _ImageTools::OpenImage(filename,w,h,d);
+    return _ImageTools::OpenImage(filename,w,h,d);
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

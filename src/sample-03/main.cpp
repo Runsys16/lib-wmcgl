@@ -286,7 +286,7 @@ static void CreateOneWindow()	{
 	}	
 	
 	//ps->setBackground( (char*) "white.png" );
-	ps->setBackground( NULL );
+	ps->setBackground( (_Texture2D*)NULL );
 
 	wm.add(ps);
 	delete pStr;

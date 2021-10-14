@@ -335,7 +335,7 @@ static void CreateOneWindow()	{
 		//pCheckBox->setBackground( (char*)"check-bg.png" );
 		pCheckBox->setCallBackFalse( call_back_check_false );
 		pCheckBox->setCallBackTrue( call_back_check_true );
-		pCheckBox->setBackground( NULL );
+		pCheckBox->setBackground( (_Texture2D*)NULL );
 		pCheckBox->setPosAndSize( 10, 6 * 42 +20*i, 24, 24 );
 
 		sprintf( Buff, "Check bouton %d", (int)i );

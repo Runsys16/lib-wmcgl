@@ -1,0 +1,106 @@
+#!/bin/bash
+#!/bin/bash
+#----------------------------------------------------------------------------------------------------
+function getPathGrep() {
+	local PATH_GREP=$(dirname $1)
+	if [ "$PATH_GREP" == "." ]
+	then
+		PATH_GREP=$PATH_IDENT
+	else
+		PATH_GREP=$PATH_IDENT/${PATH_GREP:2}
+	fi
+	
+	echo $PATH_GREP
+}
+#----------------------------------------------------------------------------------------------------
+function get_window_id() {
+	local WINDOW_ID=""
+	for n in $*
+	do
+		local FILENAME=$(basename $n)" ("
+		local PATH_GREP=$(getPathGrep $n)
+		WINDOW_ID=$(wmctrl -l | grep "$PATH_GREP"| grep "gedit" | grep "$FILENAME" | cut -f1 -d" ")
+		if [ "$WINDOW_ID" != "" ]
+		then
+			break
+		fi
+	done
+	
+    echo $WINDOW_ID
+}
+#----------------------------------------------------------------------------------------------------
+function get_workspace()	{
+	local  N=$(wmctrl -d | cut -d' ' -f8 | cut -d',' -f1)
+	echo $N
+}
+
+#----------------------------------------------------------------------------------------------------
+function wait_id()	{
+	local ID=""
+	while [ "$ID" == "" ]
+	do
+		ID=$(get_window_id $*)
+	done
+}
+#----------------------------------------------------------------------------------------------------
+function isOpen()	{
+	for i in $*
+	do
+		local FILE_GREP=$(basename $i)" ("
+		local PATH_GREP=$(getPathGrep $i)
+
+		local OUVERT=$(wmctrl -l | grep "$PATH_GREP" | grep "gedit" | grep "$FILE_GREP" )
+		if [ "$OUVERT" != "" ]
+		then
+			echo $OUVERT
+			return
+		fi
+	done
+	echo ""
+}
+#----------------------------------------------------------------------------------------------------
+function open()	{
+	
+	local OPEN=$(isOpen $*)
+	if [ "$OPEN" == "" ]
+	then
+		echo Edition ...
+		edition $* &>/dev/null
+		wait_id $*
+		wmctrl -i -r $(get_window_id $*) -e $SIZE
+		return
+	fi
+	echo $(isOpen $*)
+}
+#----------------------------------------------------------------------------------------------------
+#											MAIN
+#----------------------------------------------------------------------------------------------------
+STR1="./src/lib/*.h"
+STR0="./src/lib/*.cpp"
+STR2="ed makefile src/depend.py src/build_makefile src/build_include src/makefile.base"
+
+PATH_IDENT="programmes/opengl/lib-wmcgl"
+#----------------------------------------------------------------------------------------------------
+SCREEN_SIZE=$(xdpyinfo  | grep dimensions | sed "s/.*dimensions: *\(.*x.*\) pixels.*/\1/g")
+SCREEN_WIDTH=$(echo $SCREEN_SIZE | sed "s/\(.*\)x.*/\1/g")
+SCREEN_HEIGHT=$(echo $SCREEN_SIZE | sed "s/.*x\(.*\)/\1/g")
+
+WIDTH=$(( $SCREEN_WIDTH / 2 ))
+HEIGHT=$(( $SCREEN_HEIGHT - 0 )) 
+
+
+#----------------------------------------------------------------------------------------------------
+POS=$(( $SCREEN_WIDTH + 0 ))
+SIZE="0,$POS,0,$WIDTH,$HEIGHT"
+open $STR0
+
+POS=$(( 2*$SCREEN_WIDTH - $WIDTH ))
+SIZE="0,$POS,0,$WIDTH,$HEIGHT"
+open $STR1
+
+POS=$(( ($SCREEN_WIDTH - $WIDTH) / 2 ))
+POS=$(( $SCREEN_WIDTH - $WIDTH ))
+SIZE="0,$POS,0,$WIDTH,$HEIGHT"
+open $STR2
+
+

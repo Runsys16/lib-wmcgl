@@ -1,0 +1,38 @@
+#!/bin/bash
+#-----------------------------------------------------------------------------
+# build_makefile
+#-----------------------------------------------------------------------------
+# this script run in src directory
+#-----------------------------------------------------------------------------
+cd ./src
+cat ./makefile.base >../makefile
+echo "#-------------------------------------------------------------------------------------" >> ../makefile
+echo "#        Scripts" >> ../makefile
+echo "#        Fabrication des dependances de chaque fichier .o" >> ../makefile
+echo "#-------------------------------------------------------------------------------------" >> ../makefile
+echo "# depend.py, build_makefile" >> ../makefile
+echo "#-------------------------------------------------------------------------------------" >> ../makefile
+echo "# Recuperation des scripts (dans le repertoire src) :" >> ../makefile
+echo "# $ cat ../makefile | grep \"^#00#\" | sed -e \"s/^....\(.*\)/\1/g\" >depend.py" >> ../makefile
+echo "# $ cat ../makefile | grep \"^#01#\" | sed -e \"s/^....\(.*\)/\1/g\" >build_makefile" >> ../makefile
+echo "#-------------------------------------------------------------------------------------" >> ../makefile
+
+echo  >> ../makefile
+echo  >> ../makefile
+echo  >> ../makefile
+
+cat ./depend.py | sed -e 's/.*/#00#\0/g' >> ../makefile
+echo  >> ../makefile
+echo  >> ../makefile
+echo  >> ../makefile
+echo  >> ../makefile
+
+cat ./build_makefile | sed -e 's/.*/#01#\0/g' >> ../makefile
+echo  >> ../makefile
+echo  >> ../makefile
+echo  >> ../makefile
+echo  >> ../makefile
+
+cd lib
+../depend.py >>../../makefile
+cd ..

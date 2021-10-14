@@ -1,0 +1,80 @@
+CPP  = g++
+CC   = gcc
+
+VER = 0.1
+
+
+OBJDIR		= ./build/
+BINDIR		= ./bin/
+INSTALLDIR	= /usr/lib/
+INCLUDEDIR	= /usr/include/
+
+SRCDIR		= ./src/lib/
+
+SRC		= $(wildcard $(SRCDIR)*.cpp)
+OBJ		= $(SRC:$(SRCDIR)%.cpp=$(OBJDIR)%.o)
+BIN		= $(BINDIR)libwmcgl.so.$(VER)
+BINNAME = libwmcgl.so
+
+LIBS	=  -lfreetype -lGL -lglut -lGLU -lGLEW -lIL -shared
+
+INCS =  -I"/usr/include" -I"/usr/include/freetype2" 
+CFLAGS = $(INCS) -O2 -fpic -fpermissive -mtune=core2 -Wno-deprecated -Wno-unused-result
+CFLAGS = $(INCS) -g -O2 -fpic -fpermissive -mtune=core2 -Wno-deprecated -Wno-unused-result -std=c++11
+
+
+
+
+
+RM = rm -f
+RMDIR = rm -rf
+MKDIR = mkdir -p
+CP = cp -f
+LN = ln -sf
+
+
+.PHONY: all
+
+all: before $(BIN)
+
+before:
+	@$(MKDIR) $(OBJDIR)
+	@$(MKDIR) $(BINDIR)
+
+print:
+	@echo -----------------------------------------
+	@echo 'Variable OBJ'
+	@echo $(OBJ)
+	@echo -----------------------------------------
+	@echo 'Variable SRC'
+	@echo $(SRC)
+	@echo -----------------------------------------
+	@echo 'Variable BINDIR BIN VER'
+	@echo $(BINDIR)$(BIN).$(VER)
+	@echo -----------------------------------------
+
+clean: 
+	@$(RMDIR) $(OBJDIR)
+	@$(RMDIR) $(BINDIR)
+
+sample:
+	cd src/sample-00;make clean;make
+	cd src/sample-01;make clean;make
+	cd src/sample-02;make clean;make
+
+$(BIN): $(OBJ)
+	@echo ---------   edition des liens library $@
+	$(CPP) $(OBJ) -o $@ $(LIBS)
+
+
+install:
+	@echo ---------   Installation de library $@ dans $(INSTALLDIR)
+	$(CP) $(BIN) $(INSTALLDIR)
+	$(LN) $(INSTALLDIR)$(BINNAME).$(VER) $(INSTALLDIR)$(BINNAME)
+	@./src/build_include
+	$(CP) ./include/WindowsManager.h $(INCLUDEDIR)
+	#mkdir /usr/share/wmcgl
+	#ln -s /home/rene/programmes/opengl/lib-wmcgl/images /usr/share/wmcgl/images
+
+
+

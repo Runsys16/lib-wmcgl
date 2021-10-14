@@ -1,0 +1,75 @@
+#!/bin/bash
+
+INCLUDE="./include/WindowsManager.h"
+SRC="./src/lib/"
+
+echo "#ifndef WINDOWSMANAGER_H" >${INCLUDE}
+echo "#define WINDOWSMANAGER_H" >>${INCLUDE}
+echo  >>${INCLUDE}
+echo "#include <vector>" >>${INCLUDE}
+echo "#include <string>" >>${INCLUDE}
+echo "#include <map>" >>${INCLUDE}
+echo  >>${INCLUDE}
+echo  >>${INCLUDE}
+echo  "class _Texture2D;" >>${INCLUDE}
+echo  "class Panel;" >>${INCLUDE}
+echo  "class _Font;" >>${INCLUDE}
+echo  "class TextUtil;" >>${INCLUDE}
+echo  >>${INCLUDE}
+echo "#define color32 unsigned int" >>${INCLUDE}
+
+cat ${SRC}Font.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+
+cat >> ${INCLUDE} << EOF 
+struct CTexFont
+{
+    unsigned char * m_TexBytes;
+	unsigned int	m_TexID;
+    int             m_TexWidth;     // power of 2
+    int             m_TexHeight;    // power of 2
+    float           m_CharU0[256];
+    float           m_CharV0[256];
+    float           m_CharU1[256];
+    float           m_CharV1[256];
+    int             m_CharWidth[256];
+    int             m_CharHeight;
+    int             m_NbCharRead;
+
+    CTexFont();
+    ~CTexFont();
+};
+
+
+CTexFont *TwGenerateFont(const unsigned char *_Bitmap, int _BmWidth, int _BmHeight);
+
+
+
+extern CTexFont *DefaultSmallFont;
+extern CTexFont *DefaultNormalFont;
+extern CTexFont *DefaultLargeFont;
+
+void wmcglGenerateDefaultFonts();
+void wmcglDeleteDefaultFonts();
+
+EOF
+
+#cat ${SRC}ImageTools.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}TextUtil.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}Panel.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}PanelText.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}PanelTextOmbre.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}PanelSimple.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}PanelEditText.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}PanelScrollText.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}PanelScrollY.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}PanelConsole.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}PanelButton.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}PanelCheckBox.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}PanelWindow.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}wm.h | grep -v "WindowsManager::instance" | grep -v include | grep -v "#"    >> ${INCLUDE}
+
+echo  >>${INCLUDE}
+##echo "extern WindowsManager* WindowsManager::instance;" >>${INCLUDE}
+
+echo "#endif" >>${INCLUDE}
+

@@ -1,0 +1,12 @@
+build/*
+bin/*
+src/sample-00/*.o
+src/sample-01/*.o
+src/sample-02/*.o
+src/sample-03/*.o
+src/sample-04/*.o
+src/sample-00/sample-00
+src/sample-01/sample-01
+src/sample-02/sample-02
+src/sample-03/sample-03
+src/sample-04/sample-04

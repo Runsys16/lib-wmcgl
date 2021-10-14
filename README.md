@@ -3,6 +3,8 @@ Windows manager in openGL
 
 This windows toolbox is use for a multiple programs.
 
+$ldd bin/libwmcgl.so.0.1 
+
 	linux-vdso.so.1 (0x00007ffe6a7cf000)
 	libfreetype.so.6 => /usr/lib/x86_64-linux-gnu/libfreetype.so.6 (0x00007f67b7393000)
 	libGL.so.1 => /usr/lib/x86_64-linux-gnu/libGL.so.1 (0x00007f67b730b000)

@@ -16,7 +16,10 @@ class PanelScrollY : public PanelSimple {
 		virtual void		clickUp( int, int);
 		virtual void		clickDown( int, int);
 		virtual Panel*		isMouseOver( int, int);
-		
+
+
+		virtual void		wheelUp( int, int);
+		virtual void		wheelDown( int, int);
 
 		virtual void		displayGL();
 		virtual void		updatePos();

@@ -551,13 +551,16 @@ void PanelText::displayGLInternal()	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 Panel* PanelText::isMouseOver(int xm, int ym)	{
+//#define DEBUG
 	#ifdef DEBUG
-	cout << "PanelText::isMouseOver()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
+	if ( x_raw <= xm && xm <= (x_raw+dx_raw) && y_raw <= ym && ym <= (y_raw+dy_raw) )
+    	cout << "PanelText::isMouseOver()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
 	#endif
 	return NULL;
 
 	if ( x_raw <= xm && xm <= (x_raw+dx_raw) && y_raw <= ym && ym <= (y_raw+dy_raw) )		return this;
 	else																					return NULL;
+//#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

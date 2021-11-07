@@ -64,10 +64,11 @@ function open()	{
 	local OPEN=$(isOpen $*)
 	if [ "$OPEN" == "" ]
 	then
-		echo Edition ...
+		echo Edition ... $SIZE
 		edition $* &>/dev/null
 		wait_id $*
 		wmctrl -i -r $(get_window_id $*) -e $SIZE
+		echo wmctrl -i -r $(get_window_id $*) -e $SIZE
 		return
 	fi
 	echo $(isOpen $*)
@@ -81,25 +82,30 @@ STR2="ed makefile src/depend.py src/build_makefile src/build_include src/makefil
 
 PATH_IDENT="programmes/opengl/lib-wmcgl"
 #----------------------------------------------------------------------------------------------------
+OFFSET="50"
+[ "$(uname -n)" == "poste-portable" ] && OFFSET="50"
+
 SCREEN_SIZE=$(xdpyinfo  | grep dimensions | sed "s/.*dimensions: *\(.*x.*\) pixels.*/\1/g")
 SCREEN_WIDTH=$(echo $SCREEN_SIZE | sed "s/\(.*\)x.*/\1/g")
 SCREEN_HEIGHT=$(echo $SCREEN_SIZE | sed "s/.*x\(.*\)/\1/g")
 
-WIDTH=$(( $SCREEN_WIDTH / 2 ))
-HEIGHT=$(( $SCREEN_HEIGHT - 0 )) 
-
+SCREEN_WIDTH=$(( $SCREEN_WIDTH / 2 ))
+WIDTH=$(( $SCREEN_WIDTH / 2 + 200))
+HEIGHT=$(( $SCREEN_HEIGHT - $OFFSET )) 
 
 #----------------------------------------------------------------------------------------------------
-POS=$(( $SCREEN_WIDTH + 0 ))
+POS=0
 SIZE="0,$POS,0,$WIDTH,$HEIGHT"
 open $STR0
 
-POS=$(( 2*$SCREEN_WIDTH - $WIDTH ))
+#POS=$(( 2*$SCREEN_WIDTH - $WIDTH ))
+POS=$(( $POS + 200 ))
 SIZE="0,$POS,0,$WIDTH,$HEIGHT"
 open $STR1
 
-POS=$(( ($SCREEN_WIDTH - $WIDTH) / 2 ))
-POS=$(( $SCREEN_WIDTH - $WIDTH ))
+#POS=$(( ($SCREEN_WIDTH - $WIDTH) / 2 ))
+#POS=$(( $SCREEN_WIDTH - $WIDTH ))
+POS=$(( $POS + 200 ))
 SIZE="0,$POS,0,$WIDTH,$HEIGHT"
 open $STR2
 

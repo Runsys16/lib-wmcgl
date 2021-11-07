@@ -411,10 +411,10 @@ void WindowsManager::changeCapture( Panel* p )	{
     #ifdef DEBUG
 	cout << "WindowsManager::changeCapture( " << (p!=NULL?p->getID():0) << " )" << endl;
 	#endif
-	//if ( panelCapture!=NULL )	    panelCapture->lostCapture();
+	if ( panelCapture!=NULL )	    panelCapture->lostCapture();
 
 	panelCapture = p;
-	//if ( panelCapture!=NULL)        panelCapture->haveCapture();
+	if ( panelCapture!=NULL)        panelCapture->haveCapture();
 	
 //#undef DEBUG
 }
@@ -719,7 +719,7 @@ void WindowsManager::passiveMotionFunc(int x, int y)	{
     #endif
 	Panel * p = findPanelMouseOver(x, y);
 	
-	//changeCapture( p );
+	if ( p )    changeCapture( p );
 	
 	xm_old = -1;
 	ym_old = -1;
@@ -1018,13 +1018,15 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
     	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
 	#endif
 		if ( p )	p->wheelUp( x, y );
+		if ( p != NULL && p->getParent() != NULL )   p->getParent()->wheelUp( x, y );
 	}
 	else
 	if ( button == 4 && state == 0 )	{
-	#ifdef DEBUG
+	//#ifdef DEBUG
     	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
-	#endif
+	//#endif
 		if ( p )	p->wheelDown( x, y );
+		if ( p != NULL && p->getParent() != NULL )   p->getParent()->wheelDown( x, y );
 	}
 	
 	int ID = -1;
@@ -1073,7 +1075,7 @@ void WindowsManager::keyboardUpFunc( unsigned char key, int x, int y)	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::keyboardSpecialFunc( unsigned char key, int x, int y)	{
-#define DEBUG
+//#define DEBUG
 	#ifdef DEBUG
 	cout << "WindowsManager::keyboardSpecialFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	#endif
@@ -1093,13 +1095,13 @@ void WindowsManager::keyboardSpecialFunc( unsigned char key, int x, int y)	{
 			panelCallBackKeys[i]->cb_keyboard_special( key );
 	    }
 	}
-#undef DEBUG
+//#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::keyboardSpecialUpFunc( unsigned char key, int x, int y)	{
-#define DEBUG
+//#define DEBUG
 	#ifdef DEBUG
 	cout << "WindowsManager::keyboardSpecialUpFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	#endif
@@ -1118,7 +1120,7 @@ void WindowsManager::keyboardSpecialUpFunc( unsigned char key, int x, int y)	{
 			panelCallBackKeys[i]->cb_keyboard_special_up( key );
 	    }
 	}
-#undef DEBUG
+//#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

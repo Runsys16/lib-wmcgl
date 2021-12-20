@@ -334,8 +334,8 @@ void PanelTextOmbre::setColor( unsigned long c ) {
 	#ifdef DEBUG
 	cout << "PanelTextOmbre::setTabSize() : " << c << endl;
 	#endif
-	PanelText::setColor( c );
-	pTextOmbre.setColor( 0xff000000 );
+	color = c;//PanelText::setColor( c );
+	//pTextOmbre.setColor( 0xff000000 );
 }
 
 

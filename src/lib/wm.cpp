@@ -1022,9 +1022,9 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	}
 	else
 	if ( button == 4 && state == 0 )	{
-	//#ifdef DEBUG
+	#ifdef DEBUG
     	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
-	//#endif
+	#endif
 		if ( p )	p->wheelDown( x, y );
 		if ( p != NULL && p->getParent() != NULL )   p->getParent()->wheelDown( x, y );
 	}

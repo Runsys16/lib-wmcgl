@@ -574,6 +574,8 @@ class PanelEditText : public PanelSimple	{
 
 		inline std::string	        getText()					{ return text->getText(); };
 		inline void      	        changeText(std::string s)   { text->changeText(s, PanelText::NORMAL_FONT, true ); };
+		inline void					hideCursor()				{ bHideCursor = true; }
+		inline void					showCursor()				{ bHideCursor = false; }
 		
 	private:
 		PanelText *                 text;
@@ -595,6 +597,7 @@ class PanelEditText : public PanelSimple	{
 		bool						bRightCtrl;
 		bool						bLeftCtrl;
 		bool						bCtrl;
+		bool						bHideCursor;
 		long                        color;
 };
 

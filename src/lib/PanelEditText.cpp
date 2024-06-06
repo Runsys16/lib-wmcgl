@@ -47,6 +47,7 @@ PanelEditText::PanelEditText()	{
 	bRightCtrl = false;
 	bLeftCtrl = false;
 	bFocus = false;
+	bHideCursor = false;
 
 	heightLine = 13;
 			
@@ -231,7 +232,7 @@ void PanelEditText::delChar() {
     	#endif
 		
 		char buff[2048];
-		sprintf( buff, "%s%s", left, right );
+		snprintf( buff, sizeof(buff), "%s%s", left, right );
 		val = new string(buff);
 	}
 
@@ -458,7 +459,7 @@ void PanelEditText::supWord()	{
 	#endif
 	
 	char buff[2048];
-	sprintf( buff, "%s%s", left, right );
+	snprintf( buff, sizeof(buff), "%s%s", left, right );
 
 	val = new string(buff);
 	text->changeText( *val, PanelText::NORMAL_FONT, true );
@@ -733,24 +734,25 @@ void PanelEditText::setTabSize( int t ) {
 //--------------------------------------------------------------------------------------------------------------------
 void PanelEditText::idle(float elapsedTime) {
 
-	//cout << "ElapsedTime : "<< elapsedTime << endl;
+	//cout <<"PanelEditText::idle( "<< elapsedTime <<" )"<< endl;
 	//cout << "cursorTime  : "<< cursorTime << endl;
+	if ( bHideCursor  )	{
+		cursor.setVisible( false );
+		return;
+	}
 	if ( !bFocus )
 	{
 	    cursor.setVisible( false );
 	    return;
 	}
 
-	if ( cursorTime >= 0.0 )	{
-		cursorTime += elapsedTime;
-		if ( cursorTime >= 0.5f )		{
-			cursor.setVisible( !cursor.getVisible() );
-			cursorTime -= 0.5f;
-		}
+	//-----------------------------------------------------------
+	cursorTime += elapsedTime;
+	if ( cursorTime >= 0.5f )		{
+		cursor.setVisible( !cursor.getVisible() );
+		cursorTime -= 0.5f;
 	}
-	else	{
-		cursorTime = 0.0f;
-	}
+
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

@@ -218,56 +218,57 @@ static void CreateAllWindows()	{
 
 	string * pStr;
 
+	PanelWindow  * pw;
 	PanelSimple  * ps;
 	PanelText* pt;
 	
 	
 	//---------------------------------------------------------------------------------	
-	ps = new PanelSimple();
-	ps->setPosAndSize( 50+0, 50+50, 200, wm.getHeight()-100);
-	wm.add( ps );
+	pw = new PanelWindow();
+	pw->setPosAndSize( 50+0, 50+50, 200, wm.getHeight()-100);
+	wm.add( pw );
 	int y = 10;
 	int dy = 15;
-	ps->add( new PanelText( "Fichier",		PanelText::LARGE_FONT, 5, y + 0*dy ) );
-	ps->add( new PanelText( "Edition",		PanelText::LARGE_FONT, 5, y + 1*dy ) );
-	ps->add( new PanelText( "Affichage",	PanelText::LARGE_FONT, 5, y + 2*dy ) );
-	ps->add( new PanelText( "Recherche",	PanelText::LARGE_FONT, 5, y + 3*dy ) );
-	ps->add( new PanelText( "Outils",		PanelText::LARGE_FONT, 5, y + 4*dy ) );
-	ps->add( new PanelText( "Aide",			PanelText::LARGE_FONT, 5, y + 5*dy ) );
+	pw->add( new PanelText( "Fichier",		PanelText::LARGE_FONT, 5, y + 0*dy ) );
+	pw->add( new PanelText( "Edition",		PanelText::LARGE_FONT, 5, y + 1*dy ) );
+	pw->add( new PanelText( "Affichage",	PanelText::LARGE_FONT, 5, y + 2*dy ) );
+	pw->add( new PanelText( "Recherche",	PanelText::LARGE_FONT, 5, y + 3*dy ) );
+	pw->add( new PanelText( "Outils",		PanelText::LARGE_FONT, 5, y + 4*dy ) );
+	pw->add( new PanelText( "Aide",			PanelText::LARGE_FONT, 5, y + 5*dy ) );
 	
 	//---------------------------------------------------------------------------------	
-	ps = new PanelSimple();
-	ps->setPosAndSize( 50+wm.getWidth()-200, 50+50, 200, wm.getHeight()-100);
-	wm.add( ps );
+	pw = new PanelWindow();
+	pw->setPosAndSize( 50+wm.getWidth()-200, 50+50, 200, wm.getHeight()-100);
+	wm.add( pw );
 	
 	//---------------------------------------------------------------------------------	
-	ps = new PanelSimple();
-	ps->setPosAndSize( 50+0, 50+wm.getHeight()-50-2, wm.getWidth(), 50+2);
-	wm.add( ps );
+	pw = new PanelWindow();
+	pw->setPosAndSize( 50+0, 50+wm.getHeight()-50-2, wm.getWidth(), 50+2);
+	wm.add( pw );
 	//ps->add( new PanelText( *(new string("Press ESC to quit")),	PanelText::NORMAL_FONT, 10, 5 ) );
 	pStr = new string("Press ESC to quit");
 	PanelText* pT = new PanelText( *pStr,	PanelText::NORMAL_FONT, 0, 20 );
 	pT->setAlign( PanelText::CENTER );
 	//ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 5 ) );
-	ps->add( pT );
+	pw->add( pT );
 	
 	//---------------------------------------------------------------------------------	
-	ps = new PanelSimple();
-	ps->setPosAndSize( 50+0, 50+0, wm.getWidth(), 50+2);
-	wm.add( ps );
+	pw = new PanelWindow();
+	pw->setPosAndSize( 50+0, 50+0, wm.getWidth(), 50+2);
+	wm.add( pw );
 	pStr = new string("Press ESC to quit");
-	ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 5 ) );
+	pw->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 5 ) );
 	pStr = new string("Or key to test console, enter word \"debug\" for debug mode on/off");
-	ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 20 ) );
+	pw->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 20 ) );
 	
 	//---------------------------------------------------------------------------------	
-	ps = new PanelSimple();
-	ps->setPosAndSize( 650-4, 50+50+0, 400, 600);
-	wm.add( ps );
+	pw = new PanelWindow();
+	pw->setPosAndSize( 650-4, 50+50+0, 400, 600);
+	wm.add( pw );
 
-	ps->add( new PanelText( "1 Essai de panelText SMALL_FONT", PanelText::SMALL_FONT, 40, 100 ) );
-	ps->add( new PanelText( "2 Essai de panelText NORMAL_FONT", PanelText::NORMAL_FONT, 60, 120 ) );
-	ps->add( new PanelText( "3 Essai de panelText LARGE_FONT", PanelText::LARGE_FONT, 80, 140 ) );
+	pw->add( new PanelText( "1 Essai de panelText SMALL_FONT", PanelText::SMALL_FONT, 40, 100 ) );
+	pw->add( new PanelText( "2 Essai de panelText NORMAL_FONT", PanelText::NORMAL_FONT, 60, 120 ) );
+	pw->add( new PanelText( "3 Essai de panelText LARGE_FONT", PanelText::LARGE_FONT, 80, 140 ) );
 
 	//---------------------------------------------------------------------------------	
 	PanelConsole* pc;

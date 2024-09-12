@@ -83,6 +83,7 @@ class Panel {
 		inline int			getPosY()										{return y;};
 		inline int			getPosDX()										{return dx;};
 		inline int			getPosDY()										{return dy;};
+		inline int			getNbPanel()									{return childs.size();}
 	
 		inline bool			getVisible()									{return visible;};
 		inline void			setVisible(bool b)								{visible=b;};

@@ -101,6 +101,7 @@ public:
 	inline int			getSlot()						{return slot;}
 	inline Panel *  	getCapture()    				{return panelCapture;}
 	inline Panel *  	getFocus()      				{return panelFocus;}
+	std::vector<Panel*>&	getChilds()					{return childs;}
 
 	void				ChangeViewport(int, int, int, int, int, int);
 

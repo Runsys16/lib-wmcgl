@@ -92,6 +92,9 @@ void Panel::sup( Panel* p)	{
 	int nb = childs.size();
 	for ( int i=0; i<nb; i++ )	{
 		if ( childs[i] == p )	{
+			WindowsManager& wm = WindowsManager::getInstance();
+			if ( p == wm.getCapture() )		wm.supCapture(p);
+			if ( p == wm.getFocus() )		wm.supFocus(p);
 			childs.erase( childs.begin()+i );
 		}
 	}

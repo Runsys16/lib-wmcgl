@@ -154,10 +154,10 @@ void PanelCheckBox::displayGL() {
 	}
 
 	//m_pTexBackground->Bind(wm.getSlot());
-	unsigned char a = (c&0xff000000)>>24;
-	unsigned char r = (c&0x00ff0000)>>16;
-	unsigned char g = (c&0x0000ff00)>>8;
-	unsigned char b = (c&0x000000ff);
+	unsigned char a = (color&0xff000000)>>24;
+	unsigned char r = (color&0x00ff0000)>>16;
+	unsigned char g = (color&0x0000ff00)>>8;
+	unsigned char b = (color&0x000000ff);
 
 	glColor4f( r,g,b,a );
 
@@ -242,15 +242,16 @@ void PanelCheckBox::displayGL() {
 	cout << "    PS:" << "-----Scissor-------" << endl;
 	cout << "    PS:" << scx <<", "<< scy <<", "<< scdx <<", "<< scdy << endl;
 #endif
-	glScissor( scx, scy, scdx, scdy );
-	glEnable( GL_SCISSOR_TEST );
+
+	//glScissor( scx, scy, scdx, scdy );
+	//glEnable( GL_SCISSOR_TEST );
 	
 
 	// display	with scissor
 	Panel::displayGL();
 
 
-	glDisable( GL_SCISSOR_TEST );
+	//glDisable( GL_SCISSOR_TEST );
 	
 	if ( bDebug && pPsDebug )		{
 		pPsDebug->displayGL();

@@ -36,6 +36,7 @@ class PanelText : public Panel	{
 		void 				changeText( std::string, FONT, bool );
 		void 				eraseText( );
 		void				setTabSize( int );
+		int					getTabSize()									{return tabSize;}
 		void				setColor( int l);
 		
 		virtual Panel*		isMouseOver( int, int);
@@ -43,6 +44,7 @@ class PanelText : public Panel	{
 		virtual void		updatePos();
 		
 		inline void 		setAlign( ALIGN a )								{align = a;};
+		inline void 		setChangeText(bool b )							{bChange = b;};
 		
 		//----------------- functions
 		std::string			strFont();		

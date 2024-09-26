@@ -153,13 +153,25 @@ static void glutKeyboardFunc(unsigned char key, int x, int y) {
 		quit();
 		}
 		break;
+	case 178: 
+		{
+			for (int i=0; i<pw.size(); i++ )	{
+				int b = pw[i]->getBorderSize();
+				if ( b < 0 )	b = 128;
+			
+				b -=2;
+				pw[i]->setBorderSize(b);
+			}
+			
+		}
+		break;
 	case 9: 
 		{
 			for (int i=0; i<pw.size(); i++ )	{
 				int b = pw[i]->getBorderSize();
 				if ( b >= 128 )	b = 0;
 			
-				b +=8;
+				b +=2;
 				pw[i]->setBorderSize(b);
 			}
 			
@@ -227,8 +239,12 @@ static void CreateOneWindow()	{
 	PanelSimple  * ps;
 	PanelText* pt;
 	
-	char *texture[] = { (char*)"bouton-jaune.png", (char*)"bouton-orange.png", (char*)"bouton-rouge.png",\
-						(char*)"bouton-vert.png", (char*)"bouton-bleu.png", (char*)"bouton-noir.png" };
+	char *texture[] = { (char*)"bouton-jaune.png", 
+						(char*)"bouton-orange.png",
+						(char*)"bouton-rouge.png",
+						(char*)"bouton-vert.png", 
+						(char*)"bouton-bleu.png", 
+						(char*)"bouton-noir.png" };
 	
 	PW = new PanelWindow();
 	pw.push_back( PW );
@@ -247,6 +263,7 @@ static void CreateOneWindow()	{
 
 	ps = new PanelSimple();
 	ps->setPosAndSize( x, y, dx, dy );
+	ps->setPosAndSize( 0, 0, dx, dy );
 	PW->add( ps );
 
 
@@ -285,10 +302,10 @@ static void CreateOneWindow()	{
 		ps->add( pButton );
 	}	
 	
-	//ps->setBackground( (char*) "white.png" );
-	ps->setBackground( (_Texture2D*)NULL );
+	ps->setBackground( (char*) "images/background.tga" );
+	//ps->setBackground( (_Texture2D*)NULL );
 
-	wm.add(ps);
+	wm.add(PW);
 	delete pStr;
 }
 
@@ -296,70 +313,84 @@ static void CreateAllWindows()	{
 	//WindowsManager& wm = WindowsManager::getInstance();
 	wm.setScreenSize( width-100, height-100 );
 
-	string * pStr;
 	PanelSimple  * ps;
 	PanelText* pt;
 	
 	
 	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
+	ps->setBackground( (char*) "images/background.tga" );
 	ps->setPosAndSize( 50+0, 50+50, 200, wm.getHeight()-100);
-	wm.add( ps );
 	int y = 10;
 	int dy = 15;
 	ps->add( new PanelText( (char*)"Fichier",		PanelText::LARGE_FONT, 5, y + 0*dy ) );
-	ps->add( new PanelText( (char*)"Edition",		PanelText::LARGE_FONT, 5, y + 1*dy ) );
-	ps->add( new PanelText( (char*)"Affichage",	PanelText::LARGE_FONT, 5, y + 2*dy ) );
-	ps->add( new PanelText( (char*)"Recherche",	PanelText::LARGE_FONT, 5, y + 3*dy ) );
+	ps->add( new PanelText( (char*)"Edition",		PanelText::UBUNTU_B, 5, y + 1*dy ) );
+	ps->add( new PanelText( (char*)"Affichage",		PanelText::LARGE_FONT, 5, y + 2*dy ) );
+	ps->add( new PanelText( (char*)"Recherche",		PanelText::LARGE_FONT, 5, y + 3*dy ) );
 	ps->add( new PanelText( (char*)"Outils",		PanelText::LARGE_FONT, 5, y + 4*dy ) );
 	ps->add( new PanelText( (char*)"Aide",			PanelText::LARGE_FONT, 5, y + 5*dy ) );
 	
+	wm.add( ps );
 	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
 	ps->setPosAndSize( 50+wm.getWidth()-200, 50+50, 200, wm.getHeight()-100);
+	ps->setBackground( (char*)"images/background.tga" );
 	wm.add( ps );
 	
 	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
 	ps->setPosAndSize( 50+0, 50+wm.getHeight()-50-2, wm.getWidth(), 50+2);
+	ps->setBackground( (char*)"images/background.tga" );
 	wm.add( ps );
-	//ps->add( new PanelText( *(new string("Press ESC to quit")),	PanelText::NORMAL_FONT, 10, 5 ) );
-	pStr = new string("Press ESC to quit");
-	PanelText* pT = new PanelText( *pStr,	PanelText::NORMAL_FONT, 0, 20 );
+
+	PanelText* pT = new PanelText( (char*)"Press ESC to quit",	PanelText::NORMAL_FONT, 0, 20 );
 	pT->setAlign( PanelText::CENTER );
-	//ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 5 ) );
 	ps->add( pT );
 	
 	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
-	ps->setPosAndSize( 50+0, 50+0, wm.getWidth(), 50+2);
-	wm.add( ps );
+	ps->setPosAndSize( 50+0, 100-(3*14+20)+2, wm.getWidth(), 3*14+20);
+	ps->setBackground( (char*) "images/background.tga" );
+	/*
+	Induit une erreur de segmentation
+	-----------------------------------
 	pStr = new string("Press ESC to quit");
 	ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 5, 0xffffffff ) );
 	pStr = new string("Or key to test console, enter word \"debug\" for debug mode on/off");
 	ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 20 ) );
+	*/
+	ps->add( new PanelText( (char*)"Press ESC to quit",	
+							PanelText::NORMAL_FONT, 10, 10, 0xffffffff ) );
+	ps->add( new PanelText( (char*)"Or key to test console, enter word \"debug\" for debug mode on/off",
+							PanelText::NORMAL_FONT, 10, 24 ) );
+	ps->add( new PanelText( (char*)"Touche TAB : agrandi la largeur, touche ² inverse",
+							PanelText::NORMAL_FONT, 10, 38 ) );
 	
+	wm.add( ps );
 	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
+	ps->setBackground( (char*) "images/background.tga" );
 	ps->setPosAndSize( 650-4, 50+50+0, 400, 600);
-	wm.add( ps );
 
 	ps->add( new PanelText( (char*)"1 Essai de panelText SMALL_FONT", PanelText::SMALL_FONT, 40, 100 ) );
 	ps->add( new PanelText( (char*)"2 Essai de panelText NORMAL_FONT", PanelText::NORMAL_FONT, 60, 120 ) );
 	ps->add( new PanelText( (char*)"3 Essai de panelText LARGE_FONT", PanelText::LARGE_FONT, 80, 140 ) );
 
+	wm.add( ps );
 	//---------------------------------------------------------------------------------	
 	PanelConsole* pc;
 	pc = new PanelConsole( 100, 10 );
+	pc->setBackground( (char*) "images/background.tga" );
 	pc->setPosAndSize( 250-2, 100, 400, wm.getHeight()-100);
 	pc->setPrompt( "console1> " );
-	wm.add( pc );
 	pc->setCallBackCmd( exec_cmd );
 	pPC = pc;
 	
+	wm.add( pc );
 	//---------------------------------------------------------------------------------	
 	pc = new PanelConsole( 100, 5 );
 	pc->setPosAndSize( 250-2-4+800, 100, 200+8, wm.getHeight()-100);
+	pc->setBackground( (char*) "images/background.tga" );
 	//pc->setPrompt( "rene@poste-002:/home/rene$ " );
 	pc->setPrompt( "console2> " );
 	pc->setCallBackCmd( new CallBack() );

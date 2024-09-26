@@ -452,6 +452,7 @@ Panel * WindowsManager::findPanelMouseOver( int xm, int ym)	{
 		#endif
 
 		Panel* r = p->isMouseOver( xm, ym );
+		if ( r && !r->isVisible() )		r = NULL;
 
 	    #ifdef DEBUG
 	    log_tab(false);
@@ -478,7 +479,7 @@ Panel * WindowsManager::findPanelMouseOver( int xm, int ym)	{
 	logf( (char*)"WindowsManager::findPanelMouseOver(%d, %d)", xm, ym );
 	#endif
 	return NULL;
-//#undef DEBUG
+#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -715,11 +716,15 @@ void WindowsManager::passiveMotionFunc(int x, int y)	{
     mouseY = y;
 	#ifdef DEBUG
     logf( (char*)"WindowsManager::passiveMotionFunc(%d, %d)", x, y );
-    log_tab(true);
+    //log_tab(true);
     #endif
+//#undef DEBUG
 	Panel * p = findPanelMouseOver(x, y);
 	
-	if ( p )    changeCapture( p );
+	if ( p )    {
+		changeCapture( p );
+		p->passiveMotionFunc( x, y);
+	}
 	
 	xm_old = -1;
 	ym_old = -1;
@@ -758,14 +763,16 @@ void WindowsManager::passiveMotionFunc(int x, int y)	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::motionFunc(int x, int y)	{
+//#define DEBUG
     mouseX = x;
     mouseY = y;
-	#ifdef DEBUG
+#ifdef DEBUG
     if ( panelMove != NULL )
     	cout << "WindowsManager::motionFunc( " << x << ", " << y << " )  ID "<< panelMove->getID() << endl;
 	else
     	cout << "WindowsManager::motionFunc( " << x << ", " << y << " )  panelMove NULL " << endl;
-    #endif
+#endif
+//#undef DEBUG
     	
 	if ( bMovePanel && panelMove != NULL )	{
     	#ifdef DEBUG
@@ -902,7 +909,9 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
     mouseY = y;
     iMouseButton[button] = state;
 	#ifdef DEBUG
-	logf( (char*)"WindowsManager::mouseFunc(button %d, state %d, x %d, y %d)", button, state, x, y );
+	logf( (char*)"WindowsManager::mouseFunc( %s, %s, x %d, y %d)", 	
+									(button==0 ? "left" : (button==1 ? "middle":" right" )),
+									(state==1 ? "up" : "down"), x, y );
 	log_tab(true);
 	//cout << "WindowsManager::mouseFunc( " << button << ", " << state << ", " << x << ", " << y << " )" << endl;
 	#endif
@@ -995,7 +1004,8 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	else 
 	// bouton droite appuye
 	if ( button == 2 && state == 0 )	{
-		panelMove = getParentRoot( p );
+		if ( p->getCanMove() == false )		panelMove = getParentRoot( p );
+		else								panelMove = p;
 		if ( panelMove != NULL )	{
 			bMovePanel = true;
 			onTop( panelMove );
@@ -1035,9 +1045,9 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	#ifdef DEBUG
 	//cout << "WindowsManager::mouseFunc Addr : " << panelMove <<" ID "<< ID <<", " << bMovePanel << endl;;
 	log_tab(false);
-	logf( (char*)"WindowsManager::mouseFunc(button %d, state %d, x %d, y %d)", button, state, x, y );
+	logf( (char*)"WindowsManager::mouseFunc()" );
 	#endif
-//#undef DEBUG
+#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

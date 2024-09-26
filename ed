@@ -82,7 +82,7 @@ STR2="ed makefile src/depend.py src/build_makefile src/build_include src/makefil
 
 PATH_IDENT="programmes/opengl/lib-wmcgl"
 #----------------------------------------------------------------------------------------------------
-OFFSET="50"
+OFFSET="-0"
 [ "$(uname -n)" == "poste-portable" ] && OFFSET="50"
 
 SCREEN_SIZE=$(xdpyinfo  | grep dimensions | sed "s/.*dimensions: *\(.*x.*\) pixels.*/\1/g")
@@ -91,8 +91,14 @@ SCREEN_HEIGHT=$(echo $SCREEN_SIZE | sed "s/.*x\(.*\)/\1/g")
 
 SCREEN_WIDTH=$(( $SCREEN_WIDTH / 2 ))
 WIDTH=$(( $SCREEN_WIDTH / 2 + 200))
+WIDTH=1100
 HEIGHT=$(( $SCREEN_HEIGHT - $OFFSET )) 
 
+echo "------------------------------------------------------------"
+echo "\t   total \t   SCREEN      \t\t calculé"
+echo $SCREEN_SIZE     $SCREEN_WIDTH $SCREEN_HEIGHT           $WIDTH $HEIGHT
+echo ------------------------------------------------------------
+#exit
 #----------------------------------------------------------------------------------------------------
 POS=0
 SIZE="0,$POS,0,$WIDTH,$HEIGHT"

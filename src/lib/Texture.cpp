@@ -76,7 +76,7 @@ void _Texture::Gen()
 #ifdef DEBUG
 	std::cout << "_Texture::Gen()" << std::endl;
 #endif
-	Destroy();
+	if ( m_nHandle != 0 )			Destroy();
 	glGenTextures(1, &m_nHandle);
 }
 //--------------------------------------------------------------------------------------------------------------------

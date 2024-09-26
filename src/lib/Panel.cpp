@@ -43,7 +43,7 @@ void Panel::init()	{
 	#endif
 	
 	visible			= true;
-	canMove			= true;
+	bCanMove		= true;
 	mouseVisible	= true;
 
 	x_raw			= 0;
@@ -84,6 +84,7 @@ void Panel::add( Panel* p)	{
 	childs.push_back( p );
 	
 	p->setParent( this );
+	p->setCanMove( false );
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

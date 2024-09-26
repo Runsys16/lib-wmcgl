@@ -26,6 +26,8 @@ class Panel {
 
 		void				add( Panel* );
 		void				sup( Panel* );
+
+		virtual void		passiveMotionFunc( int, int)			      {;};
 		
 		virtual void		clickLeft( int, int);
 		virtual void		motionLeft( int, int)                         {;};
@@ -88,8 +90,8 @@ class Panel {
 		inline bool			getVisible()									{return visible;};
 		inline void			setVisible(bool b)								{visible=b;};
 		
-		inline bool			getCanMove()									{return canMove;};
-		inline void			setCanMove(bool b)								{canMove=b;};
+		inline bool			getCanMove()									{return bCanMove;};
+		inline void			setCanMove(bool b)								{bCanMove=b;};
 		
 
 		inline void			setDisplayGL(displayGL_cb_t cb)                 {displayGL_cb=cb;};
@@ -149,7 +151,7 @@ class Panel {
 		int					startY;
 	
 		bool				visible;
-		bool				canMove;
+		bool				bCanMove;
 		bool				mouseVisible;
 		int                 mouseOverBorder;
 	

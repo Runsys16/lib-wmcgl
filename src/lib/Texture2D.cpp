@@ -11,12 +11,19 @@
 #include <string>
 //#include "FrameBufferObject.h"
 
+//#define DEBUG
 
 bool _Texture2D::Load(const std::string& name)
 {
+#ifdef DEBUG
+	std::cout << "_Texture2D::Load('"<< name <<"')"<< std::endl;
+#endif
 	if(!_Texture::Load(name))
 		return false;
 
+#ifdef DEBUG
+	std::cout << "_Texture2D::Load() ... Bind()"<< std::endl;
+#endif
 	Bind();
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT,1);
@@ -46,6 +53,9 @@ bool _Texture2D::Load(const std::string& name)
 
 bool _Texture2D::Load(GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d)
 {
+#ifdef DEBUG
+	std::cout << "_Texture2D::Load('"<< w <<","<< h <<","<< d <<"')"<< std::endl;
+#endif
 	if(!_Texture::Load(""))
 		return false;
 

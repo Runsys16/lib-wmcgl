@@ -39,6 +39,7 @@ PanelText::PanelText()	{
 	ID = 9000;
 	tabSize = 40;
 	color = 0xffffffff;
+	//bFantome = true;
 }
 
 
@@ -285,9 +286,9 @@ void PanelText::eraseText()	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 void PanelText::buildString()	{
-	#ifdef DEBUG
+#ifdef DEBUG
 	cout << "PanelText::buildString() font = "<< strFont() <<"  texte = \""<< text <<"\""<< endl;
-	#endif
+#endif
 	if ( text.compare("") == 0 )	{ 
 		if (pTextGL != NULL )	{
 			textUtil->DeleteTextObj( pTextGL );
@@ -312,8 +313,9 @@ void PanelText::buildString()	{
 	pTextGL = textUtil->NewTextObj();
 
 
-	//cout << "PanelText::buildString() \""<< text <<"\", "<< typeFont <<" : "<< strFont() <<" )" << endl;
-
+#ifdef DEBUG
+	cout << "PanelText::buildString() \""<< text <<"\", "<< typeFont <<" : "<< strFont() <<" )" << endl;
+#endif
 	switch (typeFont )	{
 	case NORMAL_FONT :
 	    {
@@ -535,7 +537,7 @@ void PanelText::displayGLInternal()	{
 		break;
 	}
 
-	//cout << "PanelText::displayGLInternal() color =" << hex << color << "  "<< text << endl;
+	//cout << "PanelText::displayGLInternal() color =" << hex << color << "  text='"<< text <<"'"<< endl;
 	textUtil->DrawText( pTextGL, getX(), getY(), color, 0 );
 
 	textUtil->UnbindFont( slot );

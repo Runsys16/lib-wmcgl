@@ -67,7 +67,8 @@ PanelSimple::PanelSimple()	{
 	pPtDebug = NULL;
 	bDebug = false;
 	
-	c = 0xffffffff;
+	color = 0xffffffff;
+	//color = 0x00000000;
 }
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -76,29 +77,29 @@ PanelSimple::PanelSimple()	{
 void PanelSimple::setColor(long l)
 {
     int nb = childs.size();
-    c = l;
+    color = l;
     for( int i=0; i<nb; i++ )
     {
         Panel * child = childs[i];
         if ( typeid(*child) == typeid(PanelText) )
         {
-            dynamic_cast<PanelText*>(child)->setColor(c);
+            dynamic_cast<PanelText*>(child)->setColor(color);
         }
         if ( typeid(*child) == typeid(PanelTextOmbre) )
         {
-            dynamic_cast<PanelTextOmbre*>(child)->setColor(c);
+            dynamic_cast<PanelTextOmbre*>(child)->setColor(color);
         }
         if ( typeid(*child) == typeid(PanelButton) )
         {
-            dynamic_cast<PanelButton*>(child)->setColor(c);
+            dynamic_cast<PanelButton*>(child)->setColor(color);
         }
         if ( typeid(*child) == typeid(PanelCheckBox) )
         {
-            dynamic_cast<PanelCheckBox*>(child)->setColor(c);
+            dynamic_cast<PanelCheckBox*>(child)->setColor(color);
         }
         if ( typeid(*child) == typeid(PanelWindow) )
         {
-            dynamic_cast<PanelWindow*>(child)->setColor(c);
+            dynamic_cast<PanelWindow*>(child)->setColor(color);
         }
 
         //cout <<"child :non PanelText OK" << endl;
@@ -139,15 +140,15 @@ void PanelSimple::displayGL() {
 
 	WindowsManager& wm = WindowsManager::getInstance();
 	
-	//glColor4b( (c&0xff000000)>>24, (c&0x00ff0000)>>16, (c&0x0000ff00)>>8, (c&0xff) );
+	//glColor4b( (color&0xff000000)>>24, (color&0x00ff0000)>>16, (color&0x0000ff00)>>8, (color&0xff) );
 	
 	float width  = (float)wm.getWidth();
 	float height = (float)wm.getHeight();
 	
 	float X = getX();
 	float Y = getY();
-	float DX = getDX();
-	float DY = getDY();
+	float DX = getPosDX();
+	float DY = getPosDY();
 	
 #ifdef DEBUG
 	cout << "PS displayGL ... fenetre id : " << getID() << endl;
@@ -157,10 +158,10 @@ void PanelSimple::displayGL() {
 	cout << "    PS:" << wm.getWidth() <<", "<< wm.getHeight() << endl;
 #endif
 	
-	unsigned char a = (c&0xff000000)>>24;
-	unsigned char r = (c&0x00ff0000)>>16;
-	unsigned char g = (c&0x0000ff00)>>8;
-	unsigned char b = (c&0x000000ff);
+	unsigned char a = (color&0xff000000)>>24;
+	unsigned char r = (color&0x00ff0000)>>16;
+	unsigned char g = (color&0x0000ff00)>>8;
+	unsigned char b = (color&0x000000ff);
 
 	glColor4f( r,g,b,a );
 

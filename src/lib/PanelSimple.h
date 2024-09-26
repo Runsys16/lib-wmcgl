@@ -11,6 +11,7 @@
 #include "Texture2D.h"
 #include "TextUtil.h"
 
+
 class PanelSimple : public Panel {
 	public:
 		PanelSimple();
@@ -27,6 +28,7 @@ class PanelSimple : public Panel {
 		void				setBackground( GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d );
 inline	void                setBackground( _Texture2D* p )          { m_pTexBackground = p; }
 inline _Texture2D*          getBackground()                         { return m_pTexBackground; }
+inline 	unsigned int        getColor()                              { return color; }
 		
 		void				deleteBackground();
 
@@ -45,7 +47,7 @@ inline _Texture2D*          getBackground()                         { return m_p
 		PanelText*						pPtDebug;
 		std::string						sDebug;
 		
-		unsigned int                    c;
+		unsigned int                    color;
 };
 
 

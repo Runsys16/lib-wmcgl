@@ -197,16 +197,16 @@ void PanelButton::displayGL() {
 	cout << "    PS:" << wm.getWidth() <<", "<< wm.getHeight() << endl;
 #endif
 	
-	unsigned char a = (c&0xff000000)>>24;
-	unsigned char r = (c&0x00ff0000)>>16;
-	unsigned char g = (c&0x0000ff00)>>8;
-	unsigned char b = (c&0x000000ff);
+	unsigned char a = (color&0xff000000)>>24;
+	unsigned char r = (color&0x00ff0000)>>16;
+	unsigned char g = (color&0x0000ff00)>>8;
+	unsigned char b = (color&0x000000ff);
 
 	glColor4f( r,g,b,a );
 
 
 
-	//cout << "    PS:"<< c <<" : "<< r <<","<< g <<","<< b <<","<< a << endl;
+	//cout << "    PS:"<< color <<" : "<< r <<","<< g <<","<< b <<","<< a << endl;
 
 	if ( m_pTexBackground )	{
 		m_pTexBackground->Bind(0);

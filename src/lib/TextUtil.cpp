@@ -166,7 +166,7 @@ TextUtil::TextUtil()
 
 GLuint TextUtil::GenFont( CTexFont *_Font, color32 color)
 {
-#define DEBUG
+//#define DEBUG
 	//cout << "TextUtil::GenFont()" << endl;
 	//m_tab_size = 40;
 	if ( _Font->m_TexID != 0 )		return _Font->m_TexID;
@@ -536,9 +536,12 @@ void TextUtil::DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 
 {
     //assert(m_Drawing==true);
     //assert(_TextObj!=NULL);
-	#ifdef DEBUG
+
+//#define DEBUG
+#ifdef DEBUG
    	std::cout << "TextUtil::DrawText( " << _TextObj <<", "<< _X <<", "<< _Y <<", "<< _Color <<", "<< _BgColor <<" )" << std::endl;
-	#endif
+#endif
+
 	/*
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -549,6 +552,10 @@ void TextUtil::DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 
 
   	*/
     CTextObj *TextObj = static_cast<CTextObj *>(_TextObj);
+
+#ifdef DEBUG
+   	std::cout << "Dynamic CastEnd" << std::endl;
+#endif
 
     if( !TextObj || (TextObj->m_TextVerts.size()<4 && TextObj->m_BgVerts.size()<4 )	   ){
 		#ifdef DEBUG
@@ -622,6 +629,7 @@ void TextUtil::DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	*/
+	#undef DEBUG
 }
 
 

@@ -200,6 +200,8 @@ class Panel {
 
 		void				add( Panel* );
 		void				sup( Panel* );
+
+		virtual void		passiveMotionFunc( int, int)			      {;};
 		
 		virtual void		clickLeft( int, int);
 		virtual void		motionLeft( int, int)                         {;};
@@ -262,8 +264,8 @@ class Panel {
 		inline bool			getVisible()									{return visible;};
 		inline void			setVisible(bool b)								{visible=b;};
 		
-		inline bool			getCanMove()									{return canMove;};
-		inline void			setCanMove(bool b)								{canMove=b;};
+		inline bool			getCanMove()									{return bCanMove;};
+		inline void			setCanMove(bool b)								{bCanMove=b;};
 		
 
 		inline void			setDisplayGL(displayGL_cb_t cb)                 {displayGL_cb=cb;};
@@ -323,7 +325,7 @@ class Panel {
 		int					startY;
 	
 		bool				visible;
-		bool				canMove;
+		bool				bCanMove;
 		bool				mouseVisible;
 		int                 mouseOverBorder;
 	
@@ -389,6 +391,7 @@ class PanelText : public Panel	{
 		void 				changeText( std::string, FONT, bool );
 		void 				eraseText( );
 		void				setTabSize( int );
+		int					getTabSize()									{return tabSize;}
 		void				setColor( int l);
 		
 		virtual Panel*		isMouseOver( int, int);
@@ -396,6 +399,7 @@ class PanelText : public Panel	{
 		virtual void		updatePos();
 		
 		inline void 		setAlign( ALIGN a )								{align = a;};
+		inline void 		setChangeText(bool b )							{bChange = b;};
 		
 		//----------------- functions
 		std::string			strFont();		
@@ -486,6 +490,7 @@ class PanelTextOmbre : public PanelText	{
 
 
 
+
 class PanelSimple : public Panel {
 	public:
 		PanelSimple();
@@ -502,6 +507,7 @@ class PanelSimple : public Panel {
 		void				setBackground( GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d );
 inline	void                setBackground( _Texture2D* p )          { m_pTexBackground = p; }
 inline _Texture2D*          getBackground()                         { return m_pTexBackground; }
+inline 	unsigned int        getColor()                              { return color; }
 		
 		void				deleteBackground();
 
@@ -520,7 +526,7 @@ inline _Texture2D*          getBackground()                         { return m_p
 		PanelText*						pPtDebug;
 		std::string						sDebug;
 		
-		unsigned int                    c;
+		unsigned int                    color;
 };
 
 

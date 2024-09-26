@@ -153,13 +153,25 @@ static void glutKeyboardFunc(unsigned char key, int x, int y) {
 		quit();
 		}
 		break;
+	case 178: 
+		{
+			for (int i=0; i<pw.size(); i++ )	{
+				int b = pw[i]->getBorderSize();
+				if ( b < 0 )	b = 128;
+			
+				b -= 2;
+				pw[i]->setBorderSize(b);
+			}
+			
+		}
+		break;
 	case 9: 
 		{
 			for (int i=0; i<pw.size(); i++ )	{
 				int b = pw[i]->getBorderSize();
 				if ( b >= 128 )	b = 0;
 			
-				b +=8;
+				b +=2;
 				pw[i]->setBorderSize(b);
 			}
 			
@@ -264,7 +276,8 @@ static void CreateOneWindow()	{
 						(char*)"vert-over.png", (char*)"bleu-over.png", (char*)"noir-over.png" };
 	
 	PW = new PanelWindow();
-	PW->setBackground( (char*)"background.tga" );
+	//PW->setBackground( (char*)"background.tga" );
+	//PW->setBackground( NULL );
 	pw.push_back( PW );
 	
 	int x, y, dx, dy;
@@ -280,7 +293,7 @@ static void CreateOneWindow()	{
 	if ( pw.size()%3 == 1 )	PW->loadSkin( PanelWindow::BLACK );
 
 	ps = new PanelScrollY();
-	ps->setPosAndSize( x, y, dx, dy );
+	ps->setPosAndSize( 0, 0, dx, dy );
 	PW->add( ps );
 
 
@@ -354,7 +367,7 @@ static void CreateOneWindow()	{
 		ps->add( pCheckBox );
 	}
 	
-	wm.add(ps);
+	wm.add(PW);
     ps->setBackground( (char*)"background.tga" );
 
 	delete pStr;
@@ -368,7 +381,7 @@ static void CreateAllWindows()	{
 	//WindowsManager& wm = WindowsManager::getInstance();
 	wm.setScreenSize( width-100, height-100 );
 
-	string * pStr;
+	//string * pStr;
 	PanelSimple  * ps;
 	PanelText* pt;
 	
@@ -398,11 +411,9 @@ static void CreateAllWindows()	{
 	ps->setPosAndSize( 50+0, 50+wm.getHeight()-50-2, wm.getWidth(), 50+2);
 	ps->setBackground( (char*)"background.tga" );
 	wm.add( ps );
-	//ps->add( new PanelText( *(new string("Press ESC to quit")),	PanelText::NORMAL_FONT, 10, 5 ) );
-	pStr = new string("Press ESC to quit");
-	PanelText* pT = new PanelText( *pStr,	PanelText::NORMAL_FONT, 0, 20 );
+
+	PanelText* pT = new PanelText( (char*)"Press ESC to quit",	PanelText::NORMAL_FONT, 0, 20 );
 	pT->setAlign( PanelText::CENTER );
-	//ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 5 ) );
 	ps->add( pT );
 	
 	//---------------------------------------------------------------------------------	
@@ -410,10 +421,9 @@ static void CreateAllWindows()	{
 	ps->setPosAndSize( 50+0, 50+0, wm.getWidth(), 50+2);
 	ps->setBackground( (char*)"background.tga" );
 	wm.add( ps );
-	pStr = new string("Press ESC to quit");
-	ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 5, 0xffffffff ) );
-	pStr = new string("Or key to test console, enter word \"debug\" for debug mode on/off");
-	ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 20 ) );
+	ps->add( new PanelText( (char*)"Press ESC to quit",	PanelText::NORMAL_FONT, 10, 5, 0xffffffff ) );
+	ps->add( new PanelText( (char*)"Or key to test console, enter word \"debug\" for debug mode on/off",PanelText::NORMAL_FONT, 10, 20 ) );
+	ps->add( new PanelText( (char*)"Scroll de la souris sur les boutons",PanelText::NORMAL_FONT, 10, 35 ) );
 	
 	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();

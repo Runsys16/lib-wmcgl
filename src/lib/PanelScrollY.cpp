@@ -40,17 +40,14 @@ PanelScrollY::PanelScrollY() : PanelSimple()	{
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelScrollY::clickUp( int x, int y ) {
-	if ( y_scroll != 0 )	{
-		y_scroll += y_delta;
-		setPosY( getPosY() + y_delta );
-		updatePos();
-	}
+	y_scroll = y_delta;
+	updatePos();
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelScrollY::clickDown( int x, int y ) {
-	y_scroll -= y_delta;
-	setPosY( getPosY() - y_delta );
+	y_scroll = -y_delta;
+	//setPosY( getPosY() - y_delta );
 	updatePos();
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
@@ -78,6 +75,15 @@ void PanelScrollY::updatePos() {
 			pPtDebug->changeText( sDebug, PanelText::NORMAL_FONT, true );
 		}
 	}
+
+	int nb = childs.size();
+	for( int i=0; i<nb; i++ )	{
+		int xChild = childs[i]->getPosX();
+		int yChild = childs[i]->getPosY() + y_scroll;
+		childs[i]->setPos( xChild, yChild );
+	}
+
+	y_scroll = 0;
 
 	//-----------------------------------------
 	// Calcul des positions
@@ -119,7 +125,8 @@ void PanelScrollY::displayGL() {
 	float height = (float)wm.getHeight();
 	
 	float X = getX();
-	float Y = getY() - y_scroll;
+	//float Y = getY() - y_scroll;
+	float Y = getY();
 	float DX = getDX();
 	float DY = getDY();
 	
@@ -176,14 +183,15 @@ void PanelScrollY::displayGL() {
 	
 	int scx, scy, scdx, scdy;
 	scx  = getX();
-	scy  = height - getDY() - (getY() - y_scroll);
-	scdx = getDX();
+	scy  = height - getDY() - getY();	scdx = getDX();
 	scdy = getDY();
+
 #ifdef DEBUG
 	cout << "    PS:" << "-------------------" << endl;
 	cout << "    PS:" << "-----Scissor-------" << endl;
 	cout << "    PS:" << scx <<", "<< scy <<", "<< scdx <<", "<< scdy << endl;
 #endif
+	//glScissor( scx, scy, scdx, scdy );
 	glScissor( scx, scy, scdx, scdy );
 	glEnable( GL_SCISSOR_TEST );
 	

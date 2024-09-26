@@ -262,7 +262,7 @@ static void CreateAllWindows()	{
 	//WindowsManager& wm = WindowsManager::getInstance();
 	wm.setScreenSize( width-100, height-100 );
 
-	string * pStr;
+	//string * pStr;
 
 	PanelSimple  * ps;
 	PanelText* pt;
@@ -293,11 +293,9 @@ static void CreateAllWindows()	{
 	ps->setBackground( (char*)"background.tga" );
 	ps->setPosAndSize( 50+0, 50+wm.getHeight()-50-2, wm.getWidth(), 50+2);
 	wm.add( ps );
-	//ps->add( new PanelText( *(new string("Press ESC to quit")),	PanelText::NORMAL_FONT, 10, 5 ) );
-	pStr = new string("Press ESC to quit");
-	PanelText* pT = new PanelText( *pStr,	PanelText::NORMAL_FONT, 0, 20 );
+
+	PanelText* pT = new PanelText( (char*)"Press ESC to quit",	PanelText::NORMAL_FONT, 0, 20 );
 	pT->setAlign( PanelText::CENTER );
-	//ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 5 ) );
 	ps->add( pT );
 	
 	//---------------------------------------------------------------------------------	
@@ -305,10 +303,9 @@ static void CreateAllWindows()	{
 	ps->setPosAndSize( 50+0, 50+0, wm.getWidth(), 50+2);
 	ps->setBackground( (char*)"background.tga" );
 	wm.add( ps );
-	pStr = new string("Press ESC to quit");
-	ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 5 ) );
-	pStr = new string("Or key to test console, enter word \"debug\" for debug mode on/off");
-	ps->add( new PanelText( *pStr,	PanelText::NORMAL_FONT, 10, 20 ) );
+
+	ps->add( new PanelText( (char*)"Press ESC to quit",	PanelText::NORMAL_FONT, 10, 5 ) );
+	ps->add( new PanelText( (char*)"Or key to test console, enter word \"debug\" for debug mode on/off", PanelText::NORMAL_FONT, 10, 20 ) );
 	
 	//---------------------------------------------------------------------------------	
 	ps = new PanelSimple();
@@ -339,7 +336,7 @@ static void CreateAllWindows()	{
 	pc->setCallBackCmd( new CallBack() );
 	wm.add( pc );
 	
-	for (int i=0; i<3; i++ )		CreateOneWindow();
+	//for (int i=0; i<3; i++ )		CreateOneWindow();
 
 	wm.setScreenSize( width, height );
 }

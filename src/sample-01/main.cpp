@@ -216,7 +216,7 @@ static void CreateAllWindows()	{
 	WindowsManager& wm = WindowsManager::getInstance();
 	wm.setScreenSize( width-100, height-100 );
 
-	string * pStr;
+	//string * pStr;
 
 	PanelWindow  * pw;
 	PanelSimple  * ps;

@@ -108,6 +108,8 @@ void WindowsManager::init()	{
 	panelFocus          = NULL;
 	panelResize         = NULL;
     panelMotionMiddle   = NULL;
+    panelMotionLeft     = NULL;
+    panelMotionRight     = NULL;
 
 	bDebug        = false;
 	bStopKeyboard = false;
@@ -886,6 +888,11 @@ void WindowsManager::motionFunc(int x, int y)	{
 	{
 	    panelMotionLeft->motionLeft(x,y);
 	}
+
+	if( bMotionRight && panelMotionRight != NULL)
+	{
+	    panelMotionRight->motionRight(x,y);
+	}
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -1004,6 +1011,8 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	else 
 	// bouton droite appuye
 	if ( button == 2 && state == 0 )	{
+    	panelMotionRight = p;
+    	bMotionRight = true;
 		if ( p->getCanMove() == false )		panelMove = getParentRoot( p );
 		else								panelMove = p;
 		if ( panelMove != NULL )	{
@@ -1015,6 +1024,8 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	}
 	// bouton droite relache
 	else if ( button == 2 && state == 1 )	{
+    	panelMotionRight = NULL;
+    	bMotionRight = false;
 	    if ( panelMove != NULL)     panelMove->haveMove();
 		panelMove = NULL;
 		xm_old = -1;

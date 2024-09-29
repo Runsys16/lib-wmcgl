@@ -167,6 +167,7 @@ private:
 	bool						bResize;
 	bool						bMotionMiddle;
 	bool						bMotionLeft;
+	bool						bMotionRight;
 	
 	Panel*						panelMove;
 	Panel*						panelCapture;
@@ -174,6 +175,7 @@ private:
 	Panel*						panelResize;
 	Panel*						panelMotionMiddle;
 	Panel*						panelMotionLeft;
+	Panel*						panelMotionRight;
 	std::vector<Panel *>		panelCallBackKeys;
 	
 	bool						bDebug;

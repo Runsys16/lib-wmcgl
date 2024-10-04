@@ -131,8 +131,8 @@ void PanelEditText::addChar( char c ) {
 		val = new string(buff);
 	}
 	else	{
-		char left[2048];
-		char right[2048];
+		char left[1000];
+		char right[1000];
 		
 		int ll = pl+currentPos;
 		int rl = str.size()-(pl+currentPos);
@@ -146,7 +146,7 @@ void PanelEditText::addChar( char c ) {
 		cout << "  right : \""<< right <<"\""<< endl;;
 		
 		char buff[2048];
-		sprintf( buff, "%s%c%s", left, c, right );
+		snprintf( buff, sizeof(buff), "%s%c%s", left, c, right );
 		val = new string(buff);
 	}
 	
@@ -214,8 +214,8 @@ void PanelEditText::delChar() {
     	#endif
 	}
 	else	{
-		char left[2048];
-		char right[2048];
+		char left[1000];
+		char right[1000];
 		
 		int ll = pl+currentPos - 1;
 		int rl = str.size()-(pl+currentPos);
@@ -291,8 +291,8 @@ void PanelEditText::supChar() {
 		return;
 	}
 	else	{
-		char left[2048];
-		char right[2048];
+		char left[1000];
+		char right[1000];
 		char buff[2048];
 		
 		int ll = pl+currentPos;
@@ -310,7 +310,7 @@ void PanelEditText::supChar() {
 		cout << "  right : \""<< right <<"\""<< endl;;
 		#endif
 		
-		sprintf( buff, "%s%s", left, right );
+		snprintf( buff, sizeof(buff), "%s%s", left, right );
 		val = new string(buff);
 	}
 	
@@ -441,8 +441,8 @@ void PanelEditText::supWord()	{
 	int cl = str.size() - pl;						// command size
 	
 	string *	val;
-	char		left[2048];
-	char		right[2048];
+	char		left[1000];
+	char		right[1000];
 	
 	int ll = pl+currentPos;
 	int rl = str.size()-(pl+rightPos);

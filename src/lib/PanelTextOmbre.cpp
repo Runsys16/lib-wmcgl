@@ -30,19 +30,8 @@ PanelTextOmbre::PanelTextOmbre()	{
 	#ifdef DEBUG_CONST
 	cout << "Constructeur PanelTextOmbre() ..." << endl;
 	#endif
-
-	text = "";
-	textUtil = WindowsManager::getInstance().getTextUtil();
-	setPos( 0, 0 );
-	align = LEFT;
-	pTextGL = NULL;
-	bChange = false;
-	ID = 9001;
-	tabSize = 40;
-	color = 0xffffffff;
-	pTextOmbre.setColor( 0xff000000 );
-	pTextOmbre.setPos( 1, 1 );
-	pTextOmbre.setAlign( align );
+	
+	init();
 }
 
 
@@ -51,7 +40,7 @@ PanelTextOmbre::PanelTextOmbre( string str )	{
 	cout << "Constructeur PanelTextOmbre( "<< str <<" )" << endl;
 	#endif
 
-	PanelTextOmbre();
+	init();
 	color = 0xffffffff;
 
 	changeText( str );
@@ -59,11 +48,13 @@ PanelTextOmbre::PanelTextOmbre( string str )	{
 
 
 PanelTextOmbre::PanelTextOmbre( string str, FONT type )	{
-	typeFont = type;
 	#ifdef DEBUG_CONST
 	cout << "Constructeur PanelTextOmbre( "<< str <<", "<< strFont() <<" )" << endl;
 	#endif
-	PanelTextOmbre();
+
+	init();
+
+	typeFont = type;
 	color = 0xffffffff;
 
 	changeText( str, type, true );
@@ -96,7 +87,8 @@ PanelTextOmbre::PanelTextOmbre( string str, FONT type, int x, int y, unsigned in
 	cout << "Constructeur PanelTextOmbre( "<< str <<", "<< strFont() <<", "<< x <<", "<< y <<" )" << endl;
 	#endif
 	
-	PanelTextOmbre();
+	init();
+
 	color = c;
 	setPos(x, y);
 	changeText( str, type );
@@ -113,8 +105,7 @@ PanelTextOmbre::PanelTextOmbre( char * cstr, FONT type, int x, int y )	{
 	cout << "Constructeur PanelTextOmbre( "<< cstr <<", "<< strFont() <<", "<< x <<", "<< y <<" )" << endl;
 	#endif
 
-	PanelTextOmbre();
-	color = 0xffffffff;
+	init();
 
 	setPos(x, y);
 	changeText( cstr, type );
@@ -132,7 +123,7 @@ PanelTextOmbre::PanelTextOmbre( char * cstr, FONT type, int x, int y, unsigned i
 	cout << "Constructeur PanelTextOmbre( "<< cstr <<", "<< strFont() <<", "<< x <<", "<< y <<" )" << endl;
 	#endif
 
-	PanelTextOmbre();
+	init();
 	color = c;
 	
 	setPos(x, y);
@@ -143,6 +134,23 @@ PanelTextOmbre::PanelTextOmbre( char * cstr, FONT type, int x, int y, unsigned i
 	pTextOmbre.setColor( 0xff000000 );
 	pTextOmbre.changeText( cstr, type );
 	pTextOmbre.buildString();
+}
+//--------------------------------------------------------------------------------------------------------------------
+// ChangeText() functions
+//--------------------------------------------------------------------------------------------------------------------
+void PanelTextOmbre::init()	{
+	text = "";
+	textUtil = WindowsManager::getInstance().getTextUtil();
+	setPos( 0, 0 );
+	align = LEFT;
+	pTextGL = NULL;
+	bChange = false;
+	ID = 9001;
+	tabSize = 40;
+	color = 0xffffffff;
+	pTextOmbre.setColor( 0xff000000 );
+	pTextOmbre.setPos( 1, 1 );
+	pTextOmbre.setAlign( align );
 }
 
 /*

@@ -27,6 +27,9 @@ class Panel {
 		void				add( Panel* );
 		void				sup( Panel* );
 
+		void				onTop();
+		void				onBottom();
+
 		virtual void		passiveMotionFunc( int, int)			      {;};
 		
 		virtual void		clickLeft( int, int);
@@ -47,6 +50,7 @@ class Panel {
 		virtual void		wheelUp( int, int)                              {;};
 		virtual void		wheelDown( int, int)                            {;};
 
+		virtual Panel*		isMouseOverRaw( int, int);
 		virtual Panel*		isMouseOver( int, int);
 		virtual Panel*		isMouseOverBorder( int, int);
 
@@ -127,6 +131,7 @@ class Panel {
 
     	inline  void        setExtraString(string s)                        { sExtra = s; }
     	inline  string&     getExtraString()                                { return sExtra; }
+    	inline  void        setParentCliping(bool b)                        { bParentCliping = b; }
 	
 
 		void				deleteChilds();
@@ -151,6 +156,7 @@ class Panel {
 		int					startY;
 	
 		bool				visible;
+		bool				bParentCliping;
 		bool				bCanMove;
 		bool				mouseVisible;
 		int                 mouseOverBorder;

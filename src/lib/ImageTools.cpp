@@ -39,8 +39,8 @@ bool isFileExist( char* pathname )
             return true;
         }
     }
-    else
-        return false;
+
+	return false;
 
 }
 //--------------------------------------------------------------------------------------------------------------------

@@ -66,11 +66,12 @@ void Panel::init()	{
 	panel_click_right      = NULL;
     panel_release_right    = NULL;
 	
-	bHaveMove = false;
-	bScissor = false;
-	bFantome = false;
-	bCapture = false;
-	bFocus = false;
+	bHaveMove		= false;
+	bScissor		= false;
+	bFantome		= false;
+	bCapture		= false;
+	bFocus			= false;
+	bParentCliping	= false;
 	
 	sExtra = "";
 }
@@ -99,6 +100,53 @@ void Panel::sup( Panel* p)	{
 			childs.erase( childs.begin()+i );
 		}
 	}
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void Panel::onTop()	{
+	#ifdef DEBUG
+	//cout << "Panel::onTop() ID="<< p->getID() <<" nb="<< childs.size() << endl;
+	#endif
+	if ( parent== NULL )		return;
+	
+	std::vector<Panel*>& parChilds = parent->getChilds();
+	int nb = parChilds.size();
+	int id = getID();
+	
+	for ( int i=0; i<nb; i++ )	{
+		
+		if ( parChilds[i] == this )	{
+			parChilds.erase( parChilds.begin()+i );
+			parChilds.push_back(this);
+			break;
+		}
+	}
+
+	#ifdef DEBUG
+	//cout << "Panel::onTop() nb="<< childs.size() << endl;
+	#endif
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void Panel::onBottom()	{
+	#ifdef DEBUG
+	cout << "Panel::onBottom() ID="<< p->getID() <<" nb="<< childs.size() << endl;
+	#endif
+	if ( parent== NULL )		return;
+
+	Panel* pC_SVG;
+	Panel* pF_SVG;
+    
+    
+	std::vector<Panel*>& parChilds = parent->getChilds();
+	parent->sup(this);
+	parChilds.insert( parChilds.begin(), this );
+    
+	#ifdef DEBUG
+	cout << "Panel::onBottom() nb="<< childs.size() << endl;
+	#endif
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -133,7 +181,7 @@ void Panel::releaseRight( int x, int y)
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
-Panel* Panel::isMouseOver(int xm, int ym)	{
+Panel* Panel::isMouseOverRaw(int xm, int ym)	{
 //#define DEBUG
 	#ifdef DEBUG
 	WindowsManager& wm = WindowsManager::getInstance();
@@ -141,6 +189,7 @@ Panel* Panel::isMouseOver(int xm, int ym)	{
 	                 x_raw, y_raw, dx_raw, dy_raw );
 	wm.log_tab(true);
 	#endif
+	
 	if ( !visible || bFantome )
 	{
 	    #ifdef DEBUG
@@ -148,19 +197,6 @@ Panel* Panel::isMouseOver(int xm, int ym)	{
 	    #endif
         return NULL;
     }
-
-
-	int nb = childs.size();
-	for( int i=0; i<nb; i++ )	{
-		Panel * p = childs[i]->isMouseOver(xm, ym);
-		if ( p )		{
-    	    #ifdef DEBUG
-        	wm.logf( (char*)"OK-Panel::isMouseOver(%d,%d)", xm, ym );
-		    wm.log_tab(false);
-		    #endif
-		    return p;
-		}
-	}
 
 	if ( x_raw <= xm && xm <= (x_raw+dx_raw) && y_raw <= ym && ym <= (y_raw+dy_raw) ){
 	    #ifdef DEBUG
@@ -177,7 +213,62 @@ Panel* Panel::isMouseOver(int xm, int ym)	{
 	    return NULL;
 	}
 
-//#undef DEBUG
+#undef DEBUG
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+Panel* Panel::isMouseOver(int xm, int ym)	{
+//#define DEBUG
+	#ifdef DEBUG
+	WindowsManager& wm = WindowsManager::getInstance();
+	wm.logf( (char*)"Panel::isMouseOver(%d,%d) \"%s\" id=%d (%d, %d, %d, %d)", xm, ym, getExtraString().c_str(), getID(),
+	                 x_raw, y_raw, dx_raw, dy_raw );
+	wm.log_tab(true);
+	#endif
+	
+	
+	if ( !visible || bFantome )
+	{
+	    #ifdef DEBUG
+	    wm.log_tab(false);
+	    #endif
+        return NULL;
+    }
+
+
+	int nb = childs.size();
+	for( int i=nb-1; i>=0; i-- )	{
+		Panel* p;
+		p = childs[i]->isMouseOver(xm, ym);
+		
+		if ( p )		{
+    	    #ifdef DEBUG
+        	wm.logf( (char*)"OK-Panel::isMouseOver(%d,%d)", xm, ym );
+		    wm.log_tab(false);
+		    #endif
+		    return p;
+		}
+	}
+
+	if ( bParentCliping && parent!=NULL )		return parent->isMouseOverRaw(xm, ym)!=NULL ? this : NULL;
+
+	if ( x_raw <= xm && xm <= (x_raw+dx_raw) && y_raw <= ym && ym <= (y_raw+dy_raw) ){
+	    #ifdef DEBUG
+      	wm.logf( (char*)"OK-Panel::isMouseOver() = %s", getExtraString().c_str() );
+        wm.log_tab(false);
+	    #endif
+	    return this;
+	}
+	else {
+	    #ifdef DEBUG
+       	wm.logf( (char*)"NOK-Panel::isMouseOver(%d,%d)", xm, ym );
+        wm.log_tab(false);
+	    #endif
+	    return NULL;
+	}
+
+#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

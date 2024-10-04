@@ -52,6 +52,7 @@ public:
     int			lenght(void *_TextObj, const std::string *_TextLines, CTexFont *, int );
     void		BeginGL();
     void		EndGL();
+    void        DrawText(void *_TextObj, float angle, int _X, int _Y, color32 _Color, color32 _BgColor);
     void        DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 _BgColor);
 
 	void				ChangeViewport(int, int, int, int, int, int);

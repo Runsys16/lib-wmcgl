@@ -26,103 +26,112 @@ using namespace std;
 //
 //--------------------------------------------------------------------------------------------------------------------
 PanelText::PanelText()	{
-	#ifdef DEBUG_CONST
-	cout << "Constructeur PanelText ..." << endl;
-	#endif
-
-	text = "";
-	textUtil = WindowsManager::getInstance().getTextUtil();
-	setPos( 0, 0 );
-	align = LEFT;
-	pTextGL = NULL;
-	bChange = false;
-	ID = 9000;
-	tabSize = 40;
-	color = 0xffffffff;
-	//bFantome = true;
+	init();
 }
-
-
+//--------------------------------------------------------
 PanelText::PanelText( string str )	{
 	#ifdef DEBUG_CONST
 	cout << "Constructeur PanelText( "<< str <<" )" << endl;
 	#endif
 
-	PanelText();
-	color = 0xffffffff;
+	init();
 
+	color = 0xffffffff;
 	changeText( str );
 }
-
-
+//--------------------------------------------------------
 PanelText::PanelText( string str, FONT type )	{
 	typeFont = type;
 	#ifdef DEBUG_CONST
 	cout << "Constructeur PanelText( "<< str <<", "<< strFont() <<" )" << endl;
 	#endif
-	PanelText();
+
+	init();
+
 	color = 0xffffffff;
 
 	changeText( str, type, true );
 }
-
-
+//--------------------------------------------------------
 PanelText::PanelText( string str, FONT type, int x, int y )	{
 	typeFont = type;
 	#ifdef DEBUG_CONST
 	cout << "Constructeur PanelText( "<< str <<", "<< strFont() <<", "<< x <<", "<< y <<" )" << endl;
 	#endif
 
-	PanelText();
+	init();
+
 	color = 0xffffffff;
 
 	setPos(x, y);
 	changeText( str, type );
 }
-
-
+//--------------------------------------------------------
 PanelText::PanelText( string str, FONT type, int x, int y, unsigned int c )	{
 	typeFont = type;
 	#ifdef DEBUG_CONST
 	cout << "Constructeur PanelText( "<< str <<", "<< strFont() <<", "<< x <<", "<< y <<" )" << endl;
 	#endif
 	
-	PanelText();
+	init();
+
 	color = c;
 	setPos(x, y);
 	changeText( str, type );
 }
-
-
+//--------------------------------------------------------
 PanelText::PanelText( char * cstr, FONT type, int x, int y )	{
 	typeFont = type;
 	#ifdef DEBUG_CONST
 	cout << "Constructeur PanelText( "<< cstr <<", "<< strFont() <<", "<< x <<", "<< y <<" )" << endl;
 	#endif
 
-	PanelText();
+	init();
+
 	color = 0xffffffff;
 
 	setPos(x, y);
 	changeText( cstr, type );
 	buildString();
 }
-
+//--------------------------------------------------------
 PanelText::PanelText( char * cstr, FONT type, int x, int y, unsigned int c )	{
 	typeFont = type;
 	#ifdef DEBUG_CONST
 	cout << "Constructeur PanelText( "<< cstr <<", "<< strFont() <<", "<< x <<", "<< y <<" )" << endl;
 	#endif
 
-	PanelText();
+	init();
+
 	color = c;
 	
 	setPos(x, y);
 	changeText( cstr, type );
 	buildString();
 }
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelText::init() {
+	#ifdef DEBUG_CONST
+	cout << "PanelText::init() ..." << endl;
+	#endif
 
-
+	text		= "";
+	textUtil	= WindowsManager::getInstance().getTextUtil();
+	setPos( 0, 0 );
+	align		= LEFT;
+	pTextGL		= NULL;
+	bChange		= false;
+	ID			= 9000;
+	tabSize		= 40;
+	color		= 0xffffffff;
+	alpha		= 0.0;
+	//bFantome = true;
+}
+//--------------------------------------------------------------------------------------------------------------------
+// ChangeText() functions
 //--------------------------------------------------------------------------------------------------------------------
 string PanelText::strFont() {
 	string retString = "";
@@ -143,9 +152,6 @@ string PanelText::strFont() {
 	}	
 	return retString;	
 }
-
-
-
 //--------------------------------------------------------------------------------------------------------------------
 // ChangeText() functions
 //--------------------------------------------------------------------------------------------------------------------
@@ -162,9 +168,6 @@ void PanelText::changeText( char* cstr )	{
 	text = cstr;
 	bChange = true;
 }
-
-
-
 void PanelText::changeText( char* cstr, FONT type )	{
 	#ifdef DEBUG
 	cout << "PanelText::changeText( "<< cstr  <<", "<< strFont() <<" )" << endl;
@@ -178,8 +181,7 @@ void PanelText::changeText( char* cstr, FONT type )	{
 	typeFont = type;
 	changeText( cstr );
 }
-
-
+//--------------------------------------------------------
 void PanelText::changeText( string str )	{
 	#ifdef DEBUG
 	cout << "PanelText::changeText( "<< str <<", "<< strFont() <<" )" <<  endl;
@@ -193,9 +195,7 @@ void PanelText::changeText( string str )	{
 	text = str;
 	bChange = true;
 }
-
-
-
+//--------------------------------------------------------
 void PanelText::changeText( string str, FONT type )	{
 	#ifdef DEBUG
 	cout << "PanelText::changeText( "<< str  <<", "<< strFont() <<" )" << endl;
@@ -209,8 +209,7 @@ void PanelText::changeText( string str, FONT type )	{
 	typeFont = type;
 	changeText( str );
 }
-
-
+//--------------------------------------------------------
 void PanelText::changeText( string str, bool build )	{
 	#ifdef DEBUG
 	cout << "PanelText::changeText( "<< str <<", "<< strFont()  <<" )" << endl;
@@ -228,9 +227,7 @@ void PanelText::changeText( string str, bool build )	{
 	
 	if (build)		buildString();
 }
-
-
-
+//--------------------------------------------------------
 void PanelText::changeText( string str, FONT type, bool build )	{
 	#ifdef DEBUG
 	cout << "PanelText::changeText( \""<< str <<"\", "<< type <<" )" << endl;
@@ -253,9 +250,9 @@ void PanelText::changeText( string str, FONT type, bool build )	{
 
 	if (build)		buildString();
 }
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
 //--------------------------------------------------------------------------------------------------------------------
 void PanelText::eraseText()	{
 	#ifdef DEBUG
@@ -538,7 +535,7 @@ void PanelText::displayGLInternal()	{
 	}
 
 	//cout << "PanelText::displayGLInternal() color =" << hex << color << "  text='"<< text <<"'"<< endl;
-	textUtil->DrawText( pTextGL, getX(), getY(), color, 0 );
+	textUtil->DrawText( pTextGL, alpha, getX(), getY(), color, 0 );
 
 	textUtil->UnbindFont( slot );
 
@@ -570,7 +567,6 @@ Panel* PanelText::isMouseOver(int xm, int ym)	{
 //--------------------------------------------------------------------------------------------------------------------
 void PanelText::displayGL() {
 	if (visible == false)			return;
-	//if (bChange)					return;
 	if ( pTextGL == NULL )			return;	
 
 #ifdef DEBUG
@@ -584,7 +580,23 @@ void PanelText::displayGL() {
 	cout << "     PT:" << getX() <<", "<< getY() <<", "<< getDX() <<", "<< getDY() << endl;
 	cout << "     WM:" << wm.getWidth() <<", "<< wm.getHeight() << endl;
 #endif
+	
+	if ( alpha != 0.0 )	{
+		mat4 mRot, mTrPlus, mTrMoins;
+		mRot.rotate_z( DEG2RAD(alpha) );
+		vec3 tr = vec3( x_raw, y_raw, 0.0 );
+		mTrPlus.translate( tr );
+		mTrMoins.translate( -tr );
+		
 
+		mat4 mModelView = mTrPlus * mRot * mTrMoins; 
+		
+	
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();	
+		glLoadMatrixf (mModelView );
+		//cout << "PT displayGL alpha="<< alpha <<" ... text: " << text << endl;
+	}
     /*
     if ( color != 0xffffffff )      cout << "displa1" <<hex <<color<< endl;
 
@@ -604,6 +616,12 @@ void PanelText::displayGL() {
 			displayGLInternal();
 			break;
 	}	
+
+
+	if ( alpha != 0.0 )	{
+		glMatrixMode(GL_MODELVIEW);
+		glPopMatrix();	
+	}
 	
 }
 //--------------------------------------------------------------------------------------------------------------------

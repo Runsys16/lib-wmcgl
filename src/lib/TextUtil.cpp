@@ -532,7 +532,7 @@ void TextUtil::EndGL()	{
 
 //  ---------------------------------------------------------------------------
 
-void TextUtil::DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 _BgColor)
+void TextUtil::DrawText(void *_TextObj, float angle, int _X, int _Y, color32 _Color, color32 _BgColor)
 {
     //assert(m_Drawing==true);
     //assert(_TextObj!=NULL);
@@ -568,8 +568,11 @@ void TextUtil::DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 
     glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
     */
-    glLoadIdentity();
+    //glLoadIdentity();
+    
     glTranslatef((GLfloat)_X, (GLfloat)_Y, 0);
+    glRotatef(angle,0,0,1);
+    
     //glTranslatef((GLfloat)0.1, (GLfloat)0.1, 0);
     glEnableClientState(GL_VERTEX_ARRAY);
     if( (_BgColor!=0 || TextObj->m_BgColors.size()==TextObj->m_BgVerts.size()) && TextObj->m_BgVerts.size()>=4 )
@@ -630,6 +633,12 @@ void TextUtil::DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 
 	glPopMatrix();
 	*/
 	#undef DEBUG
+}
+//  ---------------------------------------------------------------------------
+
+void TextUtil::DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 _BgColor)
+{
+	DrawText(_TextObj, 0.0, _X, _Y, _Color, _BgColor);
 }
 
 

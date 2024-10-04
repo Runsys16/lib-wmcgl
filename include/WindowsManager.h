@@ -112,6 +112,7 @@ public:
     int			lenght(void *_TextObj, const std::string *_TextLines, CTexFont *, int );
     void		BeginGL();
     void		EndGL();
+    void        DrawText(void *_TextObj, float angle, int _X, int _Y, color32 _Color, color32 _BgColor);
     void        DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 _BgColor);
 
 	void				ChangeViewport(int, int, int, int, int, int);
@@ -201,6 +202,9 @@ class Panel {
 		void				add( Panel* );
 		void				sup( Panel* );
 
+		void				onTop();
+		void				onBottom();
+
 		virtual void		passiveMotionFunc( int, int)			      {;};
 		
 		virtual void		clickLeft( int, int);
@@ -221,6 +225,7 @@ class Panel {
 		virtual void		wheelUp( int, int)                              {;};
 		virtual void		wheelDown( int, int)                            {;};
 
+		virtual Panel*		isMouseOverRaw( int, int);
 		virtual Panel*		isMouseOver( int, int);
 		virtual Panel*		isMouseOverBorder( int, int);
 
@@ -301,6 +306,7 @@ class Panel {
 
     	inline  void        setExtraString(string s)                        { sExtra = s; }
     	inline  string&     getExtraString()                                { return sExtra; }
+    	inline  void        setParentCliping(bool b)                        { bParentCliping = b; }
 	
 
 		void				deleteChilds();
@@ -325,6 +331,7 @@ class Panel {
 		int					startY;
 	
 		bool				visible;
+		bool				bParentCliping;
 		bool				bCanMove;
 		bool				mouseVisible;
 		int                 mouseOverBorder;
@@ -377,6 +384,7 @@ class PanelText : public Panel	{
 							PanelText( char*, FONT, int, int );
 							PanelText( char*, FONT, int, int, unsigned int );
 
+		void 				init();
 		void 				buildString();
 		
 		inline std::string	getText()										{return text;};
@@ -400,6 +408,7 @@ class PanelText : public Panel	{
 		
 		inline void 		setAlign( ALIGN a )								{align = a;};
 		inline void 		setChangeText(bool b )							{bChange = b;};
+		inline void 		setAlpha(float a )								{ alpha = a;};
 		
 		//----------------- functions
 		std::string			strFont();		
@@ -419,6 +428,8 @@ class PanelText : public Panel	{
 		void*				pTextGL;
 		int					tabSize;
 		bool                bStatic;
+		
+		float				alpha;
 	
 };
 
@@ -439,6 +450,8 @@ class PanelTextOmbre : public PanelText	{
 							PanelTextOmbre( std::string, FONT, int, int, unsigned int );
 							PanelTextOmbre( char*, FONT, int, int );
 							PanelTextOmbre( char*, FONT, int, int, unsigned int );
+							
+		void				init();
 
 		void 				buildString();
 		

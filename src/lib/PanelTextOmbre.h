@@ -19,6 +19,8 @@ class PanelTextOmbre : public PanelText	{
 							PanelTextOmbre( std::string, FONT, int, int, unsigned int );
 							PanelTextOmbre( char*, FONT, int, int );
 							PanelTextOmbre( char*, FONT, int, int, unsigned int );
+							
+		void				init();
 
 		void 				buildString();
 		

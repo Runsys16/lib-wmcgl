@@ -68,7 +68,7 @@ PanelSimple::PanelSimple()	{
 	bDebug = false;
 	
 	color = 0xffffffff;
-	//color = 0x00000000;
+	colorBgr = 0x00000000;
 }
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -166,6 +166,10 @@ void PanelSimple::displayGL() {
 	glColor4f( r,g,b,a );
 
 	if ( m_pTexBackground )		{
+	
+		if ( colorBgr != 0 )		glColor4f( COLOR_R(colorBgr), COLOR_G(colorBgr), COLOR_B(colorBgr), COLOR_A(colorBgr)  );
+		
+		
 		m_pTexBackground->Bind( 0 );
 	
 		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -190,6 +194,8 @@ void PanelSimple::displayGL() {
 		glEnd();
 
 		m_pTexBackground->Unbind( 0 );
+
+		glColor4f( r,g,b,a );
 	}
 
 	//m_pTexBackground->Unbind(wm.getSlot());

@@ -39,6 +39,14 @@
 #include <math.h>
 #include <stdlib.h>
 
+#define COLOR_A(CCC)	            ((CCC&0xff000000)>>24)
+#define COLOR_R(CCC)	            ((CCC&0x00ff0000)>>16)
+#define COLOR_G(CCC)	            ((CCC&0x0000ff00)>>8)
+#define COLOR_B(CCC)	            ((CCC&0x000000ff))
+#define COLOR32(AA, RR, GG, BB)	    ((AA<<24)|(RR<<16)|(GG<<8)|(BB))
+
+
+
 #define EPSILON				0.000001f
 //#define M_PI				3.141592653589793238462643383279f		// PI
 #define M_PIDIV2			1.570796326794896619231321691639f		// PI / 2

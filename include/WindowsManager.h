@@ -518,11 +518,13 @@ class PanelSimple : public Panel {
 		
 		void				setBackground( char *);
 		void				setBackground( GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d );
+		void				deleteBackground();
+
 inline	void                setBackground( _Texture2D* p )          { m_pTexBackground = p; }
 inline _Texture2D*          getBackground()                         { return m_pTexBackground; }
 inline 	unsigned int        getColor()                              { return color; }
+inline	void                setColorBgr(unsigned int u)				{ colorBgr = u; }
 		
-		void				deleteBackground();
 
 
 //	private:
@@ -540,6 +542,7 @@ inline 	unsigned int        getColor()                              { return col
 		std::string						sDebug;
 		
 		unsigned int                    color;
+		unsigned int                    colorBgr;
 };
 
 

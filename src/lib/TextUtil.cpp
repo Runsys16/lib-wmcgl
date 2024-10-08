@@ -190,10 +190,10 @@ GLuint TextUtil::GenFont( CTexFont *_Font, color32 color)
     */
     float a, r, v, b;
 
-    a =  (float)((unsigned)(color&0xff000000) >>24 )/255.0;
-    r =  (float)((unsigned)(color&0x00ff0000) >>16 )/255.0;
-    v =  (float)((unsigned)(color&0x0000ff00) >>8  )/255.0;
-    b =  (float)((unsigned)(color&0x000000ff) >>0  )/255.0;
+    r =  (float)((unsigned)(color&0xff000000) >>24 )/255.0;
+    v =  (float)((unsigned)(color&0x00ff0000) >>16 )/255.0;
+    b =  (float)((unsigned)(color&0x0000ff00) >>8  )/255.0;
+    a =  (float)((unsigned)(color&0x000000ff) >>0  )/255.0;
 	    
     #ifdef DEBUG
 	cout << "TextUtil::GenFont() Generate Texture ID : ";

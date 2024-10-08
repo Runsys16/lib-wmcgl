@@ -382,7 +382,7 @@ void PanelText::setTabSize( int t ) {
 //--------------------------------------------------------------------------------------------------------------------
 void PanelText::setColor( int l)
 {
-    color = l;
+    color = l>>8 | ((l&0xff)<<24);
     //bChange = true;
 	//cout << "PanelText::setColor(" << hex << nColor << ")" << endl;
 }

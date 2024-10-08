@@ -154,10 +154,10 @@ void PanelCheckBox::displayGL() {
 	}
 
 	//m_pTexBackground->Bind(wm.getSlot());
-	unsigned char a = (color&0xff000000)>>24;
-	unsigned char r = (color&0x00ff0000)>>16;
-	unsigned char g = (color&0x0000ff00)>>8;
-	unsigned char b = (color&0x000000ff);
+	unsigned char r = COLOR_R(color);
+	unsigned char g = COLOR_G(color);
+	unsigned char b = COLOR_B(color);
+	unsigned char a = COLOR_A(color);
 
 	glColor4f( r,g,b,a );
 

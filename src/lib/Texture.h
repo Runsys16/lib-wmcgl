@@ -33,6 +33,10 @@ public:
 	_Texture() {m_nHandle=0; /*std::cout << "_Texture::_Texture()" << std::endl;*/}
 	~_Texture() {Destroy();}
 	
+	
+
+//static int			getNbTextures()					{ return nb; }
+	
 	unsigned	dx;
 	unsigned	dy;
 	
@@ -44,8 +48,10 @@ protected:
 	void LoadData(GLenum target, GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d);
 	
 protected:
-	GLuint	m_nHandle;				// ID de la texture
-	static bool s_bGenerateMipmaps;	// Etat pour le chargement : génération ou non des mipmaps
+		GLuint		m_nHandle;				// ID de la texture
+											// Etat pour le chargement : generation ou non des mipmaps
+static	bool 		s_bGenerateMipmaps;		
+static	int			nb;
 };
 
 #endif

@@ -1,8 +1,10 @@
 #ifndef TEXT_H
 #define TEXT_H
 
+#include "wm.h"
 #include "Panel.h"
 #include "TextUtil.h"
+#include "TrueType.h"
 
 
 
@@ -10,7 +12,9 @@
 class PanelText : public Panel	{
 
 	public:
-		enum FONT { ARIAL, UBUNTU_B, UBUNTU_RI, UBUNTU_R, DEJA_VU_SANS_MONO, NORMAL_FONT, SMALL_FONT, LARGE_FONT };
+		enum FONT { 	ARIAL, UBUNTU_B, UBUNTU_RI, UBUNTU_R, DEJA_VU_SANS_MONO,\
+					 	NORMAL_FONT, SMALL_FONT, LARGE_FONT, \
+					 	FREE_TYPE };
 		enum ALIGN { LEFT, RIGHT, CENTER };
 
 
@@ -21,6 +25,8 @@ class PanelText : public Panel	{
 							PanelText( std::string, FONT, int, int, unsigned int );
 							PanelText( char*, FONT, int, int );
 							PanelText( char*, FONT, int, int, unsigned int );
+							PanelText( char*, char*, int, int, uint32_t, uint32_t );
+							PanelText( char*, char*, int, int, uint32_t, uint32_t, bool );
 
 		void 				init();
 		void 				buildString();
@@ -39,8 +45,11 @@ class PanelText : public Panel	{
 		void				setTabSize( int );
 		int					getTabSize()									{return tabSize;}
 		void				setColor( int l);
-		
+inline	void				setChangeColor(bool b)							{ bColor = b; }
+	
 		virtual Panel*		isMouseOver( int, int);
+		void				displayGLfreetype();
+		void				displayGLInternal();
 		virtual void		displayGL();
 		virtual void		updatePos();
 		
@@ -50,7 +59,6 @@ class PanelText : public Panel	{
 		
 		//----------------- functions
 		std::string			strFont();		
-		void				displayGLInternal();
 
 	protected:
 		//----------------- members
@@ -58,14 +66,17 @@ class PanelText : public Panel	{
 
 		TextUtil*			textUtil;
 		FONT				typeFont;
+		TrueType*			pTrueType;
+		std::string			sFreeTypeName;
 		std::string			text;
-		int    	            color;
+		uint32_t            color;
 		//std::string			cmdLine;
 		bool				bChange;
 		
 		void*				pTextGL;
 		int					tabSize;
 		bool                bStatic;
+		bool				bColor;
 		
 		float				alpha;
 	

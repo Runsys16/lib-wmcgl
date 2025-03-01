@@ -5,6 +5,7 @@
 
 #include "PanelText.h"
 #include "wm.h"
+#include "ResourceManager.h"
 
 //#define DEBUG
 //#define DEBUG_CONST
@@ -109,6 +110,94 @@ PanelText::PanelText( char * cstr, FONT type, int x, int y, unsigned int c )	{
 	changeText( cstr, type );
 	buildString();
 }
+//--------------------------------------------------------
+PanelText::PanelText( char * cstr, char* sPathNameFont, int x, int y, uint32_t size, uint32_t c )	{
+//#define 	DEBUG
+	#ifdef DEBUG_CONST
+	cout << "Constructeur PanelText( "<< cstr <<", "<< sPathNameFont <<", "<< x <<", "<< y <<" )" << endl;
+	#endif
+
+	typeFont = FREE_TYPE;
+	
+	string resourceName = string( sPathNameFont ) + string("-") + to_string( (unsigned)size );
+
+	_ResourceManager& res = _ResourceManager::getInstance();
+	if ( res.isResource(resourceName) )
+	{
+		pTrueType = (TrueType*) res.LoadResource( _ResourceManager::TRUE_TYPE_FONT, resourceName );
+
+		#ifdef DEBUG
+		cout << resourceName <<" existe"<< endl;
+		#endif
+	}
+	else
+	{
+		pTrueType = new TrueType();
+		pTrueType->init( sPathNameFont, size );
+		res.NewResource( pTrueType, resourceName, _ResourceManager::TRUE_TYPE_FONT );
+
+		#ifdef DEBUG
+		cout << resourceName <<" Creation"<< endl;
+		#endif
+
+		unsigned n = pTrueType->getGlyphCount( sPathNameFont );
+		logf( (char*)"%s => %d", resourceName.c_str(), n );
+	}
+	
+	init();
+
+	color = c;
+	
+	setPos(x, y);
+	setExtraString( string(cstr) );
+	text = cstr;
+	dx = dx_raw = pTrueType->lenght( cstr );
+#undef 	DEBUG
+}
+//--------------------------------------------------------
+PanelText::PanelText( char * cstr, char* sPathNameFont, int x, int y, uint32_t size, uint32_t c, bool b )	{
+//#define 	DEBUG
+	#ifdef DEBUG_CONST
+	cout << "Constructeur PanelText( "<< cstr <<", "<< sPathNameFont <<", "<< x <<", "<< y <<" )" << endl;
+	#endif
+	typeFont = FREE_TYPE;
+	string resourceName = string( sPathNameFont ) + string("-") + to_string( (unsigned)size );
+
+	_ResourceManager& res = _ResourceManager::getInstance();
+	if ( res.isResource(resourceName) )
+	{
+		pTrueType = (TrueType*) res.LoadResource( _ResourceManager::TRUE_TYPE_FONT, resourceName );
+
+		#ifdef DEBUG
+		cout << resourceName <<" existe"<< endl;
+		#endif
+	}
+	else
+	{
+		pTrueType = new TrueType();
+		pTrueType->init( sPathNameFont, size );
+		res.NewResource( pTrueType, resourceName, _ResourceManager::TRUE_TYPE_FONT );
+
+		#ifdef DEBUG
+		cout << resourceName <<" Creation"<< endl;
+		#endif
+
+		unsigned n = pTrueType->getGlyphCount( sPathNameFont );
+		logf( (char*)"%s => %d", resourceName.c_str(), n );
+	}
+	
+	init();
+
+	color = c;
+	
+	setPos(x, y);
+	setExtraString( string(cstr) );
+	text = cstr;
+	dx = dx_raw = pTrueType->lenght( cstr );
+	
+	bColor = b;
+#undef 	DEBUG
+}
 //--------------------------------------------------------------------------------------------------------------------
 //
 //
@@ -128,6 +217,7 @@ void PanelText::init() {
 	tabSize		= 40;
 	color		= 0xffffffff;
 	alpha		= 0.0;
+	bColor		= false;
 	//bFantome = true;
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -338,6 +428,20 @@ void PanelText::buildString()	{
 		break;
 	}
 	bChange = false;
+
+	dx = dx_raw = getTextLenght();
+	dy = dy_raw = 12;
+	switch (typeFont )	{
+	case NORMAL_FONT :
+		dy = dy_raw = 14;
+		break;
+	case SMALL_FONT :
+		dy = dy_raw = 12;
+		break;
+	case LARGE_FONT :
+		dy = dy_raw = 16;
+		break;
+	}
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -345,12 +449,14 @@ void PanelText::buildString()	{
 //--------------------------------------------------------------------------------------------------------------------
 int PanelText::getTextLenght()	{
 	CTexFont * defaultFont;
+	int l;
 	switch (typeFont )	{
-		case NORMAL_FONT :		defaultFont = DefaultNormalFont;		break;
-		case SMALL_FONT :		defaultFont = DefaultSmallFont;			break;
-		case LARGE_FONT :		defaultFont = DefaultLargeFont;			break;
+		case NORMAL_FONT :		l = textUtil->lenght( pTextGL, &text, DefaultNormalFont );		break;
+		case SMALL_FONT :		l = textUtil->lenght( pTextGL, &text, DefaultSmallFont );		break;
+		case LARGE_FONT :		l = textUtil->lenght( pTextGL, &text, DefaultLargeFont );		break;
+		case FREE_TYPE :		l = pTrueType->lenght( text.c_str() );							break;
 	}
-	return( textUtil->lenght( pTextGL, &text, defaultFont ) );
+	return l;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -382,9 +488,13 @@ void PanelText::setTabSize( int t ) {
 //--------------------------------------------------------------------------------------------------------------------
 void PanelText::setColor( int l)
 {
+	if ( bColor )							return;
+	
+	// RGBA -> ARGB
     color = l>>8 | ((l&0xff)<<24);
+
     //bChange = true;
-	//cout << "PanelText::setColor(" << hex << nColor << ")" << endl;
+	//cout << "PanelText::setColor(" << hex << color << ")" << endl;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -416,6 +526,7 @@ void PanelText::updatePos() {
 		}
 	}
 
+	if ( typeFont == FREE_TYPE )		bChange = false;
 
 	if ( bChange )	{
 		switch( typeFont )	{
@@ -434,11 +545,12 @@ void PanelText::updatePos() {
 		break;
 	case CENTER:
 		if ( parent && bChange == false )	{
-			int l;
+			int l=0;
 			switch( typeFont )	{
 				case NORMAL_FONT :		l = textUtil->lenght( pTextGL, &text, DefaultNormalFont );		break;
 				case SMALL_FONT :		l = textUtil->lenght( pTextGL, &text, DefaultSmallFont );		break;
 				case LARGE_FONT :		l = textUtil->lenght( pTextGL, &text, DefaultLargeFont );		break;
+				case FREE_TYPE :		l = pTrueType->lenght( text.c_str() );							break;
 			}
 			#ifdef DEBUG
 				cout << "Align : l="<< l << " String=\""<< text <<"\"" << endl;
@@ -457,6 +569,7 @@ void PanelText::updatePos() {
 				case NORMAL_FONT :		l = textUtil->lenght( pTextGL, &text, DefaultNormalFont );		break;
 				case SMALL_FONT :		l = textUtil->lenght( pTextGL, &text, DefaultSmallFont );		break;
 				case LARGE_FONT :		l = textUtil->lenght( pTextGL, &text, DefaultLargeFont );		break;
+				case FREE_TYPE :		l = pTrueType->lenght( text.c_str() );							break;
 			}
 			#ifdef DEBUG
 				cout << "Align : l="<< l << " String=\""<< text <<"\"" << endl;
@@ -472,6 +585,58 @@ void PanelText::updatePos() {
 	
 	
 
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
+Panel* PanelText::isMouseOver(int xm, int ym)	{
+//#define DEBUG
+	#ifdef DEBUG
+	if ( x_raw <= xm && xm <= (x_raw+dx_raw) && y_raw <= ym && ym <= (y_raw+dy_raw) )
+    	cout << "PanelText::isMouseOver()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
+	#endif
+	return NULL;
+
+	if ( x_raw <= xm && xm <= (x_raw+dx_raw) && y_raw <= ym && ym <= (y_raw+dy_raw) )		return this;
+	else																					return NULL;
+//#undef DEBUG
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelText::displayGLfreetype()	{
+	WindowsManager& wm = WindowsManager::getInstance();
+	float width  = (float)wm.getWidth();
+	float height = (float)wm.getHeight();
+
+	
+	int scx, scy, scdx, scdy;
+	scx  = getParent()->getX();
+	scy  = height - getParent()->getDY() - getParent()->getY();
+	scdx = getParent()->getDX();
+	scdy = getParent()->getDY();
+
+	glPushAttrib(GL_ENABLE_BIT);
+
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_LIGHTING);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+#ifdef DEBUG
+	cout << "    PT:" << "-------------------" << endl;
+	cout << "    PT:" << "-----Scissor-------" << endl;
+	cout << "    PT:" << scx <<", "<< scy <<", "<< scdx <<", "<< scdy << endl;
+#endif
+
+	//if ( fFreeType.textures == NULL )		logf( (char*)"Erreur Texture NULL ..." );
+
+	//logf( (char*)"Affichage Freetype \"%s\"", text.c_str() );
+	pTrueType->print( x_raw, y_raw, color, text.c_str() );
+		
+	glPopAttrib();
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -499,15 +664,8 @@ void PanelText::displayGLInternal()	{
 	cout << "    PT:" << "-----Scissor-------" << endl;
 	cout << "    PT:" << scx <<", "<< scy <<", "<< scdx <<", "<< scdy << endl;
 #endif
-	//glScissor( scx, scy, scdx, scdy );
-	//glEnable( GL_SCISSOR_TEST );
-	//glColor4f( 0.0f, 0.0f, 0.0f, 0.0f );
-	//glColor4f( 1.0f, 0.0f, 0.0f, 1.0f );
-	//glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
-
 	int iTex;	
 	int slot = wm.getSlot();
-	//slot = 1;
 
     glEnable(GL_TEXTURE_2D);
 	switch( typeFont )	{
@@ -535,7 +693,8 @@ void PanelText::displayGLInternal()	{
 	}
 
 	//cout << "PanelText::displayGLInternal() color =" << hex << color << "  text='"<< text <<"'"<< endl;
-	textUtil->DrawText( pTextGL, alpha, getX(), getY(), color, 0 );
+	textUtil->DrawText( pTextGL, alpha, getX(), getY(), color, 0x80808080 );
+	//textUtil->DrawText( pTextGL, alpha, getX(), getY(), color, 0 );
 
 	textUtil->UnbindFont( slot );
 
@@ -549,25 +708,9 @@ void PanelText::displayGLInternal()	{
 //
 //
 //--------------------------------------------------------------------------------------------------------------------
-Panel* PanelText::isMouseOver(int xm, int ym)	{
-//#define DEBUG
-	#ifdef DEBUG
-	if ( x_raw <= xm && xm <= (x_raw+dx_raw) && y_raw <= ym && ym <= (y_raw+dy_raw) )
-    	cout << "PanelText::isMouseOver()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
-	#endif
-	return NULL;
-
-	if ( x_raw <= xm && xm <= (x_raw+dx_raw) && y_raw <= ym && ym <= (y_raw+dy_raw) )		return this;
-	else																					return NULL;
-//#undef DEBUG
-}
-//--------------------------------------------------------------------------------------------------------------------
-//
-//
-//--------------------------------------------------------------------------------------------------------------------
 void PanelText::displayGL() {
-	if (visible == false)			return;
-	if ( pTextGL == NULL )			return;	
+	if (visible == false)								return;
+	if ( pTextGL == NULL && typeFont!=FREE_TYPE)		return;	
 
 #ifdef DEBUG
 	WindowsManager& wm = WindowsManager::getInstance();
@@ -597,16 +740,19 @@ void PanelText::displayGL() {
 		glLoadMatrixf (mModelView );
 		//cout << "PT displayGL alpha="<< alpha <<" ... text: " << text << endl;
 	}
+    
+    
+    //if ( color != 0xffffffff )      cout << "displa1" <<hex <<color<< endl;
+	uint32_t c = color;
+	unsigned char a = (c&0xff000000)>>24;
+	unsigned char r = (c&0x00ff0000)>>16;
+	unsigned char g = (c&0x0000ff00)>>8;
+	unsigned char b = (c&0x000000ff);
+
+    //if ( color != 0xffffffff )      cout << "displa2" << hex <<color<< endl;
+	glColor4ub( r,g,b, a );
+	//printf( (char*)"\"%s\" color = 0x%08X\n", getExtraString().c_str(), color );
     /*
-    if ( color != 0xffffffff )      cout << "displa1" <<hex <<color<< endl;
-
-	unsigned char a = (color&0xff000000)>>24;
-	unsigned char r = (color&0x00ff0000)>>16;
-	unsigned char g = (color&0x0000ff00)>>8;
-	unsigned char b = (color&0x000000ff);
-
-    if ( color != 0xffffffff )      cout << "displa2" << hex <<color<< endl;
-	glColor4f( r,g,b,a );
 	*/
 
 	switch( typeFont )	{
@@ -614,6 +760,10 @@ void PanelText::displayGL() {
 		case SMALL_FONT :
 		case LARGE_FONT :
 			displayGLInternal();
+			break;
+		case FREE_TYPE :
+			//cout<< "PanelText::displayGL() freetype"<< text <<endl;
+			displayGLfreetype();
 			break;
 	}	
 

@@ -15,6 +15,7 @@
 
 
 
+int _Texture::nb = 0;
 
 //#define DEBUG 1
 
@@ -78,6 +79,7 @@ void _Texture::Gen()
 #endif
 	if ( m_nHandle != 0 )			Destroy();
 	glGenTextures(1, &m_nHandle);
+	_Texture::nb++;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -125,6 +127,7 @@ void _Texture::Destroy()
 	std::cout << "_Texture::Destroy()   m_nHandle = "<< m_nHandle << std::endl;
 #endif
 	glDeleteTextures(1, &m_nHandle);
+	_Texture::nb--;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

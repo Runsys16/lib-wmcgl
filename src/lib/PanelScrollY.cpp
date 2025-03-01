@@ -35,19 +35,58 @@ PanelScrollY::PanelScrollY() : PanelSimple()	{
 	cout << "Constructeur PanelScrollY ..." << endl;
 	#endif
 	y_scroll = 0;
+	dy_scroll = 0;
 	y_delta = 10;
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
+int  PanelScrollY::computeDY()
+{
+	int max = 0;
+	
+	for( int i=0; i<childs.size(); i++ )
+	{
+		int u = childs[i]->getPosY() + childs[i]->getDY();
+		if ( u > max ) 				max = u;
+	}
+	return max;
+}
+/*----------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelScrollY::clickUp( int x, int y ) {
-	y_scroll = y_delta;
+	int delta = y_delta;
+
+	dy_scroll += delta;
+
+	if ( dy_scroll > 0 )
+	{
+		delta = y_delta - dy_scroll;
+		dy_scroll = 0;
+	}
+
+	y_scroll = delta;
 	updatePos();
+
+	/*
+	cout <<"clickDown() max="<< computeDY();
+	cout <<"  DY="<< getDY();
+	cout << " dy_scroll=" << dy_scroll;
+	cout << endl;
+	*/
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelScrollY::clickDown( int x, int y ) {
-	y_scroll = -y_delta;
-	//setPosY( getPosY() - y_delta );
+	int max = computeDY();
+	int delta = -y_delta;
+	
+	if ( max <= getDY() )
+	{
+		delta = getDY() - max;
+	}
+		
+	dy_scroll += delta;
+	y_scroll = delta;
 	updatePos();
 }
 /*----------------------------------------------------------------------------------------------------------------------------------

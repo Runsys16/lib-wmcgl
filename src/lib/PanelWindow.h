@@ -10,6 +10,7 @@ class PanelWindow : public PanelSimple {
 	
 		PanelWindow();
 		
+		void				loadSkinPath( std::string );
 		void				loadSkin( std::string );
 		void				loadSkin( SKIN );
 		

@@ -10,34 +10,9 @@ class _Texture2D;
 class Panel;
 class _Font;
 class TextUtil;
+class TrueType;
 
 #define color32 unsigned int
-
-
-
-/*
-*/
- 
-class _Font 	{
-	public:
-		enum FONT { ARIAL, UBUNTU_B, UBUNTU_RI, UBUNTU_R, DEJA_VU_SANS_MONO };
-		_Font();
-
-		void				print(_Font::FONT, int, int, std::string );
-		void				print(_Font::FONT, int, int, char* );
-
-		/*
-		static CTexFont *DefaulttSmallFont = NULL;
-		static CTexFont *DefaulttNormalFont = NULL;
-		static CTexFont *DefaulttLargeFont = NULL;
-		*/
-
-	private:
-		//std::map<int, freetype::font_data *>*		pFonts;
-		std::map<int, void *>*		pFonts;
-};
-
-
 struct CTexFont
 {
     unsigned char * m_TexBytes;
@@ -67,6 +42,80 @@ extern CTexFont *DefaultLargeFont;
 
 void wmcglGenerateDefaultFonts();
 void wmcglDeleteDefaultFonts();
+
+
+
+
+// -------------------------------
+// Textures abstraites
+// -------------------------------
+
+class _Texture
+{
+public:
+	virtual GLenum getTextureType() const = 0;
+
+	void Gen();
+	virtual bool Load(const std::string& name);
+	void Destroy();
+
+	void Bind(GLuint slot) const;
+	void Unbind(GLuint slot) const;
+
+	GLuint getHandle() const {return m_nHandle;} 
+
+	static void EnableGenerateMipmaps(bool b) {s_bGenerateMipmaps=b;}
+	void Bind() const;
+	void Unbind() const;
+
+	_Texture() {m_nHandle=0; /*std::cout << "_Texture::_Texture()" << std::endl;*/}
+	~_Texture() {Destroy();}
+	
+	
+
+//static int			getNbTextures()					{ return nb; }
+	
+	unsigned	dx;
+	unsigned	dy;
+	
+
+protected:
+	//void Bind() const;
+	//void Unbind() const;
+	bool LoadFile(GLenum target, const std::string& name);
+	void LoadData(GLenum target, GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d);
+	
+protected:
+		GLuint		m_nHandle;				// ID de la texture
+											// Etat pour le chargement : generation ou non des mipmaps
+static	bool 		s_bGenerateMipmaps;		
+static	int			nb;
+};
+
+
+
+
+
+class FrameBufferObject;
+
+// -------------------------------
+// Textures 2D
+// -------------------------------
+
+class _Texture2D : public _Texture
+{
+public:
+	virtual GLenum getTextureType() const {return GL_TEXTURE_2D;}
+	bool Load(const std::string& name);
+	bool Load(GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d);
+static int			getNbTextures()					{ return nb; }
+
+	_Texture2D() : _Texture() {}
+
+protected:
+	
+};
+
 
 //  ---------------------------------------------------------------------------
 //
@@ -104,16 +153,16 @@ class TextUtil  {
 public:
     TextUtil();
 
-    void *      NewTextObj();
-    void        DeleteTextObj(void *_TextObj);
-    void        BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines,  CTexFont *_Font, int _Sep, int _BgWidth);
+    void *				NewTextObj();
+    void				DeleteTextObj(void *_TextObj);
+    void				BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines,  CTexFont *_Font, int _Sep, int _BgWidth);
 
-    int			lenght(void *_TextObj, const std::string *_TextLines, CTexFont * );
-    int			lenght(void *_TextObj, const std::string *_TextLines, CTexFont *, int );
-    void		BeginGL();
-    void		EndGL();
-    void        DrawText(void *_TextObj, float angle, int _X, int _Y, color32 _Color, color32 _BgColor);
-    void        DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 _BgColor);
+    int					lenght(void *_TextObj, const std::string *_TextLines, CTexFont * );
+    int					lenght(void *_TextObj, const std::string *_TextLines, CTexFont *, int );
+    void				BeginGL();
+    void				EndGL();
+    void				DrawText(void *_TextObj, float angle, int _X, int _Y, color32 _Color, color32 _BgColor);
+    void				DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 _BgColor);
 
 	void				ChangeViewport(int, int, int, int, int, int);
 
@@ -267,6 +316,7 @@ class Panel {
 		inline int			getNbPanel()									{return childs.size();}
 	
 		inline bool			getVisible()									{return visible;};
+		inline void			swapVisible()									{ visible = !visible; };
 		inline void			setVisible(bool b)								{visible=b;};
 		
 		inline bool			getCanMove()									{return bCanMove;};
@@ -372,7 +422,9 @@ class Panel {
 class PanelText : public Panel	{
 
 	public:
-		enum FONT { ARIAL, UBUNTU_B, UBUNTU_RI, UBUNTU_R, DEJA_VU_SANS_MONO, NORMAL_FONT, SMALL_FONT, LARGE_FONT };
+		enum FONT { 	ARIAL, UBUNTU_B, UBUNTU_RI, UBUNTU_R, DEJA_VU_SANS_MONO,\
+					 	NORMAL_FONT, SMALL_FONT, LARGE_FONT, \
+					 	FREE_TYPE };
 		enum ALIGN { LEFT, RIGHT, CENTER };
 
 
@@ -383,6 +435,8 @@ class PanelText : public Panel	{
 							PanelText( std::string, FONT, int, int, unsigned int );
 							PanelText( char*, FONT, int, int );
 							PanelText( char*, FONT, int, int, unsigned int );
+							PanelText( char*, char*, int, int, uint32_t, uint32_t );
+							PanelText( char*, char*, int, int, uint32_t, uint32_t, bool );
 
 		void 				init();
 		void 				buildString();
@@ -401,8 +455,11 @@ class PanelText : public Panel	{
 		void				setTabSize( int );
 		int					getTabSize()									{return tabSize;}
 		void				setColor( int l);
-		
+inline	void				setChangeColor(bool b)							{ bColor = b; }
+	
 		virtual Panel*		isMouseOver( int, int);
+		void				displayGLfreetype();
+		void				displayGLInternal();
 		virtual void		displayGL();
 		virtual void		updatePos();
 		
@@ -412,7 +469,6 @@ class PanelText : public Panel	{
 		
 		//----------------- functions
 		std::string			strFont();		
-		void				displayGLInternal();
 
 	protected:
 		//----------------- members
@@ -420,14 +476,17 @@ class PanelText : public Panel	{
 
 		TextUtil*			textUtil;
 		FONT				typeFont;
+		TrueType*			pTrueType;
+		std::string			sFreeTypeName;
 		std::string			text;
-		int    	            color;
+		uint32_t            color;
 		//std::string			cmdLine;
 		bool				bChange;
 		
 		void*				pTextGL;
 		int					tabSize;
 		bool                bStatic;
+		bool				bColor;
 		
 		float				alpha;
 	
@@ -699,6 +758,8 @@ class PanelScrollY : public PanelSimple {
 	public:
 		PanelScrollY();
 		
+		int 				computeDY();
+		
 		inline void			setDelta( int d )				{ y_delta = d; }
 		//void				buildText();
 		virtual void		clickUp( int, int);
@@ -714,6 +775,7 @@ class PanelScrollY : public PanelSimple {
 
 //	private:
 	protected:
+		int					dy_scroll;
 		int					y_scroll;
 		int					y_delta;
 		
@@ -941,6 +1003,7 @@ class PanelWindow : public PanelSimple {
 	
 		PanelWindow();
 		
+		void				loadSkinPath( std::string );
 		void				loadSkin( std::string );
 		void				loadSkin( SKIN );
 		
@@ -1000,6 +1063,15 @@ class PanelWindow : public PanelSimple {
 
 
 
+	extern void                log( char*  );
+	extern void                logf(char *, ...);
+    extern void                log_tab( bool );
+	void                log( char*  );
+	void                logf(char *, ...);
+    void                log_tab( bool );
+
+
+
 class WindowsManager {
 
 public:
@@ -1007,11 +1079,11 @@ public:
 
 	void				init();
 
-    void                log_tab( bool );
-    void                log( char*  );
-    void                logf(char *, ...);
-
-
+/*
+static	void			log( char*  );
+static	void            logf(char *, ...);
+static	void            log_tab( bool );
+*/
 
 	void				setScreenSize(int, int);
 	void				add(Panel *);
@@ -1053,7 +1125,7 @@ public:
 	inline int			getWidth()						{return width;}
 	inline void			setHeight( int h )				{height=h;}
 	inline int			getHeight()						{return height;}
-	inline _Font*		getFonts()						{return fonts;}
+//	inline _Font*		getFonts()						{return fonts;}
 	inline int			getOffsetX()					{return 0;}
 	inline int			getOffsetY()					{return 0;}
 	inline TextUtil*	getTextUtil()					{return &textUtil;}
@@ -1072,6 +1144,7 @@ public:
 		
 	void				passiveMotionFunc(int, int);
     bool                isPanelFocus(Panel *);
+    bool                isPanelCapture(Panel *);
 	void				motionFunc(int, int);
 	void				mouseFunc(int, int, int, int);
 	void				keyboardUpFunc( unsigned char, int, int );
@@ -1085,9 +1158,11 @@ public:
 
 	inline void         startKeyboard()                 { bStopKeyboard = false; }
 	inline void         stopKeyboard()                  { bStopKeyboard = true; }
-	inline float        getMouseX()                      { return mouseX; }
-	inline float        getMouseY()                      { return mouseY; }
+	inline float        getMouseX()                     { return mouseX; }
+	inline float        getMouseY()                     { return mouseY; }
 	inline int          getMouseState(int but)          { return iMouseButton[but]; }
+
+	int					getNbTextures()					{ return _Texture2D::getNbTextures(); }
 	
 static GLubyte*         OpenImage( const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d);
 
@@ -1114,7 +1189,7 @@ private:
 	int							height;
 	std::vector<Panel*>			childs;
 	//std::vector<Panel*>		panels;
-	_Font*						fonts;
+	//_Font*						fonts;
 	
 	int							xm_old;
 	int							ym_old;
@@ -1143,8 +1218,8 @@ private:
 
 	bool						bStopKeyboard;
         
-    string                      sTab;
-    int                         nb_tab;
+    //string                      sTab;
+    //int                         nb_tab;
     
     float                       mouseX;
     float                       mouseY;

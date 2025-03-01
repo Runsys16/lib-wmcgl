@@ -11,6 +11,7 @@
 
 
 
+//#define DEBUG
 
 //#include "TwPrecomp.h"
 //#include "TwMgr.h"
@@ -68,6 +69,9 @@ const char *g_ErrBadFontHeight = "Cannot determine font height while reading fon
 
 CTexFont *wmcglGenerateFont(const unsigned char *_Bitmap, int _BmWidth, int _BmHeight)
 {
+	#ifdef DEBUG_CONST
+	cout << "InternalFonts::wmcglGenerateFont..." << endl;
+	#endif
     // find height of the font
 
     int x, y;

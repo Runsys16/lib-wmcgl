@@ -16,15 +16,12 @@ public:
 	virtual GLenum getTextureType() const {return GL_TEXTURE_2D;}
 	bool Load(const std::string& name);
 	bool Load(GLubyte* ptr, unsigned int w, unsigned int h, unsigned int d);
+static int			getNbTextures()					{ return nb; }
 
 	_Texture2D() : _Texture() {}
 
 protected:
 	
-
-protected:
-
-
 };
 
 #endif

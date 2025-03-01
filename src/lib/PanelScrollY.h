@@ -11,6 +11,8 @@ class PanelScrollY : public PanelSimple {
 	public:
 		PanelScrollY();
 		
+		int 				computeDY();
+		
 		inline void			setDelta( int d )				{ y_delta = d; }
 		//void				buildText();
 		virtual void		clickUp( int, int);
@@ -26,6 +28,7 @@ class PanelScrollY : public PanelSimple {
 
 //	private:
 	protected:
+		int					dy_scroll;
 		int					y_scroll;
 		int					y_delta;
 		

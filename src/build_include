@@ -15,6 +15,7 @@ echo  "class _Texture2D;" >>${INCLUDE}
 echo  "class Panel;" >>${INCLUDE}
 echo  "class _Font;" >>${INCLUDE}
 echo  "class TextUtil;" >>${INCLUDE}
+echo  "class TrueType;" >>${INCLUDE}
 echo  >>${INCLUDE}
 echo "#define color32 unsigned int" >>${INCLUDE}
 
@@ -54,6 +55,9 @@ void wmcglDeleteDefaultFonts();
 EOF
 
 #cat ${SRC}ImageTools.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}Texture.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}Texture2D.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+#cat ${SRC}FreeType.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}TextUtil.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}Panel.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}PanelText.h | grep -v include | grep -v "#"   >> ${INCLUDE}

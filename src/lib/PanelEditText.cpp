@@ -762,6 +762,8 @@ void PanelEditText::updatePos() {
 	cout << "PanelEditText::updatePos()" << endl;;
 	#endif
 	PanelSimple::updatePos();
+	dx = dx_raw = text->getDX();
+	dy = dy_raw = text->getDY();
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

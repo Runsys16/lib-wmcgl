@@ -64,11 +64,11 @@ function open()	{
 	local OPEN=$(isOpen $*)
 	if [ "$OPEN" == "" ]
 	then
-		echo Edition ... $SIZE
+		echo "  Creation de la fenetre d'edition" ... $SIZE
 		edition $* &>/dev/null
 		wait_id $*
 		wmctrl -i -r $(get_window_id $*) -e $SIZE
-		echo wmctrl -i -r $(get_window_id $*) -e $SIZE
+		#echo "  "wmctrl -i -r $(get_window_id $*) -e $SIZE
 		return
 	fi
 	echo $(isOpen $*)
@@ -76,10 +76,10 @@ function open()	{
 #----------------------------------------------------------------------------------------------------
 #											MAIN
 #----------------------------------------------------------------------------------------------------
-STR1="./src/lib/*.h"
 STR0="./src/lib/*.cpp"
+STR1="./src/lib/*.h"
 STR2="ed makefile src/depend.py src/build_makefile src/build_include src/makefile.base"
-
+#-----------------------------------------
 PATH_IDENT="programmes/opengl/lib-wmcgl"
 #----------------------------------------------------------------------------------------------------
 OFFSET="-0"
@@ -95,24 +95,50 @@ WIDTH=1100
 HEIGHT=$(( $SCREEN_HEIGHT - $OFFSET )) 
 
 echo "------------------------------------------------------------"
-echo "\t   total \t   SCREEN      \t\t calculé"
-echo $SCREEN_SIZE     $SCREEN_WIDTH $SCREEN_HEIGHT           $WIDTH $HEIGHT
+echo "  total        SCREEN       calculé"
+echo $SCREEN_SIZE"     "$SCREEN_WIDTH"x"$SCREEN_HEIGHT"     "$WIDTH"x"$HEIGHT
 echo ------------------------------------------------------------
 #exit
 #----------------------------------------------------------------------------------------------------
-POS=0
-SIZE="0,$POS,0,$WIDTH,$HEIGHT"
+POSX=0
+POSY=0
+case "$(hostname)" in
+	"poste-002")
+		POSX=-72
+		POSY=-14
+
+		WIDTH=1140
+		HEIGHT=1249
+		;;
+esac
+
+SIZE="0,$POSX,$POSY,$WIDTH,$HEIGHT"
+echo "Fenetre STR0 "$SIZE
 open $STR0
 
-#POS=$(( 2*$SCREEN_WIDTH - $WIDTH ))
-POS=$(( $POS + 200 ))
-SIZE="0,$POS,0,$WIDTH,$HEIGHT"
+#----------------------------------------------------------------------------------------------------
+POSX=$(( $POSX + 100 ))
+case "$(hostname)" in
+	"poste-002")
+		POSX=818
+		POSY=-14
+		;;
+esac
+
+SIZE="0,$POSX,$POSY,$WIDTH,$HEIGHT"
+echo "Fenetre STR1 "$SIZE
 open $STR1
 
-#POS=$(( ($SCREEN_WIDTH - $WIDTH) / 2 ))
-#POS=$(( $SCREEN_WIDTH - $WIDTH ))
-POS=$(( $POS + 200 ))
-SIZE="0,$POS,0,$WIDTH,$HEIGHT"
-open $STR2
+#----------------------------------------------------------------------------------------------------
+case "$(hostname)" in
+	"poste-002")
+		POSX=$(($SCREEN_WIDTH-36))
+		POSY=-64
+		;;
+esac
 
+SIZE="0,$POSX,$POSY,$WIDTH,$HEIGHT"
+echo "Fenetre STR2 "$SIZE
+open $STR2
+#----------------------------------------------------------------------------------------------------
 

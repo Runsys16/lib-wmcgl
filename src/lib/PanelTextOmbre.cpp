@@ -58,7 +58,7 @@ PanelTextOmbre::PanelTextOmbre( string str, FONT type )	{
 	color = 0xffffffff;
 
 	changeText( str, type, true );
-	pTextOmbre.setColor( 0xff000000 );
+	pTextOmbre.setColor( 0x000000ff );
 	pTextOmbre.changeText( str, type, true );
 }
 
@@ -76,7 +76,7 @@ PanelTextOmbre::PanelTextOmbre( string str, FONT type, int x, int y )	{
 	changeText( str, type );
 	
 	pTextOmbre.setPos(x+1, y+1);
-	pTextOmbre.setColor( 0xff000000 );
+	pTextOmbre.setColor( 0x000000ff );
 	pTextOmbre.changeText( str, type );
 }
 
@@ -94,7 +94,7 @@ PanelTextOmbre::PanelTextOmbre( string str, FONT type, int x, int y, unsigned in
 	changeText( str, type );
 
 	pTextOmbre.setPos(x+1, y+1);
-	pTextOmbre.setColor( 0xff000000 );
+	pTextOmbre.setColor( 0x000000ff );
 	pTextOmbre.changeText( str, type );
 }
 
@@ -112,7 +112,7 @@ PanelTextOmbre::PanelTextOmbre( char * cstr, FONT type, int x, int y )	{
 	buildString();
 
 	pTextOmbre.setPos(x+1, y+1);
-	pTextOmbre.setColor( 0xff000000 );
+	pTextOmbre.setColor( 0x000000ff );
 	pTextOmbre.changeText( cstr, type );
 	pTextOmbre.buildString();
 }
@@ -131,7 +131,7 @@ PanelTextOmbre::PanelTextOmbre( char * cstr, FONT type, int x, int y, unsigned i
 	buildString();
 
 	pTextOmbre.setPos(x+1, y+1);
-	pTextOmbre.setColor( 0xff000000 );
+	pTextOmbre.setColor( 0x000000ff );
 	pTextOmbre.changeText( cstr, type );
 	pTextOmbre.buildString();
 }
@@ -148,7 +148,7 @@ void PanelTextOmbre::init()	{
 	ID = 9001;
 	tabSize = 40;
 	color = 0xffffffff;
-	pTextOmbre.setColor( 0xff000000 );
+	pTextOmbre.setColor( 0x000000ff );
 	pTextOmbre.setPos( 1, 1 );
 	pTextOmbre.setAlign( align );
 }
@@ -343,7 +343,7 @@ void PanelTextOmbre::setColor( unsigned long c ) {
 	cout << "PanelTextOmbre::setTabSize() : " << c << endl;
 	#endif
 	color = c;//PanelText::setColor( c );
-	//pTextOmbre.setColor( 0xff000000 );
+	//pTextOmbre.setColor( 0x000000ff );
 }
 
 
@@ -372,6 +372,7 @@ void PanelTextOmbre::updatePos() {
 
 	pTextOmbre.updatePos();
 
+	dy = dy_raw = getDY() + 1;
 }
 
 

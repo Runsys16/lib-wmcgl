@@ -10,16 +10,22 @@
 #include "Shader.h"
 #include <assert.h>
 
+
+using namespace std;
+
+
 SINGLETON_BEGIN( _ResourceManager )
 public:
-	enum RES_TYPE {TEXTURE2D, SHADER};
+	enum RES_TYPE {TEXTURE2D, SHADER, TRUE_TYPE_FONT};
 
-	void* LoadResource(RES_TYPE type, const std::string& name);
-	void* LoadResourceM(RES_TYPE type, const std::string& name);
-	void* NewResource(void* data, const std::string& name);
-	void  List(RES_TYPE);
-	void  ListShaders(void);
-	void  ListTextures(void);
+	void*				LoadResource(RES_TYPE type, const std::string& name);
+	void*				LoadResourceM(RES_TYPE type, const std::string& name);
+	void*				NewResource(void* , const std::string& , RES_TYPE);
+
+	void				List(RES_TYPE);
+	void				ListShaders(void);
+	void				ListTextures(void);
+	bool				isResource( string& );
 	
 
 	inline void*			getResource(const std::string& name)		{assert(m_ResDB.find(name)!=m_ResDB.end()); return m_ResDB.find(name)->second;}

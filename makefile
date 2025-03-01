@@ -252,92 +252,108 @@ install:
 #-------------------------------------------------------
 #              libwmcgl.so.0.1
 #-------------------------------------------------------
+$(OBJDIR)ImageTools.o :   $(SRCDIR)ImageTools.cpp $(SRCDIR)ImageTools.h $(SRCDIR)Mathlib.h 
 
-$(OBJDIR)Font.o :   $(SRCDIR)Font.cpp  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h  $(SRCDIR)wm.h  $(SRCDIR)Panel.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)ImageTools.h  $(SRCDIR)Mathlib.h 
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)FreeType.o :   $(SRCDIR)FreeType.cpp  $(SRCDIR)FreeType.h 
+$(OBJDIR)InternalFonts.o :   $(SRCDIR)InternalFonts.cpp $(SRCDIR)InternalFonts.h 
+
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)ImageTools.o :   $(SRCDIR)ImageTools.cpp  $(SRCDIR)ImageTools.h  $(SRCDIR)Mathlib.h 
+$(OBJDIR)Panel.o :   $(SRCDIR)Panel.cpp $(SRCDIR)Panel.h $(SRCDIR)Constante.h $(SRCDIR)wm.h $(SRCDIR)TextUtil.h $(SRCDIR)InternalFonts.h $(SRCDIR)ImageTools.h $(SRCDIR)Mathlib.h $(SRCDIR)Texture2D.h $(SRCDIR)Texture.h 
+
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)InternalFonts.o :   $(SRCDIR)InternalFonts.cpp  $(SRCDIR)InternalFonts.h 
+$(OBJDIR)PanelButton.o :   $(SRCDIR)PanelButton.cpp $(SRCDIR)PanelButton.h $(SRCDIR)PanelSimple.h $(SRCDIR)Panel.h $(SRCDIR)Constante.h $(SRCDIR)PanelText.h $(SRCDIR)wm.h $(SRCDIR)TextUtil.h $(SRCDIR)InternalFonts.h $(SRCDIR)ImageTools.h $(SRCDIR)Mathlib.h $(SRCDIR)Texture2D.h $(SRCDIR)Texture.h $(SRCDIR)TrueType.h $(SRCDIR)PanelTextOmbre.h $(SRCDIR)ResourceManager.h $(SRCDIR)Singleton.h $(SRCDIR)Shader.h 
+
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)Panel.o :   $(SRCDIR)Panel.cpp  $(SRCDIR)Panel.h 
+$(OBJDIR)PanelCheckBox.o :   $(SRCDIR)PanelCheckBox.cpp $(SRCDIR)PanelCheckBox.h $(SRCDIR)PanelSimple.h $(SRCDIR)Panel.h $(SRCDIR)Constante.h $(SRCDIR)PanelText.h $(SRCDIR)wm.h $(SRCDIR)TextUtil.h $(SRCDIR)InternalFonts.h $(SRCDIR)ImageTools.h $(SRCDIR)Mathlib.h $(SRCDIR)Texture2D.h $(SRCDIR)Texture.h $(SRCDIR)TrueType.h $(SRCDIR)PanelTextOmbre.h $(SRCDIR)ResourceManager.h $(SRCDIR)Singleton.h $(SRCDIR)Shader.h 
+
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)PanelButton.o :   $(SRCDIR)PanelButton.cpp  $(SRCDIR)PanelButton.h  $(SRCDIR)PanelSimple.h  $(SRCDIR)Panel.h  $(SRCDIR)PanelText.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)ResourceManager.h  $(SRCDIR)Singleton.h  $(SRCDIR)Shader.h  $(SRCDIR)Mathlib.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h  $(SRCDIR)ImageTools.h 
+$(OBJDIR)PanelConsole.o :   $(SRCDIR)PanelConsole.cpp $(SRCDIR)PanelConsole.h $(SRCDIR)PanelSimple.h $(SRCDIR)Panel.h $(SRCDIR)Constante.h $(SRCDIR)PanelText.h $(SRCDIR)wm.h $(SRCDIR)TextUtil.h $(SRCDIR)InternalFonts.h $(SRCDIR)ImageTools.h $(SRCDIR)Mathlib.h $(SRCDIR)Texture2D.h $(SRCDIR)Texture.h $(SRCDIR)TrueType.h $(SRCDIR)PanelTextOmbre.h 
+
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)PanelCheckBox.o :   $(SRCDIR)PanelCheckBox.cpp  $(SRCDIR)PanelCheckBox.h  $(SRCDIR)PanelSimple.h  $(SRCDIR)Panel.h  $(SRCDIR)PanelText.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)ResourceManager.h  $(SRCDIR)Singleton.h  $(SRCDIR)Shader.h  $(SRCDIR)Mathlib.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h  $(SRCDIR)ImageTools.h 
+$(OBJDIR)PanelEditText.o :   $(SRCDIR)PanelEditText.cpp $(SRCDIR)PanelEditText.h $(SRCDIR)PanelSimple.h $(SRCDIR)Panel.h $(SRCDIR)Constante.h $(SRCDIR)PanelText.h $(SRCDIR)wm.h $(SRCDIR)TextUtil.h $(SRCDIR)InternalFonts.h $(SRCDIR)ImageTools.h $(SRCDIR)Mathlib.h $(SRCDIR)Texture2D.h $(SRCDIR)Texture.h $(SRCDIR)TrueType.h $(SRCDIR)PanelTextOmbre.h 
+
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)PanelConsole.o :   $(SRCDIR)PanelConsole.cpp  $(SRCDIR)PanelConsole.h  $(SRCDIR)PanelSimple.h  $(SRCDIR)Panel.h  $(SRCDIR)PanelText.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h  $(SRCDIR)ImageTools.h  $(SRCDIR)Mathlib.h 
+$(OBJDIR)PanelScrollText.o :   $(SRCDIR)PanelScrollText.cpp $(SRCDIR)PanelScrollText.h $(SRCDIR)PanelSimple.h $(SRCDIR)Panel.h $(SRCDIR)Constante.h $(SRCDIR)PanelText.h $(SRCDIR)wm.h $(SRCDIR)TextUtil.h $(SRCDIR)InternalFonts.h $(SRCDIR)ImageTools.h $(SRCDIR)Mathlib.h $(SRCDIR)Texture2D.h $(SRCDIR)Texture.h $(SRCDIR)TrueType.h $(SRCDIR)PanelTextOmbre.h 
+
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)PanelEditText.o :   $(SRCDIR)PanelEditText.cpp  $(SRCDIR)PanelEditText.h  $(SRCDIR)PanelSimple.h  $(SRCDIR)Panel.h  $(SRCDIR)PanelText.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h  $(SRCDIR)ImageTools.h  $(SRCDIR)Mathlib.h 
+$(OBJDIR)PanelScrollY.o :   $(SRCDIR)PanelScrollY.cpp $(SRCDIR)PanelScrollY.h $(SRCDIR)PanelSimple.h $(SRCDIR)Panel.h $(SRCDIR)Constante.h $(SRCDIR)PanelText.h $(SRCDIR)wm.h $(SRCDIR)TextUtil.h $(SRCDIR)InternalFonts.h $(SRCDIR)ImageTools.h $(SRCDIR)Mathlib.h $(SRCDIR)Texture2D.h $(SRCDIR)Texture.h $(SRCDIR)TrueType.h $(SRCDIR)PanelTextOmbre.h $(SRCDIR)ResourceManager.h $(SRCDIR)Singleton.h $(SRCDIR)Shader.h 
+
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)PanelScrollText.o :   $(SRCDIR)PanelScrollText.cpp  $(SRCDIR)PanelScrollText.h  $(SRCDIR)PanelSimple.h  $(SRCDIR)Panel.h  $(SRCDIR)PanelText.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h  $(SRCDIR)ImageTools.h  $(SRCDIR)Mathlib.h 
+$(OBJDIR)PanelSimple.o :   $(SRCDIR)PanelSimple.cpp $(SRCDIR)PanelSimple.h $(SRCDIR)Panel.h $(SRCDIR)Constante.h $(SRCDIR)PanelText.h $(SRCDIR)wm.h $(SRCDIR)TextUtil.h $(SRCDIR)InternalFonts.h $(SRCDIR)ImageTools.h $(SRCDIR)Mathlib.h $(SRCDIR)Texture2D.h $(SRCDIR)Texture.h $(SRCDIR)TrueType.h $(SRCDIR)PanelTextOmbre.h $(SRCDIR)PanelButton.h $(SRCDIR)PanelCheckBox.h $(SRCDIR)PanelWindow.h $(SRCDIR)ResourceManager.h $(SRCDIR)Singleton.h $(SRCDIR)Shader.h 
+
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)PanelScrollY.o :   $(SRCDIR)PanelScrollY.cpp  $(SRCDIR)PanelScrollY.h  $(SRCDIR)PanelSimple.h  $(SRCDIR)Panel.h  $(SRCDIR)PanelText.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)ResourceManager.h  $(SRCDIR)Singleton.h  $(SRCDIR)Shader.h  $(SRCDIR)Mathlib.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h  $(SRCDIR)ImageTools.h 
+$(OBJDIR)PanelText.o :   $(SRCDIR)PanelText.cpp $(SRCDIR)PanelText.h $(SRCDIR)wm.h $(SRCDIR)Panel.h $(SRCDIR)Constante.h $(SRCDIR)TextUtil.h $(SRCDIR)InternalFonts.h $(SRCDIR)ImageTools.h $(SRCDIR)Mathlib.h $(SRCDIR)Texture2D.h $(SRCDIR)Texture.h $(SRCDIR)TrueType.h $(SRCDIR)ResourceManager.h $(SRCDIR)Singleton.h $(SRCDIR)Shader.h 
+
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)PanelSimple.o :   $(SRCDIR)PanelSimple.cpp  $(SRCDIR)PanelSimple.h  $(SRCDIR)Panel.h  $(SRCDIR)PanelText.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)ResourceManager.h  $(SRCDIR)Singleton.h  $(SRCDIR)Shader.h  $(SRCDIR)Mathlib.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h  $(SRCDIR)ImageTools.h 
+$(OBJDIR)PanelTextOmbre.o :   $(SRCDIR)PanelTextOmbre.cpp $(SRCDIR)PanelTextOmbre.h $(SRCDIR)Panel.h $(SRCDIR)Constante.h $(SRCDIR)PanelText.h $(SRCDIR)wm.h $(SRCDIR)TextUtil.h $(SRCDIR)InternalFonts.h $(SRCDIR)ImageTools.h $(SRCDIR)Mathlib.h $(SRCDIR)Texture2D.h $(SRCDIR)Texture.h $(SRCDIR)TrueType.h 
+
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)PanelText.o :   $(SRCDIR)PanelText.cpp  $(SRCDIR)PanelText.h  $(SRCDIR)Panel.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h  $(SRCDIR)ImageTools.h  $(SRCDIR)Mathlib.h 
+$(OBJDIR)PanelWindow.o :   $(SRCDIR)PanelWindow.cpp $(SRCDIR)PanelWindow.h $(SRCDIR)PanelSimple.h $(SRCDIR)Panel.h $(SRCDIR)Constante.h $(SRCDIR)PanelText.h $(SRCDIR)wm.h $(SRCDIR)TextUtil.h $(SRCDIR)InternalFonts.h $(SRCDIR)ImageTools.h $(SRCDIR)Mathlib.h $(SRCDIR)Texture2D.h $(SRCDIR)Texture.h $(SRCDIR)TrueType.h $(SRCDIR)PanelTextOmbre.h $(SRCDIR)ResourceManager.h $(SRCDIR)Singleton.h $(SRCDIR)Shader.h 
+
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)PanelTextOmbre.o :   $(SRCDIR)PanelTextOmbre.cpp  $(SRCDIR)PanelTextOmbre.h  $(SRCDIR)Panel.h  $(SRCDIR)PanelText.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h  $(SRCDIR)ImageTools.h  $(SRCDIR)Mathlib.h 
+$(OBJDIR)ResourceManager.o :   $(SRCDIR)ResourceManager.cpp $(SRCDIR)ResourceManager.h $(SRCDIR)Singleton.h $(SRCDIR)Texture2D.h $(SRCDIR)Texture.h $(SRCDIR)Shader.h $(SRCDIR)Mathlib.h 
+
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)PanelWindow.o :   $(SRCDIR)PanelWindow.cpp  $(SRCDIR)PanelWindow.h  $(SRCDIR)PanelSimple.h  $(SRCDIR)Panel.h  $(SRCDIR)PanelText.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)ResourceManager.h  $(SRCDIR)Singleton.h  $(SRCDIR)Shader.h  $(SRCDIR)Mathlib.h  $(SRCDIR)wm.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h  $(SRCDIR)ImageTools.h 
+$(OBJDIR)Shader.o :   $(SRCDIR)Shader.cpp $(SRCDIR)Shader.h $(SRCDIR)Mathlib.h $(SRCDIR)glInfo.h $(SRCDIR)Singleton.h 
+
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)ResourceManager.o :   $(SRCDIR)ResourceManager.cpp  $(SRCDIR)ResourceManager.h  $(SRCDIR)Singleton.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)Shader.h  $(SRCDIR)Mathlib.h 
+$(OBJDIR)TextUtil.o :   $(SRCDIR)TextUtil.cpp $(SRCDIR)TextUtil.h $(SRCDIR)InternalFonts.h $(SRCDIR)wm.h $(SRCDIR)Panel.h $(SRCDIR)Constante.h $(SRCDIR)ImageTools.h $(SRCDIR)Mathlib.h $(SRCDIR)Texture2D.h $(SRCDIR)Texture.h 
+
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)Shader.o :   $(SRCDIR)Shader.cpp  $(SRCDIR)Shader.h  $(SRCDIR)Mathlib.h  $(SRCDIR)glInfo.h  $(SRCDIR)Singleton.h 
+$(OBJDIR)Texture.o :   $(SRCDIR)Texture.cpp $(SRCDIR)Texture.h $(SRCDIR)ImageTools.h $(SRCDIR)Mathlib.h 
+
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)TextUtil.o :   $(SRCDIR)TextUtil.cpp  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)wm.h  $(SRCDIR)Panel.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h  $(SRCDIR)ImageTools.h  $(SRCDIR)Mathlib.h 
+$(OBJDIR)Texture2D.o :   $(SRCDIR)Texture2D.cpp $(SRCDIR)Texture2D.h $(SRCDIR)Texture.h 
+
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)Texture.o :   $(SRCDIR)Texture.cpp  $(SRCDIR)Texture.h  $(SRCDIR)ImageTools.h  $(SRCDIR)Mathlib.h 
+$(OBJDIR)TrueType.o :   $(SRCDIR)TrueType.cpp $(SRCDIR)TrueType.h 
+
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)Texture2D.o :   $(SRCDIR)Texture2D.cpp  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h 
+$(OBJDIR)glInfo.o :   $(SRCDIR)glInfo.cpp $(SRCDIR)glInfo.h $(SRCDIR)Singleton.h 
+
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
-$(OBJDIR)glInfo.o :   $(SRCDIR)glInfo.cpp  $(SRCDIR)glInfo.h  $(SRCDIR)Singleton.h 
-	@echo ---------   compilation de $@
-	$(CPP) -c $< -o $@  $(CFLAGS)
+$(OBJDIR)wm.o :   $(SRCDIR)wm.cpp $(SRCDIR)wm.h $(SRCDIR)Panel.h $(SRCDIR)Constante.h $(SRCDIR)TextUtil.h $(SRCDIR)InternalFonts.h $(SRCDIR)ImageTools.h $(SRCDIR)Mathlib.h $(SRCDIR)Texture2D.h $(SRCDIR)Texture.h $(SRCDIR)ResourceManager.h $(SRCDIR)Singleton.h $(SRCDIR)Shader.h $(SRCDIR)PanelEditText.h $(SRCDIR)PanelSimple.h $(SRCDIR)PanelText.h $(SRCDIR)TrueType.h $(SRCDIR)PanelTextOmbre.h $(SRCDIR)PanelConsole.h 
 
-$(OBJDIR)wm.o :   $(SRCDIR)wm.cpp  $(SRCDIR)wm.h  $(SRCDIR)Panel.h  $(SRCDIR)Font.h  $(SRCDIR)FreeType.h  $(SRCDIR)TextUtil.h  $(SRCDIR)InternalFonts.h  $(SRCDIR)ImageTools.h  $(SRCDIR)Mathlib.h  $(SRCDIR)ResourceManager.h  $(SRCDIR)Singleton.h  $(SRCDIR)Texture2D.h  $(SRCDIR)Texture.h  $(SRCDIR)Shader.h 
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)
 

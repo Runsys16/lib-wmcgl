@@ -54,6 +54,32 @@ void PanelWindow::loadSkin( string name )	{
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
+void PanelWindow::loadSkinPath( string name )	{
+
+	_ResourceManager& res = _ResourceManager::getInstance();
+	
+#ifdef DEBUG
+	cout <<"PanelWindow::loadSkin(\""<< name <<"\" ) m_text_tl : "<< m_tex_tl << endl;
+#endif
+	string nameFile = name;
+	m_tex_tl = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_ul.png") );
+	m_tex_tr = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_ur.png") );
+	m_tex_bl = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_dl.png") );
+	m_tex_br = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_dr.png") );
+	m_tex_t = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_u.png") );
+	m_tex_b = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_d.png") );
+	m_tex_l = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_l.png") );
+	m_tex_r = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, nameFile + "_r.png") );
+#ifdef DEBUG
+	cout <<"  m_text_tl : "<< m_tex_tl << endl;
+#endif
+	
+	
+	borderSize = 8;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void PanelWindow::loadSkin( SKIN s )	{
 	switch( s )	{
 		case STD:	loadSkin( "bfs" );		break;

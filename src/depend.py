@@ -46,7 +46,7 @@ def have_file( includes, include ):
 
 def test_file( filename, dirname="./", includes = [], ext_dirname = "" ):
 	try:
-		f = open( dirname+ext_dirname+filename )
+		f = open( dirname+ext_dirname+filename, errors='ignore' )
 	except:
 		print( "Erreur d'ouverture de : \"%s\"" % (dirname+ext_dirname+filename) )
 		sys.exc_info()
@@ -98,15 +98,18 @@ for filename in sorted(list_dir(name="./")):
 	#----------------------------------------------------
 	# print for makefile
 	#----------------------------------------------------
-	print( "$(OBJDIR)%s.o :   $(SRCDIR)%s.cpp " % (name, name) ) ,
+	ligne = "$(OBJDIR)%s.o :   $(SRCDIR)%s.cpp " % (name, name)
 
 	for include in includes:
-		print( "$(SRCDIR)%s " % include ) ,
+		ligne = ligne + "$(SRCDIR)%s " % include
+		#print( "$(SRCDIR)%s " % include ) ,
 
-	print
-	print (	"\t@echo ---------   compilation de $@" )
+
+	print( ligne )
+	print()
+	print(	"\t@echo ---------   compilation de $@" )
 	print( "\t$(CPP) -c $< -o $@  $(CFLAGS)" )
-	print
+	print()
 	
 sys.exit(0)
 

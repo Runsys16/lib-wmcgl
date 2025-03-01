@@ -16,8 +16,10 @@
 
 
 using namespace std;
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 _ResourceManager::~_ResourceManager()
 {
 	#ifdef DEBUG_CONST
@@ -25,11 +27,10 @@ _ResourceManager::~_ResourceManager()
 	#endif
 	Destroy();
 }
-
-
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 void _ResourceManager::Destroy()
 {
 	for(std::map<std::string, void*>::iterator it = m_ResDB.begin(); it != m_ResDB.end(); it++) {
@@ -66,10 +67,10 @@ void _ResourceManager::Destroy()
 	m_ResDB.clear();
 	m_UseDB.clear();
 }
-
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 bool _ResourceManager::Delete( void * Res )	
 {
 	string key;
@@ -125,7 +126,10 @@ bool _ResourceManager::Delete( void * Res )
 	return false;
 	//m_ResDB.clear();
 }
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 void* _ResourceManager::LoadResource(RES_TYPE type, const std::string& name)
 {
 	#ifdef DEBUG
@@ -177,13 +181,16 @@ void* _ResourceManager::LoadResource(RES_TYPE type, const std::string& name)
 
 	m_ResDB[name] = ptr;
 	m_TypeDB[name] = type;
-	m_UseDB[name] = 1;
+	m_UseDB[name]++;
 	#ifdef DEBUG
 	std::cout << "  --  " << ptr << std::endl;;
 	#endif
 	return ptr;
 }
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 void* _ResourceManager::LoadResourceM(RES_TYPE type, const std::string& name)
 {
 	// La ressource est déja chargée, on ne la recharge pas :
@@ -222,18 +229,20 @@ void* _ResourceManager::LoadResourceM(RES_TYPE type, const std::string& name)
 	std::cout << " " << ptr ;
 	return ptr;
 }
-
-void* _ResourceManager::NewResource(void* data, const std::string& name)
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
+void* _ResourceManager::NewResource(void* data, const std::string& name, RES_TYPE type)
 {
 	if(!data) return NULL;
 
 	// La ressource est déja chargée, on ne la recharge pas :
-	if(m_ResDB.find(name) != m_ResDB.end())
-		return m_ResDB.find(name)->second;
-
-	std::cout << name.c_str() << std::endl;
+	if(m_ResDB.find(name) != m_ResDB.end())		return NULL;
 
 	m_ResDB[name] = data;
+	m_TypeDB[name] = type;
+	m_UseDB[name] = 1;
 	return data;
 }
 
@@ -249,6 +258,10 @@ void _ResourceManager::List(void)
 }
 
 */
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 
 void _ResourceManager::List( RES_TYPE TypeRecherche )
 {
@@ -265,13 +278,10 @@ void _ResourceManager::List( RES_TYPE TypeRecherche )
 		}
 	}
 }
-
-
-
-
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 void _ResourceManager::ListShaders(void)
 {
 	char			text[80];
@@ -283,9 +293,10 @@ void _ResourceManager::ListShaders(void)
 	#endif
 	List( SHADER );
 }
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 /*
 void _ResourceManager::ListObjs(void)
 {
@@ -309,8 +320,10 @@ void _ResourceManager::ListCubeMap(void)
 }
 
 */
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 void _ResourceManager::ListTextures(void)
 {
 	char			text[80];
@@ -323,16 +336,19 @@ void _ResourceManager::ListTextures(void)
 
 
 
-
-
-
-
-
-
-
-
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
+bool _ResourceManager::isResource( string& name )
+{
+	// La ressource est déja chargée, on ne la recharge pas :
+	if(m_ResDB.find(name) != m_ResDB.end()) 
+	{
+		return true;
+	}
+	return false;
+}
 
 
 

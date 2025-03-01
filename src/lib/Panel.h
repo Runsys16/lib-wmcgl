@@ -92,6 +92,7 @@ class Panel {
 		inline int			getNbPanel()									{return childs.size();}
 	
 		inline bool			getVisible()									{return visible;};
+		inline void			swapVisible()									{ visible = !visible; };
 		inline void			setVisible(bool b)								{visible=b;};
 		
 		inline bool			getCanMove()									{return bCanMove;};

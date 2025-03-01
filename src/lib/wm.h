@@ -27,10 +27,10 @@
 
 
 #include "Panel.h"
-#include "Font.h"
+//#include "Font.h"
 #include "TextUtil.h"
 #include "ImageTools.h"
-#include "Texture.h"
+#include "Texture2D.h"
 
 //#define DEBUG_CONST
 //#define DEBUG_WM
@@ -40,6 +40,18 @@
 #include "Constante.h"
 
 
+#ifndef WM_CPP
+	extern void                log( char*  );
+	extern void                logf(char *, ...);
+    extern void                log_tab( bool );
+#else
+	void                log( char*  );
+	void                logf(char *, ...);
+    void                log_tab( bool );
+#endif
+
+
+
 class WindowsManager {
 
 public:
@@ -47,11 +59,11 @@ public:
 
 	void				init();
 
-    void                log_tab( bool );
-    void                log( char*  );
-    void                logf(char *, ...);
-
-
+/*
+static	void			log( char*  );
+static	void            logf(char *, ...);
+static	void            log_tab( bool );
+*/
 
 	void				setScreenSize(int, int);
 	void				add(Panel *);
@@ -93,7 +105,7 @@ public:
 	inline int			getWidth()						{return width;}
 	inline void			setHeight( int h )				{height=h;}
 	inline int			getHeight()						{return height;}
-	inline _Font*		getFonts()						{return fonts;}
+//	inline _Font*		getFonts()						{return fonts;}
 	inline int			getOffsetX()					{return 0;}
 	inline int			getOffsetY()					{return 0;}
 	inline TextUtil*	getTextUtil()					{return &textUtil;}
@@ -112,6 +124,7 @@ public:
 		
 	void				passiveMotionFunc(int, int);
     bool                isPanelFocus(Panel *);
+    bool                isPanelCapture(Panel *);
 	void				motionFunc(int, int);
 	void				mouseFunc(int, int, int, int);
 	void				keyboardUpFunc( unsigned char, int, int );
@@ -125,9 +138,11 @@ public:
 
 	inline void         startKeyboard()                 { bStopKeyboard = false; }
 	inline void         stopKeyboard()                  { bStopKeyboard = true; }
-	inline float        getMouseX()                      { return mouseX; }
-	inline float        getMouseY()                      { return mouseY; }
+	inline float        getMouseX()                     { return mouseX; }
+	inline float        getMouseY()                     { return mouseY; }
 	inline int          getMouseState(int but)          { return iMouseButton[but]; }
+
+	int					getNbTextures()					{ return _Texture2D::getNbTextures(); }
 	
 static GLubyte*         OpenImage( const std::string& filename, unsigned int& w, unsigned int& h, unsigned int& d);
 
@@ -154,7 +169,7 @@ private:
 	int							height;
 	std::vector<Panel*>			childs;
 	//std::vector<Panel*>		panels;
-	_Font*						fonts;
+	//_Font*						fonts;
 	
 	int							xm_old;
 	int							ym_old;
@@ -183,8 +198,8 @@ private:
 
 	bool						bStopKeyboard;
         
-    string                      sTab;
-    int                         nb_tab;
+    //string                      sTab;
+    //int                         nb_tab;
     
     float                       mouseX;
     float                       mouseY;

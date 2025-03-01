@@ -211,7 +211,7 @@ void PanelScrollText::clear( ) {
 //--------------------------------------------------------------------------------------------------------------------
 void PanelScrollText::affiche( string* str ) {
 	#ifdef DEBUG
-    printf( "PanelScrollText::affiche( (string*)\"");
+	cout << "PanelScrollText::affiche( (string*)\"";
     printf( str->c_str() );
     printf( "\" )");
     printf( "\n" );
@@ -315,8 +315,9 @@ void PanelScrollText::displayGL() {
 	WindowsManager& wm = WindowsManager::getInstance();
 	cout << "  PC displayGL ... fenetre id : " << getID() << endl;
 	cout << "  PC:" << "-------------------" << endl;
-	cout << "  PC:" << getX() <<", "<< getY() <<", "<< getDX() <<", "<< getDY() << endl;
+	cout << "  PC:" << getX() <<", "<< getY() <<", "<< getDX() <<"x"<< getDY() << endl;
 	cout << "  PC:" << wm.getWidth() <<", "<< wm.getHeight() << endl;
+	cout << "  PC: no ligne currrent : " << currentLine << endl;
 #endif
 	
 }

@@ -25,6 +25,11 @@
 
 
 //#define DEBUG
+//#define DEBUG_GEN
+
+#ifdef DEBUG
+	#define DEBUG_GEN
+#endif
 
 #ifdef DEBUG_WM
 #	define DEBUG
@@ -131,6 +136,9 @@ PFNGLBlendFuncSeparate glBlendFuncSeparate = NULL;
 */
 //  ---------------------------------------------------------------------------
 
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 #ifdef _DEBUG
     static void CheckGLError(const char *file, int line, const char *func)
     {
@@ -157,125 +165,32 @@ PFNGLBlendFuncSeparate glBlendFuncSeparate = NULL;
 GLuint TextUtil::GenFont( CTexFont *_Font )	{
 	return GenFont( _Font, (color32) 0xffffffff );
 }
-//  ---------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 TextUtil::TextUtil()
 {
     m_tab_size = 40;
 }
-
-
-GLuint TextUtil::GenFont( CTexFont *_Font, color32 color)
-{
-//#define DEBUG
-	//cout << "TextUtil::GenFont()" << endl;
-	//m_tab_size = 40;
-	if ( _Font->m_TexID != 0 )		return _Font->m_TexID;
-	
-    GLuint TexID = 0;
-    glGenTextures(1, &(_Font->m_TexID) );
-    #ifdef DEBUG
-	cout << "TextUtil::GenFont() Generate Texture ID : " << _Font->m_TexID << endl;;
-	#endif
-	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
-
-    glBindTexture(GL_TEXTURE_2D, _Font->m_TexID);
-    glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
-    glPixelStorei(GL_UNPACK_LSB_FIRST, GL_FALSE);
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-	/*    
-    */
-    float a, r, v, b;
-
-    r =  (float)((unsigned)(color&0xff000000) >>24 )/255.0;
-    v =  (float)((unsigned)(color&0x00ff0000) >>16 )/255.0;
-    b =  (float)((unsigned)(color&0x0000ff00) >>8  )/255.0;
-    a =  (float)((unsigned)(color&0x000000ff) >>0  )/255.0;
-	    
-    #ifdef DEBUG
-	cout << "TextUtil::GenFont() Generate Texture ID : ";
-	cout << "color=" << color << endl;;
-	    
-	cout << "TextUtil::GenFont() Generate Texture ID : ";
-	cout << "a=" << a <<" r=" << r <<" v="<< v <<" b="<< b << endl;;
-    #endif
-        
-    glPixelTransferf(GL_ALPHA_SCALE, 1);
-    glPixelTransferf(GL_ALPHA_BIAS, 0);
-    glPixelTransferf(GL_RED_BIAS, 1);
-    glPixelTransferf(GL_GREEN_BIAS, 1);
-    glPixelTransferf(GL_BLUE_BIAS, 1 );
-    /*
-    glPixelTransferf(GL_ALPHA_SCALE, 1);
-    glPixelTransferi(GL_ALPHA_BIAS, (color&0xff000000) >>24 );
-    glPixelTransferi(GL_RED_BIAS,	(color&0x00ff0000) >>16);
-    glPixelTransferi(GL_GREEN_BIAS,	(color&0x0000ff00) >>8);
-    glPixelTransferi(GL_BLUE_BIAS,	(color&0x000000ff) >>0);
-   	*/
-    
-    glTexImage2D(GL_TEXTURE_2D, 0, 4, _Font->m_TexWidth, _Font->m_TexHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, _Font->m_TexBytes);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    
-    glPixelTransferf(GL_ALPHA_SCALE, 1);
-    glPixelTransferf(GL_ALPHA_BIAS, 0);
-    glPixelTransferf(GL_RED_BIAS,   0);
-    glPixelTransferf(GL_GREEN_BIAS, 0);
-    glPixelTransferf(GL_BLUE_BIAS,  0);
-    
-    
-	glPixelStorei(GL_UNPACK_ALIGNMENT,1);
-	glPixelStorei(GL_PACK_ALIGNMENT,1);
-
-    return _Font->m_TexID;
-#undef DEBUG
-}
-
-void TextUtil::BindFont(const CTexFont *_Font)	{
-	BindFont( _Font, 0 );
-}
-
-void TextUtil::BindFont(const CTexFont *_Font, int slot)	{
-	glActiveTexture(GL_TEXTURE0 + slot);
-	//cout << "Bind texture slot : "<< slot << endl;
-    glBindTexture(GL_TEXTURE_2D, _Font->m_TexID);
-}
-
-void TextUtil::UnbindFont( int slot)	{
-    glBindTexture(GL_TEXTURE_2D, slot);
-}
-
-void TextUtil::UnbindFont()	{
-	UnbindFont( 0 );
-}
-
-
-
-//  ---------------------------------------------------------------------------
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void *TextUtil::NewTextObj()
 {
     return new CTextObj;
 }
-
-//  ---------------------------------------------------------------------------
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void TextUtil::DeleteTextObj(void *_TextObj)
 {
     //assert(_TextObj!=NULL);
     if (_TextObj!=NULL)
         delete static_cast<CTextObj *>(_TextObj);
 }
-
-//  ---------------------------------------------------------------------------
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines, CTexFont *_Font, int _Sep, int _BgWidth)
 {
 //#define DEBUG
@@ -362,9 +277,11 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
             TextObj->m_TextUVs.push_back(Vec2(_Font->m_CharU1[ch], _Font->m_CharV1[ch]));
             TextObj->m_TextUVs.push_back(Vec2(_Font->m_CharU0[ch], _Font->m_CharV1[ch]));
 
+           	//_LineColors = 0x0fFF00FF;
             if( _LineColors!=NULL )
             {
-            	LineColor = 0xffFF00FF;
+            	//LineColor = 0xffFF00FF;
+            	LineColor = 0;
                 TextObj->m_Colors.push_back(LineColor);
                 TextObj->m_Colors.push_back(LineColor);
                 TextObj->m_Colors.push_back(LineColor);
@@ -373,7 +290,8 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
                 TextObj->m_Colors.push_back(LineColor);
             }
             else	{
-            	LineColor = 0xffFF00FF;
+            	//LineColor = 0xffFF00FF;
+            	LineColor = 0;
                 TextObj->m_Colors.push_back(LineColor);
                 TextObj->m_Colors.push_back(LineColor);
                 TextObj->m_Colors.push_back(LineColor);
@@ -384,6 +302,7 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
 
             x = x1;
         }
+        //_BgWidth = 1;
         if( _BgWidth>0 )
         {
             TextObj->m_BgVerts.push_back(Vec2(-1        , y ));
@@ -397,6 +316,7 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
             {
 				color32 LineBgColor = (_LineBgColors[Line]&0xff00ff00) | GLubyte(_LineBgColors[Line]>>16) | (GLubyte(_LineBgColors[Line])<<16);
                 LineBgColor = 0xffFFff00;
+                LineBgColor = 0x000000FF;
                 TextObj->m_BgColors.push_back(LineBgColor);
                 TextObj->m_BgColors.push_back(LineBgColor);
                 TextObj->m_BgColors.push_back(LineBgColor);
@@ -406,7 +326,8 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
             }
            	else
            	{
-                color32 LineBgColor = 0xffFFff00;
+                //color32 LineBgColor = 0xffFFff00;
+                color32 LineBgColor = 0x000000FF;
                 TextObj->m_BgColors.push_back(LineBgColor);
                 TextObj->m_BgColors.push_back(LineBgColor);
                 TextObj->m_BgColors.push_back(LineBgColor);
@@ -418,9 +339,9 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
     }
 //#undef DEBUG
 }
-
-//  ---------------------------------------------------------------------------
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 int TextUtil::lenght(void *_TextObj, const std::string *_TextLines, CTexFont *_Font )
 //, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines, CTexFont *_Font, int _Sep, int _BgWidth)
 {
@@ -454,7 +375,9 @@ int TextUtil::lenght(void *_TextObj, const std::string *_TextLines, CTexFont *_F
     
     return x;
 }
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 int TextUtil::lenght(void *_TextObj, const std::string *_TextLines, CTexFont *_Font, int nbChar )
 //, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines, CTexFont *_Font, int _Sep, int _BgWidth)
 {
@@ -488,39 +411,20 @@ int TextUtil::lenght(void *_TextObj, const std::string *_TextLines, CTexFont *_F
     
     return x;
 }
-
-
-//  ---------------------------------------------------------------------------
-
-void TextUtil::setTabSize( int t ) {
-	#ifdef DEBUG
-	cout << "TextUtil::setTabSize() : " << t << endl;
-	#endif
-	m_tab_size = t;
-}
-
-
-//  ---------------------------------------------------------------------------
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void TextUtil::BeginGL()	{
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
-
-	/*	
-	int width  = WindowsManager::getInstance().getWidth();
-	int height = WindowsManager::getInstance().getHeight();
-	ChangeViewport( 0, 0, width, height, 0, 0 );
-	*/
-  	
 
     glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
     glDisable(GL_CULL_FACE);
 }
-
-
-//  ---------------------------------------------------------------------------
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void TextUtil::EndGL()	{
    glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
@@ -528,10 +432,9 @@ void TextUtil::EndGL()	{
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 }
-
-
-//  ---------------------------------------------------------------------------
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void TextUtil::DrawText(void *_TextObj, float angle, int _X, int _Y, color32 _Color, color32 _BgColor)
 {
     //assert(m_Drawing==true);
@@ -542,15 +445,7 @@ void TextUtil::DrawText(void *_TextObj, float angle, int _X, int _Y, color32 _Co
    	std::cout << "TextUtil::DrawText( " << _TextObj <<", "<< _X <<", "<< _Y <<", "<< _Color <<", "<< _BgColor <<" )" << std::endl;
 #endif
 
-	/*
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
 
-	int width  = WindowsManager::getInstance().getWidth();
-	int height = WindowsManager::getInstance().getHeight();
-	ChangeViewport( 0, 0, width, height, 0, 0 );
-
-  	*/
     CTextObj *TextObj = static_cast<CTextObj *>(_TextObj);
 
 #ifdef DEBUG
@@ -574,6 +469,7 @@ void TextUtil::DrawText(void *_TextObj, float angle, int _X, int _Y, color32 _Co
     glRotatef(angle,0,0,1);
     
     //glTranslatef((GLfloat)0.1, (GLfloat)0.1, 0);
+    _BgColor = 0x80808080;
     glEnableClientState(GL_VERTEX_ARRAY);
     if( (_BgColor!=0 || TextObj->m_BgColors.size()==TextObj->m_BgVerts.size()) && TextObj->m_BgVerts.size()>=4 )
     {
@@ -620,7 +516,7 @@ void TextUtil::DrawText(void *_TextObj, float angle, int _X, int _Y, color32 _Co
         glDrawArrays(GL_TRIANGLES, 0, (int)TextObj->m_TextVerts.size());
     }
     
-	glColor4ub( 255, 255, 255, 255 );
+	//glColor4ub( 255, 255, 255, 255 );
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);
@@ -634,16 +530,16 @@ void TextUtil::DrawText(void *_TextObj, float angle, int _X, int _Y, color32 _Co
 	*/
 	#undef DEBUG
 }
-//  ---------------------------------------------------------------------------
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void TextUtil::DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 _BgColor)
 {
 	DrawText(_TextObj, 0.0, _X, _Y, _Color, _BgColor);
 }
-
-
-//  ---------------------------------------------------------------------------
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void TextUtil::ChangeViewport(int _X0, int _Y0, int _Width, int _Height, int _OffsetX, int _OffsetY)	{
     if( _Width>0 && _Height>0 )
     {
@@ -663,5 +559,116 @@ void TextUtil::ChangeViewport(int _X0, int _Y0, int _Width, int _Height, int _Of
     }
 }
 
-//  ---------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+GLuint TextUtil::GenFont( CTexFont *_Font, color32 color)
+{
+	#ifdef DEBUG_GEN
+	cout << "TextUtil::GenFont()" << endl;
+	#endif
+	//m_tab_size = 40;
+	if ( _Font->m_TexID != 0 )		return _Font->m_TexID;
+	
+    GLuint TexID = 0;
+    glGenTextures(1, &(_Font->m_TexID) );
+    #ifdef DEBUG_GEN
+	cout << "  Texture ID : " << _Font->m_TexID << endl;;
+	#endif
+	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_FALSE);
+
+    glBindTexture(GL_TEXTURE_2D, _Font->m_TexID);
+    glPixelStorei(GL_UNPACK_SWAP_BYTES, GL_FALSE);
+    glPixelStorei(GL_UNPACK_LSB_FIRST, GL_FALSE);
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	/*    
+    */
+    float a, r, v, b;
+
+    r =  (float)((unsigned)(color&0xff000000) >>24 )/255.0;
+    v =  (float)((unsigned)(color&0x00ff0000) >>16 )/255.0;
+    b =  (float)((unsigned)(color&0x0000ff00) >>8  )/255.0;
+    a =  (float)((unsigned)(color&0x000000ff) >>0  )/255.0;
+	    
+    #ifdef DEBUG_GEN
+	cout << "  Color=" << color;
+	cout << " :  a=" << a <<", r=" << r <<", v="<< v <<", b="<< b << endl;;
+    #endif
+        
+    glPixelTransferf(GL_ALPHA_SCALE, 1);
+    glPixelTransferf(GL_ALPHA_BIAS, 0);
+    glPixelTransferf(GL_RED_BIAS, 1);
+    glPixelTransferf(GL_GREEN_BIAS, 1);
+    glPixelTransferf(GL_BLUE_BIAS, 1 );
+    /*
+    glPixelTransferf(GL_ALPHA_SCALE, 1);
+    glPixelTransferi(GL_ALPHA_BIAS, (color&0xff000000) >>24 );
+    glPixelTransferi(GL_RED_BIAS,	(color&0x00ff0000) >>16);
+    glPixelTransferi(GL_GREEN_BIAS,	(color&0x0000ff00) >>8);
+    glPixelTransferi(GL_BLUE_BIAS,	(color&0x000000ff) >>0);
+   	*/
+    
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, _Font->m_TexWidth, _Font->m_TexHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, _Font->m_TexBytes);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    glPixelTransferf(GL_ALPHA_SCALE, 1);
+    glPixelTransferf(GL_ALPHA_BIAS, 0);
+    glPixelTransferf(GL_RED_BIAS,   0);
+    glPixelTransferf(GL_GREEN_BIAS, 0);
+    glPixelTransferf(GL_BLUE_BIAS,  0);
+    
+    
+	glPixelStorei(GL_UNPACK_ALIGNMENT,1);
+	glPixelStorei(GL_PACK_ALIGNMENT,1);
+
+    return _Font->m_TexID;
+//#undef DEBUG
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void TextUtil::BindFont(const CTexFont *_Font)	{
+	BindFont( _Font, 0 );
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void TextUtil::BindFont(const CTexFont *_Font, int slot)	{
+	glActiveTexture(GL_TEXTURE0 + slot);
+	//cout << "Bind texture slot : "<< slot << endl;
+    glBindTexture(GL_TEXTURE_2D, _Font->m_TexID);
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void TextUtil::UnbindFont( int slot)	{
+    glBindTexture(GL_TEXTURE_2D, slot);
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void TextUtil::UnbindFont()	{
+	UnbindFont( 0 );
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void TextUtil::setTabSize( int t ) {
+	#ifdef DEBUG
+	cout << "TextUtil::setTabSize() : " << t << endl;
+	#endif
+	m_tab_size = t;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 

@@ -7,8 +7,6 @@
 
 
 #include "wm.h"
-//#include "../include/WindowsManager.h"
-#include "Font.h"
 #include "InternalFonts.h"
 #include "ResourceManager.h"
 #include "PanelEditText.h"
@@ -32,7 +30,47 @@ using namespace std;
 
 //void * cTextObj;
 
+unsigned	nb_tab = 0;
+string		sTab;
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void log_tab( bool b)
+{
+    if ( b )            nb_tab++;
+    else                nb_tab--;
+    if ( nb_tab<0 )     nb_tab = 0;
+    if ( nb_tab>7 )		nb_tab = 7;
+    
+    sTab = "";
+    for( int i=0; i<nb_tab; i++ )
+    {
+        sTab = sTab + "|  ";
+    }
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void log( char* chaine )
+{
+    string aff = sTab + string(chaine);
+    
+    printf( "libwmcgl : %s\n", aff.c_str() );
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void logf(char *fmt, ...)
+{
+    char chaine[255];
+    va_list arglist;
 
+    va_start( arglist, fmt );
+    vsprintf( chaine, fmt, arglist );
+    va_end( arglist );
+    
+    log((char*)chaine);
+}
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
@@ -74,9 +112,11 @@ void WindowsManager::init()	{
 	xm_old = -1;	
 	ym_old = -1;	
 	
+	wmcglGenerateDefaultFonts();
+
+	/*
 	fonts = new _Font();
 
-	wmcglGenerateDefaultFonts();
 	cTextObj = textUtil.NewTextObj();
 	textUtil.setTabSize(40);
 	
@@ -96,12 +136,12 @@ void WindowsManager::init()	{
 	str[8] = "Bonjour c'est un essai de texte";
 	str[9] = "Sur 10 lignes ...";
 
-//void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines, const CTexFont *_Font, int _Sep, int _BgWidth)
+	//void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines, const CTexFont *_Font, int _Sep, int _BgWidth)
 	//twFont.BuildText( cTextObj, &str, 0xffffffff, 0xffffffff, 1,  DefaultNormalFont, int _Sep, int _BgWidth)
 	color32 color		= COLOR32_WHITE;
 	color32 color_bg	= COLOR32_WHITE;
 	//textUtil.BuildText( cTextObj, str, &color, &color_bg, 10,  DefaultNormalFont, 2, 100);
-
+	*/
 
 	panelMove           = NULL;
 	panelCapture        = NULL;
@@ -120,45 +160,7 @@ void WindowsManager::init()	{
 	panelCallBackKeys.clear();
 	
 	sTab = "";
-	nb_tab = 0;
-}
-//--------------------------------------------------------------------------------------------------------------------
-//
-//--------------------------------------------------------------------------------------------------------------------
-void WindowsManager::log_tab( bool b)
-{
-    if ( b )            nb_tab++;
-    else                nb_tab--;
-    if ( nb_tab<0 )     nb_tab = 0;
-    
-    sTab = "";
-    for( int i=0; i<nb_tab; i++ )
-    {
-        sTab = sTab + "|  ";
-    }
-}
-//--------------------------------------------------------------------------------------------------------------------
-//
-//--------------------------------------------------------------------------------------------------------------------
-void WindowsManager::log( char* chaine )
-{
-    string aff = sTab + string(chaine);
-    
-    printf( "libwmcgl : %s\n", aff.c_str() );
-}
-//--------------------------------------------------------------------------------------------------------------------
-//
-//--------------------------------------------------------------------------------------------------------------------
-void WindowsManager::logf(char *fmt, ...)
-{
-    char chaine[255];
-    va_list arglist;
 
-    va_start( arglist, fmt );
-    vsprintf( chaine, fmt, arglist );
-    va_end( arglist );
-    
-    log((char*)chaine);
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -269,7 +271,7 @@ void WindowsManager::sup( Panel * p )	{
 	int id = p->getID();
 	
 	for ( int i=0; i<nb; i++ )	{
-		if ( childs[i]->getID() == id )	{
+		if ( childs[i] == p )	{
 			childs.erase( childs.begin()+i );
 			break;
 		}
@@ -656,7 +658,9 @@ void WindowsManager::ChangeViewport(int _X0, int _Y0, int _Width, int _Height, i
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::displayGL()	{
-	//cout << "WindowsManager::displayGL()" << endl;
+	#ifdef DEBUG_DISPLAY
+	cout << "WindowsManager::displayGL()" << endl;
+	#endif
 	//return;	
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
@@ -903,8 +907,21 @@ void WindowsManager::motionFunc(int x, int y)	{
 //--------------------------------------------------------------------------------------------------------------------
 bool WindowsManager::isPanelFocus(Panel*p)
 {
+	if ( panelFocus && p == panelFocus )			return true;
+    return false;
+
+/*
     if ( typeid(*p) == typeid(PanelEditText) )      return true;
     if ( typeid(*p) == typeid(PanelConsole) )       return true;
+    return false;
+*/
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+bool WindowsManager::isPanelCapture(Panel*p)
+{
+	if ( panelCapture && p == panelCapture )			return true;
     return false;
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -1013,8 +1030,9 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	if ( button == 2 && state == 0 )	{
     	panelMotionRight = p;
     	bMotionRight = true;
-		if ( p->getCanMove() == false )		panelMove = getParentRoot( p );
-		else								panelMove = p;
+		if ( p != NULL && p->getCanMove() == false )		panelMove = getParentRoot( p );
+		else												panelMove = p;
+		
 		if ( panelMove != NULL )	{
 			bMovePanel = true;
 			onTop( panelMove );
@@ -1033,6 +1051,7 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 		if ( panelCapture )			panelCapture->releaseRight( x, y );
     	//cout << " releaseRight : "<< panelCapture->getID() << endl;
 	}
+	// Roulette vers le haut
 	else 
 	if ( button == 3 && state == 0 )	{
 	#ifdef DEBUG
@@ -1041,6 +1060,7 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 		if ( p )	p->wheelUp( x, y );
 		if ( p != NULL && p->getParent() != NULL )   p->getParent()->wheelUp( x, y );
 	}
+	// Roulette vers le Bas
 	else
 	if ( button == 4 && state == 0 )	{
 	#ifdef DEBUG

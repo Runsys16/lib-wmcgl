@@ -18,6 +18,7 @@ class PanelText : public Panel	{
 		enum ALIGN { LEFT, RIGHT, CENTER };
 
 
+							~PanelText();
 							PanelText();
 							PanelText( std::string );
 							PanelText( std::string, FONT );
@@ -36,6 +37,7 @@ class PanelText : public Panel	{
 		int					getTextLenght(int);
 
 		void 				changeText( char* );
+		void 				changeText( char*, bool );
 		void 				changeText( char*, FONT );
 		void 				changeText( std::string );
 		void 				changeText( std::string, FONT );

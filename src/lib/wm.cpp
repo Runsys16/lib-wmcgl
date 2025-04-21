@@ -679,15 +679,18 @@ void WindowsManager::displayGL()	{
 	glEnable(GL_BLEND);		//Color.black.bind();
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+
+
 	int nb = childs.size();
-	
 	for( int i=0; i<nb; i++ )	{
 		childs[i]->displayGL();
 	}
-	
+
+//#define 	DEBUG_DISPLAY
 	#ifdef DEBUG_DISPLAY
 	cout << "WindowsManager::displayGL()  Draw Texte" << endl;
 	#endif
+//#undef DEBUG_DISPLAY
 
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);		//Color.black.bind();

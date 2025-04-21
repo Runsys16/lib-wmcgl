@@ -8,6 +8,7 @@ OBJDIR		= ./build/
 BINDIR		= ./bin/
 INSTALLDIR	= /usr/lib/
 INCLUDEDIR	= /usr/include/
+IMAGESDIR	= /usr/share/wmcgl/images/
 
 SRCDIR		= ./src/lib/
 
@@ -61,6 +62,9 @@ sample:
 	cd src/sample-00;make clean;make
 	cd src/sample-01;make clean;make
 	cd src/sample-02;make clean;make
+	cd src/sample-03;make clean;make
+	cd src/sample-04;make clean;make
+	cd src/sample-05;make clean;make
 
 $(BIN): $(OBJ)
 	@echo ---------   edition des liens library $@
@@ -73,6 +77,10 @@ install:
 	$(LN) $(INSTALLDIR)$(BINNAME).$(VER) $(INSTALLDIR)$(BINNAME)
 	@./src/build_include
 	$(CP) ./include/WindowsManager.h $(INCLUDEDIR)
+	
+	# IMAGESDIR est un lien sur lib-wmcgl/images
+	#$(CP) ./images/* $(IMAGESDIR)
+
 	#mkdir /usr/share/wmcgl
 	#ln -s /home/rene/programmes/opengl/lib-wmcgl/images /usr/share/wmcgl/images
 
@@ -139,7 +147,7 @@ install:
 #00#
 #00#def test_file( filename, dirname="./", includes = [], ext_dirname = "" ):
 #00#	try:
-#00#		f = open( dirname+ext_dirname+filename )
+#00#		f = open( dirname+ext_dirname+filename, errors='ignore' )
 #00#	except:
 #00#		print( "Erreur d'ouverture de : \"%s\"" % (dirname+ext_dirname+filename) )
 #00#		sys.exc_info()
@@ -191,15 +199,18 @@ install:
 #00#	#----------------------------------------------------
 #00#	# print for makefile
 #00#	#----------------------------------------------------
-#00#	print( "$(OBJDIR)%s.o :   $(SRCDIR)%s.cpp " % (name, name) ) ,
+#00#	ligne = "$(OBJDIR)%s.o :   $(SRCDIR)%s.cpp " % (name, name)
 #00#
 #00#	for include in includes:
-#00#		print( "$(SRCDIR)%s " % include ) ,
+#00#		ligne = ligne + "$(SRCDIR)%s " % include
+#00#		#print( "$(SRCDIR)%s " % include ) ,
 #00#
-#00#	print
-#00#	print (	"\t@echo ---------   compilation de $@" )
+#00#
+#00#	print( ligne )
+#00#	print()
+#00#	print(	"\t@echo ---------   compilation de $@" )
 #00#	print( "\t$(CPP) -c $< -o $@  $(CFLAGS)" )
-#00#	print
+#00#	print()
 #00#	
 #00#sys.exit(0)
 #00#
@@ -298,6 +309,11 @@ $(OBJDIR)PanelScrollY.o :   $(SRCDIR)PanelScrollY.cpp $(SRCDIR)PanelScrollY.h $(
 	$(CPP) -c $< -o $@  $(CFLAGS)
 
 $(OBJDIR)PanelSimple.o :   $(SRCDIR)PanelSimple.cpp $(SRCDIR)PanelSimple.h $(SRCDIR)Panel.h $(SRCDIR)Constante.h $(SRCDIR)PanelText.h $(SRCDIR)wm.h $(SRCDIR)TextUtil.h $(SRCDIR)InternalFonts.h $(SRCDIR)ImageTools.h $(SRCDIR)Mathlib.h $(SRCDIR)Texture2D.h $(SRCDIR)Texture.h $(SRCDIR)TrueType.h $(SRCDIR)PanelTextOmbre.h $(SRCDIR)PanelButton.h $(SRCDIR)PanelCheckBox.h $(SRCDIR)PanelWindow.h $(SRCDIR)ResourceManager.h $(SRCDIR)Singleton.h $(SRCDIR)Shader.h 
+
+	@echo ---------   compilation de $@
+	$(CPP) -c $< -o $@  $(CFLAGS)
+
+$(OBJDIR)PanelSpinEditText.o :   $(SRCDIR)PanelSpinEditText.cpp $(SRCDIR)PanelSpinEditText.h $(SRCDIR)PanelEditText.h $(SRCDIR)PanelSimple.h $(SRCDIR)Panel.h $(SRCDIR)Constante.h $(SRCDIR)PanelText.h $(SRCDIR)wm.h $(SRCDIR)TextUtil.h $(SRCDIR)InternalFonts.h $(SRCDIR)ImageTools.h $(SRCDIR)Mathlib.h $(SRCDIR)Texture2D.h $(SRCDIR)Texture.h $(SRCDIR)TrueType.h $(SRCDIR)PanelTextOmbre.h 
 
 	@echo ---------   compilation de $@
 	$(CPP) -c $< -o $@  $(CFLAGS)

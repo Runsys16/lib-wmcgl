@@ -184,9 +184,27 @@ void *TextUtil::NewTextObj()
 //--------------------------------------------------------------------------------------------------------------------
 void TextUtil::DeleteTextObj(void *_TextObj)
 {
-    //assert(_TextObj!=NULL);
-    if (_TextObj!=NULL)
-        delete static_cast<CTextObj *>(_TextObj);
+	//assert(_TextObj!=NULL);
+	//cout << "TextUtil  supression pTextGL !!!" << endl;
+	if (_TextObj!=NULL)	
+	{
+		CTextObj * p = static_cast<CTextObj *>(_TextObj);
+		int i = p->m_TextVerts.size();
+		//cout << "!  Supression Vertex "<< i << endl;
+		if ( i<0 || i>10000 )			return; 		//BUG !! 
+		p->m_TextVerts.clear();
+		//cout << "!  Supression UV" << endl;
+		p->m_TextUVs.clear();
+		//cout << "!  Supression Vertex Ng" << endl;
+		p->m_BgVerts.clear();
+		//cout << "!  Supression Color" << endl;
+		p->m_Colors.clear();
+		//cout << "!  Supression Color Bg" << endl;
+		p->m_BgColors.clear();
+		
+		delete p;
+	}
+
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -227,7 +245,7 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
     TextObj->m_BgColors.resize(0);
 
     if ( m_tab_size < 0 )	m_tab_size = 40;
-    if ( m_tab_size > 100 )	m_tab_size = 40;
+    if ( m_tab_size > 600 )	m_tab_size = 40;
 
     int x, x1, y, y1, i, Len;
     unsigned char ch;

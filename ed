@@ -1,5 +1,4 @@
 #!/bin/bash
-#!/bin/bash
 #----------------------------------------------------------------------------------------------------
 function getPathGrep() {
 	local PATH_GREP=$(dirname $1)
@@ -17,9 +16,9 @@ function get_window_id() {
 	local WINDOW_ID=""
 	for n in $*
 	do
-		local FILENAME=$(basename $n)" ("
+		local FILE_GREP=$(basename $n)" ("
 		local PATH_GREP=$(getPathGrep $n)
-		WINDOW_ID=$(wmctrl -l | grep "$PATH_GREP"| grep "gedit" | grep "$FILENAME" | cut -f1 -d" ")
+		WINDOW_ID=$(wmctrl -l | grep "$PATH_GREP"| grep "gedit" | grep "$FILE_GREP" | cut -f1 -d" ")
 		if [ "$WINDOW_ID" != "" ]
 		then
 			break
@@ -40,35 +39,49 @@ function wait_id()	{
 	while [ "$ID" == "" ]
 	do
 		ID=$(get_window_id $*)
+		#echo "ID : "$ID
 	done
 }
 #----------------------------------------------------------------------------------------------------
 function isOpen()	{
+	#echo "isOpen()"
 	for i in $*
 	do
 		local FILE_GREP=$(basename $i)" ("
 		local PATH_GREP=$(getPathGrep $i)
 
-		local OUVERT=$(wmctrl -l | grep "$PATH_GREP" | grep "gedit" | grep "$FILE_GREP" )
+		local OUVERT=$(wmctrl -l | grep "gedit" | grep "$PATH_GREP" | grep "$FILE_GREP" )
 		if [ "$OUVERT" != "" ]
 		then
 			echo $OUVERT
 			return
 		fi
 	done
+	#echo "Non ouvert"
 	echo ""
+}
+#----------------------------------------------------------------------------------------------------
+function debug()	{
+	for i in $*
+	do
+		local FILE_GREP=$(basename $i)" ("
+		local PATH_GREP=$(getPathGrep $i)
+		echo FILE_GREP $FILE_GREP
+		echo PAHT_GREP $PATH_GREP
+	done
 }
 #----------------------------------------------------------------------------------------------------
 function open()	{
 	
 	local OPEN=$(isOpen $*)
+	echo "OPEN="$OPEN
 	if [ "$OPEN" == "" ]
 	then
-		echo "  Creation de la fenetre d'edition" ... $SIZE
+		echo Edition ... $SIZE
 		edition $* &>/dev/null
 		wait_id $*
 		wmctrl -i -r $(get_window_id $*) -e $SIZE
-		#echo "  "wmctrl -i -r $(get_window_id $*) -e $SIZE
+		echo wmctrl -i -r $(get_window_id $*) -e $SIZE
 		return
 	fi
 	echo $(isOpen $*)
@@ -78,7 +91,7 @@ function open()	{
 #----------------------------------------------------------------------------------------------------
 STR0="./src/lib/*.cpp"
 STR1="./src/lib/*.h"
-STR2="ed makefile src/depend.py src/build_makefile src/build_include src/makefile.base"
+STR2="./ed ./makefile ./src/depend.py ./src/build_makefile ./src/build_include ./src/makefile.base"
 #-----------------------------------------
 PATH_IDENT="programmes/opengl/lib-wmcgl"
 #----------------------------------------------------------------------------------------------------
@@ -99,9 +112,11 @@ echo "  total        SCREEN       calculé"
 echo $SCREEN_SIZE"     "$SCREEN_WIDTH"x"$SCREEN_HEIGHT"     "$WIDTH"x"$HEIGHT
 echo ------------------------------------------------------------
 #exit
-#----------------------------------------------------------------------------------------------------
 POSX=0
 POSY=0
+#----------------------------------------------------------------------------------------------------
+# Fichiers .cpp
+#----------------------------------------------------------------------------------------------------
 case "$(hostname)" in
 	"poste-002")
 		POSX=-72
@@ -115,7 +130,8 @@ esac
 SIZE="0,$POSX,$POSY,$WIDTH,$HEIGHT"
 echo "Fenetre STR0 "$SIZE
 open $STR0
-
+#----------------------------------------------------------------------------------------------------
+# Fichiers .h
 #----------------------------------------------------------------------------------------------------
 POSX=$(( $POSX + 100 ))
 case "$(hostname)" in
@@ -128,12 +144,14 @@ esac
 SIZE="0,$POSX,$POSY,$WIDTH,$HEIGHT"
 echo "Fenetre STR1 "$SIZE
 open $STR1
-
+#----------------------------------------------------------------------------------------------------
+# Scripts
 #----------------------------------------------------------------------------------------------------
 case "$(hostname)" in
 	"poste-002")
 		POSX=$(($SCREEN_WIDTH-36))
 		POSY=-64
+		HEIGHT=1080
 		;;
 esac
 

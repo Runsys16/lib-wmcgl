@@ -2,25 +2,33 @@
 #include <stdio.h>
 #include <iostream>
 #include <sstream>
-
+//--------------------------------------------------------------------------------------------------------------------
 #include "PanelText.h"
 #include "wm.h"
 #include "ResourceManager.h"
-
+//--------------------------------------------------------------------------------------------------------------------
 //#define DEBUG
 //#define DEBUG_CONST
-
 #ifdef DEBUG_WM
 #	define DEBUG
 #endif
-
-
+//--------------------------------------------------------------------------------------------------------------------
 #ifdef DEBUG
 #	define DEBUG_CONST
 #endif
-
-
+//--------------------------------------------------------------------------------------------------------------------
 using namespace std;
+//--------------------------------------------------------------------------------------------------------------------
+//
+//						Destructeurs ....
+//
+//--------------------------------------------------------------------------------------------------------------------
+PanelText::~PanelText()	{
+	if ( pTextGL )		{ 
+		//cout << "PanelText  supression pTextGL !!!" << endl;
+		textUtil->DeleteTextObj( pTextGL );  
+	}
+}
 //--------------------------------------------------------------------------------------------------------------------
 //
 //						Constructeurs ....
@@ -39,6 +47,7 @@ PanelText::PanelText( string str )	{
 
 	color = 0xffffffff;
 	changeText( str );
+	buildString();
 }
 //--------------------------------------------------------
 PanelText::PanelText( string str, FONT type )	{
@@ -52,6 +61,7 @@ PanelText::PanelText( string str, FONT type )	{
 	color = 0xffffffff;
 
 	changeText( str, type, true );
+	buildString();
 }
 //--------------------------------------------------------
 PanelText::PanelText( string str, FONT type, int x, int y )	{
@@ -66,6 +76,7 @@ PanelText::PanelText( string str, FONT type, int x, int y )	{
 
 	setPos(x, y);
 	changeText( str, type );
+	buildString();
 }
 //--------------------------------------------------------
 PanelText::PanelText( string str, FONT type, int x, int y, unsigned int c )	{
@@ -79,6 +90,7 @@ PanelText::PanelText( string str, FONT type, int x, int y, unsigned int c )	{
 	color = c;
 	setPos(x, y);
 	changeText( str, type );
+	buildString();
 }
 //--------------------------------------------------------
 PanelText::PanelText( char * cstr, FONT type, int x, int y )	{
@@ -258,6 +270,18 @@ void PanelText::changeText( char* cstr )	{
 	text = cstr;
 	bChange = true;
 }
+
+void PanelText::changeText( char* cstr, bool bBuild )	{
+	#ifdef DEBUG
+	cout << "PanelText::changeText( "<< cstr <<", "<< strFont() <<" )" <<  endl;
+	#endif
+
+	text = cstr;
+
+	if (bBuild)		buildString();
+	bChange = false;
+}
+
 void PanelText::changeText( char* cstr, FONT type )	{
 	#ifdef DEBUG
 	cout << "PanelText::changeText( "<< cstr  <<", "<< strFont() <<" )" << endl;
@@ -397,6 +421,10 @@ void PanelText::buildString()	{
 
 	//if (pTextGL != NULL )	textUtil->DeleteTextObj( pTextGL );
 	textUtil->setTabSize( tabSize );
+	if ( pTextGL )		{ 
+		textUtil->DeleteTextObj( static_cast<TextUtil *>(pTextGL) );  
+		//logf( (char*)"Delete TextUtil" );
+	}
 	pTextGL = textUtil->NewTextObj();
 
 
@@ -407,6 +435,7 @@ void PanelText::buildString()	{
 	case NORMAL_FONT :
 	    {
     	//cout << "NORMAL_FONT : "<< typeFont  << endl;
+    	textUtil->setTabSize( tabSize );
 		textUtil->GenFont( DefaultNormalFont, color );
 		textUtil->BuildText( pTextGL, &(text), &c, &c_bg, 1,  DefaultNormalFont, 0xffffff00, 0xff0000ff);
 		}
@@ -414,6 +443,7 @@ void PanelText::buildString()	{
 	case SMALL_FONT :
 		{
     	//cout << "SMALL_FONT : "<< typeFont << endl;
+    	textUtil->setTabSize( tabSize );
 		textUtil->GenFont( DefaultSmallFont, color );
 		textUtil->BuildText( pTextGL, &(text), &c, &c_bg, 1,  DefaultSmallFont, 0xffffff00, 0xff0000ff);
 		}
@@ -421,6 +451,7 @@ void PanelText::buildString()	{
 	case LARGE_FONT :
 		{
     	//cout << "LARGE_FONT : "<< typeFont << endl;
+    	textUtil->setTabSize( tabSize );
 		textUtil->GenFont( DefaultLargeFont, color );
 		//textUtil->BuildText( pTextGL, &(text), &c, &c_bg, 1,  DefaultLargeFont, 0xffffff00, 0xff0000ff);
 		textUtil->BuildText( pTextGL, &(text), NULL, NULL, 1,  DefaultLargeFont, 0xffffff00, 0xff0000ff);

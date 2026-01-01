@@ -35,7 +35,7 @@ string		sTab;
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
-void log_tab( bool b)
+void log_wm_tab( bool b)
 {
     if ( b )            nb_tab++;
     else                nb_tab--;
@@ -51,7 +51,7 @@ void log_tab( bool b)
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
-void log( char* chaine )
+void log_wm( char* chaine )
 {
     string aff = sTab + string(chaine);
     
@@ -60,7 +60,7 @@ void log( char* chaine )
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
-void logf(char *fmt, ...)
+void logf_wm(char *fmt, ...)
 {
     char chaine[255];
     va_list arglist;
@@ -69,7 +69,7 @@ void logf(char *fmt, ...)
     vsprintf( chaine, fmt, arglist );
     va_end( arglist );
     
-    log((char*)chaine);
+    log_wm((char*)chaine);
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -442,8 +442,8 @@ void WindowsManager::changeFocus( Panel* p )	{
 Panel * WindowsManager::findPanelMouseOver( int xm, int ym)	{
 //#define DEBUG
 	#ifdef DEBUG
-	logf( (char*)"WindowsManager::findPanelMouseOver(%d, %d)", xm, ym );
-	log_tab(true);
+	logf_wm( (char*)"WindowsManager::findPanelMouseOver(%d, %d)", xm, ym );
+	log_wm_tab(true);
 	#endif
 
 	int nb = childs.size();
@@ -451,36 +451,36 @@ Panel * WindowsManager::findPanelMouseOver( int xm, int ym)	{
 	for ( int i=nb-1; i>=0; i-- )	{
 		Panel* p = childs[i];
 		#ifdef DEBUG
-		logf( (char*)"Appel de isMouseOver childs[%d] \"%s\"  ID=%d", i, p->getExtraString().c_str(), p->getID() );
-	    log_tab(true);
+		logf_wm( (char*)"Appel de isMouseOver childs[%d] \"%s\"  ID=%d", i, p->getExtraString().c_str(), p->getID() );
+	    log_wm_tab(true);
 		#endif
 
 		Panel* r = p->isMouseOver( xm, ym );
 		if ( r && !r->isVisible() )		r = NULL;
 
 	    #ifdef DEBUG
-	    log_tab(false);
+	    log_wm_tab(false);
 	    #endif
 		if ( r != NULL )	{
 			//if ( p->getID() < 9000 )	{
 				#ifdef DEBUG
-				logf( (char*)"OK \"%s\"  ID=%d", r->getExtraString().c_str(), r->getID() );
-            	log_tab(false);
-            	logf( (char*)"WindowsManager::findPanelMouseOver(%d, %d)", xm, ym );
+				logf_wm( (char*)"OK \"%s\"  ID=%d", r->getExtraString().c_str(), r->getID() );
+            	log_wm_tab(false);
+            	logf_wm( (char*)"WindowsManager::findPanelMouseOver(%d, %d)", xm, ym );
 				#endif
 				return r;
 			//}
 		}
 
 		#ifdef DEBUG
-		logf( (char*)"NOK childs[%d] \"%s\"  ID=%d", i, p->getExtraString().c_str(), p->getID() );
+		logf_wm( (char*)"NOK childs[%d] \"%s\"  ID=%d", i, p->getExtraString().c_str(), p->getID() );
 		#endif
 	}
 	
 	#ifdef DEBUG
-    logf( (char*)"NOK");
-    log_tab(false);
-	logf( (char*)"WindowsManager::findPanelMouseOver(%d, %d)", xm, ym );
+    logf_wm( (char*)"NOK");
+    log_wm_tab(false);
+	logf_wm( (char*)"WindowsManager::findPanelMouseOver(%d, %d)", xm, ym );
 	#endif
 	return NULL;
 #undef DEBUG
@@ -557,6 +557,7 @@ void WindowsManager::debug( bool b )	{
 	for (int i=0; i< nb; i++ )	{
 		childs[i]->debug( b );
 	}
+	if (b)		display_panel();
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -588,30 +589,20 @@ void WindowsManager::sup_call_back_keyboard( Panel * p )	{
 	{
 	    if ( p == panelCallBackKeys[i] )
 	    {
-	        //cout << "sup_call_back_keyboard() panel trouve... SUPPRESSION" << endl;
 	        panelCallBackKeys[i] = NULL;
 	        panelCallBackKeys.erase(panelCallBackKeys.begin()+i);
 	        return;
 	    }
 	}
-    
-    //cout << "sup_call_back_keyboard() [ERREUR] panel n existe pas..." << endl;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
 bool WindowsManager::is_call_back_keyboard( Panel * p )	{
-    //cout << "is_call_back_keyboard() Callback nb panel : "<< panelCallBackKeys.size() << endl;
 	for( int i=0; i<panelCallBackKeys.size(); i++) 
 	{
-	    if ( p == panelCallBackKeys[i] )
-	    {
-	        //cout << "panel trouve..." << endl;
-	        return true;
-	    }
+	    if ( p == panelCallBackKeys[i] )	        return true;
 	}
-    
-    //cout << "is_call_back_keyboard() [ERREUR] panel non trouve..." << endl;
     return false;
 }
 //------------------------------------------------------------
@@ -724,8 +715,8 @@ void WindowsManager::passiveMotionFunc(int x, int y)	{
     mouseX = x;
     mouseY = y;
 	#ifdef DEBUG
-    logf( (char*)"WindowsManager::passiveMotionFunc(%d, %d)", x, y );
-    //log_tab(true);
+    logf_wm( (char*)"WindowsManager::passiveMotionFunc(%d, %d)", x, y );
+    //log_wm_tab(true);
     #endif
 //#undef DEBUG
 	Panel * p = findPanelMouseOver(x, y);
@@ -759,19 +750,342 @@ void WindowsManager::passiveMotionFunc(int x, int y)	{
 	if ( !bOver )   	            glutSetCursor(0);
 	
 	
-    log_tab(false);
 	#ifdef DEBUG
+    log_wm_tab(false);
     if ( p != NULL )
-        logf( (char*)"WindowsManager::passiveMotionFunc() sur ID=%d \"%s\"",p->getID(), p->getExtraString().c_str() );
+        logf_wm( (char*)"WindowsManager::passiveMotionFunc() sur ID=%d \"%s\"",p->getID(), p->getExtraString().c_str() );
     else
-        logf( (char*)"WindowsManager::passiveMotionFunc() NULL" );
+        logf_wm( (char*)"WindowsManager::passiveMotionFunc() NULL" );
     #endif
 //#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
+//static bool bClickLeft=false;
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+bool WindowsManager::isPanelFocus(Panel*p)
+{
+	if ( panelFocus && p == panelFocus )			return true;
+    return false;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+bool WindowsManager::isPanelCapture(Panel*p)
+{
+	if ( panelCapture && p == panelCapture )			return true;
+    return false;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void WindowsManager::motionFuncResizePivot(int x, int y, int deltaX, int deltaY, int pivot)	{
+#ifdef DEBUG
+    if ( panelResize != NULL )
+    	cout << "WindowsManager::motionFuncResize( " << x << ", " << y << " )  ID "<< panelResize->getID() << endl;
+#endif
+//#undef DEBUG
+    	
+	#ifdef DEBUG
+	cout << "WindowsManager::motionFunc( " << x << ", " << y << " )" << endl;
+	cout << "   ID = " << panelResize->getID() << endl;
+	cout << "   getMouseOverBorder=" << panelResize->getMouseOverBorder() << endl;
+    #endif
+    
+            
+    int xx		= panelResize->getPosX();
+    int yy		= panelResize->getPosY();
+    int dxx		= panelResize->getPosDX();
+    int dyy		= panelResize->getPosDY();
+
+    int pos;
+    
+	switch( pivot )
+	{
+    case MOB_UPPER:
+    case MOB_UPPER_RIGHT:
+        yy += deltaY;
+		panelResize->setPosY(yy);
+    	break;
+    case MOB_UPPER_LEFT:
+        yy += deltaY;
+		panelResize->setPosY(yy);
+        xx += deltaX;
+		panelResize->setPosX(xx);
+        break; 
+    case MOB_LEFT:
+    case MOB_BOTTOM_LEFT:
+        xx += deltaX;
+		panelResize->setPosX(xx);
+		break;    	
+    case MOB_BOTTOM:
+    case MOB_BOTTOM_RIGHT:
+        break; 
+	}
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void WindowsManager::motionFuncResize(int x, int y)	{
+#ifdef DEBUG
+    if ( panelResize != NULL )
+    	cout << "WindowsManager::motionFuncResize( " << x << ", " << y << " )  ID "<< panelResize->getID() << endl;
+#endif
+//#undef DEBUG
+    	
+	#ifdef DEBUG
+	cout << "WindowsManager::motionFunc( " << x << ", " << y << " )" << endl;
+	cout << "   ID = " << panelResize->getID() << endl;
+	cout << "   getMouseOverBorder=" << panelResize->getMouseOverBorder() << endl;
+    #endif
+    
+            
+	double	r	= panelResize->getRatio();
+    int		xx	= panelResize->getPosX();
+    int		yy	= panelResize->getPosY();
+    int		dX, dxx;
+    int		dY, dyy;
+    int		dx, dy;
+    int		delta;
+    int		deltaX;
+    int		deltaY;
+    dX	= dxx	= panelResize->getPosDX();
+    dY	= dyy	= panelResize->getPosDY();
+    
+	switch( panelResize->getMouseOverBorder() )
+	{
+	    case MOB_UPPER_LEFT:
+	    	{
+	        dY = y - ym_old;
+	        dyy  -= dY;
+	        dxx =  ((double)dyy * r );
+	        dX -= dxx;
+
+	        panelResize->setPosDY(dyy);
+	        panelResize->setPosDX(dxx );
+	        
+	        motionFuncResizePivot(x, y, dX, dY, MOB_UPPER_LEFT);
+			}
+	        break; 
+	    case MOB_UPPER_RIGHT:
+	    	{
+	        dY = y - ym_old;
+	        dyy  -= dY;
+	        dxx =  ((double)dyy * r );
+	        dX += dxx;
+
+	        panelResize->setPosDY(dyy);
+	        panelResize->setPosDX(dxx );
+	        
+	        motionFuncResizePivot(x, y, dX, dY, MOB_UPPER_RIGHT);
+			}
+	        break; 
+	    case MOB_BOTTOM_LEFT:
+	    	{
+	        dY = y - ym_old;
+	        dyy  += dY;
+	        dxx =  ((double)dyy * r );
+	        dX -= dxx;
+			//printf( "%dx%d\n", dX, dY );
+	        panelResize->setPosDY(dyy);
+	        panelResize->setPosDX(dxx );
+	        
+	        motionFuncResizePivot(x, y, dX, dY, MOB_BOTTOM_LEFT);
+			}
+	        break; 
+	    case MOB_BOTTOM_RIGHT:
+	    	{
+	        dY = y - ym_old;
+	        dyy  += dY;
+	        dxx =  ((double)dyy * r );
+	        dX -= dxx;
+
+	        panelResize->setPosDY(dyy);
+	        panelResize->setPosDX(dxx );
+	        
+	        motionFuncResizePivot(x, y, dX, dY, MOB_BOTTOM_RIGHT);
+			}
+	        break; 
+	        
+	        
+	        
+	    case MOB_UPPER:
+	    	{
+	        dY = y - ym_old;
+	        dyy  -= dY;
+	        panelResize->setPosDY(dyy);
+	        motionFuncResizePivot(x, y, dX, dY, MOB_UPPER);
+			}
+	        break; 
+	    case MOB_BOTTOM:
+	    	{
+	        dY = y - ym_old;
+	        dyy  += dY;
+	        panelResize->setPosDY(dyy);
+	        motionFuncResizePivot(x, y, dX, dY, MOB_BOTTOM);
+	        }
+	        break; 
+	    case MOB_LEFT:
+	    	{
+	        dX = x - xm_old;
+	        dxx  -= dX;
+	        panelResize->setPosDX(dxx );
+	        
+	        motionFuncResizePivot(x, y, dX, dY, MOB_LEFT);
+	        }
+	        break; 
+	    case MOB_RIGHT:
+	    	{
+	        dX = -x + xm_old;
+	        dxx  -= dX;
+	        panelResize->setPosDX(dxx );
+	        
+	        motionFuncResizePivot(x, y, dX, dY, MOB_RIGHT);
+	        }
+	        break; 
+	}
+    xm_old = x;
+    ym_old = y;
+    //cout << "panelResize() ID = "<< panelResize->getID() << endl;
+    panelResize->updatePos();
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void WindowsManager::motionFuncResizeCtrl(int x, int y)	{
+	#ifdef DEBUG
+    if ( panelResize != NULL )
+    	cout << "WindowsManager::motionFuncResize( " << x << ", " << y << " )  ID "<< panelResize->getID() << endl;
+	#endif
+    	
+	#ifdef DEBUG
+	cout << "WindowsManager::motionFunc( " << x << ", " << y << " )" << endl;
+	cout << "   ID = " << panelResize->getID() << endl;
+	cout << "   getMouseOverBorder=" << panelResize->getMouseOverBorder() << endl;
+    #endif
+    
+    //printf( (char*)"CTRL\n" );
+            
+	double	r	= panelResize->getRatio();
+    int		xx	= panelResize->getPosX();
+    int		yy	= panelResize->getPosY();
+    int		dX, dxx;
+    int		dY, dyy;
+    int		dx, dy;
+    int		delta;
+    int		deltaX;
+    int		deltaY;
+    dX	= dxx	= panelResize->getPosDX();
+    dY	= dyy	= panelResize->getPosDY();
+    
+	switch( panelResize->getMouseOverBorder() )
+	{
+	    case MOB_UPPER_LEFT:
+	    	{
+	        dY = y - ym_old;
+	        dyy  -= dY;
+	        dxx =  ((double)dyy * r );
+	        dX -= dxx;
+
+	        panelResize->setPosDY(dyy);
+	        panelResize->setPosDX(dxx );
+	        
+	        motionFuncResizePivot(x, y, dX, dY, MOB_UPPER_LEFT);
+			}
+	        break; 
+	    case MOB_UPPER_RIGHT:
+	    	{
+	        dY = y - ym_old;
+	        dyy  -= dY;
+	        dxx =  ((double)dyy * r );
+	        dX += dxx;
+
+	        panelResize->setPosDY(dyy);
+	        panelResize->setPosDX(dxx );
+	        
+	        motionFuncResizePivot(x, y, dX, dY, MOB_UPPER_RIGHT);
+			}
+	        break; 
+	    case MOB_BOTTOM_LEFT:
+	    	{
+	        dY = -y + ym_old;
+	        dyy  -= dY;
+	        dxx =  ((double)dyy * r );
+	        dX -= dxx;
+
+	        panelResize->setPosDY(dyy);
+	        panelResize->setPosDX(dxx );
+	        
+	        motionFuncResizePivot(x, y, dX, dY, MOB_BOTTOM_LEFT);
+			}
+	        break; 
+	    case MOB_BOTTOM_RIGHT:
+	    	{
+	        dY = -y + ym_old;
+	        dyy  -= dY;
+	        dxx =  ((double)dyy * r );
+	        dX -= dxx;
+
+	        panelResize->setPosDY(dyy);
+	        panelResize->setPosDX(dxx );
+	        
+	        motionFuncResizePivot(x, y, dX, dY, MOB_UPPER_RIGHT);
+			}
+	        break; 
+	    case MOB_UPPER:
+	    	{
+	        dY = y - ym_old;
+	        dyy  -= dY;
+
+	        panelResize->setPosDY(dyy);
+	        
+	        motionFuncResizePivot(x, y, dX, dY, MOB_UPPER);
+			}
+	        break; 
+	    case MOB_BOTTOM:
+	    	{
+	        dY = -y + ym_old;
+	        dyy  -= dY;
+
+	        panelResize->setPosDY(dyy);
+	        
+	        motionFuncResizePivot(x, y, dX, dY, MOB_BOTTOM);
+	        }
+	        break; 
+	    case MOB_LEFT:
+	    	{
+	        dX = x - xm_old;
+	        dxx  -= dX;
+
+	        panelResize->setPosDX(dxx );
+	        
+	        motionFuncResizePivot(x, y, dX, dY, MOB_LEFT);
+	        }
+	        break; 
+	    case MOB_RIGHT:
+	    	{
+	        dX = -x + xm_old;
+	        dxx  -= dX;
+
+	        panelResize->setPosDX(dxx );
+	        
+	        motionFuncResizePivot(x, y, dX, dY, MOB_RIGHT);
+	        }
+	        break; 
+	}
+    xm_old = x;
+    ym_old = y;
+    //cout << "panelResize() ID = "<< panelResize->getID() << endl;
+    panelResize->updatePos();
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::motionFunc(int x, int y)	{
+
 //#define DEBUG
     mouseX = x;
     mouseY = y;
@@ -789,101 +1103,14 @@ void WindowsManager::motionFunc(int x, int y)	{
         #endif
 
 		movePanel( x, y, panelMove );
-		panelCapture = panelMove;
+		//panelCapture = panelMove;
 	}
 	else
 	if( bResize && panelResize != NULL)
 	{
-    	#ifdef DEBUG
-    	cout << "WindowsManager::motionFunc( " << x << ", " << y << " )" << endl;
-    	cout << "   ID = " << panelResize->getID() << endl;
-    	cout << "   getMouseOverBorder=" << panelResize->getMouseOverBorder() << endl;
-        #endif
-        
-                
-        int xx   = panelResize->getPosX();
-        int yy   = panelResize->getPosY();
-        int dxx  = panelResize->getPosDX();
-        int dyy  = panelResize->getPosDY();
-        int delta;
-        
-    	switch( panelResize->getMouseOverBorder() )
-    	{
-    	    case MOB_UPPER_LEFT:
-    	        delta = x - xm_old;
-    	        xx   += delta;
-    	        dxx  -= delta;
-    	        panelResize->setPosX(xx);
-    	        panelResize->setPosDX(dxx);
-    	        delta = y - ym_old;
-    	        yy   += delta;
-    	        dyy  -= delta;
-    	        panelResize->setPosY(yy);
-    	        panelResize->setPosDY(dyy);
-    	        break; 
-    	    case MOB_UPPER_RIGHT:
-    	        delta = x - xm_old;
-    	        dxx  -= -delta;
-    	        panelResize->setPosDX(dxx);
-    	        delta = y - ym_old;
-    	        yy   += delta;
-    	        dyy  -= delta;
-    	        panelResize->setPosY(yy);
-    	        panelResize->setPosDY(dyy);
-    	        break; 
-    	    case MOB_BOTTOM_LEFT:
-    	        delta = x - xm_old;
-    	        xx   += delta;
-    	        dxx  -= delta;
-    	        panelResize->setPosX(xx);
-    	        panelResize->setPosDX(dxx);
-    	        delta = y - ym_old;
-    	        yy   += -delta;
-    	        dyy  -= -delta;
-    	        //panelResize->setPosY(yy);
-    	        panelResize->setPosDY(dyy);
-    	        break; 
-    	    case MOB_BOTTOM_RIGHT:
-    	        delta = x - xm_old;
-    	        xx   += -delta;
-    	        dxx  -= -delta;
-    	        //panelResize->setPosX(xx);
-    	        panelResize->setPosDX(dxx);
-    	        delta = y - ym_old;
-    	        yy   += -delta;
-    	        dyy  -= -delta;
-    	        //panelResize->setPosY(yy);
-    	        panelResize->setPosDY(dyy);
-    	        break; 
-    	    case MOB_UPPER:
-    	        delta = y - ym_old;
-    	        yy   += delta;
-    	        dyy  -= delta;
-    	        panelResize->setPosY(yy);
-    	        panelResize->setPosDY(dyy);
-    	        break; 
-    	    case MOB_BOTTOM:
-    	        delta = y - ym_old;
-    	        dyy  += delta;
-    	        panelResize->setPosDY(dyy);
-    	        break; 
-    	    case MOB_LEFT:
-    	        delta = x - xm_old;
-    	        xx   += delta;
-    	        dxx  -= delta;
-    	        panelResize->setPosX(xx);
-    	        panelResize->setPosDX(dxx);
-    	        break; 
-    	    case MOB_RIGHT:
-    	        delta = x - xm_old;
-    	        dxx  += delta;
-    	        panelResize->setPosDX(dxx);
-    	        break; 
-    	}
-        xm_old = x;
-        ym_old = y;
-        //cout << "panelResize() ID = "<< panelResize->getID() << endl;
-        panelResize->updatePos();
+		//printf( "iGlutModifier = %d\n", iGlutModifier );
+		if( iGlutModifier & GLUT_ACTIVE_CTRL )			motionFuncResizeCtrl(x, y);
+		else											motionFuncResize(x, y);
 	}
 	else
 	if( bMotionMiddle && panelMotionMiddle != NULL)
@@ -904,48 +1131,23 @@ void WindowsManager::motionFunc(int x, int y)	{
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
-//static bool bClickLeft=false;
-//--------------------------------------------------------------------------------------------------------------------
-//
-//--------------------------------------------------------------------------------------------------------------------
-bool WindowsManager::isPanelFocus(Panel*p)
-{
-	if ( panelFocus && p == panelFocus )			return true;
-    return false;
-
-/*
-    if ( typeid(*p) == typeid(PanelEditText) )      return true;
-    if ( typeid(*p) == typeid(PanelConsole) )       return true;
-    return false;
-*/
-}
-//--------------------------------------------------------------------------------------------------------------------
-//
-//--------------------------------------------------------------------------------------------------------------------
-bool WindowsManager::isPanelCapture(Panel*p)
-{
-	if ( panelCapture && p == panelCapture )			return true;
-    return false;
-}
-//--------------------------------------------------------------------------------------------------------------------
-//
-//--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 //#define DEBUG
     mouseX = x;
     mouseY = y;
     iMouseButton[button] = state;
+
 	#ifdef DEBUG
-	logf( (char*)"WindowsManager::mouseFunc( %s, %s, x %d, y %d)", 	
+	logf_wm( (char*)"WindowsManager::mouseFunc( %s, %s, x %d, y %d)", 	
 									(button==0 ? "left" : (button==1 ? "middle":" right" )),
 									(state==1 ? "up" : "down"), x, y );
-	log_tab(true);
+	log_wm_tab(true);
 	//cout << "WindowsManager::mouseFunc( " << button << ", " << state << ", " << x << ", " << y << " )" << endl;
 	#endif
 
 	Panel* p = findPanelMouseOver(x, y);
 	#ifdef DEBUG
-	logf( (char*)"find panel \"%s\"", (p!=NULL? (char*)p->getExtraString().c_str():"NULL") );
+	logf_wm( (char*)"find panel \"%s\"", (p!=NULL? (char*)p->getExtraString().c_str():"NULL") );
     #endif
     	
 	bMovePanel = false;
@@ -971,6 +1173,9 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 		    ym_old = y;
 		    bResize = true;
 			onTop( panelResize );
+			double r = (double)panelResize->getPosDX() / (double)panelResize->getPosDY();
+			//printf( "%lf\n", r );
+			panelResize->setRatio( r );
 	    }
 	    else	    {
 		    Panel * pCaptureParent = getParentRoot( p );
@@ -980,7 +1185,7 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 		}
 		
 	    #ifdef DEBUG
-        logf( (char*)"panelCapture = \"%s\" adr=%016lX", (panelCapture!=NULL?panelCapture->getExtraString().c_str():(char*)"NULL"),
+        logf_wm( (char*)"panelCapture = \"%s\" adr=%016lX", (panelCapture!=NULL?panelCapture->getExtraString().c_str():(char*)"NULL"),
                         (unsigned long)panelCapture );
 	    #endif
         if ( panelCapture ){
@@ -1047,11 +1252,16 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	else if ( button == 2 && state == 1 )	{
     	panelMotionRight = NULL;
     	bMotionRight = false;
-	    if ( panelMove != NULL)     panelMove->haveMove();
-		panelMove = NULL;
+	    if ( panelMove != NULL)
+	    {
+	    	panelMove->haveMove();
+			panelMove->releaseRight( x, y );
+			panelMove = NULL;
+		}
+		//else
+		if ( panelCapture )					panelCapture->releaseRight( x, y );
 		xm_old = -1;
 		ym_old = -1;
-		if ( panelCapture )			panelCapture->releaseRight( x, y );
     	//cout << " releaseRight : "<< panelCapture->getID() << endl;
 	}
 	// Roulette vers le haut
@@ -1078,8 +1288,8 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	
 	#ifdef DEBUG
 	//cout << "WindowsManager::mouseFunc Addr : " << panelMove <<" ID "<< ID <<", " << bMovePanel << endl;;
-	log_tab(false);
-	logf( (char*)"WindowsManager::mouseFunc()" );
+	log_wm_tab(false);
+	logf_wm( (char*)"WindowsManager::mouseFunc()" );
 	#endif
 #undef DEBUG
 }
@@ -1188,6 +1398,41 @@ void WindowsManager::loadResourceImage( const std::string& filename )
 void WindowsManager::genereMipMap(bool b)
 {
     _Texture::EnableGenerateMipmaps(b);
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void WindowsManager::display_panel_childs( Panel* p)
+{
+	#ifdef DEBUG
+	log_wm_tab(true);
+	#endif
+	int nb = p->getChilds().size();
+	vector<Panel*>& childs = p->getChilds();
+	for( int i=0; i<nb; i++ )	{
+		if ( typeid(*childs[i]) == typeid(PanelText) )
+		{
+			PanelText* pt = (PanelText*)childs[i];
+			logf_wm( (char*)"%d - %s\t\t%s", i, pt->getText().c_str(),  typeid(*(childs[i])).name()  );
+		}
+		else
+			logf_wm( (char*)"%d - %s\t\t%s", i, childs[i]->getExtraString().c_str(),  typeid(*(childs[i])).name()  );
+		display_panel_childs( childs[i] );
+	}
+	#ifdef DEBUG
+	log_wm_tab(false);
+	#endif
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void WindowsManager::display_panel()
+{
+	int nb = childs.size();
+	for( int i=0; i<nb; i++ )	{
+		logf_wm( (char*)"%d - %s\t\t%s", i, childs[i]->getExtraString().c_str(),  typeid(*childs[i]).name()  );
+		display_panel_childs( childs[i] );
+	}
 }
 	
 //------------------------------------------------------------

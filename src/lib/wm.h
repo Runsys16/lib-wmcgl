@@ -125,6 +125,9 @@ static	void            log_tab( bool );
 	void				passiveMotionFunc(int, int);
     bool                isPanelFocus(Panel *);
     bool                isPanelCapture(Panel *);
+	void				motionFuncResizePivot(int, int, int, int, int);
+	void				motionFuncResize(int, int);
+	void				motionFuncResizeCtrl(int, int);
 	void				motionFunc(int, int);
 	void				mouseFunc(int, int, int, int);
 	void				keyboardUpFunc( unsigned char, int, int );
@@ -141,6 +144,7 @@ static	void            log_tab( bool );
 	inline float        getMouseX()                     { return mouseX; }
 	inline float        getMouseY()                     { return mouseY; }
 	inline int          getMouseState(int but)          { return iMouseButton[but]; }
+	inline void         setModifier(int n)				{ iGlutModifier = n; }
 
 	int					getNbTextures()					{ return _Texture2D::getNbTextures(); }
 	
@@ -153,7 +157,9 @@ static void             loadResourceImage( const std::string& );
 	inline static WindowsManager&	getInstance()			{ if (!instance) instance = new WindowsManager();return *instance;}
 	inline static void				Destroy()				{ if (instance) delete instance;instance=0;}
 
-	static void				        genereMipMap(bool b);
+	static void	        genereMipMap(bool b);
+	void		        display_panel();
+	void		        display_panel_childs(Panel*);
 
 	WindowsManager();
 	WindowsManager(int, int);
@@ -205,6 +211,7 @@ private:
     float                       mouseY;
     int                         iMouseButton[10];
 	
+	int							iGlutModifier;
 };
 
 #ifdef WM_CPP

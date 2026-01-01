@@ -155,12 +155,14 @@ public:
 
     void *				NewTextObj();
     void				DeleteTextObj(void *_TextObj);
+	int					compute_tab( int );
     void				BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines,  CTexFont *_Font, int _Sep, int _BgWidth);
 
     int					lenght(void *_TextObj, const std::string *_TextLines, CTexFont * );
     int					lenght(void *_TextObj, const std::string *_TextLines, CTexFont *, int );
     void				BeginGL();
     void				EndGL();
+
     void				DrawText(void *_TextObj, float angle, int _X, int _Y, color32 _Color, color32 _BgColor);
     void				DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 _BgColor);
 
@@ -173,7 +175,8 @@ public:
 	void 				UnbindFont( int );
 	void 				UnbindFont();
 	void				setTabSize( int );
-
+	void				razTabSize( )								{ m_vTabSize.clear(); }
+	void				setvTabSize( std::vector<int>& );
 
 
 protected:
@@ -211,7 +214,7 @@ protected:
     GLfloat             m_ProjMatrixInit[16];
     int                 m_WndWidth;
     int                 m_WndHeight;
-    int                 m_tab_size;
+    std::vector<int>	m_vTabSize;
 
     struct Vec2         { GLfloat x, y; Vec2(){} Vec2(GLfloat _X, GLfloat _Y):x(_X),y(_Y){} Vec2(int _X, int _Y):x(GLfloat(_X)),y(GLfloat(_Y)){} };
     struct CTextObj
@@ -232,6 +235,12 @@ protected:
 
 using namespace std;
 
+typedef struct
+{
+	int X, Y, DX, DY;
+} sPanelPos;
+
+
 
 typedef void (*click_left_cb_t)(int,int);
 typedef void (*release_left_cb_t)(int,int);
@@ -244,6 +253,7 @@ class Panel {
 	public:
 		//-----------------------------------------------------------------------------------
 							Panel();
+//						   ~Panel();
 		//-----------------------------------------------------------------------------------
 		void 				init();
 
@@ -254,105 +264,112 @@ class Panel {
 		void				onTop();
 		void				onBottom();
 
-		virtual void		passiveMotionFunc( int, int)			      {;};
+		virtual void		passiveMotionFunc( int, int)			      {; }
 		
 		virtual void		clickLeft( int, int);
-		virtual void		motionLeft( int, int)                         {;};
+		virtual void		motionLeft( int, int)                         {; }
 		virtual void		releaseLeft( int, int);
 
 		virtual void		clickUp( int, int);
 		virtual void		clickDown( int, int);
 
 		virtual void		clickRight( int, int);
-		virtual void		motionRight( int, int)                         {;};
+		virtual void		motionRight( int, int)                         {; }
 		virtual void		releaseRight( int, int);
 
-		virtual void		clickMiddle( int, int)                          {;};
-		virtual void		motionMiddle( int, int)                         {;};
-		virtual void		releaseMiddle( int, int)                        {;};
+		virtual void		clickMiddle( int, int)                          {; }
+		virtual void		motionMiddle( int, int)                         {; }
+		virtual void		releaseMiddle( int, int)                        {; }
 
-		virtual void		wheelUp( int, int)                              {;};
-		virtual void		wheelDown( int, int)                            {;};
+		virtual void		wheelUp( int, int)                              {; }
+		virtual void		wheelDown( int, int)                            {; }
 
 		virtual Panel*		isMouseOverRaw( int, int);
 		virtual Panel*		isMouseOver( int, int);
 		virtual Panel*		isMouseOverBorder( int, int);
 
-		virtual void		haveFocus() 	    							{ bFocus = true;}
-		virtual void		lostFocus() 									{ bFocus = false;}
+		virtual void		haveFocus() 	    							{ bFocus = true; }
+		virtual void		lostFocus() 									{ bFocus = false; }
 
-		virtual void		haveCapture()	    							{;}
-		virtual void		lostCapture()									{;}
+		virtual void		haveCapture()	    							{; }
+		virtual void		lostCapture()									{; }
 
 		virtual void		displayGL();
 		virtual void		updatePos();
-		virtual void		idle(float);//										{;};
-		virtual void		cb_keyboard( unsigned char ) 					{;};
-		virtual void		cb_keyboard_special( unsigned char )			{;};
-		virtual void		cb_keyboard_special_up( unsigned char )			{;};
-		virtual void		debug( bool )									{;};
+		virtual void		idle(float);//										{; }
+		virtual void		cb_keyboard( unsigned char ) 					{; }
+		virtual void		cb_keyboard_special( unsigned char )			{; }
+		virtual void		cb_keyboard_special_up( unsigned char )			{; }
+		virtual void		debug( bool )									{; }
 		virtual bool		isVisible(); 									
+	 	
+		inline void			setParent( Panel* p )							{ parent = p; }
+		inline Panel*		getParent()										{ return parent; }
+		inline void			setPosAndSize(int x0, int y0, int dx0, int dy0)	{ x=x0; y=y0; dx=dx0 ;dy=dy0; }
+		inline void			setPos(int x0, int y0)							{ x=x0; y=y0; }
+		inline void			setSize(int dx0, int dy0)						{ dx=dx0 ;dy=dy0; }
+		inline int			getX()											{ return x_raw; }
+		inline int			getY()											{ return y_raw; }
+		inline int			getDX()											{ return dx_raw; }
+		inline int			getDY()											{ return dy_raw; }
+		inline int			getPosX()										{ return x; }
+		inline int			getPosY()										{ return y; }
+		inline int			getPosDX()										{ return dx; }
+		inline int			getPosDY()										{ return dy; }
+		inline double		getRatio()										{ return ratio; }
+		inline void			setID(int id)									{ ID = id; }
+		inline int			getID()											{ return ID; }
+		inline void			getPosition(sPanelPos& s)						{ s.X=x; s.Y=y; s.DX=dx; s.DY=dy; }
 		
-		inline void			setParent( Panel* p )							{parent = p;};
-		inline Panel*		getParent()										{return parent;};
-		inline void			setPosAndSize(int x0, int y0, int dx0, int dy0)	{x=x0; y=y0; dx=dx0 ;dy=dy0;};
-		inline void			setPos(int x0, int y0)							{x=x0; y=y0;};
-		inline void			setSize(int dx0, int dy0)						{dx=dx0 ;dy=dy0;};
-		inline int			getX()											{return x_raw;};
-		inline int			getY()											{return y_raw;};
-		inline int			getDX()											{return dx_raw;};
-		inline int			getDY()											{return dy_raw;};
-		inline void			setID(int id)									{ID = id;};
-		inline int			getID()											{return ID;};
-		
-		inline void			setPosX(int i)									{x = i;};
-		inline void			setPosY(int i)									{y = i;};
-		inline void			setPosDX(int i)									{dx = i;};
-		inline void			setPosDY(int i)									{dy = i;};
-		inline int			getPosX()										{return x;};
-		inline int			getPosY()										{return y;};
-		inline int			getPosDX()										{return dx;};
-		inline int			getPosDY()										{return dy;};
-		inline int			getNbPanel()									{return childs.size();}
+		inline void			setPosX(int i)									{ x = i; }
+		inline void			setPosY(int i)									{ y = i; }
+		//inline void			setPosDX(int i)									{ dx = i; dy>0?ratio=(double)dx/double(dy):ratio=1.0; }
+		//inline void			setPosDY(int i)									{ dy = i; dy>0?ratio=(double)dx/double(dy):ratio=1.0; }
+		inline void			setPosDX(int i)									{ dx = i; }
+		inline void			setPosDY(int i)									{ dy = i; }
+		inline void			setRatio(double d)								{ ratio = d; }
+		inline int			getNbPanel()									{ return childs.size(); }
+		inline int			getNbChilds()									{ return childs.size(); }
 	
-		inline bool			getVisible()									{return visible;};
-		inline void			swapVisible()									{ visible = !visible; };
-		inline void			setVisible(bool b)								{visible=b;};
+		inline bool			getVisible()									{ return visible; }
+		inline void			swapVisible()									{ visible = !visible; }
+		inline void			setVisible(bool b)								{ visible=b; }
 		
-		inline bool			getCanMove()									{return bCanMove;};
-		inline void			setCanMove(bool b)								{bCanMove=b;};
+		inline bool			getCanMove()									{ return bCanMove; }
+		inline void			setCanMove(bool b)								{ bCanMove=b; }
 		
 
-		inline void			setDisplayGL(displayGL_cb_t cb)                 {displayGL_cb=cb;};
+		inline void			setDisplayGL(displayGL_cb_t cb)                 { displayGL_cb=cb; }
 
-		inline void			x2Screen(int & x)                               {x += x_raw;};
-		inline void			y2Screen(int & y)                               {y += y_raw;};
+		inline void			x2Screen(int & x)                               { x += x_raw; }
+		inline void			y2Screen(int & y)                               { y += y_raw; }
 		
-		inline void			xy2Screen(int& x, int& y)                       {x += x_raw;y += y_raw;}
+		inline void			xy2Screen(int& x, int& y)                       {x += x_raw;y += y_raw; }
 		
-		inline int			Screen2x(int x)                                 {return x - x_raw;};
-		inline int			Screen2y(int y)                                 {return y - y_raw;};
+		inline int			Screen2x(int x)                                 { return x - x_raw; }
+		inline int			Screen2y(int y)                                 { return y - y_raw; }
 		
-		inline 	std::vector<Panel*>& getChilds()							{return childs;};
+		inline 	std::vector<Panel*>& getChilds()							{ return childs; }
+		inline 	int 		getChildsSize()									{ return childs.size(); }
 		
-		inline void			haveMove()                                      { bHaveMove = true;}
-		inline bool			getHaveMove()                                   { return bHaveMove;}
-		inline void			resetHaveMove()                                 { bHaveMove = false;}
+		inline void			haveMove()                                      { bHaveMove = true; }
+		inline bool			getHaveMove()                                   { return bHaveMove; }
+		inline void			resetHaveMove()                                 { bHaveMove = false; }
 		
-		inline void			setClickLeft( click_left_cb_t cb)               { click_left_cb = cb;}
-		inline void			setReleaseLeft( click_left_cb_t cb)             { release_left_cb = cb;}
-		inline void			setClickRight( click_left_cb_t cb)              { click_right_cb = cb;}
-		inline void			setReleaseRight( click_left_cb_t cb)            { release_right_cb = cb;}
+		inline void			setClickLeft( click_left_cb_t cb)               { click_left_cb = cb; }
+		inline void			setReleaseLeft( click_left_cb_t cb)             { release_left_cb = cb; }
+		inline void			setClickRight( click_left_cb_t cb)              { click_right_cb = cb; }
+		inline void			setReleaseRight( click_left_cb_t cb)            { release_right_cb = cb; }
 		
-		inline void			setPanelClickLeft( Panel* p )                   { panel_click_left   = p;}
-		inline void			setPanelReleaseLeft( Panel* p )                 { panel_release_left = p;}
-		inline void			setPanelClickRight( Panel* p  )                 { panel_click_right  = p;}
-		inline void			setPanelReleaseRight( Panel* p )                { panel_release_right= p;}
+		inline void			setPanelClickLeft( Panel* p )                   { panel_click_left   = p; }
+		inline void			setPanelReleaseLeft( Panel* p )                 { panel_release_left = p; }
+		inline void			setPanelClickRight( Panel* p  )                 { panel_click_right  = p; }
+		inline void			setPanelReleaseRight( Panel* p )                { panel_release_right= p; }
 		
-		inline void			setScissor(bool b)                              { bScissor = b;}
-		inline void			setFantome(bool b)                              { bFantome = b;}
+		inline void			setScissor(bool b)                              { bScissor = b; }
+		inline void			setFantome(bool b)                              { bFantome = b; }
 		
-		inline int 			getMouseOverBorder()                            { return mouseOverBorder;}
+		inline int 			getMouseOverBorder()                            { return mouseOverBorder; }
 
     	inline  void        setExtraString(string s)                        { sExtra = s; }
     	inline  string&     getExtraString()                                { return sExtra; }
@@ -376,6 +393,7 @@ class Panel {
 		int					y;
 		int					dx;
 		int					dy;
+		double				ratio;
 	
 		int					startX;
 		int					startY;
@@ -454,8 +472,13 @@ class PanelText : public Panel	{
 		void 				changeText( std::string, bool );
 		void 				changeText( std::string, FONT, bool );
 		void 				eraseText( );
+
 		void				setTabSize( int );
-		int					getTabSize()									{return tabSize;}
+		void				setvTabSize( std::vector<int>& );
+		vector<int>&		getvTabSize()									{return vTabSize;}
+		vector<int>&		getTabSize()									{return vTabSize;}
+		void				razTabSize()									{ vTabSize.clear();}
+
 		void				setColor( int l);
 inline	void				setChangeColor(bool b)							{ bColor = b; }
 	
@@ -469,6 +492,7 @@ inline	void				setChangeColor(bool b)							{ bColor = b; }
 		inline void 		setChangeText(bool b )							{bChange = b;};
 		inline void 		setAlpha(float a )								{ alpha = a;};
 		
+		inline void 		setDY(unsigned u)								{ dy = dy_raw = u;};
 		//----------------- functions
 		std::string			strFont();		
 
@@ -486,9 +510,10 @@ inline	void				setChangeColor(bool b)							{ bColor = b; }
 		bool				bChange;
 		
 		void*				pTextGL;
-		int					tabSize;
+		vector<int>			vTabSize;
 		bool                bStatic;
 		bool				bColor;
+		int					iMaxSize;
 		
 		float				alpha;
 	
@@ -703,81 +728,82 @@ public:
 class PanelSpinEditText : public PanelEditText
 {
 protected:
-            double       min;
-            double       max;
-            double       step;
-            double       nb;
-            double       val_angle;
-            double       val;
-            double       angle;
+            double			min;
+            double			max;
+            double			step;
+            double			nb;
+            double			val_angle;
+            double			val;
+            double       	angle;
             
-            double*      pVal;
+            double*     	pVal;
             
-            int         delta_x;
-            int         delta_y;
-            int         nDecimal;
+            int         	delta_x;
+            int         	delta_y;
+            int         	nDecimal;
             
-            vec2        vCentre;
-            vec3        vRef;
+            vec2        	vCentre;
+            vec3        	vRef;
             
-       PanelEditText* 	pEditCopy;
-       PanelSimple*     pCadran;
-       PanelSimple*     pBoule;
-       Panel*			pPrevParent;
-       ChangeValue*     pChangeValue;
+       PanelEditText* 		pEditCopy;
+       PanelSimple*     	pCadran;
+       PanelSimple*     	pBoule;
+       PanelSimple*			pEditScissor;
+       Panel*				pPrevParent;
+       ChangeValue*     	pChangeValue;
        //Panel*			pClick;
        
             vector<double>   t_val;
-            int         x_click;
-            int         y_click;
-            motion_cb_t cb_motion;
+            int         	x_click;
+            int         	y_click;
+            motion_cb_t 	cb_motion;
 
-			void*		pID;            
+			void*			pID;            
 public:
-                        PanelSpinEditText();
+                        	PanelSpinEditText();
+                        	~PanelSpinEditText();
                         
-			void        set_pVal(double*);
-inline      void        set_delta(int x, int y)     	{ delta_x = 0; delta_y = 0; }                        
-			void        set_val(double f);//            { val_angle = val = f; }                        
-inline      void        set_min(double f)           	{ min = f; }                        
-inline      void        set_max(double f)               { max = f; }                        
-inline      void        set_step(double f)              { step = f; }                        
-inline      void        set_nb(double f)                { nb = f; }                        
-inline      void        set_ndecimal(int n)             { nDecimal = n; }                        
-inline      void        set(double m, double M, double s, double n)
+			void    	    set_pVal(double*);
+inline      void    	    set_delta(int x, int y)     	{ delta_x = 0; delta_y = 0; }                        
+			void    	    set_val(double f);//            { val_angle = val = f; }                        
+inline      void    	    set_min(double f)           	{ min = f; }                        
+inline      void    	    set_max(double f)               { max = f; }                        
+inline      void    	    set_step(double f)              { step = f; }                        
+inline      void    	    set_nb(double f)                { nb = f; }                        
+inline      void    	    set_ndecimal(int n)             { nDecimal = n; }                        
+inline      void    	    set(double m, double M, double s, double n)
 							                            { min = m; max = M; step = s; nb = n; }     
 
-inline 		void		setMotion( motion_cb_t cb)      { cb_motion = cb; }
-inline      double*     get_pVal()          		    { return pVal; }                        
-inline      double		get_val()	          		    { return val; }
-inline      void        setChangeValue(ChangeValue* p)	{ pChangeValue = p; }
-inline      void        setID( void* p)					{ pID = p; }
+inline 		void			setMotion( motion_cb_t cb)      { cb_motion = cb; }
+inline      double* 	    get_pVal()          		    { return pVal; }                        
+inline      double			get_val()	          		    { return val; }
+			void    	    setChangeValue(ChangeValue* p);
+			void    	    setID( void* p);
 
 
-            void        set_enum(vector<double>);
+            void    	    set_enum(vector<double>);
                         
-            void        boule_pos(int, int);        
+            void    	    boule_pos(int, int);        
 
-			void		computeRef( int, int );
-			void		computeAngle( int, int );
-            void        compute_pos_relatif(int, int);                   
-                        
-			void		ajusteDelta( int, int );
-            void        clampVal();
+			void			computeRef( int, int );
+			void			computeAngle( int, int );
+            void    	    compute_pos_relatif(int, int);                   
+                    	    
+			void			ajusteDelta( int, int );
+            void    	    clampVal();
             
-	virtual void		clickLeft( int, int );
-	virtual void		motionLeft( int, int );
-	virtual void		releaseLeft( int, int );
+	virtual void			clickLeft( int, int );
+	virtual void			motionLeft( int, int );
+	virtual void			releaseLeft( int, int );
 
-	virtual void		clickRight( int, int );
-	virtual void		releaseRight( int, int );
-
-    virtual void		updatePos();
-    virtual void		idle(double);
-    virtual void		displayGL();
+	virtual void			clickRight( int, int );
+	virtual void			releaseRight( int, int );
+	
+    virtual void			updatePos();
+    virtual void			idle(double);
+    virtual void			displayGL();
 
 };
-
 
 
 
@@ -811,7 +837,11 @@ class PanelScrollText : public PanelSimple	{
 		int							posWordSuiv();
 		void						wordPrec();
 		void						wordSuiv();
+
+		void						razTabSize();
 		void						setTabSize( int );
+		void						setvTabSize( std::vector<int>& );
+		std::vector<int>&			getvTabSize();
 		void						setColor( long );
 		
 		virtual void				displayGL();
@@ -822,11 +852,11 @@ inline  int                         getHeightLine()                     { return
 
 	private:
 		int							maxCmd;
-		std::vector<PanelText *>	texts;
+std::vector<PanelText *>			texts;
 		std::string					prompt;
 		
 		int							heightLine;
-		int							tabSize;
+		std::vector<int>			vTabSize;
 		
 		int                         color;
 		
@@ -855,7 +885,8 @@ class PanelScrollY : public PanelSimple {
 		int 				computeDY();
 		
 		inline void			setDelta( int d )				{ y_delta = d; }
-		//void				buildText();
+		inline int			getDelta()						{ return y_delta; }
+
 		virtual void		clickUp( int, int);
 		virtual void		clickDown( int, int);
 		virtual Panel*		isMouseOver( int, int);
@@ -929,6 +960,7 @@ class PanelConsole : public PanelSimple	{
 		int							posWordSuiv();
 		void						wordPrec();
 		void						wordSuiv();
+		void						razTabSize();
 		void						setTabSize( int );
 		void                        setColor(long);
 		
@@ -942,7 +974,7 @@ class PanelConsole : public PanelSimple	{
 		PanelConsoleCallBack*		ppccb;
 		
 		int							heightLine;
-		int							tabSize;
+		std::vector<int>			vTabSize;
 		
 		int 						currentLine;
 		int							currentPos;
@@ -1239,6 +1271,9 @@ static	void            log_tab( bool );
 	void				passiveMotionFunc(int, int);
     bool                isPanelFocus(Panel *);
     bool                isPanelCapture(Panel *);
+	void				motionFuncResizePivot(int, int, int, int, int);
+	void				motionFuncResize(int, int);
+	void				motionFuncResizeCtrl(int, int);
 	void				motionFunc(int, int);
 	void				mouseFunc(int, int, int, int);
 	void				keyboardUpFunc( unsigned char, int, int );
@@ -1255,6 +1290,7 @@ static	void            log_tab( bool );
 	inline float        getMouseX()                     { return mouseX; }
 	inline float        getMouseY()                     { return mouseY; }
 	inline int          getMouseState(int but)          { return iMouseButton[but]; }
+	inline void         setModifier(int n)				{ iGlutModifier = n; }
 
 	int					getNbTextures()					{ return _Texture2D::getNbTextures(); }
 	
@@ -1267,7 +1303,9 @@ static void             loadResourceImage( const std::string& );
 	inline static WindowsManager&	getInstance()			{ if (!instance) instance = new WindowsManager();return *instance;}
 	inline static void				Destroy()				{ if (instance) delete instance;instance=0;}
 
-	static void				        genereMipMap(bool b);
+	static void	        genereMipMap(bool b);
+	void		        display_panel();
+	void		        display_panel_childs(Panel*);
 
 	WindowsManager();
 	WindowsManager(int, int);
@@ -1319,6 +1357,7 @@ private:
     float                       mouseY;
     int                         iMouseButton[10];
 	
+	int							iGlutModifier;
 };
 
 

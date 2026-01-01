@@ -1,16 +1,17 @@
 #include "PanelSpinEditText.h"
 #include "wm.h"
-
+//--------------------------------------------------------------------------------------------------------------------
 #define ZONE_MORTE		20.0
+//#define DEBUG
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
-PanelSpinEditText::PanelSpinEditText()
+PanelSpinEditText::PanelSpinEditText() :     PanelEditText()
 {
 	//string nameFile = "/usr/share/wmcgl/images/" + name;
 
 
-    PanelEditText();
+
     this->setExtraString("SpinEditText");
 
     pCadran = new PanelSimple();
@@ -22,7 +23,6 @@ PanelSpinEditText::PanelSpinEditText()
     pBoule->setBackground((char*)"/usr/share/wmcgl/images/boule.tga");
     pBoule->setPosAndSize( 55, 55, 20, 20 );
 
-	PanelSimple* pEditScissor;
 	pEditScissor = new PanelSimple();
     pEditScissor->setBackground((char*)"/usr/share/wmcgl/images/black.png");
 	pEditScissor->setPos( 100-30, 100-8 );
@@ -48,14 +48,36 @@ PanelSpinEditText::PanelSpinEditText()
     cb_motion = NULL;
     hideCursor();
     
-    pChangeValue = NULL;
-    /*
-    pClick = new Panel();
-    pClick->setPosAndSize(10,10,10,10);
-    pClick->setPanelClickLeft(this);
-    */
-    //setVisible( false );
-    //setExtraString( "PanelSpinEditText" );
+    //setChangeValue((ChangeValue*)NULL);
+    //setID((void*)NULL);
+    pChangeValue	= NULL;
+    pID				= NULL;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+PanelSpinEditText::~PanelSpinEditText()
+{
+	//string nameFile = "/usr/share/wmcgl/images/" + name;
+
+ 	WindowsManager&     wm  = WindowsManager::getInstance();
+
+    pEditScissor->sup( pEditCopy );
+    pCadran->sup( pBoule );
+    pCadran->sup( pEditScissor );
+    
+    wm.sup( pCadran );
+
+    delete pCadran;
+    delete pBoule;
+	delete pEditScissor;
+	delete pEditCopy;
+	
+
+    //setChangeValue((ChangeValue*)NULL);
+    //setID((void*)NULL);
+    //pChangeValue	= NULL;
+    //pID				= NULL;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -134,6 +156,23 @@ void PanelSpinEditText::set_enum( vector<double> t )
 {
     t_val = t;
     nb = t.size();
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelSpinEditText::setChangeValue(ChangeValue* p)
+{
+    //logf( (char*)"PanelSpinEditText::setChangeValue(ChangeValue* %p)", (void*)p );
+    
+	pChangeValue = p;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelSpinEditText::setID( void* p)
+{
+    //logf( (char*)"PanelSpinEditText::setID(void* %p)", (void*)p );
+	pID = p;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -288,10 +327,14 @@ void PanelSpinEditText::clampVal()
 //--------------------------------------------------------------------------------------------------------------------
 void PanelSpinEditText::clickLeft( int xm, int ym )
 {
-    logf( (char*)"PanelSpinEditText::clickLeft(%d, %d)", xm, ym );
+    //logf( (char*)"PanelSpinEditText::clickLeft(%d, %d)", xm, ym );
+#ifdef DEBUG
+#endif
 
+#ifdef DEBUG
     log_tab(true);
     logf( (char*)"delta old (%d, %d)", delta_x, delta_y );
+#endif
 
 	// Affiche le cadran et efface le panel 
 	setVisible( false );
@@ -314,16 +357,20 @@ void PanelSpinEditText::clickLeft( int xm, int ym )
     pEditCopy->changeText( (char*)s );
 
     
+#ifdef DEBUG
     logf( (char*)"position (%d, %d)", xScreen, yScreen );
+#endif
+
     pCadran->setPos(xScreen, yScreen);
     pCadran->updatePos();
     
 	ajusteDelta( ws, hs );
+
+#ifdef DEBUG
     logf( (char*)"delta new (%d, %d)", delta_x, delta_y );
-	
     logf( (char*)"pos_raw old (%d, %d)", pEditCopy->getX(), pEditCopy->getY() );
-    
-    logf( (char*)"cadran (%d, %d)  boule (%d,%d)", pCadran->getX(), pCadran->getY(), pBoule->getX(), pBoule->getY() );
+	logf( (char*)"cadran (%d, %d)  boule (%d,%d)", pCadran->getX(), pCadran->getY(), pBoule->getX(), pBoule->getY() );
+#endif
     
     computeRef( xm, ym );
     clampVal();
@@ -332,7 +379,9 @@ void PanelSpinEditText::clickLeft( int xm, int ym )
     if ( click_left_cb != NULL )        (*click_left_cb)( xm, ym);
     
 
+#ifdef DEBUG
     log_tab(false);
+#endif
 }
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -340,7 +389,9 @@ void PanelSpinEditText::clickLeft( int xm, int ym )
 //--------------------------------------------------------------------------------------------------------------------
 void PanelSpinEditText::motionLeft( int xm, int ym )
 {
-    //logf( (char*)"PanelSpinEditText::motionLeft(%d, %d)", xm, ym );
+#ifdef DEBUG
+    logf( (char*)"PanelSpinEditText::motionLeft(%d, %d)", xm, ym );
+#endif
     
     
     compute_pos_relatif( xm, ym );
@@ -375,14 +426,20 @@ void PanelSpinEditText::motionLeft( int xm, int ym )
  	WindowsManager&     wm  = WindowsManager::getInstance();
     wm.onTop(pEditCopy);
 
+    //logf( (char*)"PanelSpinEditText::motionLeft()   %p->%p", (void *)pChangeValue, (void*)pID );
 	if ( cb_motion != NULL )			(*cb_motion)(xm, ym);
+#ifdef DEBUG
+	else								logf( (char*)"cb_motion == NULL" );
+#endif
+
+    if ( pChangeValue )					pChangeValue->changeValueDouble( val, pID );
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
 void PanelSpinEditText::releaseLeft( int xm, int ym )
 {
-    logf( (char*)"PanelSpinEditText::releaseLeft(%d, %d)", xm, ym );
+    //logf( (char*)"PanelSpinEditText::releaseLeft(%d, %d)", xm, ym );
     setVisible( true );
     pCadran->setVisible( false );
     pCadran->setCanMove(true);
@@ -398,8 +455,10 @@ void PanelSpinEditText::releaseLeft( int xm, int ym )
 //--------------------------------------------------------------------------------------------------------------------
 void PanelSpinEditText::clickRight( int xm, int ym )
 {
+#ifdef DEBUG
     logf( (char*)"PanelSpinEditText::clickRight(%d, %d)", xm, ym );
     logf( (char*)"	delta (%d, %d)", delta_x, delta_y );
+#endif
     x_click = xm; y_click = ym;
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -407,9 +466,10 @@ void PanelSpinEditText::clickRight( int xm, int ym )
 //--------------------------------------------------------------------------------------------------------------------
 void PanelSpinEditText::releaseRight( int xm, int ym )
 {
+#ifdef DEBUG
     logf( (char*)"PanelSpinEditText::releaseRight(%d, %d)", xm, ym );
-    
     logf( (char*)"	delta (%d, %d)", delta_x, delta_y );
+#endif
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

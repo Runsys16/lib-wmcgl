@@ -107,6 +107,8 @@ WIDTH=$(( $SCREEN_WIDTH / 2 + 200))
 WIDTH=1100
 HEIGHT=$(( $SCREEN_HEIGHT - $OFFSET )) 
 
+DOCK_WIDTH=$((38))
+
 echo "------------------------------------------------------------"
 echo "  total        SCREEN       calculé"
 echo $SCREEN_SIZE"     "$SCREEN_WIDTH"x"$SCREEN_HEIGHT"     "$WIDTH"x"$HEIGHT
@@ -122,7 +124,7 @@ case "$(hostname)" in
 		POSX=-72
 		POSY=-14
 
-		WIDTH=1140
+		WIDTH=$((1920/2+ 190))
 		HEIGHT=1249
 		;;
 esac
@@ -136,7 +138,7 @@ open $STR0
 POSX=$(( $POSX + 100 ))
 case "$(hostname)" in
 	"poste-002")
-		POSX=818
+		POSX=$((1920 - $WIDTH + $DOCK_WIDTH))
 		POSY=-14
 		;;
 esac

@@ -32,7 +32,8 @@ PanelConsole::PanelConsole()	{
 	#endif
 	
 	PanelSimple();
-	tabSize = 40;
+	razTabSize();
+	setTabSize( 40 );
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -65,7 +66,7 @@ PanelConsole::PanelConsole(int nbLine, int max)	{
 	for( int i=0; i<nbLine; i++ )	{
 		texts.push_back( new PanelText() );
 		texts[i]->setPos( 0, i*heightLine );
-		texts[i]->setTabSize( tabSize );
+		texts[i]->setvTabSize( vTabSize );
 		this->add( texts[i] );
 	}
 	
@@ -154,11 +155,16 @@ void PanelConsole::rotateBuffer() {
 	currentLine--;
 	this->sup( texts[0] );
 	texts.erase( texts.begin() + 0 );
-	texts.push_back( new PanelText() );
-	texts[ texts.size()-1 ]->setPosY( y );
-	texts[ texts.size()-1 ]->setPosX( 0 );
-	texts[ texts.size()-1 ]->setTabSize( tabSize );
-	this->add( texts[ texts.size()-1 ] );
+	
+	PanelText*	p = new PanelText();
+	texts.push_back( p );
+	
+	p->setPosY( y );
+	p->setPosX( 0 );
+
+	p->razTabSize();
+	p->setvTabSize( vTabSize );
+	this->add( p );
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -235,9 +241,15 @@ void PanelConsole::setColor( long c ) {
 //--------------------------------------------------------------------------------------------------------------------
 void PanelConsole::affiche( string* str ) {
 	texts[currentLine]->changeText(*str, PanelText::NORMAL_FONT, true );
-	texts[currentLine]->setTabSize( tabSize );
+
+	texts[currentLine]->razTabSize();
+	texts[currentLine]->setvTabSize( vTabSize );
+
 	for( int i=0; i<texts.size(); i++ )	{
-		texts[i]->setTabSize( tabSize );
+
+		texts[i]->razTabSize();
+		texts[i]->setvTabSize( vTabSize );
+
 		texts[i]->setColor( color );
 	}
 	addLine();
@@ -248,9 +260,15 @@ void PanelConsole::affiche( string* str ) {
 //--------------------------------------------------------------------------------------------------------------------
 void PanelConsole::affiche( string str ) {
 	texts[currentLine]->changeText(str, PanelText::NORMAL_FONT, true );
-	texts[currentLine]->setTabSize( tabSize );
+
+	texts[currentLine]->razTabSize();
+	texts[currentLine]->setvTabSize( vTabSize );
+
 	for( int i=0; i<texts.size(); i++ )	{
-		texts[i]->setTabSize( tabSize );
+
+		texts[i]->razTabSize();
+		texts[i]->setvTabSize( vTabSize );
+
 		texts[i]->setColor( color );
 	}
 	addLine();
@@ -931,9 +949,21 @@ void PanelConsole::cb_keyboard_special_up( unsigned char key ) {
 //
 //
 //--------------------------------------------------------------------------------------------------------------------
+void PanelConsole::razTabSize() {
+	if 	( texts.size() == 0 )				return;
+
+	texts[currentLine]->razTabSize();
+	vTabSize.clear();
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 void PanelConsole::setTabSize( int t ) {
+	if 	( texts.size() == 0 )				return;
+
 	texts[currentLine]->setTabSize( t );
-	tabSize = t;
+	vTabSize.push_back( t );
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

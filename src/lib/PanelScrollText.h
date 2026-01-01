@@ -7,7 +7,7 @@
 #include "PanelText.h"
 #include "TextUtil.h"
 
-
+#include <atomic>
 /*
 typedef void (* CB_CMD)(std::string);
 
@@ -37,7 +37,11 @@ class PanelScrollText : public PanelSimple	{
 		int							posWordSuiv();
 		void						wordPrec();
 		void						wordSuiv();
+
+		void						razTabSize();
 		void						setTabSize( int );
+		void						setvTabSize( std::vector<int>& );
+		std::vector<int>&			getvTabSize();
 		void						setColor( long );
 		
 		virtual void				displayGL();
@@ -48,11 +52,11 @@ inline  int                         getHeightLine()                     { return
 
 	private:
 		int							maxCmd;
-		std::vector<PanelText *>	texts;
+std::vector<PanelText *>			texts;
 		std::string					prompt;
 		
 		int							heightLine;
-		int							tabSize;
+		std::vector<int>			vTabSize;
 		
 		int                         color;
 		

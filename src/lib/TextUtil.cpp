@@ -170,7 +170,7 @@ GLuint TextUtil::GenFont( CTexFont *_Font )	{
 //--------------------------------------------------------------------------------------------------------------------
 TextUtil::TextUtil()
 {
-    m_tab_size = 40;
+    //m_tab_size = 40;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -205,6 +205,26 @@ void TextUtil::DeleteTextObj(void *_TextObj)
 		delete p;
 	}
 
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+int TextUtil::compute_tab( int x )
+{
+	if ( m_vTabSize.size() == 0 )			return x;
+	
+	
+	int pos = 0;
+	while( pos <= x )
+	{
+		for( int i=0; i<m_vTabSize.size(); i++ )
+		{
+			pos += m_vTabSize[i];
+			if ( pos > x )		break;
+		}
+	}
+		
+	return pos;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -244,8 +264,8 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
     TextObj->m_Colors.resize(0);
     TextObj->m_BgColors.resize(0);
 
-    if ( m_tab_size < 0 )	m_tab_size = 40;
-    if ( m_tab_size > 600 )	m_tab_size = 40;
+    if ( m_vTabSize.size() == 0 )	m_vTabSize.push_back( 40 );
+    //if ( m_tab_size > 600 )	m_tab_size = 40;
 
     int x, x1, y, y1, i, Len;
     unsigned char ch;
@@ -268,15 +288,28 @@ void TextUtil::BuildText(void *_TextObj, const std::string *_TextLines, color32 
         for( i=0; i<Len; ++i )
         {
             ch = Text[i];
-            if ( ch > 0x7f )    continue;
+            if ( ch != 176 && ch > 0x7f )    continue;
             if ( ch == '\t' )	{
+				/*
             	if ( m_tab_size == 0 )	m_tab_size = 40;
             	int pos = x / m_tab_size;
             	x = (pos+1) * m_tab_size;
-            	//std::string s = _TextLines[Line];
-                //cout << "tabulation "<< m_tab_size <<"  x=" << x <<"   "<< s << endl;
-
+				*/
+				x = compute_tab( x );
             	continue;
+            }
+            
+            if ( ch == 176 )		// degre °
+            {
+	           	//printf( "Degre : %d\n", (unsigned)ch );
+            	ch = 'o';
+				y = Line * (_Font->m_CharHeight+_Sep) - _Font->m_CharHeight / 4;
+				y1 = y+_Font->m_CharHeight;
+            }
+            else
+            {
+				y = Line * (_Font->m_CharHeight+_Sep);
+				y1 = y+_Font->m_CharHeight;
             }
 
             x1 = x + _Font->m_CharWidth[ch];
@@ -684,7 +717,21 @@ void TextUtil::setTabSize( int t ) {
 	#ifdef DEBUG
 	cout << "TextUtil::setTabSize() : " << t << endl;
 	#endif
-	m_tab_size = t;
+	m_vTabSize.push_back( t );
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void TextUtil::setvTabSize( vector<int>&vNew  ) {
+	#ifdef DEBUG
+	cout << "TextUtil::setTabSize() : " << t << endl;
+	#endif
+	m_vTabSize.clear();
+	
+	for( int i=0; i<vNew.size(); i++ )
+	{
+		m_vTabSize.push_back( vNew[i] );
+	}
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

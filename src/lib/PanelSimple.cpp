@@ -225,13 +225,16 @@ void PanelSimple::displayGL() {
 	// display	with scissor
 	glColor4f( 1.0, 1.0, 1.0, 1.0 );
 	Panel::displayGL();
-
+	
     if ( parent == NULL || bScissor )
     	glDisable( GL_SCISSOR_TEST );
 	
 	if ( bDebug && pPsDebug )		{
+		char	str[255];
+		sprintf( str, "ID=%d X=%d, Y=%d, DX=%d, DY=%d order=%d", getID(), getX(), getY(), getDX(), getDY(), wm.getOrder(this) );
+		pPtDebug->changeText( str );
+
 		pPsDebug->displayGL();
-		//pPtDebug->displayGL();
 	}
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -251,7 +254,7 @@ void PanelSimple::debug( bool b )	{
 		pPtDebug = new PanelText();
 		char	str[255];
 		
-		sprintf( str, "ID=%d\n X=%d, Y=%d, DX=%d, DY=%d order=%d", getID(), getX(), getY(), getDX(), getDY(), wm.getOrder(this) );
+		sprintf( str, "ID=%d X=%d, Y=%d, DX=%d, DY=%d order=%d", getID(), getX(), getY(), getDX(), getDY(), wm.getOrder(this) );
 		sDebug = string(str);
 		cout <<" DebugPanel : "<< sDebug << endl;
 		
@@ -260,14 +263,6 @@ void PanelSimple::debug( bool b )	{
 		pPsDebug->add( pPtDebug );
 		add( pPsDebug );
 	}
-	/*
-	if ( b )	{
-		pPsDebug->setVisible( true );
-	}
-	else	{
-		pPsDebug->setVisible( false );
-	}
-	*/
 	pPsDebug->setVisible( bDebug );
 }
 //--------------------------------------------------------------------------------------------------------------------

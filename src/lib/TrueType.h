@@ -34,6 +34,7 @@ protected:
 		GLuint 			list_base;	///< Holds the first display list id
 		
 		unsigned		uCaracLenght[MAX_CARAC];	
+		unsigned		uCaracHeight[MAX_CARAC];	
 
 public:	
 		TrueType();
@@ -44,6 +45,7 @@ public:
 		void			make_dlist ( FT_Face face, char ch, GLuint list_base, GLuint * tex_base );
 		void 			print(const float x, float y, uint32_t color, const char *fmt, ...) ;
 		unsigned		lenght( const char* text );
+		unsigned		height( const char* text );
 		unsigned		getGlyphCount( const char*);
 
 };

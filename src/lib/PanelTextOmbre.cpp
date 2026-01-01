@@ -146,7 +146,6 @@ void PanelTextOmbre::init()	{
 	pTextGL = NULL;
 	bChange = false;
 	ID = 9001;
-	tabSize = 40;
 	color = 0xffffffff;
 	pTextOmbre.setColor( 0x000000ff );
 	pTextOmbre.setPos( 1, 1 );

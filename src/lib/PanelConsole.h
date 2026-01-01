@@ -56,6 +56,7 @@ class PanelConsole : public PanelSimple	{
 		int							posWordSuiv();
 		void						wordPrec();
 		void						wordSuiv();
+		void						razTabSize();
 		void						setTabSize( int );
 		void                        setColor(long);
 		
@@ -69,7 +70,7 @@ class PanelConsole : public PanelSimple	{
 		PanelConsoleCallBack*		ppccb;
 		
 		int							heightLine;
-		int							tabSize;
+		std::vector<int>			vTabSize;
 		
 		int 						currentLine;
 		int							currentPos;

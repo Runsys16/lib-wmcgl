@@ -164,6 +164,7 @@ PanelText::PanelText( char * cstr, char* sPathNameFont, int x, int y, uint32_t s
 	setExtraString( string(cstr) );
 	text = cstr;
 	dx = dx_raw = pTrueType->lenght( cstr );
+	dy = dy_raw = pTrueType->height( cstr );
 #undef 	DEBUG
 }
 //--------------------------------------------------------
@@ -226,10 +227,12 @@ void PanelText::init() {
 	pTextGL		= NULL;
 	bChange		= false;
 	ID			= 9000;
-	tabSize		= 40;
+	vTabSize.push_back( 40 );
+	textUtil->setTabSize(40);
 	color		= 0xffffffff;
 	alpha		= 0.0;
 	bColor		= false;
+	iMaxSize	= -1;
 	//bFantome = true;
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -420,7 +423,7 @@ void PanelText::buildString()	{
 	color32 c_bg	= COLOR32_RED;
 
 	//if (pTextGL != NULL )	textUtil->DeleteTextObj( pTextGL );
-	textUtil->setTabSize( tabSize );
+	textUtil->setvTabSize( vTabSize );
 	if ( pTextGL )		{ 
 		textUtil->DeleteTextObj( static_cast<TextUtil *>(pTextGL) );  
 		//logf( (char*)"Delete TextUtil" );
@@ -435,7 +438,7 @@ void PanelText::buildString()	{
 	case NORMAL_FONT :
 	    {
     	//cout << "NORMAL_FONT : "<< typeFont  << endl;
-    	textUtil->setTabSize( tabSize );
+		textUtil->setvTabSize( vTabSize );
 		textUtil->GenFont( DefaultNormalFont, color );
 		textUtil->BuildText( pTextGL, &(text), &c, &c_bg, 1,  DefaultNormalFont, 0xffffff00, 0xff0000ff);
 		}
@@ -443,7 +446,7 @@ void PanelText::buildString()	{
 	case SMALL_FONT :
 		{
     	//cout << "SMALL_FONT : "<< typeFont << endl;
-    	textUtil->setTabSize( tabSize );
+		textUtil->setvTabSize( vTabSize );
 		textUtil->GenFont( DefaultSmallFont, color );
 		textUtil->BuildText( pTextGL, &(text), &c, &c_bg, 1,  DefaultSmallFont, 0xffffff00, 0xff0000ff);
 		}
@@ -451,7 +454,7 @@ void PanelText::buildString()	{
 	case LARGE_FONT :
 		{
     	//cout << "LARGE_FONT : "<< typeFont << endl;
-    	textUtil->setTabSize( tabSize );
+		textUtil->setvTabSize( vTabSize );
 		textUtil->GenFont( DefaultLargeFont, color );
 		//textUtil->BuildText( pTextGL, &(text), &c, &c_bg, 1,  DefaultLargeFont, 0xffffff00, 0xff0000ff);
 		textUtil->BuildText( pTextGL, &(text), NULL, NULL, 1,  DefaultLargeFont, 0xffffff00, 0xff0000ff);
@@ -461,7 +464,7 @@ void PanelText::buildString()	{
 	bChange = false;
 
 	dx = dx_raw = getTextLenght();
-	dy = dy_raw = 12;
+	dy = dy_raw = getDY();
 	switch (typeFont )	{
 	case NORMAL_FONT :
 		dy = dy_raw = 14;
@@ -473,6 +476,12 @@ void PanelText::buildString()	{
 		dy = dy_raw = 16;
 		break;
 	}
+	
+	/*
+	if ( iMaxSize != -1 )
+	{
+	}
+	*/
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -486,6 +495,7 @@ int PanelText::getTextLenght()	{
 		case SMALL_FONT :		l = textUtil->lenght( pTextGL, &text, DefaultSmallFont );		break;
 		case LARGE_FONT :		l = textUtil->lenght( pTextGL, &text, DefaultLargeFont );		break;
 		case FREE_TYPE :		l = pTrueType->lenght( text.c_str() );							break;
+		default:				l = -1; logf( (char*)"[ Erreur ] PanelText::getTextLenght() %d", __LINE__  ); break;
 	}
 	return l;
 }
@@ -499,6 +509,7 @@ int PanelText::getTextLenght( int nbChar )	{
 		case NORMAL_FONT :		defaultFont = DefaultNormalFont;		break;
 		case SMALL_FONT :		defaultFont = DefaultSmallFont;			break;
 		case LARGE_FONT :		defaultFont = DefaultLargeFont;			break;
+		default:				logf( (char*)"[ Erreur ] PanelText::getTextLenght(int %d) -- %d", nbChar, __LINE__  ); break;
 	}
 	return( textUtil->lenght( pTextGL, &text, defaultFont, nbChar ) );
 }
@@ -511,7 +522,24 @@ void PanelText::setTabSize( int t ) {
 	cout << "PanelText::setTabSize() : " << t << endl;
 	#endif
 	textUtil->setTabSize( t );
-	tabSize = t;
+	vTabSize.push_back( t );
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelText::setvTabSize( vector<int>&vNew  ) {
+	#ifdef DEBUG
+	cout << "TextUtil::setTabSize() : " << t << endl;
+	#endif
+
+	vTabSize.clear();
+	
+	for( int i=0; i<vNew.size(); i++ )
+	{
+		vTabSize.push_back( vNew[i] );
+	}
+
+	textUtil->setvTabSize( vNew );
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

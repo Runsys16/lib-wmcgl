@@ -46,12 +46,14 @@ public:
 
     void *				NewTextObj();
     void				DeleteTextObj(void *_TextObj);
+	int					compute_tab( int );
     void				BuildText(void *_TextObj, const std::string *_TextLines, color32 *_LineColors, color32 *_LineBgColors, int _NbLines,  CTexFont *_Font, int _Sep, int _BgWidth);
 
     int					lenght(void *_TextObj, const std::string *_TextLines, CTexFont * );
     int					lenght(void *_TextObj, const std::string *_TextLines, CTexFont *, int );
     void				BeginGL();
     void				EndGL();
+
     void				DrawText(void *_TextObj, float angle, int _X, int _Y, color32 _Color, color32 _BgColor);
     void				DrawText(void *_TextObj, int _X, int _Y, color32 _Color, color32 _BgColor);
 
@@ -64,7 +66,8 @@ public:
 	void 				UnbindFont( int );
 	void 				UnbindFont();
 	void				setTabSize( int );
-
+	void				razTabSize( )								{ m_vTabSize.clear(); }
+	void				setvTabSize( std::vector<int>& );
 
 
 protected:
@@ -102,7 +105,7 @@ protected:
     GLfloat             m_ProjMatrixInit[16];
     int                 m_WndWidth;
     int                 m_WndHeight;
-    int                 m_tab_size;
+    std::vector<int>	m_vTabSize;
 
     struct Vec2         { GLfloat x, y; Vec2(){} Vec2(GLfloat _X, GLfloat _Y):x(_X),y(_Y){} Vec2(int _X, int _Y):x(GLfloat(_X)),y(GLfloat(_Y)){} };
     struct CTextObj

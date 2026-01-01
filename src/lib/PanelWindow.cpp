@@ -397,55 +397,58 @@ void PanelWindow::displayGLBordure()	{
 	//cout << "PanelWindow::displayGL() m_tex_bl : " << m_tex_bl << endl;
 	float X, Y, DX, DY;
 
-	// corners
-	X = getX() - borderSize;
-	Y = getY() - borderSize;
-	DX = borderSize;
-	DY = borderSize;
-	displayGLtex( m_tex_tl, X, Y, DX, DY );
+	if ( borderSize != 0 )
+	{
+		// corners
+		X = getX() - borderSize;
+		Y = getY() - borderSize;
+		DX = borderSize;
+		DY = borderSize;
+		displayGLtex( m_tex_tl, X, Y, DX, DY );
 
-	X = getX() + getDX();
-	Y = getY() - borderSize;
-	DX = borderSize;
-	DY = borderSize;
-	displayGLtex( m_tex_tr, X, Y, DX, DY );
-	
-	X = getX() - borderSize;
-	Y = getY() + getDY();
-	DX = borderSize;
-	DY = borderSize;
-	displayGLtex( m_tex_bl, X, Y, DX, DY );
+		X = getX() + getDX();
+		Y = getY() - borderSize;
+		DX = borderSize;
+		DY = borderSize;
+		displayGLtex( m_tex_tr, X, Y, DX, DY );
+		
+		X = getX() - borderSize;
+		Y = getY() + getDY();
+		DX = borderSize;
+		DY = borderSize;
+		displayGLtex( m_tex_bl, X, Y, DX, DY );
 
-	X = getX() + getDX();
-	Y = getY() + getDY();
-	DX = borderSize;
-	DY = borderSize;
-	displayGLtex( m_tex_br, X, Y, DX, DY );
-	
-	// border
-	X = getX() - borderSize;
-	Y = getY();
-	DX = borderSize;
-	DY = getDY();
-	displayGLtex( m_tex_l, X, Y, DX, DY );
+		X = getX() + getDX();
+		Y = getY() + getDY();
+		DX = borderSize;
+		DY = borderSize;
+		displayGLtex( m_tex_br, X, Y, DX, DY );
+		
+		// border
+		X = getX() - borderSize;
+		Y = getY();
+		DX = borderSize;
+		DY = getDY();
+		displayGLtex( m_tex_l, X, Y, DX, DY );
 
-	X = getX() + getDX();
-	Y = getY();
-	DX = borderSize;
-	DY = getDY();
-	displayGLtex( m_tex_r, X, Y, DX, DY );
-	
-	X = getX();
-	Y = getY() - borderSize;
-	DX = getDX();
-	DY = borderSize;
-	displayGLtex( m_tex_t, X, Y, DX, DY );
+		X = getX() + getDX();
+		Y = getY();
+		DX = borderSize;
+		DY = getDY();
+		displayGLtex( m_tex_r, X, Y, DX, DY );
+		
+		X = getX();
+		Y = getY() - borderSize;
+		DX = getDX();
+		DY = borderSize;
+		displayGLtex( m_tex_t, X, Y, DX, DY );
 
-	X = getX();
-	Y = getY() + getDY();
-	DX = getDX();
-	DY = borderSize;
-	displayGLtex( m_tex_b, X, Y, DX, DY );
+		X = getX();
+		Y = getY() + getDY();
+		DX = getDX();
+		DY = borderSize;
+		displayGLtex( m_tex_b, X, Y, DX, DY );
+	}
 	/*
 	*/
 	if ( bDebug && pPsDebug )		{

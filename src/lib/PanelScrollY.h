@@ -14,7 +14,8 @@ class PanelScrollY : public PanelSimple {
 		int 				computeDY();
 		
 		inline void			setDelta( int d )				{ y_delta = d; }
-		//void				buildText();
+		inline int			getDelta()						{ return y_delta; }
+
 		virtual void		clickUp( int, int);
 		virtual void		clickDown( int, int);
 		virtual Panel*		isMouseOver( int, int);

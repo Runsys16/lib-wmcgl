@@ -39,7 +39,7 @@ PanelScrollText::PanelScrollText()	{
 	#endif
 	
 	PanelSimple();
-	tabSize = 40;
+	setTabSize( 40 );
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -68,7 +68,7 @@ PanelScrollText::PanelScrollText(int nbLine, int max)	{
 	for( int i=0; i<nbLine; i++ )	{
 		texts.push_back( new PanelText() );
 		texts[i]->setPos( 0, i*heightLine );
-		texts[i]->setTabSize( tabSize );
+		texts[i]->setvTabSize( vTabSize );
 		this->add( texts[i] );
 	}
 	
@@ -151,7 +151,7 @@ void PanelScrollText::rotateBuffer() {
 	texts.push_back( new PanelText() );
 	texts[ texts.size()-1 ]->setPosY( y );
 	texts[ texts.size()-1 ]->setPosX( 0 );
-	texts[ texts.size()-1 ]->setTabSize( tabSize );
+	texts[ texts.size()-1 ]->setvTabSize( vTabSize );
 	this->add( texts[ texts.size()-1 ] );
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -218,9 +218,9 @@ void PanelScrollText::affiche( string* str ) {
     #endif
         
 	texts[currentLine]->changeText(*str, PanelText::NORMAL_FONT, true );
-	texts[currentLine]->setTabSize( tabSize );
+	texts[currentLine]->setvTabSize( vTabSize );
 	for( int i=0; i<texts.size(); i++ )	{
-		texts[i]->setTabSize( tabSize );
+		texts[i]->setvTabSize( vTabSize );
 	    texts[i]->setColor( color );
 	}
 	addLine();
@@ -237,12 +237,27 @@ void PanelScrollText::affiche( string str ) {
     #endif
 
 	texts[currentLine]->changeText(str, PanelText::NORMAL_FONT, true );
-	texts[currentLine]->setTabSize( tabSize );
+	texts[currentLine]->setvTabSize( vTabSize );
 	for( int i=0; i<texts.size(); i++ )	{
-		texts[i]->setTabSize( tabSize );
+		texts[i]->setvTabSize( vTabSize );
 	    texts[i]->setColor( color );
 	}
 	addLine();
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+
+void PanelScrollText::razTabSize() {
+    #ifdef DEBUG
+    cout <<"CurrentLine : "<< currentLine << endl;
+    #endif
+	//texts[currentLine]->setTabSize( t );
+    for ( int i=0; i<texts.size(); i++ )
+    {
+	    texts[i]->razTabSize();
+	}
+	vTabSize.clear();
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -252,8 +267,36 @@ void PanelScrollText::setTabSize( int t ) {
     #ifdef DEBUG
     cout <<"CurrentLine : "<< currentLine << endl;
     #endif
+    for ( int i=0; i<texts.size(); i++ )
+    {
+	    texts[i]->setTabSize(t);
+	}
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+
+void PanelScrollText::setvTabSize( std::vector<int>& vNew ) {
+    #ifdef DEBUG
+    cout <<"CurrentLine : "<< currentLine << endl;
+    #endif
 	//texts[currentLine]->setTabSize( t );
-	tabSize = t;
+    for ( int i=0; i<texts.size(); i++ )
+    {
+	    texts[i]->setvTabSize(vNew);
+	}
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+
+std::vector<int>& PanelScrollText::getvTabSize() 
+{
+    #ifdef DEBUG
+    cout <<"CurrentLine : "<< currentLine << endl;
+    #endif
+    
+    return texts[currentLine]->getvTabSize();
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

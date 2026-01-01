@@ -44,8 +44,13 @@ class PanelText : public Panel	{
 		void 				changeText( std::string, bool );
 		void 				changeText( std::string, FONT, bool );
 		void 				eraseText( );
+
 		void				setTabSize( int );
-		int					getTabSize()									{return tabSize;}
+		void				setvTabSize( std::vector<int>& );
+		vector<int>&		getvTabSize()									{return vTabSize;}
+		vector<int>&		getTabSize()									{return vTabSize;}
+		void				razTabSize()									{ vTabSize.clear();}
+
 		void				setColor( int l);
 inline	void				setChangeColor(bool b)							{ bColor = b; }
 	
@@ -59,6 +64,7 @@ inline	void				setChangeColor(bool b)							{ bColor = b; }
 		inline void 		setChangeText(bool b )							{bChange = b;};
 		inline void 		setAlpha(float a )								{ alpha = a;};
 		
+		inline void 		setDY(unsigned u)								{ dy = dy_raw = u;};
 		//----------------- functions
 		std::string			strFont();		
 
@@ -76,9 +82,10 @@ inline	void				setChangeColor(bool b)							{ bColor = b; }
 		bool				bChange;
 		
 		void*				pTextGL;
-		int					tabSize;
+		vector<int>			vTabSize;
 		bool                bStatic;
 		bool				bColor;
+		int					iMaxSize;
 		
 		float				alpha;
 	

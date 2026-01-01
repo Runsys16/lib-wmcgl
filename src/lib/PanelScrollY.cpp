@@ -11,6 +11,7 @@
 
 
 //#define DEBUG
+//#define DEBUG_GL
 //#define DEBUG_CONST
 
 #ifdef DEBUG_WM
@@ -47,6 +48,7 @@ int  PanelScrollY::computeDY()
 	for( int i=0; i<childs.size(); i++ )
 	{
 		int u = childs[i]->getPosY() + childs[i]->getDY();
+		//int u = childs[i]->getDY();
 		if ( u > max ) 				max = u;
 	}
 	return max;
@@ -54,6 +56,12 @@ int  PanelScrollY::computeDY()
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelScrollY::clickUp( int x, int y ) {
+#ifdef DEBUG
+	logf( (char*)"PanelScrollY::clickUp( %d, %d )", x, y );
+#endif
+
+	//if ( computeDY() < getDY() ) return;
+
 	int delta = y_delta;
 
 	dy_scroll += delta;
@@ -65,38 +73,57 @@ void PanelScrollY::clickUp( int x, int y ) {
 	}
 
 	y_scroll = delta;
+#ifdef DEBUG
+	logf( (char*)"  |    delta %d", delta );
+	logf( (char*)"  |dy_scroll %d", dy_scroll );
+	logf( (char*)"  |      cDY %d  DY %d", computeDY(), getDY() );
+	//logf( (char*)"  |      max %d  DY %d", max, childs[0]->getDY() );
+	//logf( (char*)"  |      max %d  DY %d", max, childs[0]->getDY() );
+#endif
 	updatePos();
 
-	/*
-	cout <<"clickDown() max="<< computeDY();
-	cout <<"  DY="<< getDY();
-	cout << " dy_scroll=" << dy_scroll;
-	cout << endl;
-	*/
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelScrollY::clickDown( int x, int y ) {
+#ifdef DEBUG
+	logf( (char*)"PanelScrollY::clickDown( %d, %d )", x, y );
+#endif
+
+	if ( computeDY() <= getDY() ) return;
+
 	int max = computeDY();
 	int delta = -y_delta;
 	
-	if ( max <= getDY() )
+	if ( max <= (getDY()+getPosY()) )
 	{
-		delta = getDY() - max;
+		delta = getDY() + getPosY() - max;
 	}
 		
 	dy_scroll += delta;
 	y_scroll = delta;
+#ifdef DEBUG
+	logf( (char*)"  |    delta %d", delta );
+	logf( (char*)"  |dy_scroll %d", dy_scroll );
+	logf( (char*)"  |      cDY %d  DY %d", computeDY(), getDY() );
+	logf( (char*)"  |      max %d  DY %d", max, childs[0]->getDY() );
+#endif
 	updatePos();
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelScrollY::wheelUp( int x, int y ) {
+#ifdef DEBUG
+	logf( (char*)"PanelScrollY::wheelUp( %d, %d )", x, y );
+#endif
     clickUp(x, y);
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelScrollY::wheelDown( int x, int y ) {
+#ifdef DEBUG
+	logf( (char*)"PanelScrollY::wheelDown( %d, %d )", x, y );
+#endif
     clickDown(x, y);
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
@@ -133,7 +160,7 @@ void PanelScrollY::updatePos() {
 ----------------------------------------------------------------------------------------------------------------------------------*/
 Panel* PanelScrollY::isMouseOver(int xm, int ym)	{
 	#ifdef DEBUG
-	cout << "Panel::isMouseOver()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
+	cout << "PanelScrollY::isMouseOver()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
 	#endif
 	if ( !visible )			return NULL;
 
@@ -169,7 +196,7 @@ void PanelScrollY::displayGL() {
 	float DX = getDX();
 	float DY = getDY();
 	
-#ifdef DEBUG
+#ifdef DEBUG_GL
 	cout << "PS displayGL ... fenetre id : " << getID() << endl;
 	cout << "    PS:" << "-------------------" << endl;
 	cout << "    PS:" << getX() <<", "<< getY() <<", "<< getDX() <<", "<< getDY() << endl;
@@ -225,7 +252,7 @@ void PanelScrollY::displayGL() {
 	scy  = height - getDY() - getY();	scdx = getDX();
 	scdy = getDY();
 
-#ifdef DEBUG
+#ifdef DEBUG_GL
 	cout << "    PS:" << "-------------------" << endl;
 	cout << "    PS:" << "-----Scissor-------" << endl;
 	cout << "    PS:" << scx <<", "<< scy <<", "<< scdx <<", "<< scdy << endl;

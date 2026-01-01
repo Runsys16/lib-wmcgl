@@ -188,6 +188,7 @@ void TrueType::make_dlist ( FT_Face face, char ch, GLuint list_base, GLuint * te
 	//uCaracLenght[ch] = bitmap.width + bitmap_glyph->left + int(face->glyph->advance.x >> 6 );//bitmap_glyph->left;
 	uCaracLenght[ch] = int(face->glyph->advance.x >> 6 );//bitmap_glyph->left;
 	//uCaracLenght[ch] = bitmap.width + x;
+	uCaracHeight[ch] = int( y );//bitmap_glyph->left;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -356,6 +357,23 @@ unsigned TrueType::lenght(const char* text)
 {
 	unsigned l = 0;
 	for(unsigned i=0; text[i]!=0; i++ )	l +=  uCaracLenght[ text[i] ];
+
+	return l;
+}	
+//--------------------------------------------------------------------------------------------------------------------
+///Much like Nehe's glPrint function, but modified to work
+///with TrueType fonts.
+//
+//--------------------------------------------------------------------------------------------------------------------
+unsigned TrueType::height(const char* text)
+{
+	unsigned l = 0;
+	for(unsigned i=0; text[i]!=0; i++ )	
+	{
+		unsigned u = uCaracLenght[ text[i] ];
+		
+		if ( l < u  )		l = u;
+	}
 
 	return l;
 }	

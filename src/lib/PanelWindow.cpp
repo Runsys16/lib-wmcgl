@@ -8,6 +8,7 @@
 
 
 //#define DEBUG	1
+#define BORDERSIZE	12
 
 
 using namespace std;
@@ -154,8 +155,8 @@ Panel* PanelWindow::isMouseOverUpperLeft(int xm, int ym)	{
 	cout << "Panel::isMouseOverBorder()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
 	#endif
 
-    if (        ( xm>x_raw-borderSize && xm<x_raw )
-            &&  ( ym>y_raw-borderSize && ym<y_raw ) )
+    if (        ( xm>x_raw-BORDERSIZE && xm<x_raw )
+            &&  ( ym>y_raw-BORDERSIZE && ym<y_raw ) )
     
     {
         glutSetCursor(0X10);        
@@ -173,7 +174,7 @@ Panel* PanelWindow::isMouseOverUpper(int xm, int ym)	{
 	#endif
 
     if (        ( xm>x_raw && xm<x_raw+dx_raw )
-            &&  ( ym>y_raw-borderSize && ym<y_raw ) )
+            &&  ( ym>y_raw-BORDERSIZE && ym<y_raw ) )
     {
         glutSetCursor(0X0C);        
         mouseOverBorder = MOB_UPPER;
@@ -191,8 +192,8 @@ Panel* PanelWindow::isMouseOverUpperRight(int xm, int ym)	{
 	cout << "Panel::isMouseOverBorder()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
 	#endif
 
-    if (        ( xm>x_raw+borderSize && xm<x_raw+borderSize+dx_raw )
-            &&  ( ym>y_raw-borderSize && ym<y_raw ) )
+    if (        ( xm>x_raw+BORDERSIZE && xm<x_raw+BORDERSIZE+dx_raw )
+            &&  ( ym>y_raw-BORDERSIZE && ym<y_raw ) )
     {
         mouseOverBorder = MOB_UPPER_RIGHT;
         glutSetCursor(0X11);        
@@ -209,7 +210,7 @@ Panel* PanelWindow::isMouseOverLeft(int xm, int ym)	{
 	cout << "Panel::isMouseOverBorder()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
 	#endif
 
-    if (        ( xm>x_raw-borderSize && xm<x_raw )
+    if (        ( xm>x_raw-BORDERSIZE && xm<x_raw )
             &&  ( ym>y_raw && ym<y_raw+dy_raw ) )
     {
         glutSetCursor(0X0E);        
@@ -226,7 +227,7 @@ Panel* PanelWindow::isMouseOverRight(int xm, int ym)	{
 	cout << "Panel::isMouseOverBorder()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
 	#endif
 
-    if (        ( xm>x_raw+dx_raw && xm<x_raw+dx_raw+borderSize )
+    if (        ( xm>x_raw+dx_raw && xm<x_raw+dx_raw+BORDERSIZE )
             &&  ( ym>y_raw && ym<y_raw+dy_raw ) )
     {
         mouseOverBorder = MOB_RIGHT;
@@ -243,8 +244,8 @@ Panel* PanelWindow::isMouseOverBottomLeft(int xm, int ym)	{
 	cout << "Panel::isMouseOverBorder()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
 	#endif
 
-    if (        ( xm>x_raw-borderSize && xm<x_raw )
-            &&  ( ym>y_raw+dy_raw && ym<y_raw+dy_raw+borderSize ) )
+    if (        ( xm>x_raw-BORDERSIZE && xm<x_raw )
+            &&  ( ym>y_raw+dy_raw && ym<y_raw+dy_raw+BORDERSIZE ) )
     {
         glutSetCursor(0X13);        
         mouseOverBorder = MOB_BOTTOM_LEFT;
@@ -261,7 +262,7 @@ Panel* PanelWindow::isMouseOverBottom(int xm, int ym)	{
 	#endif
 
     if (        ( xm>x_raw && xm<x_raw+dx_raw )
-            &&  ( ym>y_raw+dy_raw && ym<y_raw+dy_raw+borderSize ) )
+            &&  ( ym>y_raw+dy_raw && ym<y_raw+dy_raw+BORDERSIZE ) )
     {
         glutSetCursor(0X0D);        
         mouseOverBorder = MOB_BOTTOM;
@@ -277,8 +278,8 @@ Panel* PanelWindow::isMouseOverBottomRight(int xm, int ym)	{
 	cout << "Panel::isMouseOverBorder()" << x_raw <<", "<< y_raw <<", "<< dx_raw <<", "<< dy_raw << endl;
 	#endif
 
-    if (        ( xm>x_raw+dx_raw && xm<x_raw+dx_raw+borderSize )
-            &&  ( ym>y_raw+dy_raw && ym<y_raw+dy_raw+borderSize ) )
+    if (        ( xm>x_raw+dx_raw && xm<x_raw+dx_raw+BORDERSIZE )
+            &&  ( ym>y_raw+dy_raw && ym<y_raw+dy_raw+BORDERSIZE ) )
     {
         mouseOverBorder = MOB_BOTTOM_RIGHT;
         glutSetCursor(0X12);        
@@ -334,8 +335,8 @@ Panel* PanelWindow::isMouseOver(int xm, int ym)	{
 		if ( p )		return p;
 	}
 
-	if (        x_raw-borderSize <= xm && xm <= (x_raw+dx_raw+borderSize) 
-	        &&  y_raw-borderSize <= ym && ym <= (y_raw+dy_raw+borderSize) )     		    return this;
+	if (        x_raw-BORDERSIZE <= xm && xm <= (x_raw+dx_raw+BORDERSIZE) 
+	        &&  y_raw-BORDERSIZE <= ym && ym <= (y_raw+dy_raw+BORDERSIZE) )     		    return this;
 	else																					return NULL;
 }
 //--------------------------------------------------------------------------------------------------------------------

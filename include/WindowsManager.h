@@ -460,6 +460,7 @@ class PanelText : public Panel	{
 							PanelText( char*, char*, int, int, uint32_t, uint32_t, bool );
 
 		void 				init();
+		void 				buildStringNoMaxSize();
 		void 				buildString();
 		
 		inline std::string	getText()										{return text;};
@@ -482,7 +483,6 @@ class PanelText : public Panel	{
 		void				razTabSize()									{ vTabSize.clear();}
 
 		void				setColor( int l);
-inline	void				setChangeColor(bool b)							{ bColor = b; }
 	
 		virtual Panel*		isMouseOver( int, int);
 		void				displayGLfreetype();
@@ -498,6 +498,9 @@ inline	void				setChangeColor(bool b)							{ bColor = b; }
 		//----------------- functions
 		std::string			strFont();		
 
+inline	void				setChangeColor(bool b)							{ bColor = b; }
+inline	int					getMaxSize()									{ return iMaxSize; }
+inline	void				setMaxSize(int i)								{ iMaxSize = i; }
 	protected:
 		//----------------- members
 		ALIGN				align;

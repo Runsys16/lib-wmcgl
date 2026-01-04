@@ -399,7 +399,7 @@ void PanelText::eraseText()	{
 //
 //
 //--------------------------------------------------------------------------------------------------------------------
-void PanelText::buildString()	{
+void PanelText::buildStringNoMaxSize()	{
 #ifdef DEBUG
 	cout << "PanelText::buildString() font = "<< strFont() <<"  texte = \""<< text <<"\""<< endl;
 #endif
@@ -482,6 +482,34 @@ void PanelText::buildString()	{
 	{
 	}
 	*/
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelText::buildString()	{
+	if ( iMaxSize == -1 )		buildStringNoMaxSize();
+	else
+	{
+		buildStringNoMaxSize();
+		//printf( "******* %s  ***** %d/%d\n", text.c_str(), getTextLenght(), iMax );
+		int s = text.size() / 2;
+		string left = text.substr(0,s-1);
+		string right = text.substr(s);
+		//printf( "%s ....%s\n", left.c_str(), right.c_str() );
+
+		while ( getTextLenght() > iMaxSize )
+		{
+			int l = left.size();
+			left = left.substr(0,l-1);
+			
+			int r = right.size();
+			right = right.substr(1,r-1);
+			//printf( "%s\n", text.c_str() );
+			text = left + " ... " + right;
+			buildStringNoMaxSize();
+		}
+	}
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

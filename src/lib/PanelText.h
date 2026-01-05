@@ -11,7 +11,8 @@
 
 class PanelText : public Panel	{
 
-	public:
+public:
+//-------------------------------------------------------------------------------------------------
 		enum FONT { 	ARIAL, UBUNTU_B, UBUNTU_RI, UBUNTU_R, DEJA_VU_SANS_MONO,\
 					 	NORMAL_FONT, SMALL_FONT, LARGE_FONT, \
 					 	FREE_TYPE };
@@ -30,10 +31,11 @@ class PanelText : public Panel	{
 							PanelText( char*, char*, int, int, uint32_t, uint32_t, bool );
 
 		void 				init();
+		void				setSizeText();
 		void 				buildStringNoMaxSize();
 		void 				buildString();
 		
-		inline std::string	getText()										{return text;};
+		inline std::string&	getText()						{ return bAffShort ? text_short : text_long; }
 		int					getTextLenght();
 		int					getTextLenght(int);
 
@@ -48,30 +50,33 @@ class PanelText : public Panel	{
 
 		void				setTabSize( int );
 		void				setvTabSize( std::vector<int>& );
-		vector<int>&		getvTabSize()									{return vTabSize;}
-		vector<int>&		getTabSize()									{return vTabSize;}
-		void				razTabSize()									{ vTabSize.clear();}
+		vector<int>&		getvTabSize()									{ return vTabSize; }
+		vector<int>&		getTabSize()									{ return vTabSize; }
+		void				razTabSize()									{ vTabSize.clear(); }
 
 		void				setColor( int l);
 	
-		virtual Panel*		isMouseOver( int, int);
+virtual Panel*				isMouseOver( int, int);
 		void				displayGLfreetype();
 		void				displayGLInternal();
-		virtual void		displayGL();
-		virtual void		updatePos();
+virtual void				displayGL();
+virtual void				updatePos();
 		
-		inline void 		setAlign( ALIGN a )								{align = a;};
-		inline void 		setChangeText(bool b )							{bChange = b;};
-		inline void 		setAlpha(float a )								{ alpha = a;};
-		
-		inline void 		setDY(unsigned u)								{ dy = dy_raw = u;};
-		//----------------- functions
 		std::string			strFont();		
+		void		 		setAffShort( bool );
+
+		//----------------- functions
+inline void			 		setAlign( ALIGN a )								{ align = a; }
+inline void 				setChangeText(bool b )							{ bChange = b; }
+inline void 				setAlpha(float a )								{ alpha = a; }
+
+inline void 				setDY(unsigned u)								{ dy = dy_raw = u;}
 
 inline	void				setChangeColor(bool b)							{ bColor = b; }
 inline	int					getMaxSize()									{ return iMaxSize; }
 inline	void				setMaxSize(int i)								{ iMaxSize = i; }
-	protected:
+//-------------------------------------------------------------------------------------------------
+protected:
 		//----------------- members
 		ALIGN				align;
 
@@ -79,18 +84,23 @@ inline	void				setMaxSize(int i)								{ iMaxSize = i; }
 		FONT				typeFont;
 		TrueType*			pTrueType;
 		std::string			sFreeTypeName;
-		std::string			text;
 		uint32_t            color;
-		//std::string			cmdLine;
-		bool				bChange;
+
+		std::string			text;
+		std::string			text_long;
+		std::string			text_short;
 		
 		void*				pTextGL;
+		void*				pTextGL_long;
+		void*				pTextGL_short;
+
 		vector<int>			vTabSize;
-		bool                bStatic;
-		bool				bColor;
 		int					iMaxSize;
-		
 		float				alpha;
+
+		bool				bChange;
+		bool				bColor;
+		bool				bAffShort;
 	
 };
 

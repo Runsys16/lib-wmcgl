@@ -24,10 +24,14 @@ using namespace std;
 //
 //--------------------------------------------------------------------------------------------------------------------
 PanelText::~PanelText()	{
-	if ( pTextGL )		{ 
-		//cout << "PanelText  supression pTextGL !!!" << endl;
-		textUtil->DeleteTextObj( pTextGL );  
+	if ( pTextGL_short )		{ 
+		textUtil->DeleteTextObj( pTextGL_short );
 	}
+	if ( pTextGL_long )		{ 
+		textUtil->DeleteTextObj( pTextGL_long );  
+	}
+
+	pTextGL = pTextGL_short = pTextGL_long = NULL;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -220,20 +224,24 @@ void PanelText::init() {
 	cout << "PanelText::init() ..." << endl;
 	#endif
 
-	text		= "";
-	textUtil	= WindowsManager::getInstance().getTextUtil();
 	setPos( 0, 0 );
-	align		= LEFT;
-	pTextGL		= NULL;
-	bChange		= false;
-	ID			= 9000;
+	text			= "";
+	text_long		= "";
+	textUtil		= WindowsManager::getInstance().getTextUtil();
+	align			= LEFT;
+	pTextGL			= NULL;
+	pTextGL_long	= NULL;
+	pTextGL_short	= NULL;
+	ID				= 9000;
+	color			= 0xffffffff;
+	alpha			= 0.0;
+	iMaxSize		= -1;
+	bColor			= false;
+	bChange			= false;
+	bAffShort		= false;
+	//bFantome = true;
 	vTabSize.push_back( 40 );
 	textUtil->setTabSize(40);
-	color		= 0xffffffff;
-	alpha		= 0.0;
-	bColor		= false;
-	iMaxSize	= -1;
-	//bFantome = true;
 }
 //--------------------------------------------------------------------------------------------------------------------
 // ChangeText() functions
@@ -399,6 +407,25 @@ void PanelText::eraseText()	{
 //
 //
 //--------------------------------------------------------------------------------------------------------------------
+void PanelText::setSizeText()	{
+	dx = dx_raw = getTextLenght();
+	dy = dy_raw = getDY();
+	switch (typeFont )	{
+	case NORMAL_FONT :
+		dy = dy_raw = 14;
+		break;
+	case SMALL_FONT :
+		dy = dy_raw = 12;
+		break;
+	case LARGE_FONT :
+		dy = dy_raw = 16;
+		break;
+	}
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 void PanelText::buildStringNoMaxSize()	{
 #ifdef DEBUG
 	cout << "PanelText::buildString() font = "<< strFont() <<"  texte = \""<< text <<"\""<< endl;
@@ -463,20 +490,7 @@ void PanelText::buildStringNoMaxSize()	{
 	}
 	bChange = false;
 
-	dx = dx_raw = getTextLenght();
-	dy = dy_raw = getDY();
-	switch (typeFont )	{
-	case NORMAL_FONT :
-		dy = dy_raw = 14;
-		break;
-	case SMALL_FONT :
-		dy = dy_raw = 12;
-		break;
-	case LARGE_FONT :
-		dy = dy_raw = 16;
-		break;
-	}
-	
+	setSizeText();	
 	/*
 	if ( iMaxSize != -1 )
 	{
@@ -488,10 +502,19 @@ void PanelText::buildStringNoMaxSize()	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 void PanelText::buildString()	{
-	if ( iMaxSize == -1 )		buildStringNoMaxSize();
+	buildStringNoMaxSize();
+	pTextGL_long = pTextGL;
+	text_long = text;
+
+	if ( iMaxSize == -1 )		
+	{
+		return;
+	}
 	else
 	{
-		buildStringNoMaxSize();
+		if ( getTextLenght() <= iMaxSize )			return;
+		pTextGL = textUtil->NewTextObj();
+		
 		//printf( "******* %s  ***** %d/%d\n", text.c_str(), getTextLenght(), iMax );
 		int s = text.size() / 2;
 		string left = text.substr(0,s-1);
@@ -509,6 +532,12 @@ void PanelText::buildString()	{
 			text = left + " ... " + right;
 			buildStringNoMaxSize();
 		}
+
+		//printf( "******* %s  ***** %d/%d\n", text.c_str(), getTextLenght(), iMaxSize );
+		pTextGL_short = pTextGL;
+		text_short = text;
+		bAffShort = true;
+		setSizeText();
 	}
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -860,6 +889,22 @@ void PanelText::displayGL() {
 		glPopMatrix();	
 	}
 	
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelText::setAffShort( bool b) 
+{
+	//printf( (char*)"setAffShort\n" );
+	bAffShort = b;
+
+	if ( b )		{ pTextGL = pTextGL_short; text = text_short; }
+	else			{ pTextGL = pTextGL_long;  text = text_long; }
+	
+	if ( pTextGL==NULL )	{ pTextGL = pTextGL_long;  text = text_long; }
+
+	setSizeText();
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

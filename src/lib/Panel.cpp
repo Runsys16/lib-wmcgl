@@ -103,7 +103,13 @@ void Panel::add( Panel* p)	{
 	#ifdef DEBUG_CONST
 	cout << " Panel::add() ..." << endl;
 	#endif
-	if ( p->getParent() != NULL )			{ cout << " Panel::add() parent existe ..." << endl; return; }
+	if ( p->getParent() != NULL )			
+	{
+		log_wm(  (char*)"Panel::add() parent existe ...");
+    	logf_wm( (char*)"|  childs = \"%s\"", p->sExtra.c_str() );
+    	logf_wm( (char*)"|  parent = \"%s\"", this->sExtra.c_str() );
+		return;
+	}
 
 	childs.push_back( p );
 	

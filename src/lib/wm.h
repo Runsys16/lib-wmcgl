@@ -41,13 +41,13 @@
 
 
 #ifndef WM_CPP
-	extern void                log( char*  );
-	extern void                logf(char *, ...);
-    extern void                log_tab( bool );
+	extern void                log_wm( char*  );
+	extern void                logf_wm(char *, ...);
+    extern void                log_wm_tab( bool );
 #else
-	void                log( char*  );
-	void                logf(char *, ...);
-    void                log_tab( bool );
+	void                log_wm( char*  );
+	void                logf_wm(char *, ...);
+    void                log_wm_tab( bool );
 #endif
 
 

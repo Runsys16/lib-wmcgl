@@ -55,7 +55,7 @@ void log_wm( char* chaine )
 {
     string aff = sTab + string(chaine);
     
-    printf( "libwmcgl : %s\n", aff.c_str() );
+    printf( "libwm: %s\n", aff.c_str() );
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

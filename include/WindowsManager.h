@@ -465,10 +465,6 @@ public:
 		void 				buildStringNoMaxSize();
 		void 				buildString();
 		
-		inline std::string&	getText()						{ return bAffShort ? text_short : text_long; }
-		int					getTextLenght();
-		int					getTextLenght(int);
-
 		void 				changeText( char* );
 		void 				changeText( char*, bool );
 		void 				changeText( char*, FONT );
@@ -477,6 +473,10 @@ public:
 		void 				changeText( std::string, bool );
 		void 				changeText( std::string, FONT, bool );
 		void 				eraseText( );
+
+		void				aff_debug();
+		int					getTextLenght();
+		int					getTextLenght(int);
 
 		void				setTabSize( int );
 		void				setvTabSize( std::vector<int>& );
@@ -496,6 +496,7 @@ virtual void				updatePos();
 		void		 		setAffShort( bool );
 
 		//----------------- functions
+inline std::string&			getText()										{ return bAffShort ? text_short : text_long; }
 inline void			 		setAlign( ALIGN a )								{ align = a; }
 inline void 				setChangeText(bool b )							{ bChange = b; }
 inline void 				setAlpha(float a )								{ alpha = a; }
@@ -1204,12 +1205,12 @@ class PanelWindow : public PanelSimple {
 
 
 
-	extern void                log( char*  );
-	extern void                logf(char *, ...);
-    extern void                log_tab( bool );
-	void                log( char*  );
-	void                logf(char *, ...);
-    void                log_tab( bool );
+	extern void                log_wm( char*  );
+	extern void                logf_wm(char *, ...);
+    extern void                log_wm_tab( bool );
+	void                log_wm( char*  );
+	void                logf_wm(char *, ...);
+    void                log_wm_tab( bool );
 
 
 

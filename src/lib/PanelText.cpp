@@ -157,7 +157,7 @@ PanelText::PanelText( char * cstr, char* sPathNameFont, int x, int y, uint32_t s
 		#endif
 
 		unsigned n = pTrueType->getGlyphCount( sPathNameFont );
-		logf( (char*)"%s => %d", resourceName.c_str(), n );
+		logf_wm( (char*)"%s => %d", resourceName.c_str(), n );
 	}
 	
 	init();
@@ -200,7 +200,7 @@ PanelText::PanelText( char * cstr, char* sPathNameFont, int x, int y, uint32_t s
 		#endif
 
 		unsigned n = pTrueType->getGlyphCount( sPathNameFont );
-		logf( (char*)"%s => %d", resourceName.c_str(), n );
+		logf_wm( (char*)"%s => %d", resourceName.c_str(), n );
 	}
 	
 	init();
@@ -453,7 +453,7 @@ void PanelText::buildStringNoMaxSize()	{
 	textUtil->setvTabSize( vTabSize );
 	if ( pTextGL )		{ 
 		textUtil->DeleteTextObj( static_cast<TextUtil *>(pTextGL) );  
-		//logf( (char*)"Delete TextUtil" );
+		//logf_wm( (char*)"Delete TextUtil" );
 	}
 	pTextGL = textUtil->NewTextObj();
 
@@ -552,9 +552,27 @@ int PanelText::getTextLenght()	{
 		case SMALL_FONT :		l = textUtil->lenght( pTextGL, &text, DefaultSmallFont );		break;
 		case LARGE_FONT :		l = textUtil->lenght( pTextGL, &text, DefaultLargeFont );		break;
 		case FREE_TYPE :		l = pTrueType->lenght( text.c_str() );							break;
-		default:				l = -1; logf( (char*)"[ Erreur ] PanelText::getTextLenght() %d", __LINE__  ); break;
+		default:				l = -1; logf_wm( (char*)"[ Erreur ] PanelText::getTextLenght() %d", __LINE__  ); break;
 	}
 	return l;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelText::aff_debug()
+{
+	if (parent == NULL)				return;
+	
+	Panel* pParent = this;
+	while( pParent->getParent() != NULL )
+	{
+		logf_wm( (char*)"           Parent : \"%s\" ID=%d", pParent->getExtraString().c_str(), pParent->getID() );
+		pParent = getParent();
+	}
+
+	logf_wm( (char*)"           Parent : \"%s\" ID=%d", pParent->getExtraString().c_str(), pParent->getID() );
+	
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -566,7 +584,15 @@ int PanelText::getTextLenght( int nbChar )	{
 		case NORMAL_FONT :		defaultFont = DefaultNormalFont;		break;
 		case SMALL_FONT :		defaultFont = DefaultSmallFont;			break;
 		case LARGE_FONT :		defaultFont = DefaultLargeFont;			break;
-		default:				logf( (char*)"[ Erreur ] PanelText::getTextLenght(int %d) -- %d", nbChar, __LINE__  ); break;
+		case FREE_TYPE :
+			logf_wm( (char*)"[ Erreur ] PanelText::getTextLenght(int %d) FREE_TYPE", nbChar  );
+		default:				
+			{
+			logf_wm( (char*)"[ Erreur ] PanelText::getTextLenght(int %d) -- %d", nbChar, __LINE__  );
+			logf_wm( (char*)"           text=\"%s\" %d", text.c_str(), __LINE__  );
+			aff_debug();
+			break;
+			}
 	}
 	return( textUtil->lenght( pTextGL, &text, defaultFont, nbChar ) );
 }
@@ -747,9 +773,9 @@ void PanelText::displayGLfreetype()	{
 	cout << "    PT:" << scx <<", "<< scy <<", "<< scdx <<", "<< scdy << endl;
 #endif
 
-	//if ( fFreeType.textures == NULL )		logf( (char*)"Erreur Texture NULL ..." );
+	//if ( fFreeType.textures == NULL )		logf_wm( (char*)"Erreur Texture NULL ..." );
 
-	//logf( (char*)"Affichage Freetype \"%s\"", text.c_str() );
+	//logf_wm( (char*)"Affichage Freetype \"%s\"", text.c_str() );
 	pTrueType->print( x_raw, y_raw, color, text.c_str() );
 		
 	glPopAttrib();

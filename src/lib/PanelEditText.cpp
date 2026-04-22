@@ -563,7 +563,7 @@ void PanelEditText::cb_keyboard( unsigned char key ) {
 		}		
 		break;
 	}
-//#undef DEBUG
+#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

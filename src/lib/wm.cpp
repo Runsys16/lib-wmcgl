@@ -16,6 +16,9 @@
 //#define DEBUG_CONST
 //#define DEBUG
 //#define DEBUG_DISPLAY
+//#define DEBUG_ADD
+//#define DEBUG_SP
+//#define DEBUG_FIND
 
 #ifdef DEBUG_WM
 #	define DEBUG
@@ -30,22 +33,22 @@ using namespace std;
 
 //void * cTextObj;
 
-unsigned	nb_tab = 0;
-string		sTab;
+unsigned	nb_tab_wm = 0;
+string		sTabWM;
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
 void log_wm_tab( bool b)
 {
-    if ( b )            nb_tab++;
-    else                nb_tab--;
-    if ( nb_tab<0 )     nb_tab = 0;
-    if ( nb_tab>7 )		nb_tab = 7;
+    if ( b )            nb_tab_wm++;
+    else                nb_tab_wm--;
+    if ( nb_tab_wm<0 )	nb_tab_wm = 0;
+    if ( nb_tab_wm>7 )	nb_tab_wm = 7;
     
-    sTab = "";
-    for( int i=0; i<nb_tab; i++ )
+    sTabWM = "";
+    for( int i=0; i<nb_tab_wm; i++ )
     {
-        sTab = sTab + "|  ";
+        sTabWM = sTabWM + "|  ";
     }
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -53,7 +56,7 @@ void log_wm_tab( bool b)
 //--------------------------------------------------------------------------------------------------------------------
 void log_wm( char* chaine )
 {
-    string aff = sTab + string(chaine);
+    string aff = sTabWM + string(chaine);
     
     printf( "libwm: %s\n", aff.c_str() );
 }
@@ -78,6 +81,15 @@ WindowsManager::WindowsManager()	{
 	#ifdef DEBUG_CONST
 	cout << "Constructeur WindowsManager ..." << endl;
 	#endif
+	
+	logf_wm( (char*)"Sizeof ..." );
+	logf_wm( (char*)" bool\t : %d eb", 8* sizeof(bool) );
+	logf_wm( (char*)" char\t : %d eb", 8* sizeof(char) );
+	logf_wm( (char*)" int\t : %d eb", 8* sizeof(int) );
+	logf_wm( (char*)" long\t : %d eb", 8* sizeof(long) );
+	logf_wm( (char*)" float\t : %d eb", 8* sizeof(float) );
+	logf_wm( (char*)" double\t : %d eb", 8* sizeof(double) );
+	
 	init();
 	//Font * 	font = new Font();
 };
@@ -159,7 +171,7 @@ void WindowsManager::init()	{
 
 	panelCallBackKeys.clear();
 	
-	sTab = "";
+	sTabWM = "";
 
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -176,7 +188,7 @@ void WindowsManager::setScreenSize( int w, int h )	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::add( Panel * p )	{
-	#ifdef DEBUG
+	#ifdef DEBUG_ADD
 	cout << "WindowsManager::add() ID="<< p->getID() <<" nb="<< childs.size() << endl;
 	#endif
 	//cout << "WindowsManager::add() "<< p->getID() << endl;
@@ -186,7 +198,7 @@ void WindowsManager::add( Panel * p )	{
 	childs.push_back( p );
 	p->setParent( NULL );
 
-	#ifdef DEBUG
+	#ifdef DEBUG_ADD
 	int nb = childs.size();
 	for ( int i=0; i<nb; i++ )	{
 		cout << i <<" - "<< childs[i]->getID() << endl;
@@ -203,16 +215,19 @@ void WindowsManager::add( Panel * p )	{
 void WindowsManager::supCapture( Panel * p )	{
 //#define DEBUG
 	#ifdef DEBUG
-	cout << "WindowsManager::supCapture() ID="<< p->getID() <<" nb="<< childs.size()  << endl;
+	  logf_wm( (char*)"WindowsManager::supCapture() '%s' ID=%d/%d", p!=NULL?p->getExtraString().c_str():"NULL" ,p->getID(), childs.size() );
 	#endif
 
     if ( panelCapture == p  ){
+		#ifdef DEBUG
+		  logf_wm( (char*)"WindowsManager::supCapture() '%s' ID=%d/%d", p!=NULL?p->getExtraString().c_str():"NULL" ,p->getID(), childs.size() );
+		#endif
         changeCapture(NULL); 
         return;
     }
 
+    /*
     std::vector<Panel*>& childs = p->getChilds();
-    
     if ( p != NULL )
     {
         for( int i=0; i<childs.size(); i++ )
@@ -224,6 +239,7 @@ void WindowsManager::supCapture( Panel * p )	{
             }
         }
     }
+    */
 //#undef DEBUG    
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -260,10 +276,11 @@ void WindowsManager::supFocus( Panel * p )	{
 //--------------------------------------------------------------------------------------------------------------------
 void WindowsManager::sup( Panel * p )	{
 //#define DEBUG
-	#ifdef DEBUG
-	cout << "WindowsManager::sup() ID="<< p->getID() <<" nb="<< childs.size()  << endl;
+	#ifdef DEBUG_SUP
+	  logf_wm( (char*)"WindowsManager::sup( '%s' )", p!=NULL?p->getExtraString().c_str():"NULL" );
 	#endif
 
+    //if ( panelCapture == p	)		
     supCapture(p);
     supFocus(p);
 
@@ -277,7 +294,7 @@ void WindowsManager::sup( Panel * p )	{
 		}
 	}
 
-	#ifdef DEBUG
+	#ifdef DEBUG_SPU
 	cout << "WindowsManager::sup() nb="<< childs.size()  << endl;
 	#endif
 //#undef DEBUG
@@ -413,12 +430,17 @@ Panel * WindowsManager::getParentRoot( Panel* pChild)	{
 void WindowsManager::changeCapture( Panel* p )	{
 //#define DEBUG
     #ifdef DEBUG
-	cout << "WindowsManager::changeCapture( " << (p!=NULL?p->getID():0) << " )" << endl;
+	logf_wm( (char*)"WindowsManager::changeCapture() '%s' ", p!=NULL?p->getExtraString().c_str():"NULL" );
 	#endif
+
 	if ( panelCapture!=NULL )	    panelCapture->lostCapture();
 
 	panelCapture = p;
 	if ( panelCapture!=NULL)        panelCapture->haveCapture();
+
+    #ifdef DEBUG
+	logf_wm( (char*)"haveCapture \"%s\"",p!=NULL ? p->getExtraString().c_str() : "NULL" );
+	#endif
 	
 //#undef DEBUG
 }
@@ -441,49 +463,47 @@ void WindowsManager::changeFocus( Panel* p )	{
 //--------------------------------------------------------------------------------------------------------------------
 Panel * WindowsManager::findPanelMouseOver( int xm, int ym)	{
 //#define DEBUG
-	#ifdef DEBUG
-	logf_wm( (char*)"WindowsManager::findPanelMouseOver(%d, %d)", xm, ym );
-	log_wm_tab(true);
+	#if defined  DEBUG || defined DEBUG_FIND
+		logf_wm( (char*)"WindowsManager::findPanelMouseOver(%d, %d)  LINE %d", xm, ym, __LINE__ );
+		log_wm_tab(true);
 	#endif
 
 	int nb = childs.size();
 	
 	for ( int i=nb-1; i>=0; i-- )	{
 		Panel* p = childs[i];
-		#ifdef DEBUG
-		logf_wm( (char*)"Appel de isMouseOver childs[%d] \"%s\"  ID=%d", i, p->getExtraString().c_str(), p->getID() );
-	    log_wm_tab(true);
+		#if defined  DEBUG || defined DEBUG_FIND
+			logf_wm( (char*)"Appel de isMouseOver childs[%d] \"%s\"  ID=%04X %d", i, p->getExtraString().c_str(), p->getID(), p->getID() );
+			//log_wm_tab(true);
 		#endif
 
 		Panel* r = p->isMouseOver( xm, ym );
 		if ( r && !r->isVisible() )		r = NULL;
 
-	    #ifdef DEBUG
-	    log_wm_tab(false);
+		#if defined  DEBUG || defined DEBUG_FIND
+			//log_wm_tab(false);
 	    #endif
 		if ( r != NULL )	{
 			//if ( p->getID() < 9000 )	{
-				#ifdef DEBUG
-				logf_wm( (char*)"OK \"%s\"  ID=%d", r->getExtraString().c_str(), r->getID() );
-            	log_wm_tab(false);
-            	logf_wm( (char*)"WindowsManager::findPanelMouseOver(%d, %d)", xm, ym );
+				#if defined  DEBUG || defined DEBUG_FIND
+					logf_wm( (char*)"OK \"%s\"  ID=%04X %d", r->getExtraString().c_str(), r->getID(), r->getID() );
+		        	log_wm_tab(false);
 				#endif
 				return r;
 			//}
 		}
 
-		#ifdef DEBUG
-		logf_wm( (char*)"NOK childs[%d] \"%s\"  ID=%d", i, p->getExtraString().c_str(), p->getID() );
+		#if defined  DEBUG || defined DEBUG_FIND
+			logf_wm( (char*)"NOK childs[%d] \"%s\"  ID=%04X %d", i, p->getExtraString().c_str(), p->getID(), p->getID() );
 		#endif
 	}
 	
-	#ifdef DEBUG
-    logf_wm( (char*)"NOK");
-    log_wm_tab(false);
-	logf_wm( (char*)"WindowsManager::findPanelMouseOver(%d, %d)", xm, ym );
+	#if defined  DEBUG || defined DEBUG_FIND
+		logf_wm( (char*)"NOK");
+		log_wm_tab(false);
 	#endif
 	return NULL;
-#undef DEBUG
+//#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -505,9 +525,12 @@ void WindowsManager::movePanel( int xm, int ym)	{
 	#ifdef DEBUG
 	cout << "WindowsManager::movePanel( " << xm << ", " << ym << " )" << endl;
 	#endif
-	Panel * p;
 	
-	p = findPanelMouseOver( xm, ym );
+	logf_wm( (char*)"movePanel Appel  findPanelMouseOver LINE %d", __LINE__ );
+	log_wm_tab(true);	
+	Panel* p = findPanelMouseOver(xm, ym);
+	log_wm_tab(false);	
+	
 	if ( p ) {
 		p = getParentRoot( p );
 		if ( p )	movePanel( xm, ym, p );
@@ -714,12 +737,21 @@ void WindowsManager::passiveMotionFunc(int x, int y)	{
 //#define DEBUG
     mouseX = x;
     mouseY = y;
-	#ifdef DEBUG
-    logf_wm( (char*)"WindowsManager::passiveMotionFunc(%d, %d)", x, y );
-    //log_wm_tab(true);
-    #endif
-//#undef DEBUG
-	Panel * p = findPanelMouseOver(x, y);
+		#ifdef DEBUG
+		logf_wm( (char*)"WindowsManager::passiveMotionFunc(%d, %d)", x, y );
+		#endif
+
+
+		#ifdef DEBUG
+		logf_wm( (char*)"passiveMotionFunc Appel  findPanelMouseOver LINE %d", __LINE__ );
+		log_wm_tab(true);	
+		#endif
+
+	Panel* p = findPanelMouseOver(x, y);
+
+		#ifdef DEBUG
+		log_wm_tab(false);	
+		#endif
 	
 	if ( p )    {
 		changeCapture( p );
@@ -731,7 +763,16 @@ void WindowsManager::passiveMotionFunc(int x, int y)	{
 
     bool bOver = false;
 
+		#ifdef DEBUG
+		logf_wm( (char*)"passiveMotionFunc Appel  findPanelMouseOver  LINE %d", __LINE__ );
+		log_wm_tab(true);	
+		#endif
 	p = findPanelMouseOver(x, y);
+
+		#ifdef DEBUG
+		log_wm_tab(false);	
+		#endif
+
 	p = getParentRoot( p );
 	
 	panelResize = NULL;
@@ -750,13 +791,13 @@ void WindowsManager::passiveMotionFunc(int x, int y)	{
 	if ( !bOver )   	            glutSetCursor(0);
 	
 	
-	#ifdef DEBUG
-    log_wm_tab(false);
-    if ( p != NULL )
-        logf_wm( (char*)"WindowsManager::passiveMotionFunc() sur ID=%d \"%s\"",p->getID(), p->getExtraString().c_str() );
-    else
-        logf_wm( (char*)"WindowsManager::passiveMotionFunc() NULL" );
-    #endif
+		#ifdef DEBUG
+		log_wm_tab(false);
+		if ( p != NULL )
+		    logf_wm( (char*)"WindowsManager::passiveMotionFunc() sur ID=%d \"%s\"",p->getID(), p->getExtraString().c_str() );
+		else
+		    logf_wm( (char*)"WindowsManager::passiveMotionFunc() NULL" );
+		#endif
 //#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -1137,18 +1178,21 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
     mouseY = y;
     iMouseButton[button] = state;
 
-	#ifdef DEBUG
-	logf_wm( (char*)"WindowsManager::mouseFunc( %s, %s, x %d, y %d)", 	
-									(button==0 ? "left" : (button==1 ? "middle":" right" )),
-									(state==1 ? "up" : "down"), x, y );
-	log_wm_tab(true);
-	//cout << "WindowsManager::mouseFunc( " << button << ", " << state << ", " << x << ", " << y << " )" << endl;
-	#endif
+		#ifdef DEBUG
+		logf_wm( (char*)"WindowsManager::mouseFunc( %s, %s, x %d, y %d)", 	
+										(button==0 ? "left" : (button==1 ? "middle":" right" )),
+										(state==1 ? "up" : "down"), x, y );
+		log_wm_tab(true);
 
+		logf_wm( (char*)"MouseFunc Appel  findPanelMouseOver  LINE %d", __LINE__ );
+		log_wm_tab(true);	
+		#endif
 	Panel* p = findPanelMouseOver(x, y);
-	#ifdef DEBUG
-	logf_wm( (char*)"find panel \"%s\"", (p!=NULL? (char*)p->getExtraString().c_str():"NULL") );
-    #endif
+		#ifdef DEBUG
+		log_wm_tab(false);	
+
+		logf_wm( (char*)"find panel \"%s\"", (p!=NULL? (char*)p->getExtraString().c_str():"NULL") );
+		#endif
     	
 	bMovePanel = false;
 
@@ -1158,7 +1202,12 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	if ( button >= 0 && button <=2 && state == 0 )
 	{
 	    changeCapture( p );
-	    //if ( isPanelFocus(p) )      changeFocus(p);
+
+			#ifdef DEBUG
+		    logf_wm( (char*)"mouseFunc changeCapture = '%s'", (panelCapture!=NULL?panelCapture->getExtraString().c_str():(char*)"NULL") );
+		    #endif
+
+        panelCapture = p;
 	    changeFocus(p);
 	}
     //
@@ -1174,7 +1223,6 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 		    bResize = true;
 			onTop( panelResize );
 			double r = (double)panelResize->getPosDX() / (double)panelResize->getPosDY();
-			//printf( "%lf\n", r );
 			panelResize->setRatio( r );
 	    }
 	    else	    {
@@ -1184,13 +1232,18 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 		    }
 		}
 		
-	    #ifdef DEBUG
-        logf_wm( (char*)"panelCapture = \"%s\" adr=%016lX", (panelCapture!=NULL?panelCapture->getExtraString().c_str():(char*)"NULL"),
-                        (unsigned long)panelCapture );
-	    #endif
+		    #ifdef DEBUG
+		    logf_wm( (char*)"panelCapture = \"%s\" adr=%016lX", (panelCapture!=NULL?panelCapture->getExtraString().c_str():(char*)"NULL"),
+		                    (unsigned long)panelCapture );
+		    #endif
+        
         if ( panelCapture ){
             panelCapture->clickLeft( x, y );
         }
+
+		    #ifdef DEBUG
+	        logf_wm( (char*)"clickLeft = \"%s\"", (panelCapture!=NULL?panelCapture->getExtraString().c_str():(char*)"NULL") );
+		    #endif
 	}
 	// bouton gauche relache
 	else if ( button == 0 && state == 1  )	{
@@ -1199,7 +1252,15 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 		xm_old = -1;
 		ym_old = -1;
 		
-		if ( panelCapture )			panelCapture->releaseLeft( x, y );
+			#ifdef DEBUG
+	        logf_wm( (char*)"releaseLeft = '%s'", (panelCapture!=NULL?panelCapture->getExtraString().c_str():(char*)"NULL") );
+		    #endif
+
+		if ( panelCapture )			{
+			panelCapture->releaseLeft( x, y );
+            panelCapture = NULL;
+        }
+
     	panelMotionLeft = NULL;
 
 	    if ( bResize )
@@ -1209,16 +1270,20 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
     		bResize = false;
     	    //cout << " Release Left resize "<< endl;
         }
-	    #ifdef DEBUG
-	    cout << "  Release gauche panelCapture="<< panelCapture << endl;
-	    #endif
+
+		    #ifdef DEBUG
+		    logf_wm( (char*) "Release gauche panelCapture = '%s'",
+		    			(panelCapture!=NULL?panelCapture->getExtraString().c_str():(char*)"NULL")  );
+		    #endif
 	}
 	// bouton milieu appuye
 	else 
 	if ( button == 1 && state == 0 )	{
-	#ifdef DEBUG
-    	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
-	#endif
+
+			#ifdef DEBUG
+			cout << "WindowsManager::mouseFunc  button: " << button << endl;;
+			#endif
+
     	panelMotionMiddle = p;
     	bMotionMiddle = true;
 		if ( p )	p->clickMiddle( x, y );
@@ -1226,9 +1291,10 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	// bouton milieu relache
 	else 
 	if ( button == 1 && state == 1 )	{
-	#ifdef DEBUG
-    	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
-	#endif
+			#ifdef DEBUG
+			cout << "WindowsManager::mouseFunc  button: " << button << endl;;
+			#endif
+
 		if ( panelMotionMiddle )	panelMotionMiddle->releaseMiddle( x, y );
 		bMotionMiddle = false;
     	panelMotionMiddle = NULL;
@@ -1267,18 +1333,20 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	// Roulette vers le haut
 	else 
 	if ( button == 3 && state == 0 )	{
-	#ifdef DEBUG
-    	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
-	#endif
+			#ifdef DEBUG
+			cout << "WindowsManager::mouseFunc  button: " << button << endl;;
+			#endif
+
 		if ( p )	p->wheelUp( x, y );
 		if ( p != NULL && p->getParent() != NULL )   p->getParent()->wheelUp( x, y );
 	}
 	// Roulette vers le Bas
 	else
 	if ( button == 4 && state == 0 )	{
-	#ifdef DEBUG
-    	cout << "WindowsManager::mouseFunc  button: " << button << endl;;
-	#endif
+			#ifdef DEBUG
+			cout << "WindowsManager::mouseFunc  button: " << button << endl;;
+			#endif
+
 		if ( p )	p->wheelDown( x, y );
 		if ( p != NULL && p->getParent() != NULL )   p->getParent()->wheelDown( x, y );
 	}
@@ -1286,11 +1354,10 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 	int ID = -1;
 	if ( panelMove )			ID = panelMove->getID();
 	
-	#ifdef DEBUG
-	//cout << "WindowsManager::mouseFunc Addr : " << panelMove <<" ID "<< ID <<", " << bMovePanel << endl;;
-	log_wm_tab(false);
-	logf_wm( (char*)"WindowsManager::mouseFunc()" );
-	#endif
+		#ifdef DEBUG
+		log_wm_tab(false);
+		//logf_wm( (char*)"WindowsManager::mouseFunc()" );
+		#endif
 #undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------

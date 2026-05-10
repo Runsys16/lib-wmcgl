@@ -14,6 +14,8 @@
 //#define DEBUG_MOUSEOVER
 //#define DEBUG_CONST
 
+
+
 #ifdef DEBUG_WM
 #	define DEBUG
 #endif
@@ -40,14 +42,14 @@ PanelButton::PanelButton()	: PanelSimple(){
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
-PanelButton::PanelButton( PanelButtonCallBack* pCB)	: PanelSimple(){	
+PanelButton::PanelButton( PanelButtonCallback* pCB)	: PanelSimple(){	
 	#ifdef DEBUG_CONST
 	cout << "Constructeur PanelButton ..." << endl;
 	#endif
 
 	//PanelButton::PanelButton();
 	init();
-	pPanelButtonCallBack = pCB;
+	pPanelButtonCallback = pCB;
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
@@ -69,7 +71,7 @@ void PanelButton::init(){
 	pPsDebug = NULL;
 	pPtDebug = NULL;
 	bDebug = false;
-	pPanelButtonCallBack = NULL;
+	pPanelButtonCallback = NULL;
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
@@ -96,7 +98,7 @@ void PanelButton::updatePos() {
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelButton::haveCapture()	{
 	#ifdef DEBUG_MOUSEOVER
-	cout << "PanelButton::haveCapture( "<< endl;
+	logf_wm( (char*)"PanelButton::haveCapture() '%s' ", sExtra.c_str() );
 	#endif
 	m_pTexCurrent = m_pTexOver;
 }
@@ -104,7 +106,7 @@ void PanelButton::haveCapture()	{
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelButton::lostCapture()	{
 	#ifdef DEBUG_MOUSEOVER
-	cout << "PanelButton::LostCapture( "<< endl;
+	logf_wm( (char*)"PanelButton::lostCapture() '%s' ", sExtra.c_str() );
 	#endif
 	m_pTexCurrent = m_pTexUp;
 }
@@ -112,15 +114,19 @@ void PanelButton::lostCapture()	{
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelButton::clickLeft( int xm, int ym)	{
 	if( pCallBackDown )				(*pCallBackDown)(this);
-	if ( pPanelButtonCallBack )		pPanelButtonCallBack->cb_button_mouse_down(this);
+	if ( pPanelButtonCallback )		pPanelButtonCallback->cb_button_mouse_down(this);
 	PanelSimple::clickLeft( xm, ym);
 	texDown();
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelButton::releaseLeft( int xm, int ym)	{
+	#ifdef DEBUG
+	logf_wm( (char*)"PanelButton::releaseLeft) '%s'", sExtra.c_str() );
+	#endif
+	
 	if( pCallBackUp )				(*pCallBackUp)(this);
-	if ( pPanelButtonCallBack )		pPanelButtonCallBack->cb_button_mouse_up(this);
+	if ( pPanelButtonCallback )		pPanelButtonCallback->cb_button_mouse_up(this);
 	PanelSimple::releaseLeft( xm, ym);
 	texUp();
 }
@@ -138,7 +144,7 @@ Panel* PanelButton::isMouseOver(int xm, int ym)	{
 		cout << "PanelButton::isMouseOver)  OVER" << endl;
 		#endif
 		if( pCallBackOver )				(*pCallBackOver)(this);
-		if ( pPanelButtonCallBack )		pPanelButtonCallBack->cb_button_mouse_over(this);
+		if ( pPanelButtonCallback )		pPanelButtonCallback->cb_button_mouse_over(this);
 
 		return this;
 	}
@@ -151,7 +157,7 @@ Panel* PanelButton::isMouseOver(int xm, int ym)	{
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelButton::texOver()	{
 	#ifdef DEBUG_MOUSEOVER
-	cout << "PanelButton::haveCapture( "<< endl;
+	cout << "PanelButton::texOver( "<< endl;
 	#endif
 	m_pTexCurrent = m_pTexOver;
 }
@@ -159,7 +165,7 @@ void PanelButton::texOver()	{
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelButton::texDown()	{
 	#ifdef DEBUG_MOUSEOVER
-	cout << "PanelButton::haveCapture( "<< endl;
+	cout << "PanelButton::texDown( "<< endl;
 	#endif
 	m_pTexCurrent = m_pTexDown;
 }
@@ -167,7 +173,7 @@ void PanelButton::texDown()	{
 ----------------------------------------------------------------------------------------------------------------------------------*/
 void PanelButton::texUp()	{
 	#ifdef DEBUG_MOUSEOVER
-	cout << "PanelButton::haveCapture( "<< endl;
+	cout << "PanelButton::texUp( "<< endl;
 	#endif
 	m_pTexCurrent = m_pTexUp;
 }

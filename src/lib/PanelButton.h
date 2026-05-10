@@ -13,7 +13,7 @@ class PanelButton;
 typedef void (* CALLBACK_MOUSE)(PanelButton*);
 //typedef void (* CALLBACK_DOWN)(PanelButton*);
 
-class PanelButtonCallBack	{
+class PanelButtonCallback	{
 	public :
 	virtual void					cb_button_mouse_over(PanelButton*)				{;};
 	virtual void					cb_button_mouse_down(PanelButton*)				{;};
@@ -24,7 +24,7 @@ class PanelButtonCallBack	{
 class PanelButton : public PanelSimple {
 	public:
 		PanelButton();
-		PanelButton( PanelButtonCallBack* );
+		PanelButton( PanelButtonCallback* );
 		void init();
 		
 		
@@ -47,11 +47,13 @@ class PanelButton : public PanelSimple {
 		void				setOver( char *);
 		
 		void				setCallBackOver( CALLBACK_MOUSE p)		{ pCallBackOver = p; }
-		void				setCallBackUp( CALLBACK_MOUSE p)		{ pCallBackUp = p; }
+		void				setCallBackUp( CALLBACK_MOUSE p)		{ printf((char*)"callback"); pCallBackUp = p; }
 		void				setCallBackDown( CALLBACK_MOUSE p)		{ pCallBackDown = p; }
 
+		void				setButtonCallback(PanelButtonCallback*	p)		{ pPanelButtonCallback = p; }
+
 	protected:
-		PanelButtonCallBack*	pPanelButtonCallBack;
+		PanelButtonCallback*	pPanelButtonCallback;
 		_Texture2D*				m_pTexUp;
 		_Texture2D*				m_pTexDown;
 		_Texture2D*				m_pTexOver;

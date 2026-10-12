@@ -110,7 +110,7 @@ void PanelSpinEditText::set_pVal( double*  p )
             sprintf( s, "%0.0f", val );
             break;
     }
-    //logf( (char*)"val=%0.2f max=%0.2f", val, max );
+    //logf_wm( (char*)"val=%0.2f max=%0.2f", val, max );
     changeText( (char*)s );
     pEditCopy->changeText( (char*)s );
 }
@@ -145,7 +145,7 @@ void PanelSpinEditText::set_val( double  p )
             sprintf( s, "%0.0f", val );
             break;
     }
-    //logf( (char*)"val=%0.2f max=%0.2f", val, max );
+    //logf_wm( (char*)"val=%0.2f max=%0.2f", val, max );
     changeText( (char*)s );
     pEditCopy->changeText( (char*)s );
 }
@@ -162,7 +162,7 @@ void PanelSpinEditText::set_enum( vector<double> t )
 //--------------------------------------------------------------------------------------------------------------------
 void PanelSpinEditText::setChangeValue(ChangeValue* p)
 {
-    //logf( (char*)"PanelSpinEditText::setChangeValue(ChangeValue* %p)", (void*)p );
+    //logf_wm( (char*)"PanelSpinEditText::setChangeValue(ChangeValue* %p)", (void*)p );
     
 	pChangeValue = p;
 }
@@ -171,7 +171,7 @@ void PanelSpinEditText::setChangeValue(ChangeValue* p)
 //--------------------------------------------------------------------------------------------------------------------
 void PanelSpinEditText::setID( void* p)
 {
-    //logf( (char*)"PanelSpinEditText::setID(void* %p)", (void*)p );
+    //logf_wm( (char*)"PanelSpinEditText::setID(void* %p)", (void*)p );
 	pID = p;
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -252,8 +252,8 @@ void PanelSpinEditText::compute_pos_relatif( int xm, int ym )
     {
         val_angle = (step) / (nb*360.0) * angle;
 #ifdef DEBUG
-        logf( (char*)"compute_pos_relatif()  angle=%0.2f val_angle=%0.8f", angle, val_angle ); 
-        logf( (char*)"                       min=%0.8f max=%0.8f", min, max ); 
+        logf_wm( (char*)"compute_pos_relatif()  angle=%0.2f val_angle=%0.8f", angle, val_angle ); 
+        logf_wm( (char*)"                       min=%0.8f max=%0.8f", min, max ); 
 #endif
         
         val += val_angle;
@@ -263,7 +263,7 @@ void PanelSpinEditText::compute_pos_relatif( int xm, int ym )
     else
     {
 #ifdef DEBUG
-	    logf( (char*)"compute_pos_relatif()  angle=%0.2f", angle ); 
+	    logf_wm( (char*)"compute_pos_relatif()  angle=%0.2f", angle ); 
 #endif
         val_angle += nb / 360.0 * angle;
         if ( val_angle <  0.0 )         val_angle = 0.0;
@@ -272,7 +272,7 @@ void PanelSpinEditText::compute_pos_relatif( int xm, int ym )
         val = t_val[i];
     }    
     //--------------------------------------
-    //logf( (char*)"compute_pos_relatif()  angle=%0.2f norm=%0.2f val=%0.2f", val_angle, norm, val ); 
+    //logf_wm( (char*)"compute_pos_relatif()  angle=%0.2f norm=%0.2f val=%0.2f", val_angle, norm, val ); 
     if ( pVal!= NULL )          	*pVal = val;
     if ( pChangeValue )				pChangeValue->changeValueDouble( val, pID );
 #undef DEBUG
@@ -327,13 +327,13 @@ void PanelSpinEditText::clampVal()
 //--------------------------------------------------------------------------------------------------------------------
 void PanelSpinEditText::clickLeft( int xm, int ym )
 {
-    //logf( (char*)"PanelSpinEditText::clickLeft(%d, %d)", xm, ym );
+    //logf_wm( (char*)"PanelSpinEditText::clickLeft(%d, %d)", xm, ym );
 #ifdef DEBUG
 #endif
 
 #ifdef DEBUG
     log_tab(true);
-    logf( (char*)"delta old (%d, %d)", delta_x, delta_y );
+    logf_wm( (char*)"delta old (%d, %d)", delta_x, delta_y );
 #endif
 
 	// Affiche le cadran et efface le panel 
@@ -358,7 +358,7 @@ void PanelSpinEditText::clickLeft( int xm, int ym )
 
     
 #ifdef DEBUG
-    logf( (char*)"position (%d, %d)", xScreen, yScreen );
+    logf_wm( (char*)"position (%d, %d)", xScreen, yScreen );
 #endif
 
     pCadran->setPos(xScreen, yScreen);
@@ -367,9 +367,9 @@ void PanelSpinEditText::clickLeft( int xm, int ym )
 	ajusteDelta( ws, hs );
 
 #ifdef DEBUG
-    logf( (char*)"delta new (%d, %d)", delta_x, delta_y );
-    logf( (char*)"pos_raw old (%d, %d)", pEditCopy->getX(), pEditCopy->getY() );
-	logf( (char*)"cadran (%d, %d)  boule (%d,%d)", pCadran->getX(), pCadran->getY(), pBoule->getX(), pBoule->getY() );
+    logf_wm( (char*)"delta new (%d, %d)", delta_x, delta_y );
+    logf_wm( (char*)"pos_raw old (%d, %d)", pEditCopy->getX(), pEditCopy->getY() );
+	logf_wm( (char*)"cadran (%d, %d)  boule (%d,%d)", pCadran->getX(), pCadran->getY(), pBoule->getX(), pBoule->getY() );
 #endif
     
     computeRef( xm, ym );
@@ -390,7 +390,7 @@ void PanelSpinEditText::clickLeft( int xm, int ym )
 void PanelSpinEditText::motionLeft( int xm, int ym )
 {
 #ifdef DEBUG
-    logf( (char*)"PanelSpinEditText::motionLeft(%d, %d)", xm, ym );
+    logf_wm( (char*)"PanelSpinEditText::motionLeft(%d, %d)", xm, ym );
 #endif
     
     
@@ -419,17 +419,17 @@ void PanelSpinEditText::motionLeft( int xm, int ym )
             sprintf( s, "%0.0f", val );
             break;
     }
-    //logf( (char*)"val=%0.2f max=%0.2f", val, max );
+    //logf_wm( (char*)"val=%0.2f max=%0.2f", val, max );
     changeText( (char*)s );
     pEditCopy->changeText( (char*)s );
 
  	WindowsManager&     wm  = WindowsManager::getInstance();
     wm.onTop(pEditCopy);
 
-    //logf( (char*)"PanelSpinEditText::motionLeft()   %p->%p", (void *)pChangeValue, (void*)pID );
+    //logf_wm( (char*)"PanelSpinEditText::motionLeft()   %p->%p", (void *)pChangeValue, (void*)pID );
 	if ( cb_motion != NULL )			(*cb_motion)(xm, ym);
 #ifdef DEBUG
-	else								logf( (char*)"cb_motion == NULL" );
+	else								logf_wm( (char*)"cb_motion == NULL" );
 #endif
 
     if ( pChangeValue )					pChangeValue->changeValueDouble( val, pID );
@@ -439,7 +439,7 @@ void PanelSpinEditText::motionLeft( int xm, int ym )
 //--------------------------------------------------------------------------------------------------------------------
 void PanelSpinEditText::releaseLeft( int xm, int ym )
 {
-    //logf( (char*)"PanelSpinEditText::releaseLeft(%d, %d)", xm, ym );
+    //logf_wm( (char*)"PanelSpinEditText::releaseLeft(%d, %d)", xm, ym );
     setVisible( true );
     pCadran->setVisible( false );
     pCadran->setCanMove(true);
@@ -448,6 +448,7 @@ void PanelSpinEditText::releaseLeft( int xm, int ym )
     
     if ( pVal!= NULL )          		*pVal = val;
     if ( pChangeValue )					pChangeValue->changeValueDouble( val, pID );
+    if ( pChangeValue )					pChangeValue->changeValueDoubleClick( val, pID );
     if ( release_left_cb != NULL )		(*release_left_cb)( xm, ym);
 }
 //--------------------------------------------------------------------------------------------------------------------
@@ -456,8 +457,8 @@ void PanelSpinEditText::releaseLeft( int xm, int ym )
 void PanelSpinEditText::clickRight( int xm, int ym )
 {
 #ifdef DEBUG
-    logf( (char*)"PanelSpinEditText::clickRight(%d, %d)", xm, ym );
-    logf( (char*)"	delta (%d, %d)", delta_x, delta_y );
+    logf_wm( (char*)"PanelSpinEditText::clickRight(%d, %d)", xm, ym );
+    logf_wm( (char*)"	val ( %d)", val );
 #endif
     x_click = xm; y_click = ym;
 }
@@ -467,16 +468,49 @@ void PanelSpinEditText::clickRight( int xm, int ym )
 void PanelSpinEditText::releaseRight( int xm, int ym )
 {
 #ifdef DEBUG
-    logf( (char*)"PanelSpinEditText::releaseRight(%d, %d)", xm, ym );
-    logf( (char*)"	delta (%d, %d)", delta_x, delta_y );
+    logf_wm( (char*)"PanelSpinEditText::releaseRight(%d, %d)", xm, ym );
+    logf_wm( (char*)"	val ( %d)", (int)val );
 #endif
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelSpinEditText::wheelUp( int xm, int ym )
+{
+#ifdef DEBUG
+    logf_wm( (char*)"PanelSpinEditText::wheelUp(%d, %d)", xm, ym );
+    logf_wm( (char*)"	val ( %d)", val );
+#endif
+	val += 1.0;
+	if ( val > max )			val = max;
+    clampVal();
+	set_val( val );
+
+    if ( pChangeValue )			pChangeValue->changeValueDouble( val, pID );
+    if ( pChangeValue )			pChangeValue->changeValueDoubleClick( val, pID );
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelSpinEditText::wheelDown( int xm, int ym )
+{
+#ifdef DEBUG
+    logf_wm( (char*)"PanelSpinEditText::releaseRight(%d, %d)", xm, ym );
+    logf_wm( (char*)"	delta (%d, %d)", delta_x, delta_y );
+#endif
+	val -= 1.0;
+    clampVal();
+	set_val( val );
+
+	if ( val < min )			val = min;
+    if ( pChangeValue )			pChangeValue->changeValueDoubleClick( val, pID );
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
 void PanelSpinEditText::updatePos()
 {
-    //logf( (char*)"PanelSpinEditText::updatePos()" );
+    //logf_wm( (char*)"PanelSpinEditText::updatePos()" );
     PanelEditText::updatePos();
 
     int dx2 = pCadran->getDX() / 2;
@@ -518,7 +552,7 @@ void PanelSpinEditText::displayGL()
     if ( pEditCopy && pEditCopy->getVisible()==false )		return;
 
 #ifdef DBUG_CENTRE
-    //logf( (char*)"cadran (%d, %d)  boule (%d,%d)", pCadran->getX(), pCadran->getY(), pBoule->getX(), pBoule->getY() );
+    //logf_wm( (char*)"cadran (%d, %d)  boule (%d,%d)", pCadran->getX(), pCadran->getY(), pBoule->getX(), pBoule->getY() );
 
 
     glBegin(GL_LINES);

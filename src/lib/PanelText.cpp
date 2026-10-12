@@ -225,8 +225,8 @@ void PanelText::init() {
 	#endif
 
 	setPos( 0, 0 );
-	text			= "";
-	text_long		= "";
+	text			= " ";
+	text_long		= " ";
 	textUtil		= WindowsManager::getInstance().getTextUtil();
 	align			= LEFT;
 	pTextGL			= NULL;
@@ -588,6 +588,7 @@ int PanelText::getTextLenght( int nbChar )	{
 			logf_wm( (char*)"[ Erreur ] PanelText::getTextLenght(int %d) FREE_TYPE", nbChar  );
 		default:				
 			{
+			return 0;
 			logf_wm( (char*)"[ Erreur ] PanelText::getTextLenght(int %d) -- %d", nbChar, __LINE__  );
 			logf_wm( (char*)"           text=\"%s\" %d", text.c_str(), __LINE__  );
 			aff_debug();

@@ -11,7 +11,7 @@ using namespace std;
 typedef struct
 {
 	int X, Y, DX, DY;
-} sPanelPos;
+} sPos;
 
 
 
@@ -94,7 +94,8 @@ class Panel {
 		inline double		getRatio()										{ return ratio; }
 		inline void			setID(int id)									{ ID = id; }
 		inline int			getID()											{ return ID; }
-		inline void			getPosition(sPanelPos& s)						{ s.X=x; s.Y=y; s.DX=dx; s.DY=dy; }
+		inline void			getPosition(sPos& s)							{ s.X=x; s.Y=y; s.DX=dx; s.DY=dy; }
+		inline void			setPosition(sPos& s)							{ x=s.X; y=s.Y; dx=s.DX; dy=s.DY; }
 		
 		inline void			setPosX(int i)									{ x = i; }
 		inline void			setPosY(int i)									{ y = i; }

@@ -12,7 +12,8 @@ class ChangeValue
 {
 public:
 	
-        virtual void changeValueDouble( double val, void *p )			{};
+        virtual void changeValueDouble( double val, void *p )		{};
+        virtual void changeValueDoubleClick( double val, void *p )	{};
 };
 
 class PanelSpinEditText : public PanelEditText
@@ -89,6 +90,9 @@ inline      double			get_val()	          		    { return val; }
 	virtual void			clickRight( int, int );
 	virtual void			releaseRight( int, int );
 	
+	virtual void			wheelUp( int, int);
+	virtual void			wheelDown( int, int);
+
     virtual void			updatePos();
     virtual void			idle(double);
     virtual void			displayGL();

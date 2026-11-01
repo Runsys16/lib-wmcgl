@@ -38,12 +38,13 @@ PanelCheckBox::PanelCheckBox()	: PanelSimple(){
 	//PanelSimple::PanelSimple();
 
 	
-	m_pTexTrue  = NULL;
-	m_pTexFalse = NULL;
+	m_pTexTrue		= NULL;
+	m_pTexFalse		= NULL;
 	
-	pCallBackTrue  = NULL;
-	pCallBackFalse = NULL;
-	pCallBackMouse = NULL;
+	pCallBackTrue	= NULL;
+	pCallBackFalse	= NULL;
+	pCallBackMouse	= NULL;
+	pChangeValue	= NULL;
 	
 	pPsDebug = NULL;
 	pPtDebug = NULL;
@@ -89,13 +90,17 @@ void PanelCheckBox::updatePos() {
 void PanelCheckBox::clickLeft( int xm, int ym)	{
 //#define DEBUG
 	#ifdef DEBUG
-	cout << "PanelCheckBox::clickLeft()"<< endl;
+	logf_wm( (char*)"PanelCheckBox::clickLeft()" );
 	#endif
 
 	bVal = !bVal;
 	if ( pVal )			*pVal = bVal;
 	if( bVal && pCallBackTrue )			(*pCallBackTrue)();
 	else if( !bVal && pCallBackFalse )	(*pCallBackFalse)();
+
+	if ( pChangeValue != NULL )		pChangeValue->changeValueDoubleClick( (int)bVal, pID );
+
+	//logf_wm( (char*)"PanelCheckBox::clickLeft %p", pChangeValue );
 	
 	if ( pCallBackMouse )       (*pCallBackMouse)(this);
 //#undef DEBUG
@@ -318,6 +323,14 @@ void PanelCheckBox::setFalse( char * str_background )	{
 	_Texture2D* pResource = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, str_background) );
 
 	if ( pResource )	m_pTexFalse = pResource;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelCheckBox::setID( void* p)
+{
+    //logf_wm( (char*)"PanelSpinEditText::setID(void* %p)", (void*)p );
+	pID = p;
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/

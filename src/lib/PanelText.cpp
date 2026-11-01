@@ -239,6 +239,7 @@ void PanelText::init() {
 	bColor			= false;
 	bChange			= false;
 	bAffShort		= false;
+
 	//bFantome = true;
 	vTabSize.push_back( 40 );
 	textUtil->setTabSize(40);
@@ -410,6 +411,7 @@ void PanelText::eraseText()	{
 void PanelText::setSizeText()	{
 	dx = dx_raw = getTextLenght();
 	dy = dy_raw = getDY();
+
 	switch (typeFont )	{
 	case NORMAL_FONT :
 		dy = dy_raw = 14;

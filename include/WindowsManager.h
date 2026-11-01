@@ -45,6 +45,16 @@ void wmcglDeleteDefaultFonts();
 
 
 
+class ChangeValue
+{
+public:
+	
+        virtual void changeValueDouble( double val, void *p )		{};
+        virtual void changeValueDoubleClick( double val, void *p )	{};
+};
+
+
+
 
 // -------------------------------
 // Textures abstraites
@@ -533,6 +543,7 @@ protected:
 		bool				bChange;
 		bool				bColor;
 		bool				bAffShort;
+
 	
 };
 
@@ -671,42 +682,64 @@ class PanelEditText : public PanelSimple	{
 		void						setPrompt( std::string );
 		void						setCallBackCmd( CB_CMD );
 		void						setCallBackCmd( PanelEditTextCallBack * );
-
-		virtual void				displayGL();
-		virtual void				updatePos();
-		virtual void				idle(float);
+		void						setBackgroundInverse(char*);
+		
+		void						moveCursor();
 
 		void						addCmd(std::string cmd);
+
+		void						setTabSize( int );
+		void                        setColor(long);
+
+		void						addChar( char );
+		void						delChar();
+		void						supChar();
+
+		void						incCursor();
+		void						decCursor();
+		void						resetCursor();
+
+		int							posWordPrec();
+		int							posWordSuiv();
+		void						wordPrec();
+		void						wordSuiv();
+		void						supWord();
+		void						delWord();
+		void						majuscule();
+		void						minuscule();
+
+		bool						isAlpha( unsigned char );
+		bool						isNum( unsigned char );
+		bool						isAlphaNum( unsigned char );
+		bool						isAlphaMaj( unsigned char );
+		bool						isAlphaMin( unsigned char );
+
+		virtual Panel*				isMouseOver( int, int);
+		virtual void				haveFocus();
+		virtual void				lostFocus();
+
+		virtual void				clickLeft( int, int);
 		
 		virtual void				cb_keyboard( unsigned char );
 		virtual void				cb_keyboard_special( unsigned char );
 		virtual void				cb_keyboard_special_up( unsigned char );
 		
-		void						moveCursor();
-		void						addChar( char );
-		void						supChar();
-		void						delChar();
-		void						supWord();
-		void						delWord();
-		
-		void						incCursor();
-		void						decCursor();
-		int							posWordPrec();
-		int							posWordSuiv();
-		void						wordPrec();
-		void						wordSuiv();
-		void						setTabSize( int );
-		void                        setColor(long);
+		virtual void				idle(float);
+		virtual void				updatePos();
+		virtual void				displayGL();
 
 		inline std::string	        getText()					{ return text->getText(); };
-		inline void      	        changeText(std::string s)   { text->changeText(s, PanelText::NORMAL_FONT, true ); };
+		inline void      	        changeText(std::string s)   { text->changeText(s, PanelText::NORMAL_FONT, true ); currentPos=0;  };
 		inline void					hideCursor()				{ bHideCursor = true; }
 		inline void					showCursor()				{ bHideCursor = false; }
+		inline	void				setConstLarg(bool b)		{ bDxStr = b; }
+		inline	bool				getConstLarg()				{ return bDxStr; }
 		
 	private:
 		PanelText *                 text;
 		std::string					prompt;
 		PanelText					cursor;
+		PanelSimple                 cursorInverse;
 		CB_CMD						cb_cmd;
 		PanelEditTextCallBack*		ppccb;
 		
@@ -719,12 +752,16 @@ class PanelEditText : public PanelSimple	{
 		//std::string					svgCmd;
 		
 		float						cursorTime;
+		bool						bCursor;
+		
 		bool						bIns;
 		bool						bRightCtrl;
 		bool						bLeftCtrl;
 		bool						bCtrl;
 		bool						bHideCursor;
 		long                        color;
+		bool						bDxStr;
+		_Texture2D*					TextureInverse;//
 };
 
 
@@ -735,94 +772,91 @@ class PanelEditText : public PanelSimple	{
 typedef void (*motion_cb_t)(int,int);
 
 
-class ChangeValue
-{
-public:
-	
-        virtual void changeValueDouble( double val, void *p )		{};
-        virtual void changeValueDoubleClick( double val, void *p )	{};
-};
-
 class PanelSpinEditText : public PanelEditText
 {
-protected:
-            double			min;
-            double			max;
-            double			step;
-            double			nb;
-            double			val_angle;
-            double			val;
-            double       	angle;
+protected:	
+    double				min;
+    double				max;
+    double				step;
+    double				nb;
+    double				val_angle;
+    double				val;
+    double  	     	angle;
+    
+    double*		     	pVal;
+    
+    int 	        	delta_x;
+    int 	        	delta_y;
+    int		         	nDecimal;
+    
+    vec2        		vCentre;
+    vec3        		vRef;
             
-            double*     	pVal;
-            
-            int         	delta_x;
-            int         	delta_y;
-            int         	nDecimal;
-            
-            vec2        	vCentre;
-            vec3        	vRef;
-            
-       PanelEditText* 		pEditCopy;
-       PanelSimple*     	pCadran;
-       PanelSimple*     	pBoule;
-       PanelSimple*			pEditScissor;
-       Panel*				pPrevParent;
-       ChangeValue*     	pChangeValue;
-       //Panel*			pClick;
-       
-            vector<double>   t_val;
-            int         	x_click;
-            int         	y_click;
-            motion_cb_t 	cb_motion;
+	PanelEditText* 		pEditCopy;
+	PanelSimple*     	pCadran;
+	PanelSimple*     	pBoule;
+	PanelSimple*			pEditScissor;
+	Panel*				pPrevParent;
+	ChangeValue*     	pChangeValue;
+	//Panel*			pClick;
+   
+    vector<double>		t_val;
+    int         		x_click;
+    int         		y_click;
+    motion_cb_t 		cb_motion;
+    char*				pUnite;
 
-			void*			pID;            
-public:
-                        	PanelSpinEditText();
-                        	~PanelSpinEditText();
-                        
-			void    	    set_pVal(double*);
-inline      void    	    set_delta(int x, int y)     	{ delta_x = 0; delta_y = 0; }                        
-			void    	    set_val(double f);//            { val_angle = val = f; }                        
-inline      void    	    set_min(double f)           	{ min = f; }                        
-inline      void    	    set_max(double f)               { max = f; }                        
-inline      void    	    set_step(double f)              { step = f; }                        
-inline      void    	    set_nb(double f)                { nb = f; }                        
-inline      void    	    set_ndecimal(int n)             { nDecimal = n; }                        
-inline      void    	    set(double m, double M, double s, double n)
-							                            { min = m; max = M; step = s; nb = n; }     
-
-inline 		void			setMotion( motion_cb_t cb)      { cb_motion = cb; }
-inline      double* 	    get_pVal()          		    { return pVal; }                        
-inline      double			get_val()	          		    { return val; }
-			void    	    setChangeValue(ChangeValue* p);
-			void    	    setID( void* p);
-
-
-            void    	    set_enum(vector<double>);
-                        
-            void    	    boule_pos(int, int);        
-
-			void			computeRef( int, int );
-			void			computeAngle( int, int );
-            void    	    compute_pos_relatif(int, int);                   
-                    	    
-			void			ajusteDelta( int, int );
-            void    	    clampVal();
-            
-	virtual void			clickLeft( int, int );
-	virtual void			motionLeft( int, int );
-	virtual void			releaseLeft( int, int );
-
-	virtual void			clickRight( int, int );
-	virtual void			releaseRight( int, int );
+	void*				pID;
 	
-	virtual void			wheelUp( int, int);
-	virtual void			wheelDown( int, int);
+	
+public:
+                       	PanelSpinEditText();
+                       	~PanelSpinEditText();
+                        
+		void    	    set_pVal(double*);
+inline	void    	    set_delta(int x, int y)     	{ delta_x = 0; delta_y = 0; }                        
+		void    	    set_val(double f);//            { val_angle = val = f; }                        
+inline 	void    	    set_min(double f)           	{ min = f; }                        
+inline 	void    	    set_max(double f)               { max = f; }                        
+inline	void    	    set_step(double f)              { step = f; }                        
+inline	void    	    set_nb(double f)                { nb = f; }                        
+inline	void    	    set_ndecimal(int n)             { nDecimal = n; }                        
+inline	void    	    set(double m, double M, double s, double n)
+							                            	{ min = m; max = M; step = s; nb = n; }     
+		void    	    set_unite(char*);
+inline	void			setMotion( motion_cb_t cb)      { cb_motion = cb; }
+inline	double* 	    get_pVal()          		    { return pVal; }                        
+inline	double			get_val()	          		    { return val; }
+		void    	    setID( void* p);
+		void    	    set_enum(vector<double>);
+		void    	    setChangeValue(ChangeValue* p);
+                        
+		void    	    boule_pos(int, int);        
 
-    virtual void			updatePos();
-    virtual void			idle(double);
-    virtual void			displayGL();
+		void			computeRef( int, int );
+		void			computeAngle( int, int );
+		void    	    compute_pos_relatif(int, int);                   
+                    	    
+		void			ajusteDelta( int, int );
+		void    	    clampVal();
+            
+virtual void			clickLeft( int, int );
+virtual void			motionLeft( int, int );
+virtual void			releaseLeft( int, int );
+
+virtual void			clickRight( int, int );
+virtual void			releaseRight( int, int );
+	
+virtual void			wheelUp( int, int);
+virtual void			wheelDown( int, int);
+
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+virtual Panel*			isMouseOver(int, int);
+virtual void			updatePos();
+virtual void			idle(double);
+virtual void			displayGL();
 
 };
 
@@ -1054,7 +1088,7 @@ class PanelButton : public PanelSimple {
 		void				setOver( char *);
 		
 		void				setCallBackOver( CALLBACK_MOUSE p)		{ pCallBackOver = p; }
-		void				setCallBackUp( CALLBACK_MOUSE p)		{ printf((char*)"callback"); pCallBackUp = p; }
+		void				setCallBackUp( CALLBACK_MOUSE p)		{ pCallBackUp = p; }
 		void				setCallBackDown( CALLBACK_MOUSE p)		{ pCallBackDown = p; }
 
 		void				setButtonCallback(PanelButtonCallback*	p)		{ pPanelButtonCallback = p; }
@@ -1107,23 +1141,30 @@ class PanelCheckBox : public PanelSimple {
 		
 		bool				getVal()								{ return bVal; }
 		void				setPercent( float );
+		
 		inline void			setVal( bool b )						{ bVal = b; }
 		inline void			setListener( bool* p)					{ pVal = p; }
 		inline void			setUseInverse( bool p)					{ bUseInverse = p; }
+		inline void			setChangeValue(ChangeValue* p)			{ pChangeValue = p; }
+				void		setID( void* p);
 
 	protected:
-		_Texture2D*		m_pTexTrue;
-		_Texture2D*		m_pTexFalse;
+		_Texture2D*			m_pTexTrue;
+		_Texture2D*			m_pTexFalse;
 
-		CALLBACK_TRUE	pCallBackTrue;;
-		CALLBACK_FALSE	pCallBackFalse;
-		CALLBACK_CHECK  pCallBackMouse;
+		CALLBACK_TRUE		pCallBackTrue;;
+		CALLBACK_FALSE		pCallBackFalse;
+		CALLBACK_CHECK  	pCallBackMouse;
 		
-		bool			bVal;
-		bool*			pVal;
-		bool			bUseInverse;
+		ChangeValue*		pChangeValue;
 		
-		float			percent;
+		
+		bool				bVal;
+		bool*				pVal;
+		bool				bUseInverse;
+			
+		float				percent;
+		void*				pID;            
 //	private:
 		/*	
 	protected:
@@ -1148,7 +1189,7 @@ class PanelCheckBox : public PanelSimple {
 
 class PanelWindow : public PanelSimple {
 	public:
-		enum SKIN { STD, RED, BLACK };
+		enum SKIN { STD, RED, BLACK, BLUE, VERT, YELLOW, ORANGE };
 	
 		PanelWindow();
 		
@@ -1184,7 +1225,11 @@ class PanelWindow : public PanelSimple {
 
 		virtual void		displayGL();
 		virtual void		updatePos();
-		
+
+inline _Texture2D*			getTextureTop()					{ return m_tex_t; }
+inline _Texture2D*			getTextureBottom()				{ return m_tex_b; }
+inline _Texture2D*			getTextureLeft()				{ return m_tex_l; }
+
 	private:
 		_Texture2D*			m_tex_tl;
 		_Texture2D*			m_tex_tr;

@@ -6,7 +6,7 @@
 
 class PanelWindow : public PanelSimple {
 	public:
-		enum SKIN { STD, RED, BLACK };
+		enum SKIN { STD, RED, BLACK, BLUE, VERT, YELLOW, ORANGE };
 	
 		PanelWindow();
 		
@@ -42,7 +42,11 @@ class PanelWindow : public PanelSimple {
 
 		virtual void		displayGL();
 		virtual void		updatePos();
-		
+
+inline _Texture2D*			getTextureTop()					{ return m_tex_t; }
+inline _Texture2D*			getTextureBottom()				{ return m_tex_b; }
+inline _Texture2D*			getTextureLeft()				{ return m_tex_l; }
+
 	private:
 		_Texture2D*			m_tex_tl;
 		_Texture2D*			m_tex_tr;

@@ -1366,7 +1366,7 @@ void WindowsManager::mouseFunc(int button, int state, int x, int y)	{
 void WindowsManager::keyboardFunc( unsigned char key, int x, int y)	{
 //#define DEBUG
 	#ifdef DEBUG
-	cout << "WindowsManager::keyboardFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
+		cout << "WindowsManager::keyboardFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	#endif
 	if ( bStopKeyboard )        return;
 	if ( panelFocus!= NULL )    panelFocus->cb_keyboard( key );
@@ -1398,7 +1398,7 @@ void WindowsManager::keyboardUpFunc( unsigned char key, int x, int y)	{
 void WindowsManager::keyboardSpecialFunc( unsigned char key, int x, int y)	{
 //#define DEBUG
 	#ifdef DEBUG
-	cout << "WindowsManager::keyboardSpecialFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
+		cout << "WindowsManager::keyboardSpecialFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	#endif
 	if ( bStopKeyboard )        return;
 	int nb = panelCallBackKeys.size();
@@ -1407,7 +1407,7 @@ void WindowsManager::keyboardSpecialFunc( unsigned char key, int x, int y)	{
 	return;
 	
 	#ifdef DEBUG
-	cout << "WindowsManager::keyboardSpecialFunc( " << nb <<" fenetres panelCallBackKeys " << endl;
+		cout << "WindowsManager::keyboardSpecialFunc( " << nb <<" fenetres panelCallBackKeys " << endl;
 	#endif
 	for( int i=0; i<nb; i++ )	{
 		if ( panelCallBackKeys[i]->isVisible() )
@@ -1424,7 +1424,7 @@ void WindowsManager::keyboardSpecialFunc( unsigned char key, int x, int y)	{
 void WindowsManager::keyboardSpecialUpFunc( unsigned char key, int x, int y)	{
 //#define DEBUG
 	#ifdef DEBUG
-	cout << "WindowsManager::keyboardSpecialUpFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
+		cout << "WindowsManager::keyboardSpecialUpFunc( " << (int)key << ", " << x << ", " << y << " )" << endl;
 	#endif
 	if ( bStopKeyboard )        return;
 
@@ -1433,7 +1433,7 @@ void WindowsManager::keyboardSpecialUpFunc( unsigned char key, int x, int y)	{
 	
 	int nb = panelCallBackKeys.size();
 	#ifdef DEBUG
-	cout << "WindowsManager::keyboardSpecialFunc( " << nb <<" fenetres panelCallBackKeys " << endl;
+		cout << "WindowsManager::keyboardSpecialFunc( " << nb <<" fenetres panelCallBackKeys " << endl;
 	#endif
 	for( int i=0; i<nb; i++ )	{
 		if ( panelCallBackKeys[i]->isVisible() )

@@ -6,6 +6,7 @@
 #include "PanelText.h"
 #include "Texture2D.h"
 #include "TextUtil.h"
+#include "change_value.h"
 
 class PanelCheckBox;
 
@@ -37,23 +38,30 @@ class PanelCheckBox : public PanelSimple {
 		
 		bool				getVal()								{ return bVal; }
 		void				setPercent( float );
+		
 		inline void			setVal( bool b )						{ bVal = b; }
 		inline void			setListener( bool* p)					{ pVal = p; }
 		inline void			setUseInverse( bool p)					{ bUseInverse = p; }
+		inline void			setChangeValue(ChangeValue* p)			{ pChangeValue = p; }
+				void		setID( void* p);
 
 	protected:
-		_Texture2D*		m_pTexTrue;
-		_Texture2D*		m_pTexFalse;
+		_Texture2D*			m_pTexTrue;
+		_Texture2D*			m_pTexFalse;
 
-		CALLBACK_TRUE	pCallBackTrue;;
-		CALLBACK_FALSE	pCallBackFalse;
-		CALLBACK_CHECK  pCallBackMouse;
+		CALLBACK_TRUE		pCallBackTrue;;
+		CALLBACK_FALSE		pCallBackFalse;
+		CALLBACK_CHECK  	pCallBackMouse;
 		
-		bool			bVal;
-		bool*			pVal;
-		bool			bUseInverse;
+		ChangeValue*		pChangeValue;
 		
-		float			percent;
+		
+		bool				bVal;
+		bool*				pVal;
+		bool				bUseInverse;
+			
+		float				percent;
+		void*				pID;            
 //	private:
 		/*	
 	protected:

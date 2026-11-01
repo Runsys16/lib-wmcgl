@@ -105,9 +105,11 @@ void Panel::add( Panel* p)	{
 	#endif
 	if ( p->getParent() != NULL )			
 	{
-		log_wm(  (char*)"Panel::add() parent existe ...");
-    	logf_wm( (char*)"|  childs = \"%s\"", p->sExtra.c_str() );
-    	logf_wm( (char*)"|  parent = \"%s\"", this->sExtra.c_str() );
+		#ifdef DEBUG
+			log_wm(  (char*)"Panel::add() parent existe ...");
+			logf_wm( (char*)"|  childs = \"%s\"", p->sExtra.c_str() );
+			logf_wm( (char*)"|  parent = \"%s\"", this->sExtra.c_str() );
+		#endif
 		return;
 	}
 

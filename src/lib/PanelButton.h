@@ -47,7 +47,7 @@ class PanelButton : public PanelSimple {
 		void				setOver( char *);
 		
 		void				setCallBackOver( CALLBACK_MOUSE p)		{ pCallBackOver = p; }
-		void				setCallBackUp( CALLBACK_MOUSE p)		{ printf((char*)"callback"); pCallBackUp = p; }
+		void				setCallBackUp( CALLBACK_MOUSE p)		{ pCallBackUp = p; }
 		void				setCallBackDown( CALLBACK_MOUSE p)		{ pCallBackDown = p; }
 
 		void				setButtonCallback(PanelButtonCallback*	p)		{ pPanelButtonCallback = p; }

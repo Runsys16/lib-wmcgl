@@ -83,9 +83,13 @@ void PanelWindow::loadSkinPath( string name )	{
 //--------------------------------------------------------------------------------------------------------------------
 void PanelWindow::loadSkin( SKIN s )	{
 	switch( s )	{
-		case STD:	loadSkin( "bfs" );		break;
-		case RED:	loadSkin( "rouge" );	break;
-		case BLACK:	loadSkin( "fen-2" );	break;
+		case STD:		loadSkin( "bfs" );		break;
+		case RED:		loadSkin( "rouge" );	break;
+		case BLACK:		loadSkin( "fen-2" );	break;
+		case BLUE:		loadSkin( "bleu" );		break;
+		case VERT:		loadSkin( "vert" );		break;
+		case YELLOW:	loadSkin( "jaune" );	break;
+		case ORANGE:	loadSkin( "orange" );	break;
 	}
 }
 //--------------------------------------------------------------------------------------------------------------------

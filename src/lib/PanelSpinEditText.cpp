@@ -1,8 +1,10 @@
 #include "PanelSpinEditText.h"
 #include "wm.h"
+#include "macro.h"
 //--------------------------------------------------------------------------------------------------------------------
-#define ZONE_MORTE		20.0
 //#define DEBUG
+//------------------------------
+#define ZONE_MORTE		20.0
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
@@ -20,6 +22,7 @@ PanelSpinEditText::PanelSpinEditText() :     PanelEditText()
     pCadran->setPosAndSize( -100+20, -100+8, 200, 200 );
 
     pBoule = new PanelSimple();
+    pBoule->setExtraString("PanelSpinEditText:Boule");
     pBoule->setBackground((char*)"/usr/share/wmcgl/images/boule.tga");
     pBoule->setPosAndSize( 55, 55, 20, 20 );
 
@@ -47,7 +50,9 @@ PanelSpinEditText::PanelSpinEditText() :     PanelEditText()
     pVal = NULL;
     cb_motion = NULL;
     hideCursor();
+    setVisible( true );
     
+	pUnite = NULL;
     //setChangeValue((ChangeValue*)NULL);
     //setID((void*)NULL);
     pChangeValue	= NULL;
@@ -88,26 +93,30 @@ void PanelSpinEditText::set_pVal( double*  p )
 	val		= *pVal;
 	
     char s[50];
+    char u[50];
+    
+	if ( pUnite != NULL )		snprintf( u, sizeof(u), "%s", pUnite );
+	else						u[0] = 0;
     
     switch( nDecimal )
     {
         case 0:
-            sprintf( s, "%0.0f", val );
+            snprintf( s, sizeof(s), "%0.0lf %s", val, u );
             break;
         case 1 :
-            sprintf( s, "%0.1f", val );
+            snprintf( s, sizeof(s), "%0.1f", val );
             break;
         case 2:
-            sprintf( s, "%0.2f", val );
+            snprintf( s, sizeof(s), "%0.2f", val );
             break;
         case 6:
-            sprintf( s, "%0.6f", val );
+            snprintf( s, sizeof(s), "%0.6f", val );
             break;
         case 14:
-            sprintf( s, "%0.14f", val );
+            snprintf( s, sizeof(s), "%0.14f", val );
             break;
         default:
-            sprintf( s, "%0.0f", val );
+            snprintf( s, sizeof(s),"%0.0f", val );
             break;
     }
     //logf_wm( (char*)"val=%0.2f max=%0.2f", val, max );
@@ -117,17 +126,21 @@ void PanelSpinEditText::set_pVal( double*  p )
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
-void PanelSpinEditText::set_val( double  p )
+void PanelSpinEditText::set_val( double  d )
 {
-	if ( pVal )		*pVal	= p;
-	val		= p;
+	if ( pVal )		*pVal	= d;
+	val		= d;
 	
     char s[50];
+    char u[50];
+    
+	if ( pUnite != NULL )		snprintf( u, sizeof(u), "%s", pUnite );
+	else						u[0] = 0;
     
     switch( nDecimal )
     {
         case 0:
-            sprintf( s, "%0.0f", val );
+            sprintf( s, "%0.0f %s", val, u );
             break;
         case 1 :
             sprintf( s, "%0.1f", val );
@@ -145,9 +158,17 @@ void PanelSpinEditText::set_val( double  p )
             sprintf( s, "%0.0f", val );
             break;
     }
-    //logf_wm( (char*)"val=%0.2f max=%0.2f", val, max );
+    
     changeText( (char*)s );
     pEditCopy->changeText( (char*)s );
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelSpinEditText::set_unite( char* pS )
+{
+    //logf_wm( (char*)"PanelSpinEditText::set_unite( %s )", pS );
+	pUnite = pS;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -275,7 +296,7 @@ void PanelSpinEditText::compute_pos_relatif( int xm, int ym )
     //logf_wm( (char*)"compute_pos_relatif()  angle=%0.2f norm=%0.2f val=%0.2f", val_angle, norm, val ); 
     if ( pVal!= NULL )          	*pVal = val;
     if ( pChangeValue )				pChangeValue->changeValueDouble( val, pID );
-#undef DEBUG
+//#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -327,8 +348,8 @@ void PanelSpinEditText::clampVal()
 //--------------------------------------------------------------------------------------------------------------------
 void PanelSpinEditText::clickLeft( int xm, int ym )
 {
-    //logf_wm( (char*)"PanelSpinEditText::clickLeft(%d, %d)", xm, ym );
 #ifdef DEBUG
+    //logf_wm( (char*)"PanelSpinEditText::clickLeft(%d, %d)", xm, ym );
 #endif
 
 #ifdef DEBUG
@@ -398,10 +419,15 @@ void PanelSpinEditText::motionLeft( int xm, int ym )
     clampVal();
     
     char s[50];
+    char u[50];
+    
+	if ( pUnite != NULL )	snprintf( u, sizeof(u), "%s", pUnite );
+	else					u[0] = 0;
+
     switch( nDecimal )
     {
         case 0:
-            sprintf( s, "%0.0f", val );
+            sprintf( s, "%0.0f %s", val, u );
             break;
         case 1 :
             sprintf( s, "%0.1f", val );
@@ -439,8 +465,11 @@ void PanelSpinEditText::motionLeft( int xm, int ym )
 //--------------------------------------------------------------------------------------------------------------------
 void PanelSpinEditText::releaseLeft( int xm, int ym )
 {
-    //logf_wm( (char*)"PanelSpinEditText::releaseLeft(%d, %d)", xm, ym );
+	#ifdef DEBUG
+		logf_wm( (char*)"PanelSpinEditText::releaseLeft(%d, %d)", xm, ym );
+	#endif
     setVisible( true );
+
     pCadran->setVisible( false );
     pCadran->setCanMove(true);
 
@@ -477,10 +506,11 @@ void PanelSpinEditText::releaseRight( int xm, int ym )
 //--------------------------------------------------------------------------------------------------------------------
 void PanelSpinEditText::wheelUp( int xm, int ym )
 {
-#ifdef DEBUG
-    logf_wm( (char*)"PanelSpinEditText::wheelUp(%d, %d)", xm, ym );
-    logf_wm( (char*)"	val ( %d)", val );
-#endif
+	#ifdef DEBUG
+		logf_wm( (char*)"PanelSpinEditText::wheelUp(%d, %d)", xm, ym );
+		logf_wm( (char*)"	val ( %d)", val );
+	#endif
+
 	val += 1.0;
 	if ( val > max )			val = max;
     clampVal();
@@ -494,10 +524,11 @@ void PanelSpinEditText::wheelUp( int xm, int ym )
 //--------------------------------------------------------------------------------------------------------------------
 void PanelSpinEditText::wheelDown( int xm, int ym )
 {
-#ifdef DEBUG
-    logf_wm( (char*)"PanelSpinEditText::releaseRight(%d, %d)", xm, ym );
-    logf_wm( (char*)"	delta (%d, %d)", delta_x, delta_y );
-#endif
+	#ifdef DEBUG
+		logf_wm( (char*)"PanelSpinEditText::releaseRight(%d, %d)", xm, ym );
+		logf_wm( (char*)"	delta (%d, %d)", delta_x, delta_y );
+	#endif
+
 	val -= 1.0;
     clampVal();
 	set_val( val );
@@ -508,19 +539,44 @@ void PanelSpinEditText::wheelDown( int xm, int ym )
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
+Panel* PanelSpinEditText::isMouseOver(int xm, int ym)
+{
+//#define DEBUG
+	//if ( !isVisible() || bFantome )		return NULL;
+
+	
+	#ifdef DEBUG
+		logf_wm( (char*)"PanelSpinEditText::MouseOver '%s' = %d,%d %dx%d  visible %s",
+		             sExtra.c_str(), x, y, dx_raw, dy_raw, BOOL2STR(getVisible()) );
+	#endif
+
+	#ifdef DEBUG
+		if ( x_raw <= xm && xm <= (x_raw+dx_raw) && y_raw <= ym && ym <= (y_raw+dy_raw) )		
+			{ logf_wm( (char*)"Mouse over '%s'", sExtra.c_str() ); return this; }
+	#endif
+
+	if ( x_raw <= xm && xm <= (x_raw+dx_raw) && y_raw <= ym && ym <= (y_raw+dy_raw) )		return this;
+	else																					return NULL;
+
+//#undef DEBUG
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void PanelSpinEditText::updatePos()
 {
-    //logf_wm( (char*)"PanelSpinEditText::updatePos()" );
+	#ifdef DEBUG
+		logf_wm( (char*)"PanelSpinEditText::updatePos()" );
+	#endif
+	
     PanelEditText::updatePos();
 
     int dx2 = pCadran->getDX() / 2;
     int dy2 = pCadran->getDY() / 2;
 
     vCentre = vec2( (double)(pCadran->getX() + dx2), (double)(pCadran->getY() + dy2) );
-    //pClick->setPosAndSize( 0, 0, 40, 15 );
     
     Panel::updatePos();
-    //vCentre = vec2( (double)(x_raw)+20, (double)(y_raw)+8 );
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -528,18 +584,6 @@ void PanelSpinEditText::updatePos()
 void PanelSpinEditText::idle(double f)
 {
 	PanelEditText::idle(f);
-    //log( (char*)"PanelSpinEditText::idle()" ); 
-/*
-	long color;
-
-    if ( var.getb("bNuit") )        color = 0xffff0000;
-    else                            color = 0xffffffff;
-
-    setColor( color );
-    pCadran->setColor( color );
-    pBoule->setColor( color );
-    pEditCopy->setColor( color );
-*/
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -566,9 +610,6 @@ void PanelSpinEditText::displayGL()
 		    int y0 = vCentre.y;
 		    int x1 = vCentre.x+10;
 		    int y1 = vCentre.y;
-
-		    //xy2Screen(x0, y0);
-		    //xy2Screen(x1, y1);
 		    
 		    glVertex2i( x0, y0 );
 		    glVertex2i( x1, y1 );
@@ -579,9 +620,6 @@ void PanelSpinEditText::displayGL()
 		    int y0 = vCentre.y+10;
 		    int x1 = vCentre.x;
 		    int y1 = vCentre.y-10;
-
-		    //xy2Screen(x0, y0);
-		    //xy2Screen(x1, y1);
 		    
 		    glVertex2i( x0, y0 );
 		    glVertex2i( x1, y1 );

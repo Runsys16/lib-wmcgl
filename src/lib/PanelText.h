@@ -102,6 +102,7 @@ protected:
 		bool				bChange;
 		bool				bColor;
 		bool				bAffShort;
+
 	
 };
 

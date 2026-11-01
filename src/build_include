@@ -19,7 +19,7 @@ echo  "class TrueType;" >>${INCLUDE}
 echo  >>${INCLUDE}
 echo "#define color32 unsigned int" >>${INCLUDE}
 
-cat ${SRC}Font.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+#cat ${SRC}Font.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 
 cat >> ${INCLUDE} << EOF 
 struct CTexFont
@@ -55,6 +55,7 @@ void wmcglDeleteDefaultFonts();
 EOF
 
 #cat ${SRC}ImageTools.h | grep -v include | grep -v "#"   >> ${INCLUDE}
+cat ${SRC}change_value.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}Texture.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 cat ${SRC}Texture2D.h | grep -v include | grep -v "#"   >> ${INCLUDE}
 #cat ${SRC}FreeType.h | grep -v include | grep -v "#"   >> ${INCLUDE}

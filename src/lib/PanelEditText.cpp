@@ -3,8 +3,10 @@
 #include <iostream>
 #include <sstream>
 
+#include "ResourceManager.h"
 #include "PanelEditText.h"
 #include "wm.h"
+#include "macro.h"
 
 //#define DEBUG
 //#define DEBUG_CONST
@@ -18,7 +20,7 @@
 #	define DEBUG_CONST
 #endif
 
-
+#define CURSOR_TIME 0.4f
 using namespace std;
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -28,40 +30,46 @@ using namespace std;
 //--------------------------------------------------------------------------------------------------------------------
 PanelEditText::PanelEditText()	{
 	#ifdef DEBUG_CONST
-	cout << "Constructeur PanelEditText() ..." << endl;
+		cout << "Constructeur PanelEditText() ..." << endl;
 	#endif
 	
 	PanelSimple();
 
-	tabSize = 40;
-	prompt = "";
-	//currentLine = 0;
-	currentPos = 0;
-	//currentCmd = 0;
-	cursorTime = -1.0f;
+	tabSize			= 40;
+	prompt			= "";
+	currentPos		= 0;
+	cursorTime		= 0.0f;
 
-	cb_cmd = NULL;
-	ppccb = NULL;
-	bIns = false;
-	bCtrl = false;
-	bRightCtrl = false;
-	bLeftCtrl = false;
-	bFocus = false;
-	bHideCursor = false;
+	cb_cmd			= NULL;
+	ppccb			= NULL;
+	TextureInverse	= NULL;
 
-	heightLine = 13;
-			
+	bIns			= false;
+	bCtrl			= false;
+	bRightCtrl		= false;
+	bLeftCtrl		= false;
+	bFocus			= false;
+	bHideCursor		= false;
+	bDxStr			= true;
+	bCursor			= false;
+	
+	heightLine		= 13;
 	
 	WindowsManager::getInstance().call_back_keyboard( this );
 	//cursor.setPos( currentPos, 15*currentLine );
 
     text =  new PanelText();
-    add(text);
 	text->changeText((char*)"");
+
 	cursor.changeText( "|", PanelText::NORMAL_FONT, true );
-	this->add( &cursor );
-	moveCursor();
 	
+	cursorInverse.setVisible(false);
+	cursor.setVisible(false);
+
+	add( &cursor );
+    add(text);
+	
+	moveCursor();
 	ID = 9010;
 
 }
@@ -85,6 +93,26 @@ void PanelEditText::setCallBackCmd( PanelEditTextCallBack* p )		{
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
+void PanelEditText::setBackgroundInverse( char * str_background )	{
+	if ( TextureInverse != NULL )		return;
+	
+	
+	_ResourceManager& res = _ResourceManager::getInstance();
+
+	_Texture2D* ret = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, str_background) );
+
+	if ( ret )	TextureInverse = ret;
+	else		logf_wm( (char*)"  [Error] WM - PanelSimple::setBackground( %s )", str_background );
+		
+	cursorInverse.setBackground( TextureInverse );
+
+	add( &cursorInverse );
+	cursor.onTop();
+	text->onTop();
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void PanelEditText::moveCursor()	{
 	int pl = prompt.size();
 	int x = text->getTextLenght(pl+currentPos);
@@ -92,6 +120,14 @@ void PanelEditText::moveCursor()	{
 	//int y = currentLine*heightLine;
 
 	cursor.setPos( x, y );
+	cursorInverse.setPos( x, y );
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelEditText::setTabSize( int t ) {
+	text->setTabSize( t );
+	tabSize = t;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -99,9 +135,14 @@ void PanelEditText::moveCursor()	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 void PanelEditText::setColor( long c ) {
+	#ifdef DEBUG
+		logf_wm( (char*)"PanelEditText::setColor( 0x%8x ) : %s ", c, sExtra.c_str() );
+	#endif
+
     color = c;
     
     text->setColor( c );
+    cursor.setColor( c ^ 0xffFFff00 );
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -246,7 +287,7 @@ void PanelEditText::delChar() {
 //
 //--------------------------------------------------------------------------------------------------------------------
 void PanelEditText::supChar() {
-#define DEBUG
+//#define DEBUG
 	#ifdef DEBUG
 	cout << "PanelEditText::supChar()" << endl;
 	#endif
@@ -320,7 +361,7 @@ void PanelEditText::supChar() {
 	text->changeText( *val, PanelText::NORMAL_FONT, true );
 	delete val;
 	//decCursor();
-#undef DEBUG
+//#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -348,6 +389,13 @@ void PanelEditText::decCursor()	{
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
+void PanelEditText::resetCursor()	{
+	currentPos = 0;
+	moveCursor();
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 int PanelEditText::posWordSuiv()	{
 	int prevCursor = currentPos;
 	string  pT = text->getText();
@@ -364,12 +412,14 @@ int PanelEditText::posWordSuiv()	{
 	if ( (i) >= (l-pl) )		return l-pl;
 
 	// tant que le caratere suivant est ' ' ou '\t'
-	while( cmd[i] == ' ' || cmd[i] == '\t' )	{
+	//while( cmd[i] == ' ' || cmd[i] == '\t' )	{
+	while( !isAlphaNum(cmd[i-1]) )	{
 		i++;
 		if ( (i) >= (l-pl) )	return i;
 	}
 	// tant que le caratere suivant n'est pas ' ' et '\t'
-	while( cmd[i] != ' ' && cmd[i] != '\t' )	{
+	//while( cmd[i] != ' ' && cmd[i] != '\t' )	{
+	while( isAlphaNum(cmd[i-1]) )	{
 		i++;
 		if ( (i) >= (l-pl) )	return i;
 	}
@@ -395,12 +445,14 @@ int PanelEditText::posWordPrec()	{
 	if ( (i-1) <  0 )		return 0;
 
 	// tant que le caratere suivant est ' ' ou '\t'
-	while( cmd[i-1] == ' ' || cmd[i-1] == '\t' )	{
+	//while( cmd[i-1] == ' ' || cmd[i-1] == '\t' )	{
+	while( !isAlphaNum(cmd[i-1]) )	{
 		i--;
 		if ( (i-1) < 0 )	return i;
 	}
 	// tant que le caratere suivant n'est pas ' ' et '\t'
-	while( cmd[i-1] != ' ' && cmd[i-1] != '\t' )	{
+	//while( cmd[i-1] != ' ' && cmd[i-1] != '\t' )	{
+	while( isAlphaNum(cmd[i-1]) )	{
 		i--;
 		if ( (i-1) < 0 )	return i;
 	}
@@ -466,8 +518,10 @@ void PanelEditText::supWord()	{
 	delete val;
 }
 //	moveCursor();
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 void PanelEditText::delWord()	{
 	currentPos = posWordPrec();
 	supWord();
@@ -475,14 +529,183 @@ void PanelEditText::delWord()	{
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelEditText::majuscule()
+{
+	string& sText = text->getText();
+	string newString;
+	
+	for( int i=0; i<sText.size(); i++ )
+	{
+		unsigned char c = sText[i]; 
+		
+		if ( isAlphaMin(c) )
+		{
+			c = c ^ 0x20;
+			sText[i] = c;
+		}
+		
+		newString = newString + sText[i];
+	}
+
+	text->changeText( newString );
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelEditText::minuscule()
+{
+	string& sText = text->getText();
+	string newString;
+	
+	for( int i=0; i<sText.size(); i++ )
+	{
+		unsigned char c = sText[i]; 
+		
+		if ( isAlphaMaj(c) )
+		{
+			c = c | 0x20;
+			sText[i] = c;
+		}
+		
+		newString = newString + sText[i];
+	}
+
+	text->changeText( newString );
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
+bool PanelEditText::isAlpha(unsigned char c)
+{
+	return ( (0x41<=c && c<=0x5A) || (0x61<=c && c<=0x7A) );
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
+bool PanelEditText::isNum(unsigned char c)
+{
+	return (0x30<=c && c<=0x39);
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
+bool PanelEditText::isAlphaNum(unsigned char c)
+{
+	return isAlpha(c) || isNum(c);
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
+bool PanelEditText::isAlphaMaj(unsigned char c)
+{
+	return ( (0x41<=c && c<=0x5A) );
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
+bool PanelEditText::isAlphaMin(unsigned char c)
+{
+	return ( (0x61<=c && c<=0x7A) );
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//						Fonctions Virtuels
+//
+//--------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelEditText::haveFocus()	
+{
+	bFocus = true;
+
+	cursorInverse.setVisible(true);
+	cursor.setVisible(true);
+	
+	cursorTime = 0.0;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelEditText::lostFocus()	
+{
+	bFocus = false;
+
+	cursorInverse.setVisible(false);
+	cursor.setVisible(false);
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+Panel* PanelEditText::isMouseOver(int xm, int ym)
+{
+//#define DEBUG
+	if ( !isVisible() || bFantome )		return NULL;
+
+	
+	#ifdef DEBUG
+		logf_wm( (char*)"MouseOver '%s' = %d,%d %dx%d %s", sExtra.c_str(), x, y, dx_raw, dy_raw, BOOL2STR(bDxStr) );
+	#endif
+
+
+	#ifdef DEBUG
+	if ( x_raw <= xm && xm <= (x_raw+dx_raw) && y_raw <= ym && ym <= (y_raw+dy_raw) )		
+		{ logf_wm( (char*)"Mouse over '%s'", sExtra.c_str() ); return this; }
+	#endif
+	if ( x_raw <= xm && xm <= (x_raw+dx_raw) && y_raw <= ym && ym <= (y_raw+dy_raw) )		return this;
+	else																					return NULL;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+// Deplace le curseur sur un appuye souris
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelEditText::clickLeft( int x, int y ) 
+{
+	logf_wm( (char*)"PanelEditText::clickLeft(%d,%d)", x, y );
+	
+	if ( text->getText().size() == 0 )		{ currentPos = 0; return; }
+	
+	unsigned X = getX();		// x screen
+	
+	currentPos = text->getText().size();
+	
+	for( int i=0; i<text->getText().size(); i++ )
+	{
+		int l = text->getTextLenght(i);
+		//logf_wm( (char*)"Comparaison %d ~ %d", X+l, x );
+		if ( (X+l) > x )	
+		{
+			//logf_wm( (char*)"currentPos %d => %d", currentPos, i );
+			
+			//-----------------
+			// resultat		
+			if ( i >= 1 )				currentPos = i-1;
+			else						currentPos = i;
+					
+			moveCursor();
+			//-----------------
+			break;
+		}
+	}
+	
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
 //						Callback keyboard functions....
 //
 //--------------------------------------------------------------------------------------------------------------------
 void PanelEditText::cb_keyboard( unsigned char key ) {
-//#define DEBUG
-	//if ( !bVisible )		return;
 	#ifdef DEBUG
-	cout << "PanelEditText::cb_keyboard( "<< (unsigned int) key <<" ) "<< endl;;
+		logf_wm( (char*)"PanelEditText::cb_keyboard( %d )", key );
 	#endif
     
     WindowsManager& wm = WindowsManager::getInstance();
@@ -498,7 +721,11 @@ void PanelEditText::cb_keyboard( unsigned char key ) {
     
 	static int n=0;
 	switch(key){ 
-	case '\r':		{
+	// CTRL+M	//\r
+	case 13:		
+		{
+		majuscule();
+
 		if ( cb_cmd || ppccb )	{
 			string* str = new string(text->getText());
 			char		cmd[2048];
@@ -519,6 +746,11 @@ void PanelEditText::cb_keyboard( unsigned char key ) {
 			//addLine();
 		}
 		}	
+		break;
+	// CTRL+N
+	case 14:		{
+		minuscule();
+		}		
 		break;
 	// ESC
 	case 27:		{
@@ -563,15 +795,16 @@ void PanelEditText::cb_keyboard( unsigned char key ) {
 		}		
 		break;
 	}
-#undef DEBUG
+//#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
+//
+//
 //--------------------------------------------------------------------------------------------------------------------
 void PanelEditText::cb_keyboard_special( unsigned char key ) {
-	//if ( !bVisible )		return;
 	#ifdef DEBUG
-	cout << "PanelEditText::cb_keyboard_special( "<< (unsigned int) key <<" ) "<< endl;;
+		logf_wm( (char*)"PanelEditText::cb_keyboard_special( %d )", key );
 	#endif
 
 	switch(key){ 
@@ -683,15 +916,33 @@ void PanelEditText::cb_keyboard_special( unsigned char key ) {
 	cout <<"  bCtrl= "<< std::boolalpha << bCtrl <<" bRightCtrl="<< bRightCtrl <<" bLeftCtrl="<< bLeftCtrl << endl;
 	#endif
 }
-	
-
-
+//--------------------------------------------------------------------------------------------------------------------
+//
+//
+//
+//--------------------------------------------------------------------------------------------------------------------
 void PanelEditText::cb_keyboard_special_up( unsigned char key ) {
 	//if ( !bVisible )		return;
 	#ifdef DEBUG
-	cout << "PanelEditText::cb_keyboard_special_up( "<< (unsigned int) key <<" ) "<< endl;;
+		logf_wm( (char*)"PanelEditText::cb_keyboard_special_up( %d )", key );
 	#endif
+	
 	switch(key){ 
+	//  Left
+	case 100:	{
+		decCursor();
+		}	
+		break;
+	//  Left
+	case 102:	{
+		incCursor();
+		}	
+		break;
+	//  Fin
+	case 107:	{
+		incCursor();
+		}	
+		break;
 	//  Right Ctrl
 	case 250:	{
 		bRightCtrl = false;
@@ -720,37 +971,51 @@ void PanelEditText::cb_keyboard_special_up( unsigned char key ) {
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
-void PanelEditText::setTabSize( int t ) {
-	text->setTabSize( t );
-	tabSize = t;
-}
-//--------------------------------------------------------------------------------------------------------------------
-//
-//						Virtuals fonctions....
-//
-//--------------------------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------------------------
-//
-//--------------------------------------------------------------------------------------------------------------------
 void PanelEditText::idle(float elapsedTime) {
+	if ( !isVisible() )			
+	{
+		return;
+	}
 
 	//cout <<"PanelEditText::idle( "<< elapsedTime <<" )"<< endl;
 	//cout << "cursorTime  : "<< cursorTime << endl;
 	if ( bHideCursor  )	{
 		cursor.setVisible( false );
+		//logf_wm( (char*)"idle %s LINE %d", sExtra.c_str(), __LINE__ );
 		return;
 	}
+	/*
+	*/
 	if ( !bFocus )
 	{
 	    cursor.setVisible( false );
+		//logf_wm( (char*)"idle %s LINE %d", sExtra.c_str(), __LINE__ );
+		cursorTime = 0.0f;
 	    return;
 	}
 
 	//-----------------------------------------------------------
 	cursorTime += elapsedTime;
-	if ( cursorTime >= 0.5f )		{
-		cursor.setVisible( !cursor.getVisible() );
-		cursorTime -= 0.5f;
+	if ( cursorTime >= CURSOR_TIME )		
+	{
+		bCursor =  !bCursor;
+
+		//logf_wm( (char*)"idle %0.2f", cursorTime );
+		cursorTime -= CURSOR_TIME;
+		/*
+		*/
+	}
+
+	if ( TextureInverse == NULL )
+	{
+		if (bCursor)	{ cursor.setVisible( true ); cursorInverse.setVisible( true ); }
+		else			{ cursor.setVisible( false ); cursorInverse.setVisible( false ); }
+
+	}
+	else
+	{
+		if (bCursor)	{ cursor.setVisible( true ); cursorInverse.setVisible( true ); }
+		else			{ cursor.setVisible( false ); cursorInverse.setVisible( false ); }
 	}
 
 }
@@ -758,12 +1023,58 @@ void PanelEditText::idle(float elapsedTime) {
 //
 //--------------------------------------------------------------------------------------------------------------------
 void PanelEditText::updatePos() {
+	if ( !isVisible() )			return;
+	
 	#ifdef DEBUG
-	cout << "PanelEditText::updatePos()" << endl;;
+		logf_wm( (char*)"PanelEditText::updatePos()" );
 	#endif
+
 	PanelSimple::updatePos();
-	dx = dx_raw = text->getDX();
-	dy = dy_raw = text->getDY();
+
+	if ( !getConstLarg() )	{	
+		dx = dx_raw = text->getDX();
+		dy = dy_raw = text->getDY();
+	}
+	if ( TextureInverse != NULL && cursor.getVisible() )
+	{
+		char c[] = "B";
+		c[0] =  text->getText()[currentPos];
+		cursor.changeText( c, true );
+		
+		int x  = text->getX();
+		int y  = text->getY();
+		int dx = cursor.getTextLenght(1);
+		int dy = text->getDY();
+		
+		if ( text->getText().size() != 0 )
+		{
+			cursor.setPosAndSize( x, y, dx, dy );
+			moveCursor();
+			cursorInverse.setSize( dx, dy );
+
+			#ifdef DEBUG
+				logf_wm( (char*)"%s::updatePos() %d:'%s'", sExtra.c_str(), currentPos, cursor.getText().c_str() );
+				logf_wm( (char*)"    %d, %d %dx%d", cursor.getX(),cursor.getY(),cursor.getDX(),cursor.getDY() );
+			#endif
+		}
+		else
+		{
+			c[0] = ' ';
+			cursor.changeText( c, true );
+			dx = cursor.getTextLenght(1);
+			cursorInverse.setSize( dx, dy );
+
+			cursor.setPosAndSize( x, y, dx, dy );
+			moveCursor();
+			cursorInverse.setSize( dx, dy );
+
+			#ifdef DEBUG
+				logf_wm( (char*)"%s::updatePos() %d:'%s'", sExtra.c_str(), currentPos, cursor.getText().c_str() );
+				logf_wm( (char*)"    text size = 0" );
+				logf_wm( (char*)"    %d, %d %dx%d", cursor.getX(),cursor.getY(),cursor.getDX(),cursor.getDY() );
+			#endif
+		}
+	}
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -773,14 +1084,14 @@ void PanelEditText::displayGL() {
 
 	PanelSimple::displayGL();
 
-#ifdef DEBUG
-	cout << "PanelEditText::displayGL()" << endl;;
-	WindowsManager& wm = WindowsManager::getInstance();
-	cout << "  PC displayGL ... fenetre id : " << getID() << endl;
-	cout << "  PC:" << "-------------------" << endl;
-	cout << "  PC:" << getX() <<", "<< getY() <<", "<< getDX() <<", "<< getDY() << endl;
-	cout << "  PC:" << wm.getWidth() <<", "<< wm.getHeight() << endl;
-#endif
+	#ifdef DEBUG
+		cout << "PanelEditText::displayGL()" << endl;;
+		WindowsManager& wm = WindowsManager::getInstance();
+		cout << "  PC displayGL ... fenetre id : " << getID() << endl;
+		cout << "  PC:" << "-------------------" << endl;
+		cout << "  PC:" << getX() <<", "<< getY() <<", "<< getDX() <<", "<< getDY() << endl;
+		cout << "  PC:" << wm.getWidth() <<", "<< wm.getHeight() << endl;
+	#endif
 	
 }
 //--------------------------------------------------------------------------------------------------------------------

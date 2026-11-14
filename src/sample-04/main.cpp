@@ -12,27 +12,33 @@
 #include <string>
 #include <vector>
 
+#include "../lib/Mathlib.h"
 #include <WindowsManager.h>
-
-
+//---------------------------------------------------------------------------------------------------------------
+//
+//
+//
+//---------------------------------------------------------------------------------------------------------------
 using namespace std;
-
-
-
-
-GLenum err;
-//PanelConsole console(100);
-
-float prevTime = -1.0;
-
-WindowsManager & wm = WindowsManager::getInstance();
-
-int width  = 1500;
-int height = 800;
-GLdouble fov = 60.0;
-PanelConsole *pPC;
-std::vector<PanelWindow *>	pw;
-
+//---------------------------------------------------------------------------------------------------------------
+//
+//
+//
+//---------------------------------------------------------------------------------------------------------------
+GLenum 						err;
+float 						prevTime	= -1.0;
+WindowsManager&				wm			= WindowsManager::getInstance();
+int							width		= 1500;
+int							height		= 800;
+GLdouble					fov			= 60.0;
+PanelConsole*				pPC;
+std::vector<PanelWindow*>	pw;
+int							nFen		= 0;
+//---------------------------------------------------------------------------------------------------------------
+//
+//
+//
+//---------------------------------------------------------------------------------------------------------------
 void change_fov( void )
 {
 	glMatrixMode(GL_PROJECTION);
@@ -42,12 +48,11 @@ void change_fov( void )
 	
 	gluPerspective((GLdouble)fov, (GLdouble)ratio, (GLdouble)0.1, (GLdouble) 1000.0);
 }
-
-
-
-
-
-
+//---------------------------------------------------------------------------------------------------------------
+//
+//
+//
+//---------------------------------------------------------------------------------------------------------------
 static void displayGL(void)
 {
 	WindowsManager::getInstance().clearBufferGL(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -66,11 +71,11 @@ static void displayGL(void)
 
 
 }
-
-
-
-
-
+//---------------------------------------------------------------------------------------------------------------
+//
+//
+//
+//---------------------------------------------------------------------------------------------------------------
 static void reshapeGL(int newWidth, int newHeight)
 {
 
@@ -84,9 +89,11 @@ static void reshapeGL(int newWidth, int newHeight)
 
 	change_fov();
 }
-
-
-
+//---------------------------------------------------------------------------------------------------------------
+//
+//
+//
+//---------------------------------------------------------------------------------------------------------------
 static void idleGL(void)
 {
 	float time = (float)glutGet(GLUT_ELAPSED_TIME) / 1000.0f;
@@ -103,24 +110,21 @@ static void idleGL(void)
 
 	glutPostRedisplay();
 }
-
-
-
-
-
-
-
-
-
+//---------------------------------------------------------------------------------------------------------------
+//
+//
+//
+//---------------------------------------------------------------------------------------------------------------
 static void quit(void)
 {
 	exit(0);
 }
-
-
-
-static void initGL(int argc, 
-		   char **argv)
+//---------------------------------------------------------------------------------------------------------------
+//
+//
+//
+//---------------------------------------------------------------------------------------------------------------
+static void initGL(int argc,  char **argv)
 {
 	glClearColor(.8f,.8f,.8f,1.0f);
 
@@ -137,8 +141,11 @@ static void initGL(int argc,
 
 
 }
-
-
+//---------------------------------------------------------------------------------------------------------------
+//
+//
+//
+//---------------------------------------------------------------------------------------------------------------
 static void glutKeyboardFunc(unsigned char key, int x, int y) {
 	PanelConsole* console = (PanelConsole*)WindowsManager::getInstance().getByID(5);
 	//cout <<"Console addr : "<< console <<"typeof "<< typeid(console).name() << endl;
@@ -160,6 +167,7 @@ static void glutKeyboardFunc(unsigned char key, int x, int y) {
 				if ( b < 0 )	b = 128;
 			
 				b -= 2;
+				if ( b<2 )	b = 2;
 				pw[i]->setBorderSize(b);
 			}
 			
@@ -179,7 +187,11 @@ static void glutKeyboardFunc(unsigned char key, int x, int y) {
 		break;
 	}
 }
-
+//---------------------------------------------------------------------------------------------------------------
+//
+//
+//
+//---------------------------------------------------------------------------------------------------------------
 static void glutKeyboardUpFunc(unsigned char key, int x, int y)	{
 	WindowsManager::getInstance().keyboardUpFunc( key, x, y);
 }
@@ -202,9 +214,11 @@ static void glutMotionFunc(int x, int y)	{
 static void glutPassiveMotionFunc(int x, int y)	{
 	WindowsManager::getInstance().passiveMotionFunc(x, y);
 }
-
-
-
+//---------------------------------------------------------------------------------------------------------------
+//
+//
+//
+//---------------------------------------------------------------------------------------------------------------
 void exec_cmd( string cmd  )	{
 	printf( "C standard :: exec_cmd( ) \"%s\"\n", cmd.c_str() );
 	if ( cmd.compare( "clear" ) == 0 )	{
@@ -218,11 +232,11 @@ void exec_cmd( string cmd  )	{
 	}
 	pPC->affiche( new string("Exec command ..") );
 }
-
-
-
-
-
+//---------------------------------------------------------------------------------------------------------------
+//
+//
+//
+//---------------------------------------------------------------------------------------------------------------
 class CallBack : public PanelConsoleCallBack	{
 	public :
 	virtual void					callback_cmd(std::string cmd)	{
@@ -255,9 +269,11 @@ void call_back_check_true()	{
 void call_back_check_false()	{
 	cout << "CallBack check false()" << endl;
 }
-
-
-
+//---------------------------------------------------------------------------------------------------------------
+//
+//
+//
+//---------------------------------------------------------------------------------------------------------------
 static void CreateOneWindow()	{
 	//WindowsManager& wm = WindowsManager::getInstance();
 	string * pStr;
@@ -288,10 +304,19 @@ static void CreateOneWindow()	{
 	dx = 220;
 	dy = 6 * 42 + 20;
 
+	//enum SKIN { STD, RED, BLACK, BLUE, VERT, YELLOW, ORANGE, MARINE, MAGENTA };
 	PW->setPosAndSize( x, y, dx, dy );
-	if ( pw.size()%3 == 0 )	PW->loadSkin( PanelWindow::RED );
-	if ( pw.size()%3 == 1 )	PW->loadSkin( PanelWindow::BLACK );
+	PW->setBorderSize( 32 );
+	if ( nFen % 8 == 0 )	PW->loadSkin( PanelWindow::STD );
+	if ( nFen % 8 == 1 )	PW->loadSkin( PanelWindow::RED );
+	if ( nFen % 8 == 2 )	PW->loadSkin( PanelWindow::BLUE );
+	if ( nFen % 8 == 3 )	PW->loadSkin( PanelWindow::VERT );
+	if ( nFen % 8 == 4 )	PW->loadSkin( PanelWindow::YELLOW );
+	if ( nFen % 8 == 5 )	PW->loadSkin( PanelWindow::ORANGE );
+	if ( nFen % 8 == 6 )	PW->loadSkin( PanelWindow::MARINE );
+	if ( nFen % 8 == 7 )	PW->loadSkin( PanelWindow::MAGENTA );
 
+	nFen++;
 	ps = new PanelScrollY();
 	ps->setPosAndSize( 0, 0, dx, dy );
 	PW->add( ps );
@@ -372,11 +397,11 @@ static void CreateOneWindow()	{
 
 	delete pStr;
 }
-
-
-
-
-
+//---------------------------------------------------------------------------------------------------------------
+//
+//
+//
+//---------------------------------------------------------------------------------------------------------------
 static void CreateAllWindows()	{
 	//WindowsManager& wm = WindowsManager::getInstance();
 	wm.setScreenSize( width-100, height-100 );
@@ -455,27 +480,17 @@ static void CreateAllWindows()	{
 	wm.add( pc );
 	/*
 	*/
-	for (int i=0; i<3; i++ )		CreateOneWindow();
-	CreateOneWindow();
+	for (int i=0; i<8; i++ )		CreateOneWindow();
+	//CreateOneWindow();
 
 	wm.setScreenSize( width, height );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-int main(int argc, 
-	 char **argv)
+//---------------------------------------------------------------------------------------------------------------
+//
+//
+//
+//---------------------------------------------------------------------------------------------------------------
+int main(int argc, char **argv)
 {
 
 	
@@ -527,5 +542,10 @@ int main(int argc,
 
 	  return 0;
 }
+//---------------------------------------------------------------------------------------------------------------
+//
+//
+//
+//---------------------------------------------------------------------------------------------------------------
 
 

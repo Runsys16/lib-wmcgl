@@ -23,8 +23,9 @@ PanelWindow::PanelWindow( void )	{
 	
 	loadSkin( "bfs" );
 
-	borderSize = 8;
-    bFantome = false;
+	borderSize		= 8;
+    bFantome		= false;
+	bResizable		= true;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -90,6 +91,8 @@ void PanelWindow::loadSkin( SKIN s )	{
 		case VERT:		loadSkin( "vert" );		break;
 		case YELLOW:	loadSkin( "jaune" );	break;
 		case ORANGE:	loadSkin( "orange" );	break;
+		case MARINE:	loadSkin( "marine" );	break;
+		case MAGENTA:	loadSkin( "magenta" );	break;
 	}
 }
 //--------------------------------------------------------------------------------------------------------------------

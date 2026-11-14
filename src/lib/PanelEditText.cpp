@@ -367,6 +367,7 @@ void PanelEditText::supChar() {
 //
 //--------------------------------------------------------------------------------------------------------------------
 void PanelEditText::incCursor()	{
+	//logf_wm( (char*)"PanelEditText::incCursor()" );
 	// prompt lenght
 	int pl = prompt.size();
 	// command lenght
@@ -376,15 +377,21 @@ void PanelEditText::incCursor()	{
 		currentPos++;
 		moveCursor();
 	}
+	
+	cursorTime	= 0.0;
+	bCursor		= true;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
 void PanelEditText::decCursor()	{
+	//logf_wm( (char*)"PanelEditText::decCursor()" );
 	if ( currentPos > 0 )	{
 		currentPos--;
 		moveCursor();
 	}
+	cursorTime = 0.0;
+	bCursor		= true;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -397,6 +404,10 @@ void PanelEditText::resetCursor()	{
 //
 //--------------------------------------------------------------------------------------------------------------------
 int PanelEditText::posWordSuiv()	{
+    #ifdef DEBUG
+		logf_wm( (char*)"PanelEditText::posWordSuiv() pl=%d", prompt.size() );
+	#endif
+	
 	int prevCursor = currentPos;
 	string  pT = text->getText();
 	int pl = prompt.size();
@@ -411,25 +422,36 @@ int PanelEditText::posWordSuiv()	{
 	int i = currentPos;
 	if ( (i) >= (l-pl) )		return l-pl;
 
-	// tant que le caratere suivant est ' ' ou '\t'
+	// tant que le caratere suivant est alphanum'
 	//while( cmd[i] == ' ' || cmd[i] == '\t' )	{
-	while( !isAlphaNum(cmd[i-1]) )	{
+	while( isAlphaNum(cmd[i+1]) )	{
 		i++;
 		if ( (i) >= (l-pl) )	return i;
 	}
+	i++;
+	if ( (i) >= (l-pl) )	return i-1;
+
+	return i;
+	
+	/*
 	// tant que le caratere suivant n'est pas ' ' et '\t'
 	//while( cmd[i] != ' ' && cmd[i] != '\t' )	{
-	while( isAlphaNum(cmd[i-1]) )	{
+	while( isAlphaNum(cmd[i+1]) )	{
 		i++;
 		if ( (i) >= (l-pl) )	return i;
 	}
 	
 	return i;
+	*/
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
 int PanelEditText::posWordPrec()	{
+    #ifdef DEBUG
+		logf_wm( (char*)"PanelEditText::posWordPrec() pl=%d", prompt.size() );
+	#endif
+
 	int prevCursor = currentPos;
 	string pT = text->getText();
 	int pl = prompt.size();
@@ -444,12 +466,16 @@ int PanelEditText::posWordPrec()	{
 	int i = currentPos;
 	if ( (i-1) <  0 )		return 0;
 
-	// tant que le caratere suivant est ' ' ou '\t'
+	// tant que le caratere precedant est alphanum'
 	//while( cmd[i-1] == ' ' || cmd[i-1] == '\t' )	{
-	while( !isAlphaNum(cmd[i-1]) )	{
+	while( isAlphaNum(cmd[i-1]) )	{
 		i--;
 		if ( (i-1) < 0 )	return i;
 	}
+	
+	//if ( (i-1) < 0 )	return i+1;
+	return i;
+	/*
 	// tant que le caratere suivant n'est pas ' ' et '\t'
 	//while( cmd[i-1] != ' ' && cmd[i-1] != '\t' )	{
 	while( isAlphaNum(cmd[i-1]) )	{
@@ -458,6 +484,7 @@ int PanelEditText::posWordPrec()	{
 	}
 	
 	return i;
+	*/
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -671,6 +698,10 @@ Panel* PanelEditText::isMouseOver(int xm, int ym)
 void PanelEditText::clickLeft( int x, int y ) 
 {
 	logf_wm( (char*)"PanelEditText::clickLeft(%d,%d)", x, y );
+	logf_wm( (char*)"bCursor %s, TextSize %d, cursorTime %f)", BOOL2STR(bCursor), text->getText().size(), cursorTime );
+	logf_wm( (char*)"bHideCursor %s, bFocus %s", BOOL2STR(bHideCursor), BOOL2STR(bFocus) );
+	
+	bCursor = true;
 	
 	if ( text->getText().size() == 0 )		{ currentPos = 0; return; }
 	
@@ -789,7 +820,7 @@ void PanelEditText::cb_keyboard( unsigned char key ) {
 		break;
 	default :		{
 		#ifdef DEBUG
-		std::cout << "  Value : "<< (int)key << std::endl;
+			logf_wm( (char*)"key : %d - %c",  (int)key, key;
 		#endif
 		if ( key >= ' ')		addChar(  key ); 
 		}		
@@ -821,7 +852,7 @@ void PanelEditText::cb_keyboard_special( unsigned char key ) {
 	// left
 	case 100:	{
 		if ( bCtrl )	wordPrec();
-		else			decCursor();
+		//else			decCursor();
 		}	
 		break;
 	// up
@@ -847,7 +878,7 @@ void PanelEditText::cb_keyboard_special( unsigned char key ) {
 	// right
 	case 102:	{
 		if ( bCtrl )	wordSuiv();
-		else			incCursor();
+		//else			incCursor();
 		}
 		break;
 	// down
@@ -974,6 +1005,7 @@ void PanelEditText::cb_keyboard_special_up( unsigned char key ) {
 void PanelEditText::idle(float elapsedTime) {
 	if ( !isVisible() )			
 	{
+		//logf_wm( (char*)"PanelEditText::idle invisible %s", getExtraString().c_str() );
 		return;
 	}
 

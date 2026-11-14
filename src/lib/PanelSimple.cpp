@@ -201,7 +201,7 @@ void PanelSimple::displayGL() {
 	//m_pTexBackground->Unbind(wm.getSlot());
 
 
-
+	displayBackground();
 
 	
 	

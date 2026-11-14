@@ -10,6 +10,7 @@
 #include <typeinfo>
 #include <string>
 
+#include "../lib/Mathlib.h"
 #include <WindowsManager.h>
 
 
@@ -184,7 +185,7 @@ static void glutPassiveMotionFunc(int x, int y)	{
 
 
 void exec_cmd( string cmd  )	{
-	printf( "C standard :: exec_cmd( %s ) \"%s\"\n", cmd.c_str() );
+	printf( (char*)"C standard :: exec_cmd( %s ) \n", cmd.c_str() );
 	if ( cmd.compare( "clear" ) == 0 )	{
 		pPC->clear();
 		return;
@@ -216,7 +217,7 @@ static void CreateAllWindows()	{
 	WindowsManager& wm = WindowsManager::getInstance();
 	wm.setScreenSize( width-100, height-100 );
 
-	//string * pStr;
+	string * pStr;
 
 	PanelWindow  * pw;
 	PanelSimple  * ps;
@@ -229,12 +230,12 @@ static void CreateAllWindows()	{
 	wm.add( pw );
 	int y = 10;
 	int dy = 15;
-	pw->add( new PanelText( "Fichier",		PanelText::LARGE_FONT, 5, y + 0*dy ) );
-	pw->add( new PanelText( "Edition",		PanelText::LARGE_FONT, 5, y + 1*dy ) );
-	pw->add( new PanelText( "Affichage",	PanelText::LARGE_FONT, 5, y + 2*dy ) );
-	pw->add( new PanelText( "Recherche",	PanelText::LARGE_FONT, 5, y + 3*dy ) );
-	pw->add( new PanelText( "Outils",		PanelText::LARGE_FONT, 5, y + 4*dy ) );
-	pw->add( new PanelText( "Aide",			PanelText::LARGE_FONT, 5, y + 5*dy ) );
+	pw->add( new PanelText( (char*)"Fichier",		PanelText::LARGE_FONT, 5, y + 0*dy ) );
+	pw->add( new PanelText( (char*)"Edition",		PanelText::LARGE_FONT, 5, y + 1*dy ) );
+	pw->add( new PanelText( (char*)"Affichage",		PanelText::LARGE_FONT, 5, y + 2*dy ) );
+	pw->add( new PanelText( (char*)"Recherche",		PanelText::LARGE_FONT, 5, y + 3*dy ) );
+	pw->add( new PanelText( (char*)"Outils",		PanelText::LARGE_FONT, 5, y + 4*dy ) );
+	pw->add( new PanelText( (char*)"Aide",			PanelText::LARGE_FONT, 5, y + 5*dy ) );
 	
 	//---------------------------------------------------------------------------------	
 	pw = new PanelWindow();
@@ -266,9 +267,9 @@ static void CreateAllWindows()	{
 	pw->setPosAndSize( 650-4, 50+50+0, 400, 600);
 	wm.add( pw );
 
-	pw->add( new PanelText( "1 Essai de panelText SMALL_FONT", PanelText::SMALL_FONT, 40, 100 ) );
-	pw->add( new PanelText( "2 Essai de panelText NORMAL_FONT", PanelText::NORMAL_FONT, 60, 120 ) );
-	pw->add( new PanelText( "3 Essai de panelText LARGE_FONT", PanelText::LARGE_FONT, 80, 140 ) );
+	pw->add( new PanelText( (char*)"1 Essai de panelText SMALL_FONT", PanelText::SMALL_FONT, 40, 100 ) );
+	pw->add( new PanelText( (char*)"2 Essai de panelText NORMAL_FONT", PanelText::NORMAL_FONT, 60, 120 ) );
+	pw->add( new PanelText( (char*)"3 Essai de panelText LARGE_FONT", PanelText::LARGE_FONT, 80, 140 ) );
 
 	//---------------------------------------------------------------------------------	
 	PanelConsole* pc;

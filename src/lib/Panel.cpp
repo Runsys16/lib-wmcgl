@@ -82,19 +82,25 @@ void Panel::init()	{
 	click_right_cb      = NULL;
     release_right_cb    = NULL;
 
-	panel_click_left       = NULL;
-	panel_release_left     = NULL;
-	panel_click_right      = NULL;
-    panel_release_right    = NULL;
+	panel_click_left	= NULL;
+	panel_release_left	= NULL;
+	panel_click_right	= NULL;
+    panel_release_right	= NULL;
+    
+    pCallBackMouse		= NULL;
+    pCB_return			= NULL;
+
 	
-	bHaveMove		= false;
-	bScissor		= false;
-	bFantome		= false;
-	bCapture		= false;
-	bFocus			= false;
-	bParentCliping	= false;
+	bHaveMove			= false;
+	bScissor			= false;
+	bFantome			= false;
+	bCapture			= false;
+	bFocus				= false;
+	bParentCliping		= false;
 	
-	sExtra = "";
+	bResizable			= false;
+	
+	sExtra				= "";
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -186,14 +192,16 @@ void Panel::clickLeft( int x, int y)
 {
     if (click_left_cb)              (*click_left_cb)(Screen2x(x), Screen2y(y));
     if (panel_click_left)           clickLeft( Screen2x(x), Screen2y(y) );
+    if (pCallBackMouse)				pCallBackMouse->clickLeftCB(x, y, (void*)this);
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
 void Panel::releaseLeft( int x, int y)
 {
-    if (release_left_cb)      (*release_left_cb)(x,y);
-    if (panel_release_left)   panel_release_left->releaseLeft( x, y );
+    if (release_left_cb)						(*release_left_cb)(x,y);
+    if (panel_release_left)						panel_release_left->releaseLeft( x, y );
+    if (pCallBackMouse && isMouseOver(x,y))		pCallBackMouse->releaseLeftCB(x, y, (void*)this);
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
@@ -425,6 +433,14 @@ bool Panel::isVisible()	{
 	}
 
     return true;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void Panel::setCallBackMouse( CallBackMouse* p, void* pv )
+{
+	pCallBackMouse	= p;
+	pCB_return		= pv;
 }
 //--------------------------------------------------------------------------------------------------------------------
 //

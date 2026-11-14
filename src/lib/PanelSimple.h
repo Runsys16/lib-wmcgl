@@ -20,6 +20,7 @@ class PanelSimple : public Panel {
 
 		void                setColor(long);
 
+		virtual void		displayBackground()				{};
 		virtual void		displayGL();
 		virtual void		updatePos();
 		virtual void        debug(bool);

@@ -58,15 +58,17 @@ void PanelButton::init(){
 	cout << "Constructeur PanelButton ..." << endl;
 	#endif
 
-	m_pTexUp = NULL;
-	m_pTexDown = NULL;
-	m_pTexOver = NULL;
+	m_pTexUp		= NULL;
+	m_pTexDown		= NULL;
+	m_pTexOver		= NULL;
 	
-	m_pTexCurrent = NULL;
+	m_pTexCurrent	= NULL;
 
-	pCallBackUp   = NULL;
-	pCallBackDown = NULL;
-	pCallBackOver = NULL;
+	pCallBackUp		= NULL;
+	pCallBackDown	= NULL;
+	pCallBackOver	= NULL;
+	
+	pChangeValue	= NULL;
 	
 	pPsDebug = NULL;
 	pPtDebug = NULL;
@@ -115,6 +117,7 @@ void PanelButton::lostCapture()	{
 void PanelButton::clickLeft( int xm, int ym)	{
 	if( pCallBackDown )				(*pCallBackDown)(this);
 	if ( pPanelButtonCallback )		pPanelButtonCallback->cb_button_mouse_down(this);
+	
 	PanelSimple::clickLeft( xm, ym);
 	texDown();
 }
@@ -127,6 +130,10 @@ void PanelButton::releaseLeft( int xm, int ym)	{
 	
 	if( pCallBackUp )				(*pCallBackUp)(this);
 	if ( pPanelButtonCallback )		pPanelButtonCallback->cb_button_mouse_up(this);
+	
+	if ( pChangeValue != NULL && isMouseOver(xm,ym) )
+			pChangeValue->changeValueDoubleClick( (int)true, pID );
+
 	PanelSimple::releaseLeft( xm, ym);
 	texUp();
 }
@@ -369,6 +376,23 @@ void PanelButton::setOver( char * str_background )	{
 	_Texture2D* pResource = ((_Texture2D*)res.LoadResource(_ResourceManager::TEXTURE2D, str_background) );
 
 	if ( pResource )	m_pTexOver = pResource;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelButton::setID( void* p)
+{
+    //logf_wm( (char*)"PanelSpinEditText::setID(void* %p)", (void*)p );
+	pID = p;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
+void PanelButton::setChangeValue(ChangeValue* p, void* ID)	
+{
+    //logf_wm( (char*)"PanelSpinEditText::setID(void* %p)", (void*)p );
+	pChangeValue = p;
+	pID = ID;
 }
 /*----------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------------------*/

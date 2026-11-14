@@ -6,7 +6,7 @@
 
 class PanelWindow : public PanelSimple {
 	public:
-		enum SKIN { STD, RED, BLACK, BLUE, VERT, YELLOW, ORANGE };
+		enum SKIN { STD, RED, BLACK, BLUE, VERT, YELLOW, ORANGE, MARINE, MAGENTA };
 	
 		PanelWindow();
 		

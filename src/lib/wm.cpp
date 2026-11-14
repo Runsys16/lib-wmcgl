@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
+#include <typeinfo>
 
 
 
@@ -11,6 +12,8 @@
 #include "ResourceManager.h"
 #include "PanelEditText.h"
 #include "PanelConsole.h"
+#include "PanelWindow.h"
+#include "macro.h"
 
 
 //#define DEBUG_CONST
@@ -737,21 +740,21 @@ void WindowsManager::passiveMotionFunc(int x, int y)	{
 //#define DEBUG
     mouseX = x;
     mouseY = y;
-		#ifdef DEBUG
+	#ifdef DEBUG
 		logf_wm( (char*)"WindowsManager::passiveMotionFunc(%d, %d)", x, y );
-		#endif
+	#endif
 
 
-		#ifdef DEBUG
+	#ifdef DEBUG
 		logf_wm( (char*)"passiveMotionFunc Appel  findPanelMouseOver LINE %d", __LINE__ );
 		log_wm_tab(true);	
-		#endif
+	#endif
 
 	Panel* p = findPanelMouseOver(x, y);
 
-		#ifdef DEBUG
+	#ifdef DEBUG
 		log_wm_tab(false);	
-		#endif
+	#endif
 	
 	if ( p )    {
 		changeCapture( p );
@@ -763,15 +766,15 @@ void WindowsManager::passiveMotionFunc(int x, int y)	{
 
     bool bOver = false;
 
-		#ifdef DEBUG
+	#ifdef DEBUG
 		logf_wm( (char*)"passiveMotionFunc Appel  findPanelMouseOver  LINE %d", __LINE__ );
 		log_wm_tab(true);	
-		#endif
+	#endif
 	p = findPanelMouseOver(x, y);
 
-		#ifdef DEBUG
+	#ifdef DEBUG
 		log_wm_tab(false);	
-		#endif
+	#endif
 
 	p = getParentRoot( p );
 	
@@ -780,9 +783,8 @@ void WindowsManager::passiveMotionFunc(int x, int y)	{
     if ( p != NULL )
     {
 	    Panel * pp = p->isMouseOverBorder( x, y );
-	    if ( pp != NULL )	
+	    if ( pp != NULL && pp->getResizable() )
 	    {
-		    //cout << " Resize  Panel ID : "<< pp->getID()  << endl;
 		    bOver = true;
         	panelResize = pp;
         }
@@ -791,19 +793,23 @@ void WindowsManager::passiveMotionFunc(int x, int y)	{
 	if ( !bOver )   	            glutSetCursor(0);
 	
 	
-		#ifdef DEBUG
+	#ifdef DEBUG
 		log_wm_tab(false);
 		if ( p != NULL )
 		    logf_wm( (char*)"WindowsManager::passiveMotionFunc() sur ID=%d \"%s\"",p->getID(), p->getExtraString().c_str() );
 		else
 		    logf_wm( (char*)"WindowsManager::passiveMotionFunc() NULL" );
-		#endif
+	#endif
 //#undef DEBUG
 }
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
-//static bool bClickLeft=false;
+bool WindowsManager::isPanelWindow(Panel*p)
+{
+	if ( typeid(*p) == typeid(PanelWindow)  )			return true;
+    return false;
+}
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------

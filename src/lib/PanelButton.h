@@ -6,6 +6,8 @@
 #include "PanelText.h"
 #include "Texture2D.h"
 #include "TextUtil.h"
+#include "change_value.h"
+
 
 
 class PanelButton;
@@ -52,6 +54,10 @@ class PanelButton : public PanelSimple {
 
 		void				setButtonCallback(PanelButtonCallback*	p)		{ pPanelButtonCallback = p; }
 
+		void				setID( void* p);
+		void				setChangeValue(ChangeValue*, void*);
+inline 	void				setChangeValue(ChangeValue* p)			{ pChangeValue = p; }
+
 	protected:
 		PanelButtonCallback*	pPanelButtonCallback;
 		_Texture2D*				m_pTexUp;
@@ -63,6 +69,10 @@ class PanelButton : public PanelSimple {
 		CALLBACK_MOUSE			pCallBackDown;
 		CALLBACK_MOUSE			pCallBackUp;
 		CALLBACK_MOUSE			pCallBackOver;;
+
+		ChangeValue*			pChangeValue;
+		void*					pID;
+
 };
 
 

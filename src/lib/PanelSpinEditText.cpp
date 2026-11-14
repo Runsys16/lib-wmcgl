@@ -190,6 +190,16 @@ void PanelSpinEditText::setChangeValue(ChangeValue* p)
 //--------------------------------------------------------------------------------------------------------------------
 //
 //--------------------------------------------------------------------------------------------------------------------
+void PanelSpinEditText::setChangeValue(ChangeValue* p, void* pv)
+{
+    //logf_wm( (char*)"PanelSpinEditText::setChangeValue(ChangeValue* %p)", (void*)p );
+    
+	pChangeValue	= p;
+	pID				= pv;
+}
+//--------------------------------------------------------------------------------------------------------------------
+//
+//--------------------------------------------------------------------------------------------------------------------
 void PanelSpinEditText::setID( void* p)
 {
     //logf_wm( (char*)"PanelSpinEditText::setID(void* %p)", (void*)p );

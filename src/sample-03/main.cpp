@@ -12,6 +12,7 @@
 #include <string>
 #include <vector>
 
+#include "../lib/Mathlib.h"
 #include <WindowsManager.h>
 
 
